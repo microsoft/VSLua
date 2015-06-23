@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileHelper.cs" />
     <Compile Include="Lexer\Lexer.cs" />
     <Compile Include="Lexer\StreamExtension.cs" />
     <Compile Include="Lexer\Token.cs" />
@@ -58,8 +59,17 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Parser\StatNode.cs" />
+    <Compile Include="Tester.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Testing\Input\assignment.lua" />
+    <None Include="Testing\Input\leveled_blocks.lua" />
+    <None Include="Testing\Input\longcode.lua" />
+    <None Include="Testing\Input\longs.lua" />
+    <None Include="Testing\Input\newlines.lua" />
+    <None Include="Testing\Input\tabs.lua" />
+    <None Include="Testing\Output\assignment.out" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
