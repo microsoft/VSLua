@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Lexer\Lexer.cs" />
-    <Compile Include="Lexer\MoveableStreamReader.cs" />
+    <Compile Include="Lexer\StreamExtension.cs" />
     <Compile Include="Lexer\Token.cs" />
     <Compile Include="Lexer\Trivia.cs" />
     <Compile Include="Parser\Parser.cs" />
