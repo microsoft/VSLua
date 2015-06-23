@@ -19,7 +19,7 @@ namespace LanguageModel
 		{
 
 			string trivia_string = "";
-			foreach (Trivia trivia in token.leadingTrivia)
+			foreach (Trivia trivia in token.LeadingTrivia)
 			{
 				trivia_string += trivia.trivia;
 			}
@@ -44,7 +44,7 @@ namespace LanguageModel
 
 		private static void DisplayInconsistency(string expected, string output, Token token, Type type, string file) // 0 for trivia, 1 for token
 		{
-			Console.WriteLine("In " + file + " on index: " + token.fullStart + " to " + (token.start + token.value.Length));
+			Console.WriteLine("In " + file + " on index: " + token.FullStart + " to " + (token.Start + token.Text.Length));
 			Console.WriteLine("For " + type.ToString() + " expected: \"" + ConvertStringToSymbols(expected) + "\", but got: \"" + ConvertStringToSymbols(output) + "\".");
 			Console.WriteLine();
 		}
@@ -83,14 +83,14 @@ namespace LanguageModel
 		private static bool CompareToken(Token token, ref string fileString, string file)
 		{
 
-			string token_string = GetTokenFromString(token.start, token.value.Length, ref fileString);
-			string trivia_string = GetTriviaFromString(token.fullStart, token.start, ref fileString);
+			string token_string = GetTokenFromString(token.Start, token.Text.Length, ref fileString);
+			string trivia_string = GetTriviaFromString(token.FullStart, token.Start, ref fileString);
 
 			bool passed = true;
 
-			if (token_string != token.value)
+			if (token_string != token.Text)
 			{
-				DisplayInconsistency(token_string, token.value, token, Type.TOKEN, file);
+				DisplayInconsistency(token_string, token.Text, token, Type.TOKEN, file);
 				passed = false;
 			}
 
@@ -154,11 +154,12 @@ namespace LanguageModel
 				Stream lua_stream = File.OpenRead(path_input + "\\" + file);
 				
 				List<Token> tokens = lexer.Tokenize(lua_stream);
+
 				string token_strings = "";
 
 				foreach (Token token in tokens)
 				{
-					token_strings += token.type + "\n";
+					token_strings += token.Type + "\n";
 				}
 
 				string expected_output = File.ReadAllText(path_output + "\\" + outfile_name);

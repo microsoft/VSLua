@@ -27,7 +27,7 @@ namespace LanguageModel
 
 		public static bool EndOfStream(this Stream stream)
 		{
-			return stream.Position != stream.Length - 1;
+			return stream.Position == stream.Length - 1;
 		}
 
 		public static char ReadChar(this Stream stream)

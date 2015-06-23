@@ -87,7 +87,6 @@ namespace LanguageModel
             List<Token> tokens = new List<Token>();
             Token nextToken;
             List<Trivia> trivia;
-            
 
             while (!stream.EndOfStream())
             {

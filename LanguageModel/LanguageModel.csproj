@@ -63,11 +63,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Testing\Input\assignment.lua" />
-    <None Include="Testing\Input\leveled_blocks.lua" />
-    <None Include="Testing\Input\longcode.lua" />
-    <None Include="Testing\Input\longs.lua" />
+    <None Include="Testing\Temp\leveled_blocks.lua" />
+    <None Include="Testing\Temp\longcode.lua" />
+    <None Include="Testing\Temp\longs.lua" />
     <None Include="Testing\Input\newlines.lua" />
-    <None Include="Testing\Input\tabs.lua" />
+    <None Include="Testing\Temp\tabs.lua" />
     <None Include="Testing\Output\assignment.out" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

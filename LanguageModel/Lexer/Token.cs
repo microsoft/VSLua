@@ -13,20 +13,20 @@ namespace LanguageModel
             CloseCurlyBrace, Number, String, Unknown, EndOfFile
         }
 
-        protected int fullStart;
-        protected int start;
-        protected string value;
-        public TokenType type { get; private set; }
-        protected List<Trivia> leadingTrivia;
+        public int FullStart { get; private set; }
+        public int Start { get; private set; }
+        public string Text { get; private set; }
+        public TokenType Type { get; private set; }
+        public List<Trivia> LeadingTrivia { get; private set; }
 
 
         public Token(TokenType tokentype, string value, List<Trivia> trivia, int fullStart, int start)
         {
-            this.type = tokentype;
-            this.value = value;
-            this.leadingTrivia = trivia;
-            this.fullStart = fullStart;
-            this.start = start;
+            this.Type = tokentype;
+            this.Text = value;
+            this.LeadingTrivia = trivia;
+            this.FullStart = fullStart;
+            this.Start = start;
         }
 
         public string ToString()
@@ -35,7 +35,7 @@ namespace LanguageModel
             StringBuilder sb = new StringBuilder();
             sb.Append("==============================================\nTrivia:\n");
 
-            foreach (Trivia triv in leadingTrivia)
+            foreach (Trivia triv in LeadingTrivia)
             {
                 sb.Append("\t");
                 sb.Append(Enum.GetName(typeof(Trivia.TriviaType), triv.type));
@@ -44,11 +44,11 @@ namespace LanguageModel
             }
 
             sb.Append("Data:\n\t");
-            sb.Append(this.type.ToString());
+            sb.Append(this.Type.ToString());
             sb.Append("\t");
-            sb.Append(value);
+            sb.Append(Text);
             sb.Append("\t");
-            sb.Append(start);
+            sb.Append(Start);
 
             return sb.ToString();
         }

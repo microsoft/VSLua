@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace LanguageModel
 {
@@ -20,7 +21,7 @@ namespace LanguageModel
             luaFiles = new List<Syntax.ChunkNode>();
         }
 
-        public void CreateParseTree(MoveableStreamReader stream)
+        public void CreateParseTree(Stream stream)
         {
             luaFiles.Add(new Syntax.ChunkNode(lexer.Tokenize(stream))); //TODO: deal with lexer objects still tied to tokens from a previous list without erasing?
 
