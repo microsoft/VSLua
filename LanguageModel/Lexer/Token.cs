@@ -38,8 +38,8 @@ namespace LanguageModel
             foreach (Trivia triv in LeadingTrivia)
             {
                 sb.Append("\t");
-                sb.Append(Enum.GetName(typeof(Trivia.TriviaType), triv.type));
-                sb.Append("\t" + triv.trivia);
+                sb.Append(triv.ToString());
+                //sb.Append("\t" + triv.trivia);
                 sb.Append("\n");
             }
 

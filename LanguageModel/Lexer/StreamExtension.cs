@@ -17,18 +17,21 @@ namespace LanguageModel
 
 		public static char Peek(this Stream stream , int forward)
 		{
+            long oldPos = stream.Position;
 			stream.Position += forward - 1;
 			char c = stream.ReadChar();
-
-			stream.Position -= forward;
+            
+			stream.Position = oldPos;
 
 			return c;
 		}
 
 		public static bool EndOfStream(this Stream stream)
 		{
-			return stream.Position == stream.Length - 1;
-		}
+            //Console.WriteLine(stream.Peek());
+            //return stream.Peek() == unchecked((char)-1);
+            return stream.Length == stream.Position;
+        }
 
 		public static char ReadChar(this Stream stream)
 		{

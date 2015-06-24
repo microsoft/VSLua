@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileHelper.cs" />
+    <Compile Include="Testing\FileHelper.cs" />
     <Compile Include="Lexer\Lexer.cs" />
     <Compile Include="Lexer\StreamExtension.cs" />
     <Compile Include="Lexer\Token.cs" />
@@ -59,7 +59,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Parser\StatNode.cs" />
-    <Compile Include="Tester.cs" />
+    <Compile Include="Testing\Tester.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Testing\Input\assignment.lua" />

@@ -94,24 +94,30 @@ namespace LanguageModel
 				int fullStart = (int) stream.Position;
 				trivia = this.ConsumeTrivia(stream);
                 
-                // TODO: return longest string of acceptable values (124fut return number 124)
                 nextToken = this.ReadNextToken(stream, trivia, fullStart);
+
+                //Console.WriteLine(nextToken.ToString());
 
 				tokens.Add(nextToken);
             }
-			
-			// TODO: IEnum yield return
-			return tokens;
+
+            char c = stream.Peek();
+            // TODO: IEnum yield return
+            return tokens;
         } 
 
         private Token ReadNextToken(Stream stream, List<Trivia> trivia, int fullStart)
         {
+            char nextChar;
+
             if (stream.EndOfStream()) //todo why hiting here?
             {
-                return new Token(Token.TokenType.EndOfFile, "", trivia, fullStart, (int) stream.Position);
+                //stream.EndOfStream();
+                nextChar = stream.Peek();
+                return new Token(Token.TokenType.EndOfFile, "", trivia, fullStart, (int)stream.Position);
             }
 
-            char nextChar = stream.Peek();
+            nextChar = stream.Peek();
 
             // Keyword or Identifier
             if (char.IsLetter(nextChar) || (nextChar == '_'))
@@ -173,7 +179,7 @@ namespace LanguageModel
                 next = stream.Peek();
             }
 
-            if (this.IsValidTerminator(next))
+            if (this.IsValidTerminator(next) || stream.EndOfStream())
             {
                 return new Token(Token.TokenType.Number, number.ToString(), trivia, fullStart, tokenStartPosition);
             }
@@ -353,7 +359,7 @@ namespace LanguageModel
                     else
                     {
                         char[] symbol = { nextChar, nextChar };
-                        return new Token(Token.TokenType.Punctuation, symbol.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(Token.TokenType.Punctuation, new string(symbol), leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '<':
                 case '>':
@@ -366,7 +372,7 @@ namespace LanguageModel
                     {
                         char secondOperatorChar = stream.ReadChar();
                         char[] symbol = { nextChar, secondOperatorChar };
-                        return new Token(Token.TokenType.Operator, symbol.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(Token.TokenType.Operator, new string(symbol), leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '=':
                 case '/':
@@ -376,6 +382,7 @@ namespace LanguageModel
                     }
                     else
                     {
+                        stream.ReadChar(); //TODO: did this fix the bug?
                         char[] symbol = { nextChar, nextChar };
                         //string symbol = char.ToString(nextChar) + char.ToString(nextChar);
                         return new Token(Token.TokenType.Operator, new string(symbol), leadingTrivia, fullStart, tokenStartPosition);
@@ -427,27 +434,30 @@ namespace LanguageModel
                         isTrivia = true;
                         triviaList.Add(CollectWhitespace(stream));
                         break;
-
-					case '\r':
                     case '\n':
                         isTrivia = true;
                         Trivia newLineTrivia = new Trivia(Trivia.TriviaType.Newline, stream.ReadChar().ToString());
                         triviaList.Add(newLineTrivia);
                         break;
 
-                    /*case '\r': This is just completely redundant IMO.
+                   case '\r': //TODO: Is this is just completely redundant IMO.
                         isTrivia = true;
                         stream.ReadChar();
                         next = stream.Peek();
 
+                        Trivia returnTrivia;
+
                         if (next == '\n')
                         {
                             stream.ReadChar();
+                            returnTrivia = new Trivia(Trivia.TriviaType.Newline, "\r\n");
+                        } else
+                        {
+                            returnTrivia = new Trivia(Trivia.TriviaType.Newline, "\r");
                         }
 
-                        Trivia returnTrivia = new Trivia(Trivia.TriviaType.Newline, Environment.NewLine);
                         triviaList.Add(returnTrivia);
-                        break;*/
+                        break;
 
                     case '-':
                                                 
@@ -475,7 +485,7 @@ namespace LanguageModel
                         else
                         {
                             isTrivia = false;
-                            //stream.Position--;
+                            stream.Position--;
                         }
                         break;
 
@@ -540,7 +550,7 @@ namespace LanguageModel
         Trivia ReadLongComment(Stream stream, char[] commentRead)
         {
             StringBuilder comment = new StringBuilder();
-            comment.Append("-").Append(commentRead);
+            comment.Append("-").Append(new string(commentRead));
 
             int level = 0;
             char next;
