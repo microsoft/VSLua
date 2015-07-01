@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LanguageModel
 {   
-    internal class StatNode : SyntaxNode
+    internal class StatNode
     {
         public enum StatKind
         {
@@ -25,16 +25,42 @@ namespace LanguageModel
             LocalAssignment
         }
 
-        private StatKind kind;
-
-        public StatNode(StatKind kind) : base()
+        public SyntaxNode Parse(IEnumerator<Token> tokenEnumerator)
         {
-            this.kind = kind;
+            switch (tokenEnumerator.Current.Text)
+            {
+                case "break":
+                    //TODO: Implement
+                    break;
+                case "goto":
+                    //TODO: Implement
+                    break;
+                case "do":
+                    //TODO: Implement
+                    break;
+                case "while":
+                    //TODO: Implement
+                    break;
+                case "repeat":
+                    //TODO: Implement
+                    break;
+                case "if":
+                    break;
+                case "for":
+                    //TODO: Implement
+                    break;
+                case "function":
+                    //TODO: Implement
+                    break;
+                case "local":
+                    //TODO: Implement
+                    break;
+                default:
+                    //TODO: Implement
+                    //not the beginning of a statement?
+                    break;
+            }
+            return null; //TODO: change
         }
-
-        public StatNode(int start, int end, StatKind kind ) : base(start,end)
-        {
-            this.kind = kind;
-        }        
     }
 }

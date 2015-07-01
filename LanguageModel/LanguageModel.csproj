@@ -33,7 +33,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ImmutableObjectGraph, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bfd91f1bd601e0d7, processorArchitecture=MSIL">
+      <HintPath>packages\ImmutableObjectGraph.Core.0.1.0-beta4\lib\portable-net45+win+wp80\ImmutableObjectGraph.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Bcl.Immutable.1.0.27\lib\portable-net45+win8+wp8\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,25 +51,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Parser\NodeCreator.cs" />
     <Compile Include="Testing\FileHelper.cs" />
     <Compile Include="Lexer\Lexer.cs" />
     <Compile Include="Lexer\StreamExtension.cs" />
     <Compile Include="Lexer\Token.cs" />
     <Compile Include="Lexer\Trivia.cs" />
     <Compile Include="Parser\Parser.cs" />
-    <Compile Include="Parser\ChunkNode.cs" />
-    <Compile Include="Parser\SyntaxNode.cs" />
-    <Compile Include="Parser\Syntax\IfNode.cs" />
-    <Compile Include="Parser\Syntax\Block.cs" />
-    <Compile Include="Parser\Syntax\EndOfFile.cs" />
-    <Compile Include="Parser\Syntax\Expression.cs" />
-    <Compile Include="Parser\Syntax\Keyword.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Parser\StatNode.cs" />
     <Compile Include="Testing\Tester.cs" />
+    <Compile Include="YourImmutableTypeDefinition.cs" />
+    <Compile Include="YourImmutableTypeDefinition.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>YourImmutableTypeDefinition.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Testing\Input\assignment.lua" />
     <None Include="Testing\Temp\leveled_blocks.lua" />
     <None Include="Testing\Temp\longcode.lua" />
@@ -69,6 +78,26 @@
     <None Include="Testing\Input\newlines.lua" />
     <None Include="Testing\Temp\tabs.lua" />
     <None Include="Testing\Output\assignment.out" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ImmutableObjectGraph\ImmutableObjectGraph.Builders.tt.inc" />
+    <Content Include="ImmutableObjectGraph\ImmutableObjectGraph.CollectionHelpers.tt.inc" />
+    <Content Include="ImmutableObjectGraph\ImmutableObjectGraph.DeepMutation.tt.inc" />
+    <Content Include="ImmutableObjectGraph\ImmutableObjectGraph.Delta.tt.inc" />
+    <Content Include="ImmutableObjectGraph\ImmutableObjectGraph.Discovery.tt.inc" />
+    <Content Include="ImmutableObjectGraph\ImmutableObjectGraph.FastSpine.tt.inc" />
+    <Content Include="ImmutableObjectGraph\ImmutableObjectGraph.Interface.tt.inc" />
+    <Content Include="ImmutableObjectGraph\ImmutableObjectGraph.RedNode.tt.inc" />
+    <Content Include="ImmutableObjectGraph\ImmutableObjectGraph.tt.inc" />
+    <Content Include="ImmutableObjectGraph\ImmutableObjectGraph.TypeConversion.tt.inc" />
+    <Content Include="ImmutableObjectGraph\ImmutableObjectGraph.WithProperty.tt.inc" />
+    <Content Include="YourImmutableTypeDefinition.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>YourImmutableTypeDefinition.generated.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

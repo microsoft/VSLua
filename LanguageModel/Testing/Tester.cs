@@ -8,178 +8,170 @@ using System.IO;
 namespace LanguageModel
 {
 
-	enum Type
-	{
-		TRIVIA, TOKEN,
-	}
+    enum Type
+    {
+        TRIVIA, TOKEN,
+    }
 
-	internal sealed class Tester
-	{
-		private static string BuildTriviaString(Token token)
-		{
+    internal sealed class Tester
+    {
+        private static string BuildTriviaString(Token token)
+        {
 
-			string trivia_string = "";
-			foreach (Trivia trivia in token.LeadingTrivia)
-			{
-				trivia_string += trivia.trivia;
-			}
+            string trivia_string = "";
+            foreach (Trivia trivia in token.LeadingTrivia)
+            {
+                trivia_string += trivia.trivia;
+            }
 
-			return trivia_string;
-		}
-
-		private static string GetTokenFromString(int start, int length, ref string fileString)
-		{
-			return fileString.Substring(start, length);
-		}
-
-		private static string GetTriviaFromString(int fullStart, int start, ref string fileString)
-		{
-			return fileString.Substring(fullStart, start - fullStart);
-		}
-
-		private static string GetTriviaTokenFromString(int fullStart, int start, int length, ref string fileString)
-		{
-			return GetTriviaFromString(fullStart, start, ref fileString) + GetTokenFromString(start, length, ref fileString);
+            return trivia_string;
         }
 
-		private static void DisplayInconsistency(string expected, string output, Token token, Type type, string file) // 0 for trivia, 1 for token
-		{
-			Console.WriteLine("In " + file + " on index: " + token.FullStart + " to " + (token.Start + token.Text.Length));
-			Console.WriteLine("For " + type.ToString() + " expected: \"" + ConvertStringToSymbols(expected) + "\", but got: \"" + ConvertStringToSymbols(output) + "\".");
-			Console.WriteLine();
-		}
+        private static string GetTokenFromString(int start, int length, ref string fileString)
+        {
+            return fileString.Substring(start, length);
+        }
 
-		private static string ConvertStringToSymbols(string s)
-		{
-			string new_string = "";
+        private static string GetTriviaFromString(int fullStart, int start, ref string fileString)
+        {
+            return fileString.Substring(fullStart, start - fullStart);
+        }
 
-			foreach (char c in s)
-			{
-				if (c == '\r')
-				{
-					new_string += "\\r";
-				}
-				else if (c == '\n')
-				{
-					new_string += "\\n";
-				}
-				else if (c == '\t')
-				{
-					new_string += "\\t";
-				}
-				else if (c == ' ')
-				{
-					new_string += "\\s";
-				}
-				else
-				{
-					new_string += c;
-				}
-			}
+        private static string GetTriviaTokenFromString(int fullStart, int start, int length, ref string fileString)
+        {
+            return GetTriviaFromString(fullStart, start, ref fileString) + GetTokenFromString(start, length, ref fileString);
+        }
 
-			return new_string;
-		}
+        private static void DisplayInconsistency(string expected, string output, Token token, Type type, string file) // 0 for trivia, 1 for token
+        {
+            Console.WriteLine("In " + file + " on index: " + token.FullStart + " to " + (token.Start + token.Text.Length));
+            Console.WriteLine("For " + type.ToString() + " expected: \"" + ConvertStringToSymbols(expected) + "\", but got: \"" + ConvertStringToSymbols(output) + "\".");
+            Console.WriteLine();
+        }
 
-		private static bool CompareToken(Token token, ref string fileString, string file)
-		{
+        private static string ConvertStringToSymbols(string s)
+        {
+            string new_string = "";
 
-			string token_string = GetTokenFromString(token.Start, token.Text.Length, ref fileString);
-			string trivia_string = GetTriviaFromString(token.FullStart, token.Start, ref fileString);
+            foreach (char c in s)
+            {
+                if (c == '\r')
+                {
+                    new_string += "\\r";
+                }
+                else if (c == '\n')
+                {
+                    new_string += "\\n";
+                }
+                else if (c == '\t')
+                {
+                    new_string += "\\t";
+                }
+                else if (c == ' ')
+                {
+                    new_string += "\\s";
+                }
+                else
+                {
+                    new_string += c;
+                }
+            }
 
-			bool passed = true;
+            return new_string;
+        }
 
-			if (token_string != token.Text)
-			{
-				DisplayInconsistency(token_string, token.Text, token, Type.TOKEN, file);
-				passed = false;
-			}
+        private static bool CompareToken(Token token, ref string fileString, string file)
+        {
 
-			string trivia_from_token = BuildTriviaString(token);
-			if (trivia_string != trivia_from_token)
-			{
-				DisplayInconsistency(trivia_string, trivia_from_token, token, Type.TRIVIA, file);
-				passed = false;
-			}
+            string token_string = GetTokenFromString(token.Start, token.Text.Length, ref fileString);
+            string trivia_string = GetTriviaFromString(token.FullStart, token.Start, ref fileString);
 
-			return passed;
-		}
+            bool passed = true;
 
-		public static void TestFidelity(string path_input, List<string> files_input, Lexer lexer)
-		{
-			foreach (string file in files_input)
-			{
-				string file_location = path_input + "\\" + file;
-				Stream lua_test = File.OpenRead(file_location);
+            if (token_string != token.Text)
+            {
+                DisplayInconsistency(token_string, token.Text, token, Type.TOKEN, file);
+                passed = false;
+            }
+
+            string trivia_from_token = BuildTriviaString(token);
+            if (trivia_string != trivia_from_token)
+            {
+                DisplayInconsistency(trivia_string, trivia_from_token, token, Type.TRIVIA, file);
+                passed = false;
+            }
+
+            return passed;
+        }
+
+        public static void TestFidelity(string path_input, List<string> files_input)
+        {
+            foreach (string file in files_input)
+            {
+                string file_location = path_input + "\\" + file;
+                Stream lua_test = File.OpenRead(file_location);
                 char p = lua_test.Peek();
                 string fileString = (p == 'ï' ? "ï»¿" : "") + File.ReadAllText(file_location); // TODO: Deal with BOM
-                //string fileString = File.ReadAllText(file_location); // TODO: Deal with BOM
+                IEnumerable<Token> tokens = Lexer.Tokenize(lua_test);//TODO: iterate through all tokens in the program
+                bool file_pass = true;
+                
+                foreach (Token token in tokens)
+                {
+                    if (!CompareToken(token, ref fileString, file))
+                    {
+                        file_pass = false;
+                    }
+                }
 
-                List<Token> tokens = lexer.Tokenize(lua_test);
+                if (file_pass)
+                {
+                    Console.WriteLine(file + " passed the fidelity test!");
+                }
+                else
+                {
+                    Console.WriteLine(file + " failed the fidelity test!");
+                }
+            }
+        }
 
-				bool file_pass = true;
+        public static void TestTokens(string path_input, string path_output)
+        {
+            List<string> input_files = FileHelper.GetAllFileNamesInDirectory(path_input);
+            List<string> output_files = FileHelper.GetAllFileNamesInDirectory(path_output);
 
+            List<string> test_files = input_files.Where(x => output_files.Contains(x.Substring(0, x.IndexOf('.')) + ".out")).ToList();
 
+            foreach (string file in test_files)
+            {
 
-				foreach (Token token in tokens)
-				{
-					if (!CompareToken(token, ref fileString, file))
-					{
-						file_pass = false;
-					}
-				}
+                string outfile_name = file.Substring(0, file.IndexOf('.')) + ".out";
 
-				if (file_pass)
-				{
-					Console.WriteLine(file + " passed the fidelity test!");
-				}
-				else
-				{
-					Console.WriteLine(file + " failed the fidelity test!");
-				}
-			}
-		}
+                Stream lua_stream = File.OpenRead(path_input + "\\" + file);
 
-		public static void TestTokens(string path_input, string path_output, Lexer lexer)
-		{
-			List<string> input_files = FileHelper.GetAllFileNamesInDirectory(path_input);
-			List<string> output_files = FileHelper.GetAllFileNamesInDirectory(path_output);
+                IEnumerable<Token> tokens = Lexer.Tokenize(lua_stream);
 
-			List<string> test_files = input_files.Where(x => output_files.Contains(x.Substring(0, x.IndexOf('.')) + ".out")).ToList();
+                string token_strings = "";
 
-			foreach (string file in test_files)
-			{
+                foreach (Token token in tokens)
+                {
+                    token_strings += token.Type + "\n";
+                }
 
-				string outfile_name = file.Substring(0, file.IndexOf('.')) + ".out";
+                string expected_output = File.ReadAllText(path_output + "\\" + outfile_name);
 
-				Stream lua_stream = File.OpenRead(path_input + "\\" + file);
-				
-				List<Token> tokens = lexer.Tokenize(lua_stream);
-
-				string token_strings = "";
-
-				foreach (Token token in tokens)
-				{
-					token_strings += token.Type + "\n";
-				}
-
-				string expected_output = File.ReadAllText(path_output + "\\" + outfile_name);
-
-				if (expected_output == token_strings)
-				{
-					Console.WriteLine(file + " passed the token test!");
-				}else
-				{
-					Console.WriteLine("In " + file + " expected these tokens: ");
-					Console.Write(expected_output);
-					Console.WriteLine("But got: ");
-					Console.Write(token_strings);
-					Console.WriteLine("\n");
-				}
-
-			}
-			
-
-		}
-
-	}
+                if (expected_output == token_strings)
+                {
+                    Console.WriteLine(file + " passed the token test!");
+                }
+                else
+                {
+                    Console.WriteLine("In " + file + " expected these tokens: ");
+                    Console.Write(expected_output);
+                    Console.WriteLine("But got: ");
+                    Console.Write(token_strings);
+                    Console.WriteLine("\n");
+                }
+            }
+        }
+    }
 }

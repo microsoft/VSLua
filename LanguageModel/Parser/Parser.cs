@@ -9,38 +9,18 @@ namespace LanguageModel
 {
     class Parser
     {
-        private Lexer lexer;
-        //private Token currentToken;
-        //private List<Token> tokenList;
-        //private int positionInTokenList;
-        private List<Syntax.ChunkNode> luaFiles;
+        private List<ChunkNode> luaFiles;
 
         public Parser()
         {
-            this.lexer = new Lexer();
-            luaFiles = new List<Syntax.ChunkNode>();
+            luaFiles = new List<ChunkNode>();
         }
 
-        public void CreateParseTree(Stream stream)
+        public void CreateNewParseTree(Stream stream)
         {
-            luaFiles.Add(new Syntax.ChunkNode(lexer.Tokenize(stream))); //TODO: deal with lexer objects still tied to tokens from a previous list without erasing?
-
+            var newProgramRootNode = ChunkNode.CreateBuilder();
+            //newProgramRootNode.Parse(Lexer.Tokenize(stream).GetEnumerator(), TokenType.EndOfFile);
+            //luaFiles.Add(newProgramRootNode);
         }
-
-        //private bool GetNextToken() ///TODO consider returning bool here...
-        //{
-        //    if (positionInTokenList < tokenList.Count)
-        //    {
-        //        currentToken = tokenList[positionInTokenList];
-        //        positionInTokenList++;
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("ERROR: No more tokens to get!");
-        //        return false;
-        //    }
-        //}
-
     }
 }

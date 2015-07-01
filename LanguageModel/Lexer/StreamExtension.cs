@@ -7,10 +7,9 @@ using System.IO;
 
 namespace LanguageModel
 {
-    public static class StreamExtension
+    public static class StreamExtension //TODO: change to streamreader so as to auto deal with encoding issues....
     {
-
-		public static char Peek(this Stream stream)
+        public static char Peek(this Stream stream)
 		{
 			return stream.Peek(1);
 		}
@@ -20,7 +19,6 @@ namespace LanguageModel
             long oldPos = stream.Position;
 			stream.Position += forward - 1;
 			char c = stream.ReadChar();
-            
 			stream.Position = oldPos;
 
 			return c;
@@ -28,8 +26,6 @@ namespace LanguageModel
 
 		public static bool EndOfStream(this Stream stream)
 		{
-            //Console.WriteLine(stream.Peek());
-            //return stream.Peek() == unchecked((char)-1);
             return stream.Length == stream.Position;
         }
 
@@ -51,8 +47,6 @@ namespace LanguageModel
 			}
 
 			return c;
-
 		}
-
     }
 }

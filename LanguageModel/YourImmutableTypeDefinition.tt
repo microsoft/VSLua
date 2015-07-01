@@ -1,0 +1,70 @@
+﻿<#@ template debug="true" language="C#" #>
+<#@ Output Extension=".generated.cs" #>
+<#
+	this.Namespace = "LanguageModel";
+	this.DefineInterfaces = false;
+	this.DefineBuilders = true;
+	this.DefineWithMethodsPerProperty = false;
+#>
+<#@ Include File="ImmutableObjectGraph\ImmutableObjectGraph.Delta.tt.inc" #>
+<#@ Include File="ImmutableObjectGraph\ImmutableObjectGraph.tt.inc" #>
+<#+
+
+	abstract class SyntaxNode {
+		[Required]
+		ImmutableList<Trivia> triviaList;
+		[Required]
+		int fullStartPosition;
+		[Required]
+		int startPosition;
+		[Required]
+		int length;
+	}
+
+	[Ignore]
+	class Trivia {}
+
+	class Block : SyntaxNode {
+		ImmutableList<SyntaxNode> children;
+	}
+
+	class ElseBlock {
+        Keyword elseKeyword;
+        Block block;
+    }
+
+    class ElseIfBlock {
+        Keyword elseIfKeyword;
+        Expression exp;
+        Keyword thenKeyword;
+        Block block;
+    }
+	
+	class ChunkNode : SyntaxNode {
+		Block programBlock;
+        EndOfFileNode endOfFile;
+	}
+
+	class EndOfFileNode : SyntaxNode {
+	 	//TODO: implement
+	}
+
+    class IfNode : SyntaxNode {
+        Keyword ifKeyword;
+        Expression exp;
+        Keyword thenKeyword;
+        Block ifBlock;
+        ImmutableList<ElseIfBlock> elseIfList;
+        ElseBlock elseBlock;
+        Keyword endKeyword;
+	}
+	
+	class Expression : SyntaxNode {
+		//TODO: implement
+	}
+	
+	class Keyword : SyntaxNode {
+		string value;
+	}
+
+#>
