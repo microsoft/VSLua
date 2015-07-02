@@ -18,6 +18,12 @@
             {
                 this.FullStartPosition = token.FullStart;
                 this.StartPosition = token.Start;
+            }
+
+            public void ExtractTokenInfoWithTrivia(Token token)
+            {
+                this.FullStartPosition = token.FullStart;
+                this.StartPosition = token.Start;
                 this.TriviaList = token.LeadingTrivia.ToImmutableList().ToBuilder();
             }
 

@@ -60,7 +60,6 @@
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Parser\StatNode.cs" />
     <Compile Include="Testing\Tester.cs" />
     <Compile Include="YourImmutableTypeDefinition.cs" />
     <Compile Include="YourImmutableTypeDefinition.generated.cs">

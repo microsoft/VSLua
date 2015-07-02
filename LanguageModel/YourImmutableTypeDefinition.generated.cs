@@ -394,10 +394,13 @@ namespace LanguageModel {
 				endKeyword: endKeyword);
 		}
 		
-		public virtual Expression ToExpression() {
+		public virtual Expression ToExpression(
+			ImmutableObjectGraph.Optional<KeyValue> keyvalue = default(ImmutableObjectGraph.Optional<KeyValue>)) {
 			Expression that = this as Expression;
 			if (that != null && this.GetType().IsEquivalentTo(typeof(Expression))) {
-				return that;
+				if ((!keyvalue.IsDefined || keyvalue.Value == that.Keyvalue)) {
+					return that;
+				}
 			}
 		
 			return Expression.CreateWithIdentity(
@@ -405,7 +408,26 @@ namespace LanguageModel {
 				fullStartPosition: this.FullStartPosition,
 				startPosition: this.StartPosition,
 				length: this.Length,
-				identity: this.Identity);
+				identity: this.Identity,
+				keyvalue: keyvalue);
+		}
+		
+		public virtual KeyValue ToKeyValue(
+			ImmutableObjectGraph.Optional<System.String> value = default(ImmutableObjectGraph.Optional<System.String>)) {
+			KeyValue that = this as KeyValue;
+			if (that != null && this.GetType().IsEquivalentTo(typeof(KeyValue))) {
+				if ((!value.IsDefined || value.Value == that.Value)) {
+					return that;
+				}
+			}
+		
+			return KeyValue.CreateWithIdentity(
+				triviaList: this.TriviaList,
+				fullStartPosition: this.FullStartPosition,
+				startPosition: this.StartPosition,
+				length: this.Length,
+				identity: this.Identity,
+				value: value);
 		}
 		
 		public virtual Keyword ToKeyword(
@@ -601,14 +623,19 @@ namespace LanguageModel {
 		EndKeyword = 0x8000,
 	
 		/// <summary>
+		/// The Keyvalue property was changed.
+		/// </summary>
+		Keyvalue = 0x10000,
+	
+		/// <summary>
 		/// The Value property was changed.
 		/// </summary>
-		Value = 0x10000,
+		Value = 0x20000,
 	
 		/// <summary>
 		/// All flags in this enum.
 		/// </summary>
-		All = Type | PositionUnderParent | Parent | TriviaList | FullStartPosition | StartPosition | Length | ProgramBlock | EndOfFile | IfKeyword | Exp | ThenKeyword | IfBlock | ElseIfList | ElseBlock | EndKeyword | Value,
+		All = Type | PositionUnderParent | Parent | TriviaList | FullStartPosition | StartPosition | Length | ProgramBlock | EndOfFile | IfKeyword | Exp | ThenKeyword | IfBlock | ElseIfList | ElseBlock | EndKeyword | Keyvalue | Value,
 	}
 	
 	public partial class Block : SyntaxNode, System.Collections.Generic.IEnumerable<SyntaxNode>, IRecursiveParentWithOrderedChildren, IRecursiveParent<SyntaxNode>, IRecursiveParentWithFastLookup {
@@ -2948,6 +2975,9 @@ namespace LanguageModel {
 		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 		private static readonly Expression DefaultInstance = GetDefaultTemplate();
 	
+		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+		private readonly KeyValue keyvalue;
+	
 		/// <summary>Initializes a new instance of the Expression class.</summary>
 		protected Expression(
 			System.UInt32 identity,
@@ -2955,6 +2985,7 @@ namespace LanguageModel {
 			System.Int32 fullStartPosition,
 			System.Int32 startPosition,
 			System.Int32 length,
+			KeyValue keyvalue,
 			ImmutableObjectGraph.Optional<bool> skipValidation = default(ImmutableObjectGraph.Optional<bool>))
 			: base(
 				identity: identity,
@@ -2963,6 +2994,7 @@ namespace LanguageModel {
 				startPosition: startPosition,
 				length: length)
 		{
+			this.keyvalue = keyvalue;
 			if (!skipValidation.Value) {
 				this.Validate();
 			}
@@ -2972,14 +3004,20 @@ namespace LanguageModel {
 			System.Collections.Immutable.ImmutableList<Trivia> triviaList,
 			System.Int32 fullStartPosition,
 			System.Int32 startPosition,
-			System.Int32 length) {
+			System.Int32 length,
+			ImmutableObjectGraph.Optional<KeyValue> keyvalue = default(ImmutableObjectGraph.Optional<KeyValue>)) {
 			var identity = Optional.For(NewIdentity());
 			return DefaultInstance.WithFactory(
 				triviaList: Optional.For(triviaList),
 				fullStartPosition: Optional.For(fullStartPosition),
 				startPosition: Optional.For(startPosition),
 				length: Optional.For(length),
+				keyvalue: Optional.For(keyvalue.GetValueOrDefault(DefaultInstance.Keyvalue)),
 				identity: Optional.For(identity.GetValueOrDefault(DefaultInstance.Identity)));
+		}
+	
+		public KeyValue Keyvalue {
+			get { return this.keyvalue; }
 		}
 		
 		/// <summary>Replaces the elements of the TriviaList collection with the specified collection.</summary>
@@ -3046,12 +3084,31 @@ namespace LanguageModel {
 			ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>> triviaList = default(ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>>),
 			ImmutableObjectGraph.Optional<System.Int32> fullStartPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
 			ImmutableObjectGraph.Optional<System.Int32> startPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
-			ImmutableObjectGraph.Optional<System.Int32> length = default(ImmutableObjectGraph.Optional<System.Int32>)) {
+			ImmutableObjectGraph.Optional<System.Int32> length = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<KeyValue> keyvalue = default(ImmutableObjectGraph.Optional<KeyValue>)) {
 			return (Expression)this.WithCore(
 				triviaList: triviaList,
 				fullStartPosition: fullStartPosition,
 				startPosition: startPosition,
-				length: length);
+				length: length,
+				keyvalue: keyvalue);
+		}
+	
+		/// <summary>Returns a new instance of this object with any number of properties changed.</summary>
+		protected virtual Expression WithCore(
+			ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>> triviaList = default(ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>>),
+			ImmutableObjectGraph.Optional<System.Int32> fullStartPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> startPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> length = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<KeyValue> keyvalue = default(ImmutableObjectGraph.Optional<KeyValue>)) {
+			var identity = default(ImmutableObjectGraph.Optional<System.UInt32>);
+			return this.WithFactory(
+				triviaList: Optional.For(triviaList.GetValueOrDefault(this.TriviaList)),
+				fullStartPosition: Optional.For(fullStartPosition.GetValueOrDefault(this.FullStartPosition)),
+				startPosition: Optional.For(startPosition.GetValueOrDefault(this.StartPosition)),
+				length: Optional.For(length.GetValueOrDefault(this.Length)),
+				keyvalue: Optional.For(keyvalue.GetValueOrDefault(this.Keyvalue)),
+				identity: Optional.For(identity.GetValueOrDefault(this.Identity)));
 		}
 	
 		/// <summary>Returns a new instance of this object with any number of properties changed.</summary>
@@ -3060,19 +3117,22 @@ namespace LanguageModel {
 			ImmutableObjectGraph.Optional<System.Int32> fullStartPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
 			ImmutableObjectGraph.Optional<System.Int32> startPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
 			ImmutableObjectGraph.Optional<System.Int32> length = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<KeyValue> keyvalue = default(ImmutableObjectGraph.Optional<KeyValue>),
 			ImmutableObjectGraph.Optional<System.UInt32> identity = default(ImmutableObjectGraph.Optional<System.UInt32>)) {
 			if (
 				(identity.IsDefined && identity.Value != this.Identity) || 
 				(triviaList.IsDefined && triviaList.Value != this.TriviaList) || 
 				(fullStartPosition.IsDefined && fullStartPosition.Value != this.FullStartPosition) || 
 				(startPosition.IsDefined && startPosition.Value != this.StartPosition) || 
-				(length.IsDefined && length.Value != this.Length)) {
+				(length.IsDefined && length.Value != this.Length) || 
+				(keyvalue.IsDefined && keyvalue.Value != this.Keyvalue)) {
 				return new Expression(
 					identity: identity.GetValueOrDefault(this.Identity),
 					triviaList: triviaList.GetValueOrDefault(this.TriviaList),
 					fullStartPosition: fullStartPosition.GetValueOrDefault(this.FullStartPosition),
 					startPosition: startPosition.GetValueOrDefault(this.StartPosition),
-					length: length.GetValueOrDefault(this.Length));
+					length: length.GetValueOrDefault(this.Length),
+					keyvalue: keyvalue.GetValueOrDefault(this.Keyvalue));
 			} else {
 				return this;
 			}
@@ -3096,6 +3156,7 @@ namespace LanguageModel {
 				template.FullStartPosition,
 				template.StartPosition,
 				template.Length,
+				template.Keyvalue,
 				skipValidation: true);
 		}
 	
@@ -3108,6 +3169,21 @@ namespace LanguageModel {
 			internal System.Int32 StartPosition { get; set; }
 	
 			internal System.Int32 Length { get; set; }
+	
+			internal KeyValue Keyvalue { get; set; }
+		}
+		
+		protected override SyntaxNodeChangedProperties DiffProperties(SyntaxNode other) {
+			var propertiesChanged = base.DiffProperties(other);
+		
+			var otherExpression = other as Expression;
+			if (otherExpression != null) {
+				if (this.Keyvalue != otherExpression.Keyvalue) {
+					propertiesChanged |= SyntaxNodeChangedProperties.Keyvalue;
+				}
+			}
+		
+			return propertiesChanged;
 		}
 		
 		internal static Expression CreateWithIdentity(
@@ -3115,12 +3191,19 @@ namespace LanguageModel {
 				System.Int32 fullStartPosition,
 				System.Int32 startPosition,
 				System.Int32 length,
+				ImmutableObjectGraph.Optional<KeyValue> keyvalue = default(ImmutableObjectGraph.Optional<KeyValue>),
 				ImmutableObjectGraph.Optional<System.UInt32> identity = default(ImmutableObjectGraph.Optional<System.UInt32>)) {
 			if (!identity.IsDefined) {
 				identity = NewIdentity();
 			}
 		
-			return DefaultInstance;
+			return DefaultInstance.WithFactory(
+					triviaList: Optional.For(triviaList),
+					fullStartPosition: Optional.For(fullStartPosition),
+					startPosition: Optional.For(startPosition),
+					length: Optional.For(length),
+					keyvalue: Optional.For(keyvalue.GetValueOrDefault(DefaultInstance.Keyvalue)),
+					identity: Optional.For(identity.GetValueOrDefault(DefaultInstance.Identity)));
 		}
 		
 		public new Builder ToBuilder() {
@@ -3135,14 +3218,315 @@ namespace LanguageModel {
 			[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 			private Expression immutable;
 		
+			[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+			protected ImmutableObjectGraph.Optional<KeyValue.Builder> keyvalue;
+		
 			internal Builder(Expression immutable) : base(immutable) {
 				this.immutable = immutable;
 		
 			}
 		
+			public KeyValue.Builder Keyvalue {
+				get {
+					if (!this.keyvalue.IsDefined) {
+						this.keyvalue = this.immutable.keyvalue != null ? this.immutable.keyvalue.ToBuilder() : null;
+					}
+		
+					return this.keyvalue.Value;
+				}
+		
+				set {
+					this.keyvalue = value;
+				}
+			}
+		
 			public new Expression ToImmutable() {
 				var triviaList = this.triviaList.IsDefined ? (this.triviaList.Value != null ? this.triviaList.Value.ToImmutable() : null) : this.immutable.TriviaList;
-				return this.immutable = this.immutable;
+				var keyvalue = this.keyvalue.IsDefined ? (this.keyvalue.Value != null ? this.keyvalue.Value.ToImmutable() : null) : this.immutable.Keyvalue;
+				return this.immutable = this.immutable.With(
+					ImmutableObjectGraph.Optional.For(triviaList),
+					ImmutableObjectGraph.Optional.For(this.FullStartPosition),
+					ImmutableObjectGraph.Optional.For(this.StartPosition),
+					ImmutableObjectGraph.Optional.For(this.Length),
+					ImmutableObjectGraph.Optional.For(keyvalue));
+			}
+		}
+	}
+	
+	public partial class KeyValue : SyntaxNode {
+		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+		private static readonly KeyValue DefaultInstance = GetDefaultTemplate();
+	
+		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+		private readonly System.String value;
+	
+		/// <summary>Initializes a new instance of the KeyValue class.</summary>
+		protected KeyValue(
+			System.UInt32 identity,
+			System.Collections.Immutable.ImmutableList<Trivia> triviaList,
+			System.Int32 fullStartPosition,
+			System.Int32 startPosition,
+			System.Int32 length,
+			System.String value,
+			ImmutableObjectGraph.Optional<bool> skipValidation = default(ImmutableObjectGraph.Optional<bool>))
+			: base(
+				identity: identity,
+				triviaList: triviaList,
+				fullStartPosition: fullStartPosition,
+				startPosition: startPosition,
+				length: length)
+		{
+			this.value = value;
+			if (!skipValidation.Value) {
+				this.Validate();
+			}
+		}
+	
+		public static KeyValue Create(
+			System.Collections.Immutable.ImmutableList<Trivia> triviaList,
+			System.Int32 fullStartPosition,
+			System.Int32 startPosition,
+			System.Int32 length,
+			ImmutableObjectGraph.Optional<System.String> value = default(ImmutableObjectGraph.Optional<System.String>)) {
+			var identity = Optional.For(NewIdentity());
+			return DefaultInstance.WithFactory(
+				triviaList: Optional.For(triviaList),
+				fullStartPosition: Optional.For(fullStartPosition),
+				startPosition: Optional.For(startPosition),
+				length: Optional.For(length),
+				value: Optional.For(value.GetValueOrDefault(DefaultInstance.Value)),
+				identity: Optional.For(identity.GetValueOrDefault(DefaultInstance.Identity)));
+		}
+	
+		public System.String Value {
+			get { return this.value; }
+		}
+		
+		/// <summary>Replaces the elements of the TriviaList collection with the specified collection.</summary>
+		public new KeyValue WithTriviaList(params Trivia[] values) {
+			return (KeyValue)base.WithTriviaList(values);
+		}
+		
+		/// <summary>Replaces the elements of the TriviaList collection with the specified collection.</summary>
+		public new KeyValue WithTriviaList(System.Collections.Generic.IEnumerable<Trivia> values) {
+			return (KeyValue)base.WithTriviaList(values);
+		}
+		
+		/// <summary>Adds the specified elements from the TriviaList collection.</summary>
+		public new KeyValue AddTriviaList(System.Collections.Generic.IEnumerable<Trivia> values) {
+			return (KeyValue)base.AddTriviaList(values);
+		}
+		
+		/// <summary>Adds the specified elements from the TriviaList collection.</summary>
+		public new KeyValue AddTriviaList(params Trivia[] values) {
+			return (KeyValue)base.AddTriviaList(values);
+		}
+		
+		/// <summary>Adds the specified element from the TriviaList collection.</summary>
+		public new KeyValue AddTriviaList(Trivia value) {
+			return (KeyValue)base.AddTriviaList(value);
+		}
+		
+		/// <summary>Removes the specified elements from the TriviaList collection.</summary>
+		public new KeyValue RemoveTriviaList(System.Collections.Generic.IEnumerable<Trivia> values) {
+			return (KeyValue)base.RemoveTriviaList(values);
+		}
+		
+		/// <summary>Removes the specified elements from the TriviaList collection.</summary>
+		public new KeyValue RemoveTriviaList(params Trivia[] values) {
+			return (KeyValue)base.RemoveTriviaList(values);
+		}
+		
+		/// <summary>Removes the specified element from the TriviaList collection.</summary>
+		public new KeyValue RemoveTriviaList(Trivia value) {
+			return (KeyValue)base.RemoveTriviaList(value);
+		}
+		
+		/// <summary>Clears all elements from the TriviaList collection.</summary>
+		public new KeyValue RemoveTriviaList() {
+			return (KeyValue)base.RemoveTriviaList();
+		}
+		
+	
+		/// <summary>Returns a new instance of this object with any number of properties changed.</summary>
+		protected override SyntaxNode WithCore(
+			ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>> triviaList = default(ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>>),
+			ImmutableObjectGraph.Optional<System.Int32> fullStartPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> startPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> length = default(ImmutableObjectGraph.Optional<System.Int32>)) {
+			return this.WithFactory(
+				triviaList: triviaList,
+				fullStartPosition: fullStartPosition,
+				startPosition: startPosition,
+				length: length);
+		}
+	
+		/// <summary>Returns a new instance of this object with any number of properties changed.</summary>
+		public KeyValue With(
+			ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>> triviaList = default(ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>>),
+			ImmutableObjectGraph.Optional<System.Int32> fullStartPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> startPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> length = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.String> value = default(ImmutableObjectGraph.Optional<System.String>)) {
+			return (KeyValue)this.WithCore(
+				triviaList: triviaList,
+				fullStartPosition: fullStartPosition,
+				startPosition: startPosition,
+				length: length,
+				value: value);
+		}
+	
+		/// <summary>Returns a new instance of this object with any number of properties changed.</summary>
+		protected virtual KeyValue WithCore(
+			ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>> triviaList = default(ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>>),
+			ImmutableObjectGraph.Optional<System.Int32> fullStartPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> startPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> length = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.String> value = default(ImmutableObjectGraph.Optional<System.String>)) {
+			var identity = default(ImmutableObjectGraph.Optional<System.UInt32>);
+			return this.WithFactory(
+				triviaList: Optional.For(triviaList.GetValueOrDefault(this.TriviaList)),
+				fullStartPosition: Optional.For(fullStartPosition.GetValueOrDefault(this.FullStartPosition)),
+				startPosition: Optional.For(startPosition.GetValueOrDefault(this.StartPosition)),
+				length: Optional.For(length.GetValueOrDefault(this.Length)),
+				value: Optional.For(value.GetValueOrDefault(this.Value)),
+				identity: Optional.For(identity.GetValueOrDefault(this.Identity)));
+		}
+	
+		/// <summary>Returns a new instance of this object with any number of properties changed.</summary>
+		private KeyValue WithFactory(
+			ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>> triviaList = default(ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>>),
+			ImmutableObjectGraph.Optional<System.Int32> fullStartPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> startPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> length = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.String> value = default(ImmutableObjectGraph.Optional<System.String>),
+			ImmutableObjectGraph.Optional<System.UInt32> identity = default(ImmutableObjectGraph.Optional<System.UInt32>)) {
+			if (
+				(identity.IsDefined && identity.Value != this.Identity) || 
+				(triviaList.IsDefined && triviaList.Value != this.TriviaList) || 
+				(fullStartPosition.IsDefined && fullStartPosition.Value != this.FullStartPosition) || 
+				(startPosition.IsDefined && startPosition.Value != this.StartPosition) || 
+				(length.IsDefined && length.Value != this.Length) || 
+				(value.IsDefined && value.Value != this.Value)) {
+				return new KeyValue(
+					identity: identity.GetValueOrDefault(this.Identity),
+					triviaList: triviaList.GetValueOrDefault(this.TriviaList),
+					fullStartPosition: fullStartPosition.GetValueOrDefault(this.FullStartPosition),
+					startPosition: startPosition.GetValueOrDefault(this.StartPosition),
+					length: length.GetValueOrDefault(this.Length),
+					value: value.GetValueOrDefault(this.Value));
+			} else {
+				return this;
+			}
+		}
+	
+		/// <summary>Normalizes and/or validates all properties on this object.</summary>
+		/// <exception type="ArgumentException">Thrown if any properties have disallowed values.</exception>
+		partial void Validate();
+	
+		/// <summary>Provides defaults for fields.</summary>
+		/// <param name="template">The struct to set default values on.</param>
+		static partial void CreateDefaultTemplate(ref Template template);
+	
+		/// <summary>Returns a newly instantiated KeyValue whose fields are initialized with default values.</summary>
+		private static KeyValue GetDefaultTemplate() {
+			var template = new Template();
+			CreateDefaultTemplate(ref template);
+			return new KeyValue(
+				default(System.UInt32),
+				template.TriviaList,
+				template.FullStartPosition,
+				template.StartPosition,
+				template.Length,
+				template.Value,
+				skipValidation: true);
+		}
+	
+		/// <summary>A struct with all the same fields as the containing type for use in describing default values for new instances of the class.</summary>
+		private struct Template {
+			internal System.Collections.Immutable.ImmutableList<Trivia> TriviaList { get; set; }
+	
+			internal System.Int32 FullStartPosition { get; set; }
+	
+			internal System.Int32 StartPosition { get; set; }
+	
+			internal System.Int32 Length { get; set; }
+	
+			internal System.String Value { get; set; }
+		}
+		
+		protected override SyntaxNodeChangedProperties DiffProperties(SyntaxNode other) {
+			var propertiesChanged = base.DiffProperties(other);
+		
+			var otherKeyValue = other as KeyValue;
+			if (otherKeyValue != null) {
+				if (this.Value != otherKeyValue.Value) {
+					propertiesChanged |= SyntaxNodeChangedProperties.Value;
+				}
+			}
+		
+			return propertiesChanged;
+		}
+		
+		internal static KeyValue CreateWithIdentity(
+				System.Collections.Immutable.ImmutableList<Trivia> triviaList,
+				System.Int32 fullStartPosition,
+				System.Int32 startPosition,
+				System.Int32 length,
+				ImmutableObjectGraph.Optional<System.String> value = default(ImmutableObjectGraph.Optional<System.String>),
+				ImmutableObjectGraph.Optional<System.UInt32> identity = default(ImmutableObjectGraph.Optional<System.UInt32>)) {
+			if (!identity.IsDefined) {
+				identity = NewIdentity();
+			}
+		
+			return DefaultInstance.WithFactory(
+					triviaList: Optional.For(triviaList),
+					fullStartPosition: Optional.For(fullStartPosition),
+					startPosition: Optional.For(startPosition),
+					length: Optional.For(length),
+					value: Optional.For(value.GetValueOrDefault(DefaultInstance.Value)),
+					identity: Optional.For(identity.GetValueOrDefault(DefaultInstance.Identity)));
+		}
+		
+		public new Builder ToBuilder() {
+			return new Builder(this);
+		}
+		
+		public static new Builder CreateBuilder() {
+			return new Builder(DefaultInstance);
+		}
+		
+		public new partial class Builder : SyntaxNode.Builder {
+			[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+			private KeyValue immutable;
+		
+			[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+			protected System.String value;
+		
+			internal Builder(KeyValue immutable) : base(immutable) {
+				this.immutable = immutable;
+		
+				this.value = immutable.Value;
+			}
+		
+			public System.String Value {
+				get {
+					return this.value;
+				}
+		
+				set {
+					this.value = value;
+				}
+			}
+		
+			public new KeyValue ToImmutable() {
+				var triviaList = this.triviaList.IsDefined ? (this.triviaList.Value != null ? this.triviaList.Value.ToImmutable() : null) : this.immutable.TriviaList;
+				return this.immutable = this.immutable.With(
+					ImmutableObjectGraph.Optional.For(triviaList),
+					ImmutableObjectGraph.Optional.For(this.FullStartPosition),
+					ImmutableObjectGraph.Optional.For(this.StartPosition),
+					ImmutableObjectGraph.Optional.For(this.Length),
+					ImmutableObjectGraph.Optional.For(this.Value));
 			}
 		}
 	}

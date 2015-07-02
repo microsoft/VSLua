@@ -50,8 +50,9 @@ namespace LanguageModel
         static IfNode ParseIfNode(IEnumerator<Token> tokenEnumerator)
         {
             IfNode.Builder ifNodeBuilder = IfNode.CreateBuilder();
-            ifNodeBuilder.ExtractTokenInfo(tokenEnumerator.Current);
+            ifNodeBuilder.ExtractTokenInfoWithTrivia(tokenEnumerator.Current);
 
+            ifNodeBuilder.IfKeyword = Keyword.CreateBuilder();
             ifNodeBuilder.IfKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
 
             if(!tokenEnumerator.MoveNext())
@@ -59,10 +60,12 @@ namespace LanguageModel
                 //TODO: Error?
             }
 
+            ifNodeBuilder.Exp = Expression.CreateBuilder();
             ifNodeBuilder.Exp = ParseExp(tokenEnumerator, TokenType.ThenKeyword);
 
             if (tokenEnumerator.Current.Text == "then")
             {
+                ifNodeBuilder.ThenKeyword = Keyword.CreateBuilder();
                 ifNodeBuilder.ThenKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
             } else
             {
@@ -74,6 +77,7 @@ namespace LanguageModel
                 //TODO: Error?
             }
 
+            ifNodeBuilder.IfBlock = Block.CreateBuilder();
             ifNodeBuilder.IfBlock = ParseIfBlock(tokenEnumerator);
 
             while(tokenEnumerator.Current.Type == TokenType.ElseIfKeyword)
@@ -127,17 +131,26 @@ namespace LanguageModel
             return elseifBlockBuilder.ToImmutable();
         }
 
-        private static Expression.Builder ParseExp(IEnumerator<Token> tokenEnumerator, TokenType thenKeyword)
+        private static Expression.Builder ParseExp(IEnumerator<Token> tokenEnumerator, TokenType terminatingKeyword)
         {
             Expression.Builder expBuilder = Expression.CreateBuilder();
             expBuilder.ExtractTokenInfo(tokenEnumerator.Current);
 
-
-
+            while(tokenEnumerator.Current.Type != terminatingKeyword)
+            {
+                expBuilder.Keyvalue = KeyValue.CreateBuilder();
+                expBuilder.Keyvalue.ExtractTokenInfo(tokenEnumerator.Current);
+                expBuilder.Keyvalue.Value = tokenEnumerator.Current.Text;
+                if (!tokenEnumerator.MoveNext())
+                {
+                    //TODO: Error?
+                }
+            }
+            expBuilder.Length = tokenEnumerator.Current.FullStart - expBuilder.FullStartPosition;
             return expBuilder;
         }
 
-        static ChunkNode ParseChunkNode(IEnumerator<Token> tokenEnumerator)
+        public static ChunkNode ParseChunkNode(IEnumerator<Token> tokenEnumerator)
         {
             ChunkNode.Builder chunkNodeBuilder = ChunkNode.CreateBuilder();
             chunkNodeBuilder.ExtractTokenInfo(tokenEnumerator.Current);
