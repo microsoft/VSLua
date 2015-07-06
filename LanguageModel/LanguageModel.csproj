@@ -51,16 +51,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Parser\NodeCreator.cs" />
-    <Compile Include="Testing\FileHelper.cs" />
+    <Compile Include="Formatting\Ruling\FormattingContext.cs" />
+    <Compile Include="Formatting\Ruling\Rule.cs" />
+    <Compile Include="Formatting\Ruling\RuleAction.cs" />
+    <Compile Include="Formatting\Ruling\RuleDescriptor.cs" />
+    <Compile Include="Formatting\Ruling\RuleOperation.cs" />
+    <Compile Include="Formatting\Ruling\RuleOperationContext.cs" />
     <Compile Include="Lexer\Lexer.cs" />
     <Compile Include="Lexer\StreamExtension.cs" />
     <Compile Include="Lexer\Token.cs" />
     <Compile Include="Lexer\Trivia.cs" />
+    <Compile Include="Parser\NodeCreator.cs" />
     <Compile Include="Parser\Parser.cs" />
+    <Compile Include="Parser\StatNode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Parser\StatNode.cs" />
+    <Compile Include="Testing\FileHelper.cs" />
     <Compile Include="Testing\Tester.cs" />
     <Compile Include="YourImmutableTypeDefinition.cs" />
     <Compile Include="YourImmutableTypeDefinition.generated.cs">
