@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssignmentAndBinaryOperatorTests.cs" />
+    <Compile Include="BracketTests.cs" />
     <Compile Include="ForLoopTests.cs" />
     <Compile Include="LeftCommaTests.cs" />
     <Compile Include="Tester.cs" />
