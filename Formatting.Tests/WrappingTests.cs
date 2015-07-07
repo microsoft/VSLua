@@ -20,42 +20,42 @@ namespace Formatting.Tests
             this.testOutputHelper = testOutputHelper;
         }
 
-        public async Task GeneralWrappingTest(string original, string expected)
+        public void GeneralWrappingTest(string original, string expected)
         {
-            string actual = await FormatAsync(original);
+            string actual = Format(original);
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public async Task EmptyFunction()
+        public void EmptyFunction()
         {
             string original = "foo = function() end";
             string expected = @"foo = function()
 end";
-           await GeneralWrappingTest(original, expected);
+           GeneralWrappingTest(original, expected);
         }
 
         [Fact]
-        public async Task OneReturn()
+        public void OneReturn()
         {
             string original = "foo = function() return end";
             string expected =
                 @"foo = function()
     return
 end";
-            await GeneralWrappingTest(original, expected);
+            GeneralWrappingTest(original, expected);
         }
 
         [Fact]
-        public async Task OneReturnWithVariable()
+        public void OneReturnWithVariable()
         {
             string original = "foo = function() return x end";
             string expected = @"foo = function()\n    return x\nend";
 
-            await GeneralWrappingTest(original, expected);
+            GeneralWrappingTest(original, expected);
         }
 
-        private async Task<string> FormatAsync(string original)
+        private string Format(string original)
         {
 
             var factory = new EditorUtils.EditorHostFactory();
