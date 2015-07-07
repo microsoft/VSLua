@@ -2,17 +2,17 @@
 
 namespace Formatting.Tests
 {
-    internal static class BracketTests
+    public class BracketTests
     {
 
-        internal static void GeneralTest(string original, string expected)
+        public void GeneralTest(string original, string expected)
         {
             string actual = Tester.Format(original);
             Assert.Equal(actual, expected);
         }
 
         [Fact]
-        internal static void BasicSquare()
+        public void BasicSquare()
         {
             string original = "t[1]";
             string expected = "t[ 1 ]";
@@ -20,7 +20,7 @@ namespace Formatting.Tests
         }
 
         [Fact]
-        internal static void BasicParenthesis()
+        public void BasicParenthesis()
         {
             string original = "function foo (x) end";
             string expected = "function foo ( x ) end";
@@ -28,7 +28,7 @@ namespace Formatting.Tests
         }
 
         [Fact]
-        internal static void BasicCurly()
+        public void BasicCurly()
         {
             string original = "t = {1}";
             string expected = "t = { 1 }";
@@ -36,7 +36,7 @@ namespace Formatting.Tests
         }
 
         [Fact]
-        internal static void LongTable()
+        public void LongTable()
         {
             string original = "t = {1, 3, 4, 5, 6, 7,}";
             string expected = "t = { 1, 3, 4, 5, 6, 7, }";
@@ -44,7 +44,7 @@ namespace Formatting.Tests
         }
 
         [Fact]
-        internal static void LongParams()
+        public void LongParams()
         {
             string original = "foo = function(x, y, z, w) end";
             string expected = "foo = function( x, y, z, w ) end";
@@ -52,7 +52,7 @@ namespace Formatting.Tests
         }
 
         [Fact]
-        internal static void LongSquare()
+        public void LongSquare()
         {
             string original = "t[\"this is a test that grabs this key in Lua\"]";
             string expected = "t[ \"this is a test that grabs this key in Lua\" ]";
@@ -60,7 +60,7 @@ namespace Formatting.Tests
         }
 
         [Fact]
-        internal static void MultiLinedTable()
+        public void MultiLinedTable()
         {
             string original = @"
 t = {
@@ -71,7 +71,7 @@ t = {
         }
 
         [Fact]
-        internal static void MutliLinedSquare()
+        public void MutliLinedSquare()
         {
             string original = @"
 t = [
@@ -85,7 +85,7 @@ t = [
         }
 
         [Fact]
-        internal static void MutliLinedParams()
+        public void MutliLinedParams()
         {
             string original = @"
 foo = function (
@@ -97,7 +97,7 @@ a, b, c )";
         }
 
         [Fact]
-        internal static void ClosedSquare()
+        public void ClosedSquare()
         {
             string original = "](";
             string expected = "] (";
@@ -105,7 +105,7 @@ a, b, c )";
         }
 
         [Fact]
-        internal static void ClosedParen()
+        public void ClosedParen()
         {
             string original = ")(";
             string expected = ") (";
@@ -113,7 +113,7 @@ a, b, c )";
         }
 
         [Fact]
-        internal static void ClosedCurly()
+        public void ClosedCurly()
         {
             string original = "}(";
             string expected = "} (";

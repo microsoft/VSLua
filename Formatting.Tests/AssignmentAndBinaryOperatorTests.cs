@@ -2,17 +2,17 @@
 
 namespace Formatting.Tests
 {
-    internal static class AssignmentAndBinaryOperatorTests
+    public class AssignmentAndBinaryOperatorTests
     {
 
-        internal static void GeneralTestFunction(string original, string expected)
+        public void GeneralTestFunction(string original, string expected)
         {
             string actual = Tester.Format(original);
             Assert.Equal(actual, expected);
         }
 
         [Fact]
-        internal static void AssignmentBasic()
+        public void AssignmentBasic()
         {
             string original = "x=1";
             string expected = "x = 1";
@@ -20,7 +20,7 @@ namespace Formatting.Tests
         }
 
         [Fact]
-        internal static void AssignmentTable()
+        public void AssignmentTable()
         {
             string original = "{ x=1, y=2 }";
             string expected = "{ x = 1, y = 2 }";
@@ -28,7 +28,7 @@ namespace Formatting.Tests
         }
 
         [Fact]
-        internal static void DoubleEquals()
+        public void DoubleEquals()
         {
             string original = "x=1 == 1";
             string expected = "x = 1 == 1";
@@ -36,7 +36,7 @@ namespace Formatting.Tests
         }
 
         [Fact]
-        internal static void MultiLinedAssignemnt()
+        public void MultiLinedAssignemnt()
         {
             string original = @"
 x=
@@ -48,7 +48,7 @@ x =
         }
 
         [Fact]
-        internal static void MultiSpacedBinaryAssignment()
+        public void MultiSpacedBinaryAssignment()
         {
             string original = "1     +       2        =       x";
             string expected = "1 + 2 = x";
@@ -56,7 +56,7 @@ x =
         }
 
         [Fact]
-        internal static void BasicBinaryOperator()
+        public void BasicBinaryOperator()
         {
             string original = "1+1";
             string expected = "1 + 1";
@@ -64,7 +64,7 @@ x =
         }
 
         [Fact]
-        internal static void MutliOperators()
+        public void MutliOperators()
         {
             string original = "1==1+2-4*10^6";
             string expected = "1 == 1 + 2 - 4 * 10 ^ 6";
@@ -72,7 +72,7 @@ x =
         }
 
         [Fact]
-        internal static void MutliLinedBinary()
+        public void MutliLinedBinary()
         {
             string original = @"
 1+1+
@@ -84,7 +84,7 @@ x =
         }
 
         [Fact]
-        internal static void BinaryAdjecent()
+        public void BinaryAdjecent()
         {
             string original = "+-*/";
             string expected = "+ - * /";
@@ -92,7 +92,7 @@ x =
         }
 
         [Fact]
-        internal static void TrailingBinary()
+        public void TrailingBinary()
         {
             string original = "1+";
             string expected = "1 +";
@@ -100,7 +100,7 @@ x =
         }
 
         [Fact]
-        internal static void Mixed()
+        public void Mixed()
         {
             string original = "x +1 == 2   x= 3 /2+4";
             string expected = "x + 1 == 2    x = 3 / 2 + 4";

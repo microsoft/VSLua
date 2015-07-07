@@ -2,10 +2,10 @@
 
 namespace Formatting.Tests
 {
-    public static class WrappingTests
+    public class WrappingTests
     {
 
-        public static void GeneralWrappingTest(string original, string expected1, string expected2)
+        public void GeneralWrappingTest(string original, string expected1, string expected2)
         {
             string actual = Tester.Format(original);
             Assert.Equal(expected1, actual);
@@ -13,7 +13,7 @@ namespace Formatting.Tests
         }
 
         [Fact]
-        public static void EmptyFunction()
+        public void EmptyFunction()
         {
             string original = @"
 foo = function() end";
@@ -24,7 +24,7 @@ end";
         }
 
         [Fact]
-        public static void OneReturn()
+        public void OneReturn()
         {
             string original = @"
 foo = function() return end";
@@ -40,7 +40,7 @@ end";
         }
 
         [Fact]
-        public static void OneReturnWithVariable()
+        public void OneReturnWithVariable()
         {
             string original = @"
 foo = function() return x end";
@@ -57,7 +57,7 @@ end";
         }
 
         [Fact]
-        public static void TwoReturns()
+        public void TwoReturns()
         {
             string original = @"
 foo = function() return return end";
@@ -75,7 +75,7 @@ end";
         }
 
         [Fact]
-        public static void EmptyFunctionV2()
+        public void EmptyFunctionV2()
         {
             string original = @"
 function foo() end";
@@ -86,7 +86,7 @@ end";
         }
 
         [Fact]
-        public static void OneReturnV2()
+        public void OneReturnV2()
         {
             string original = @"
 function foo() return end";
@@ -98,7 +98,7 @@ end";
         }
 
         [Fact]
-        public static void OneExpression()
+        public void OneExpression()
         {
             string original = @"
 foo = function() x = x + 1 end";
@@ -114,7 +114,7 @@ end";
         }
 
         [Fact]
-        public static void NotSameLineFunction1()
+        public void NotSameLineFunction1()
         {
             string original = @"
 foo = function() return
@@ -123,7 +123,7 @@ end";
         }
 
         [Fact]
-        public static void NotSameLineFunction2()
+        public void NotSameLineFunction2()
         {
             string original = @"
 foo =
@@ -132,7 +132,7 @@ function() return end";
         }
 
         [Fact]
-        public static void NotSameLineFunction3()
+        public void NotSameLineFunction3()
         {
             string original = @"
 function foo()
@@ -141,7 +141,7 @@ end";
         }
 
         [Fact]
-        public static void EmptyTable()
+        public void EmptyTable()
         {
             string original = @"
 t1 = {}";
@@ -155,7 +155,7 @@ t1 = {
         }
 
         [Fact]
-        public static void OneElement()
+        public void OneElement()
         {
             string original = @"
 t1 = {2}";
@@ -173,7 +173,7 @@ t1 = {
         }
 
         [Fact]
-        public static void TableTrailingComma()
+        public void TableTrailingComma()
         {
             string original = @"
 t1 = {2,}";
@@ -189,7 +189,7 @@ t1 = {
         }
 
         [Fact]
-        public static void TableMoreElements()
+        public void TableMoreElements()
         {
             string original = @"
 t1 = {1, 2, 3}";
@@ -210,7 +210,7 @@ t1 = {
         }
 
         [Fact]
-        public static void TableMultipleLines1()
+        public void TableMultipleLines1()
         {
             string original = @"
 t1 =
@@ -219,7 +219,7 @@ t1 =
         }
 
         [Fact]
-        public static void TableMutlipleLines2()
+        public void TableMutlipleLines2()
         {
             string original = @"
 t2 = {2,
@@ -228,7 +228,7 @@ t2 = {2,
         }
 
         [Fact]
-        public static void TableMutlipleLines3()
+        public void TableMutlipleLines3()
         {
             string original = @"
 t3 = {2
@@ -237,7 +237,7 @@ t3 = {2
         }
 
         [Fact]
-        public static void EmbeddedTables()
+        public void EmbeddedTables()
         {
             string original = @"
 t1 = { t2 = { t3 = {} } }";
@@ -260,7 +260,7 @@ t1 = {
         }
 
         [Fact]
-        public static void EmbeddedFunctions()
+        public void EmbeddedFunctions()
         {
             string original = @"
 foo = function() bar = function() foobar = function() end end end";
@@ -282,7 +282,7 @@ end";
         }
 
         [Fact]
-        public static void EmbeddedFunctionsV2()
+        public void EmbeddedFunctionsV2()
         {
             string original = @"
 function foo() function bar() function foobar() end end end";
