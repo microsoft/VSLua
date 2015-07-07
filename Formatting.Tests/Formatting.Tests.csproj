@@ -106,6 +106,7 @@
     <Compile Include="BracketTests.cs" />
     <Compile Include="ForLoopTests.cs" />
     <Compile Include="LeftCommaTests.cs" />
+    <Compile Include="NewlineRuleTesting.cs" />
     <Compile Include="Tester.cs" />
     <Compile Include="WrappingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
