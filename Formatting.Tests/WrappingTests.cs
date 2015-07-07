@@ -35,6 +35,7 @@ end";
            await GeneralWrappingTest(original, expected);
         }
 
+        [Fact]
         public async Task OneReturn()
         {
             string original = "foo = function() return end";
@@ -56,15 +57,13 @@ end";
 
         private async Task<string> FormatAsync(string original)
         {
-            var ep = await EditorHost.CreateExportProviderAsync(this.testOutputHelper);
-            var editorFacotryService = ep.GetExportedValue<ITextEditorFactoryService>();
-            var textView = editorFacotryService.CreateTextView();
-            var textBuffer = textView.TextBuffer;
-            var textEdit = textBuffer.CreateEdit();
-            textEdit.Replace(0, 0, original);
-            var applied = textEdit.Apply();
 
-            //List<TextEditInfo> textEdits = Formatter.Format(original);
+            var factory = new EditorUtils.EditorHostFactory();
+            var host = factory.CreateEditorHost();
+
+            var buffer = host.CreateTextBuffer(original);
+            var edit = buffer.CreateEdit();
+            var applied = edit.Apply();
 
             return applied.GetText();
         }
