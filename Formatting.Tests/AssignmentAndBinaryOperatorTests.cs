@@ -48,6 +48,14 @@ x =
         }
 
         [Fact]
+        internal static void MultiSpacedBinaryAssignment()
+        {
+            string original = "1     +       2        =       x";
+            string expected = "1 + 2 = x";
+            GeneralTestFunction(original, expected);
+        }
+
+        [Fact]
         internal static void BasicBinaryOperator()
         {
             string original = "1+1";
