@@ -45,6 +45,15 @@ end";
             await GeneralWrappingTest(original, expected);
         }
 
+        [Fact]
+        public async Task OneReturnWithVariable()
+        {
+            string original = "foo = function() return x end";
+            string expected = @"foo = function()\n    return x\nend";
+
+            await GeneralWrappingTest(original, expected);
+        }
+
         private async Task<string> FormatAsync(string original)
         {
             var ep = await EditorHost.CreateExportProviderAsync(this.testOutputHelper);
