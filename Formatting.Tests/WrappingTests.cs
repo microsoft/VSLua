@@ -20,14 +20,29 @@ namespace Formatting.Tests
             this.testOutputHelper = testOutputHelper;
         }
 
+        public async Task GeneralWrappingTest(string original, string expected)
+        {
+            string actual = await FormatAsync(original);
+            Assert.Equal(expected, actual);
+        }
+
         [Fact]
         public async Task EmptyFunction()
         {
             string original = "foo = function() end";
             string expected = @"foo = function()
 end";
-            string actual = await FormatAsync(original);
-            Assert.Equal(expected, actual);
+           await GeneralWrappingTest(original, expected);
+        }
+
+        public async Task OneReturn()
+        {
+            string original = "foo = function() return end";
+            string expected =
+                @"foo = function()
+    return
+end";
+            await GeneralWrappingTest(original, expected);
         }
 
         private async Task<string> FormatAsync(string original)
