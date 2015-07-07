@@ -323,6 +323,27 @@ namespace LanguageModel {
 				children: children);
 		}
 		
+		public virtual ElseBlock ToElseBlock(
+			ImmutableObjectGraph.Optional<Keyword> elseKeyword = default(ImmutableObjectGraph.Optional<Keyword>),
+			ImmutableObjectGraph.Optional<Block> block = default(ImmutableObjectGraph.Optional<Block>)) {
+			ElseBlock that = this as ElseBlock;
+			if (that != null && this.GetType().IsEquivalentTo(typeof(ElseBlock))) {
+				if ((!elseKeyword.IsDefined || elseKeyword.Value == that.ElseKeyword) && 
+				    (!block.IsDefined || block.Value == that.Block)) {
+					return that;
+				}
+			}
+		
+			return ElseBlock.CreateWithIdentity(
+				triviaList: this.TriviaList,
+				fullStartPosition: this.FullStartPosition,
+				startPosition: this.StartPosition,
+				length: this.Length,
+				identity: this.Identity,
+				elseKeyword: elseKeyword,
+				block: block);
+		}
+		
 		public virtual ChunkNode ToChunkNode(
 			ImmutableObjectGraph.Optional<Block> programBlock = default(ImmutableObjectGraph.Optional<Block>),
 			ImmutableObjectGraph.Optional<EndOfFileNode> endOfFile = default(ImmutableObjectGraph.Optional<EndOfFileNode>)) {
@@ -578,64 +599,74 @@ namespace LanguageModel {
 		Length = 0x40,
 	
 		/// <summary>
+		/// The ElseKeyword property was changed.
+		/// </summary>
+		ElseKeyword = 0x80,
+	
+		/// <summary>
+		/// The Block property was changed.
+		/// </summary>
+		Block = 0x100,
+	
+		/// <summary>
 		/// The ProgramBlock property was changed.
 		/// </summary>
-		ProgramBlock = 0x80,
+		ProgramBlock = 0x200,
 	
 		/// <summary>
 		/// The EndOfFile property was changed.
 		/// </summary>
-		EndOfFile = 0x100,
+		EndOfFile = 0x400,
 	
 		/// <summary>
 		/// The IfKeyword property was changed.
 		/// </summary>
-		IfKeyword = 0x200,
+		IfKeyword = 0x800,
 	
 		/// <summary>
 		/// The Exp property was changed.
 		/// </summary>
-		Exp = 0x400,
+		Exp = 0x1000,
 	
 		/// <summary>
 		/// The ThenKeyword property was changed.
 		/// </summary>
-		ThenKeyword = 0x800,
+		ThenKeyword = 0x2000,
 	
 		/// <summary>
 		/// The IfBlock property was changed.
 		/// </summary>
-		IfBlock = 0x1000,
+		IfBlock = 0x4000,
 	
 		/// <summary>
 		/// The ElseIfList property was changed.
 		/// </summary>
-		ElseIfList = 0x2000,
+		ElseIfList = 0x8000,
 	
 		/// <summary>
 		/// The ElseBlock property was changed.
 		/// </summary>
-		ElseBlock = 0x4000,
+		ElseBlock = 0x10000,
 	
 		/// <summary>
 		/// The EndKeyword property was changed.
 		/// </summary>
-		EndKeyword = 0x8000,
+		EndKeyword = 0x20000,
 	
 		/// <summary>
 		/// The Keyvalue property was changed.
 		/// </summary>
-		Keyvalue = 0x10000,
+		Keyvalue = 0x40000,
 	
 		/// <summary>
 		/// The Value property was changed.
 		/// </summary>
-		Value = 0x20000,
+		Value = 0x80000,
 	
 		/// <summary>
 		/// All flags in this enum.
 		/// </summary>
-		All = Type | PositionUnderParent | Parent | TriviaList | FullStartPosition | StartPosition | Length | ProgramBlock | EndOfFile | IfKeyword | Exp | ThenKeyword | IfBlock | ElseIfList | ElseBlock | EndKeyword | Keyvalue | Value,
+		All = Type | PositionUnderParent | Parent | TriviaList | FullStartPosition | StartPosition | Length | ElseKeyword | Block | ProgramBlock | EndOfFile | IfKeyword | Exp | ThenKeyword | IfBlock | ElseIfList | ElseBlock | EndKeyword | Keyvalue | Value,
 	}
 	
 	public partial class Block : SyntaxNode, System.Collections.Generic.IEnumerable<SyntaxNode>, IRecursiveParentWithOrderedChildren, IRecursiveParent<SyntaxNode>, IRecursiveParentWithFastLookup {
@@ -1392,12 +1423,9 @@ namespace LanguageModel {
 		}
 	}
 	
-	public partial class ElseBlock {
+	public partial class ElseBlock : SyntaxNode {
 		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 		private static readonly ElseBlock DefaultInstance = GetDefaultTemplate();
-		
-		/// <summary>The last identity assigned to a created instance.</summary>
-		private static int lastIdentityProduced;
 	
 		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 		private readonly Keyword elseKeyword;
@@ -1405,16 +1433,23 @@ namespace LanguageModel {
 		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 		private readonly Block block;
 	
-		private readonly System.UInt32 identity;
-	
 		/// <summary>Initializes a new instance of the ElseBlock class.</summary>
 		protected ElseBlock(
 			System.UInt32 identity,
+			System.Collections.Immutable.ImmutableList<Trivia> triviaList,
+			System.Int32 fullStartPosition,
+			System.Int32 startPosition,
+			System.Int32 length,
 			Keyword elseKeyword,
 			Block block,
 			ImmutableObjectGraph.Optional<bool> skipValidation = default(ImmutableObjectGraph.Optional<bool>))
+			: base(
+				identity: identity,
+				triviaList: triviaList,
+				fullStartPosition: fullStartPosition,
+				startPosition: startPosition,
+				length: length)
 		{
-			this.identity = identity;
 			this.elseKeyword = elseKeyword;
 			this.block = block;
 			if (!skipValidation.Value) {
@@ -1423,10 +1458,18 @@ namespace LanguageModel {
 		}
 	
 		public static ElseBlock Create(
+			System.Collections.Immutable.ImmutableList<Trivia> triviaList,
+			System.Int32 fullStartPosition,
+			System.Int32 startPosition,
+			System.Int32 length,
 			ImmutableObjectGraph.Optional<Keyword> elseKeyword = default(ImmutableObjectGraph.Optional<Keyword>),
 			ImmutableObjectGraph.Optional<Block> block = default(ImmutableObjectGraph.Optional<Block>)) {
 			var identity = Optional.For(NewIdentity());
 			return DefaultInstance.WithFactory(
+				triviaList: Optional.For(triviaList),
+				fullStartPosition: Optional.For(fullStartPosition),
+				startPosition: Optional.For(startPosition),
+				length: Optional.For(length),
 				elseKeyword: Optional.For(elseKeyword.GetValueOrDefault(DefaultInstance.ElseKeyword)),
 				block: Optional.For(block.GetValueOrDefault(DefaultInstance.Block)),
 				identity: Optional.For(identity.GetValueOrDefault(DefaultInstance.Identity)));
@@ -1439,22 +1482,97 @@ namespace LanguageModel {
 		public Block Block {
 			get { return this.block; }
 		}
+		
+		/// <summary>Replaces the elements of the TriviaList collection with the specified collection.</summary>
+		public new ElseBlock WithTriviaList(params Trivia[] values) {
+			return (ElseBlock)base.WithTriviaList(values);
+		}
+		
+		/// <summary>Replaces the elements of the TriviaList collection with the specified collection.</summary>
+		public new ElseBlock WithTriviaList(System.Collections.Generic.IEnumerable<Trivia> values) {
+			return (ElseBlock)base.WithTriviaList(values);
+		}
+		
+		/// <summary>Adds the specified elements from the TriviaList collection.</summary>
+		public new ElseBlock AddTriviaList(System.Collections.Generic.IEnumerable<Trivia> values) {
+			return (ElseBlock)base.AddTriviaList(values);
+		}
+		
+		/// <summary>Adds the specified elements from the TriviaList collection.</summary>
+		public new ElseBlock AddTriviaList(params Trivia[] values) {
+			return (ElseBlock)base.AddTriviaList(values);
+		}
+		
+		/// <summary>Adds the specified element from the TriviaList collection.</summary>
+		public new ElseBlock AddTriviaList(Trivia value) {
+			return (ElseBlock)base.AddTriviaList(value);
+		}
+		
+		/// <summary>Removes the specified elements from the TriviaList collection.</summary>
+		public new ElseBlock RemoveTriviaList(System.Collections.Generic.IEnumerable<Trivia> values) {
+			return (ElseBlock)base.RemoveTriviaList(values);
+		}
+		
+		/// <summary>Removes the specified elements from the TriviaList collection.</summary>
+		public new ElseBlock RemoveTriviaList(params Trivia[] values) {
+			return (ElseBlock)base.RemoveTriviaList(values);
+		}
+		
+		/// <summary>Removes the specified element from the TriviaList collection.</summary>
+		public new ElseBlock RemoveTriviaList(Trivia value) {
+			return (ElseBlock)base.RemoveTriviaList(value);
+		}
+		
+		/// <summary>Clears all elements from the TriviaList collection.</summary>
+		public new ElseBlock RemoveTriviaList() {
+			return (ElseBlock)base.RemoveTriviaList();
+		}
+		
+	
+		/// <summary>Returns a new instance of this object with any number of properties changed.</summary>
+		protected override SyntaxNode WithCore(
+			ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>> triviaList = default(ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>>),
+			ImmutableObjectGraph.Optional<System.Int32> fullStartPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> startPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> length = default(ImmutableObjectGraph.Optional<System.Int32>)) {
+			return this.WithFactory(
+				triviaList: triviaList,
+				fullStartPosition: fullStartPosition,
+				startPosition: startPosition,
+				length: length);
+		}
 	
 		/// <summary>Returns a new instance of this object with any number of properties changed.</summary>
 		public ElseBlock With(
+			ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>> triviaList = default(ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>>),
+			ImmutableObjectGraph.Optional<System.Int32> fullStartPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> startPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> length = default(ImmutableObjectGraph.Optional<System.Int32>),
 			ImmutableObjectGraph.Optional<Keyword> elseKeyword = default(ImmutableObjectGraph.Optional<Keyword>),
 			ImmutableObjectGraph.Optional<Block> block = default(ImmutableObjectGraph.Optional<Block>)) {
 			return (ElseBlock)this.WithCore(
+				triviaList: triviaList,
+				fullStartPosition: fullStartPosition,
+				startPosition: startPosition,
+				length: length,
 				elseKeyword: elseKeyword,
 				block: block);
 		}
 	
 		/// <summary>Returns a new instance of this object with any number of properties changed.</summary>
 		protected virtual ElseBlock WithCore(
+			ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>> triviaList = default(ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>>),
+			ImmutableObjectGraph.Optional<System.Int32> fullStartPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> startPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> length = default(ImmutableObjectGraph.Optional<System.Int32>),
 			ImmutableObjectGraph.Optional<Keyword> elseKeyword = default(ImmutableObjectGraph.Optional<Keyword>),
 			ImmutableObjectGraph.Optional<Block> block = default(ImmutableObjectGraph.Optional<Block>)) {
 			var identity = default(ImmutableObjectGraph.Optional<System.UInt32>);
 			return this.WithFactory(
+				triviaList: Optional.For(triviaList.GetValueOrDefault(this.TriviaList)),
+				fullStartPosition: Optional.For(fullStartPosition.GetValueOrDefault(this.FullStartPosition)),
+				startPosition: Optional.For(startPosition.GetValueOrDefault(this.StartPosition)),
+				length: Optional.For(length.GetValueOrDefault(this.Length)),
 				elseKeyword: Optional.For(elseKeyword.GetValueOrDefault(this.ElseKeyword)),
 				block: Optional.For(block.GetValueOrDefault(this.Block)),
 				identity: Optional.For(identity.GetValueOrDefault(this.Identity)));
@@ -1462,29 +1580,32 @@ namespace LanguageModel {
 	
 		/// <summary>Returns a new instance of this object with any number of properties changed.</summary>
 		private ElseBlock WithFactory(
+			ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>> triviaList = default(ImmutableObjectGraph.Optional<System.Collections.Immutable.ImmutableList<Trivia>>),
+			ImmutableObjectGraph.Optional<System.Int32> fullStartPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> startPosition = default(ImmutableObjectGraph.Optional<System.Int32>),
+			ImmutableObjectGraph.Optional<System.Int32> length = default(ImmutableObjectGraph.Optional<System.Int32>),
 			ImmutableObjectGraph.Optional<Keyword> elseKeyword = default(ImmutableObjectGraph.Optional<Keyword>),
 			ImmutableObjectGraph.Optional<Block> block = default(ImmutableObjectGraph.Optional<Block>),
 			ImmutableObjectGraph.Optional<System.UInt32> identity = default(ImmutableObjectGraph.Optional<System.UInt32>)) {
 			if (
 				(identity.IsDefined && identity.Value != this.Identity) || 
+				(triviaList.IsDefined && triviaList.Value != this.TriviaList) || 
+				(fullStartPosition.IsDefined && fullStartPosition.Value != this.FullStartPosition) || 
+				(startPosition.IsDefined && startPosition.Value != this.StartPosition) || 
+				(length.IsDefined && length.Value != this.Length) || 
 				(elseKeyword.IsDefined && elseKeyword.Value != this.ElseKeyword) || 
 				(block.IsDefined && block.Value != this.Block)) {
 				return new ElseBlock(
 					identity: identity.GetValueOrDefault(this.Identity),
+					triviaList: triviaList.GetValueOrDefault(this.TriviaList),
+					fullStartPosition: fullStartPosition.GetValueOrDefault(this.FullStartPosition),
+					startPosition: startPosition.GetValueOrDefault(this.StartPosition),
+					length: length.GetValueOrDefault(this.Length),
 					elseKeyword: elseKeyword.GetValueOrDefault(this.ElseKeyword),
 					block: block.GetValueOrDefault(this.Block));
 			} else {
 				return this;
 			}
-		}
-	
-		protected internal uint Identity {
-			get { return (uint)this.identity; }
-		}
-	
-		/// <summary>Returns a unique identity that may be assigned to a newly created instance.</summary>
-		protected static System.UInt32 NewIdentity() {
-			return (System.UInt32)System.Threading.Interlocked.Increment(ref lastIdentityProduced);
 		}
 	
 		/// <summary>Normalizes and/or validates all properties on this object.</summary>
@@ -1501,6 +1622,10 @@ namespace LanguageModel {
 			CreateDefaultTemplate(ref template);
 			return new ElseBlock(
 				default(System.UInt32),
+				template.TriviaList,
+				template.FullStartPosition,
+				template.StartPosition,
+				template.Length,
 				template.ElseKeyword,
 				template.Block,
 				skipValidation: true);
@@ -1508,20 +1633,67 @@ namespace LanguageModel {
 	
 		/// <summary>A struct with all the same fields as the containing type for use in describing default values for new instances of the class.</summary>
 		private struct Template {
+			internal System.Collections.Immutable.ImmutableList<Trivia> TriviaList { get; set; }
+	
+			internal System.Int32 FullStartPosition { get; set; }
+	
+			internal System.Int32 StartPosition { get; set; }
+	
+			internal System.Int32 Length { get; set; }
+	
 			internal Keyword ElseKeyword { get; set; }
 	
 			internal Block Block { get; set; }
 		}
 		
-		public Builder ToBuilder() {
+		protected override SyntaxNodeChangedProperties DiffProperties(SyntaxNode other) {
+			var propertiesChanged = base.DiffProperties(other);
+		
+			var otherElseBlock = other as ElseBlock;
+			if (otherElseBlock != null) {
+				if (this.ElseKeyword != otherElseBlock.ElseKeyword) {
+					propertiesChanged |= SyntaxNodeChangedProperties.ElseKeyword;
+				}
+		
+				if (this.Block != otherElseBlock.Block) {
+					propertiesChanged |= SyntaxNodeChangedProperties.Block;
+				}
+			}
+		
+			return propertiesChanged;
+		}
+		
+		internal static ElseBlock CreateWithIdentity(
+				System.Collections.Immutable.ImmutableList<Trivia> triviaList,
+				System.Int32 fullStartPosition,
+				System.Int32 startPosition,
+				System.Int32 length,
+				ImmutableObjectGraph.Optional<Keyword> elseKeyword = default(ImmutableObjectGraph.Optional<Keyword>),
+				ImmutableObjectGraph.Optional<Block> block = default(ImmutableObjectGraph.Optional<Block>),
+				ImmutableObjectGraph.Optional<System.UInt32> identity = default(ImmutableObjectGraph.Optional<System.UInt32>)) {
+			if (!identity.IsDefined) {
+				identity = NewIdentity();
+			}
+		
+			return DefaultInstance.WithFactory(
+					triviaList: Optional.For(triviaList),
+					fullStartPosition: Optional.For(fullStartPosition),
+					startPosition: Optional.For(startPosition),
+					length: Optional.For(length),
+					elseKeyword: Optional.For(elseKeyword.GetValueOrDefault(DefaultInstance.ElseKeyword)),
+					block: Optional.For(block.GetValueOrDefault(DefaultInstance.Block)),
+					identity: Optional.For(identity.GetValueOrDefault(DefaultInstance.Identity)));
+		}
+		
+		public new Builder ToBuilder() {
 			return new Builder(this);
 		}
 		
-		public static Builder CreateBuilder() {
+		public static new Builder CreateBuilder() {
 			return new Builder(DefaultInstance);
 		}
 		
-		public partial class Builder {
+		public new partial class Builder : SyntaxNode.Builder {
 			[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 			private ElseBlock immutable;
 		
@@ -1531,7 +1703,7 @@ namespace LanguageModel {
 			[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 			protected ImmutableObjectGraph.Optional<Block.Builder> block;
 		
-			internal Builder(ElseBlock immutable) {
+			internal Builder(ElseBlock immutable) : base(immutable) {
 				this.immutable = immutable;
 		
 			}
@@ -1564,10 +1736,15 @@ namespace LanguageModel {
 				}
 			}
 		
-			public ElseBlock ToImmutable() {
+			public new ElseBlock ToImmutable() {
+				var triviaList = this.triviaList.IsDefined ? (this.triviaList.Value != null ? this.triviaList.Value.ToImmutable() : null) : this.immutable.TriviaList;
 				var elseKeyword = this.elseKeyword.IsDefined ? (this.elseKeyword.Value != null ? this.elseKeyword.Value.ToImmutable() : null) : this.immutable.ElseKeyword;
 				var block = this.block.IsDefined ? (this.block.Value != null ? this.block.Value.ToImmutable() : null) : this.immutable.Block;
 				return this.immutable = this.immutable.With(
+					ImmutableObjectGraph.Optional.For(triviaList),
+					ImmutableObjectGraph.Optional.For(this.FullStartPosition),
+					ImmutableObjectGraph.Optional.For(this.StartPosition),
+					ImmutableObjectGraph.Optional.For(this.Length),
 					ImmutableObjectGraph.Optional.For(elseKeyword),
 					ImmutableObjectGraph.Optional.For(block));
 			}

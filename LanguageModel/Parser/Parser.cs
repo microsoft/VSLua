@@ -7,7 +7,7 @@ using System.IO;
 
 namespace LanguageModel
 {
-    class Parser
+    public class Parser
     {
         private List<ChunkNode> luaFiles;
 

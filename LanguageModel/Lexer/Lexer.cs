@@ -12,7 +12,7 @@ using System.IO;
 
 namespace LanguageModel
 {
-    internal static class Lexer
+    public static class Lexer
     {
         private static readonly HashSet<string> Keywords = new HashSet<string> //TODO: make dictionary
         {

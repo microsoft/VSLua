@@ -108,7 +108,7 @@ namespace LanguageModel
         private static ElseIfBlock ParseElseIfBlocks(IEnumerator<Token> tokenEnumerator)
         {
             ElseIfBlock.Builder elseifBlockBuilder = ElseIfBlock.CreateBuilder();
-            elseifBlockBuilder.ExtractTokenInfo(tokenEnumerator.Current);
+            //elseifBlockBuilder.ExtractTokenInfo(tokenEnumerator.Current);
 
             elseifBlockBuilder.ElseIfKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
             if (!tokenEnumerator.MoveNext())

@@ -37,16 +37,16 @@
 
     partial class ElseIfBlock
     {
-        partial class Builder
-        {
-            public void ExtractTokenInfo(Token token)
-            {
-                //TODO: make this class inherit from syntaxnode
-                //this.FullStartPosition = token.FullStart;
-                //this.StartPosition = token.Start;
-                //this.TriviaList = token.LeadingTrivia.ToImmutableList().ToBuilder(); 
-            }
-        }
+    //    partial class Builder
+    //    {
+    //        public void ExtractTokenInfo(Token token)
+    //        {
+    //            //TODO: make this class inherit from syntaxnode
+    //            //this.FullStartPosition = token.FullStart;
+    //            //this.StartPosition = token.Start;
+    //            //this.TriviaList = token.LeadingTrivia.ToImmutableList().ToBuilder(); 
+    //        }
+    //    }
     }
 
     partial class Keyword

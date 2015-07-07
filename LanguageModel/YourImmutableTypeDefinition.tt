@@ -28,7 +28,7 @@
 		ImmutableList<SyntaxNode> children;
 	}
 
-	class ElseBlock { //TODO: inherit from syntax node
+	class ElseBlock : SyntaxNode {
         Keyword elseKeyword;
         Block block;
     }
