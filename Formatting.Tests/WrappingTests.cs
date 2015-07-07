@@ -1,34 +1,19 @@
-﻿using Microsoft.VisualStudio.Composition;
-using Microsoft.VisualStudio.Text.Editor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
-using Microsoft.VisualStudio.Utilities;
-using Xunit.Abstractions;
+﻿using Xunit;
 
 namespace Formatting.Tests
 {
-    public class WrappingTests
+    public static class WrappingTests
     {
-        private readonly ITestOutputHelper testOutputHelper;
 
-        public WrappingTests(ITestOutputHelper testOutputHelper)
+        public static void GeneralWrappingTest(string original, string expected1, string expected2)
         {
-            this.testOutputHelper = testOutputHelper;
-        }
-
-        public void GeneralWrappingTest(string original, string expected1, string expected2)
-        {
-            string actual = Format(original);
+            string actual = Tester.Format(original);
             Assert.Equal(expected1, actual);
             Assert.Equal(expected2, actual);
         }
 
         [Fact]
-        public void EmptyFunction()
+        public static void EmptyFunction()
         {
             string original = @"
 foo = function() end";
@@ -39,7 +24,7 @@ end";
         }
 
         [Fact]
-        public void OneReturn()
+        public static void OneReturn()
         {
             string original = @"
 foo = function() return end";
@@ -55,7 +40,7 @@ end";
         }
 
         [Fact]
-        public void OneReturnWithVariable()
+        public static void OneReturnWithVariable()
         {
             string original = @"
 foo = function() return x end";
@@ -72,7 +57,7 @@ end";
         }
 
         [Fact]
-        public void TwoReturns()
+        public static void TwoReturns()
         {
             string original = @"
 foo = function() return return end";
@@ -90,7 +75,7 @@ end";
         }
 
         [Fact]
-        public void EmptyFunctionV2()
+        public static void EmptyFunctionV2()
         {
             string original = @"
 function foo() end";
@@ -101,7 +86,7 @@ end";
         }
 
         [Fact]
-        public void OneReturnV2()
+        public static void OneReturnV2()
         {
             string original = @"
 function foo() return end";
@@ -113,7 +98,7 @@ end";
         }
 
         [Fact]
-        public void OneExpression()
+        public static void OneExpression()
         {
             string original = @"
 foo = function() x = x + 1 end";
@@ -129,7 +114,7 @@ end";
         }
 
         [Fact]
-        public void NotSameLineFunction1()
+        public static void NotSameLineFunction1()
         {
             string original = @"
 foo = function() return
@@ -138,7 +123,7 @@ end";
         }
 
         [Fact]
-        public void NotSameLineFunction2()
+        public static void NotSameLineFunction2()
         {
             string original = @"
 foo =
@@ -147,7 +132,7 @@ function() return end";
         }
 
         [Fact]
-        public void NotSameLineFunction3()
+        public static void NotSameLineFunction3()
         {
             string original = @"
 function foo()
@@ -156,7 +141,7 @@ end";
         }
 
         [Fact]
-        public void EmptyTable()
+        public static void EmptyTable()
         {
             string original = @"
 t1 = {}";
@@ -170,7 +155,7 @@ t1 = {
         }
 
         [Fact]
-        public void OneElement()
+        public static void OneElement()
         {
             string original = @"
 t1 = {2}";
@@ -188,7 +173,7 @@ t1 = {
         }
 
         [Fact]
-        public void TableTrailingComma()
+        public static void TableTrailingComma()
         {
             string original = @"
 t1 = {2,}";
@@ -204,7 +189,7 @@ t1 = {
         }
 
         [Fact]
-        public void TableMoreElements()
+        public static void TableMoreElements()
         {
             string original = @"
 t1 = {1, 2, 3}";
@@ -225,7 +210,7 @@ t1 = {
         }
 
         [Fact]
-        public void TableMultipleLines1()
+        public static void TableMultipleLines1()
         {
             string original = @"
 t1 =
@@ -234,7 +219,7 @@ t1 =
         }
 
         [Fact]
-        public void TableMutlipleLines2()
+        public static void TableMutlipleLines2()
         {
             string original = @"
 t2 = {2,
@@ -243,7 +228,7 @@ t2 = {2,
         }
 
         [Fact]
-        public void TableMutlipleLines3()
+        public static void TableMutlipleLines3()
         {
             string original = @"
 t3 = {2
@@ -252,7 +237,7 @@ t3 = {2
         }
 
         [Fact]
-        public void EmbeddedTables()
+        public static void EmbeddedTables()
         {
             string original = @"
 t1 = { t2 = { t3 = {} } }";
@@ -275,7 +260,7 @@ t1 = {
         }
 
         [Fact]
-        public void EmbeddedFunctions()
+        public static void EmbeddedFunctions()
         {
             string original = @"
 foo = function() bar = function() foobar = function() end end end";
@@ -297,7 +282,7 @@ end";
         }
 
         [Fact]
-        public void EmbeddedFunctionsV2()
+        public static void EmbeddedFunctionsV2()
         {
             string original = @"
 function foo() function bar() function foobar() end end end";
@@ -309,20 +294,6 @@ function foo()
     end
 end";
             GeneralWrappingTest(original, expected, expected);
-        }
-
-
-        private string Format(string original)
-        {
-
-            var factory = new EditorUtils.EditorHostFactory();
-            var host = factory.CreateEditorHost();
-
-            var buffer = host.CreateTextBuffer(original);
-            var edit = buffer.CreateEdit();
-            var applied = edit.Apply();
-
-            return applied.GetText();
         }
     }
 }
