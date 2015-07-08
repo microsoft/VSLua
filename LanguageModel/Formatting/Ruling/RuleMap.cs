@@ -26,7 +26,23 @@ namespace LanguageModel.Formatting.Ruling
 
         internal static void AddRule(Rule rule)
         {
-            //int column = rule.ruleDescriptor.TokenRangeLeft
+            foreach (TokenType typeLeft in rule.ruleDescriptor.TokenRangeLeft)
+            {
+                foreach (TokenType typeRight in rule.ruleDescriptor.TokenRangeRight)
+                {
+                    int column = (int)typeLeft;
+                    int row = (int)typeRight;
+
+                    RuleBucket bucket = RuleMap.map[column, row];
+                    if (bucket == null)
+                    {
+                        bucket = new RuleBucket();
+                    }
+
+                    bucket.Add(rule);
+
+                }
+            }
         }
 
         private static Rule GetRule(FormattingContext formattingContext)
