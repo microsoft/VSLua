@@ -72,6 +72,7 @@ namespace LanguageModel
         public int FullStart { get; private set; }
         public int Start { get; private set; }
         public string Text { get; private set; }
+        public int Length { get; private set; }
         public TokenType Type { get; private set; }
         public List<Trivia> LeadingTrivia { get; private set; } //TODO: change to Immutable List
 
@@ -83,6 +84,7 @@ namespace LanguageModel
             this.LeadingTrivia = trivia;
             this.FullStart = fullStart;
             this.Start = start;
+            this.Length = FullStart - (Text.Length + Start); //TODO: correct?
         }
 
         public override string ToString()
