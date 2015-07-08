@@ -69,24 +69,24 @@
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class ElseBlock : SyntaxNode
     {
-        Keyword elseKeyword;
-        Block block;
+        readonly Keyword elseKeyword;
+        readonly Block block;
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class ElseIfBlock
     { //TODO: inherit from syntax node
-        Keyword elseIfKeyword;
-        Expression exp;
-        Keyword thenKeyword;
-        Block block;
+        readonly Keyword elseIfKeyword;
+        readonly Expression exp;
+        readonly Keyword thenKeyword;
+        readonly Block block;
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class ChunkNode : SyntaxNode
     {
-        Block programBlock;
-        EndOfFileNode endOfFile;
+        readonly Block programBlock;
+        readonly EndOfFileNode endOfFile;
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -98,25 +98,25 @@
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class IfNode : SyntaxNode
     {
-        Keyword ifKeyword;
-        Expression exp;
-        Keyword thenKeyword;
-        Block ifBlock;
-        ImmutableList<ElseIfBlock> elseIfList;
-        ElseBlock elseBlock;
-        Keyword endKeyword;
+        readonly Keyword ifKeyword;
+        readonly Expression exp;
+        readonly Keyword thenKeyword;
+        readonly Block ifBlock;
+        readonly ImmutableList<ElseIfBlock> elseIfList;
+        readonly ElseBlock elseBlock;
+        readonly Keyword endKeyword;
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class Expression : SyntaxNode
     {
         //TODO: implement further
-        KeyValue keyvalue;
+        readonly KeyValue keyvalue;
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class KeyValue : SyntaxNode
     {
-        string value;
+        readonly string value;
     }
 }
