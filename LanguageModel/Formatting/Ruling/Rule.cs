@@ -17,5 +17,12 @@ namespace FormattingEngine.Ruling
             this.ruleOperation = new RuleOperation(new RuleOperationContext(contextFilters), action);
         }
 
+        internal bool Applies(FormattingContext formattingContext)
+        {
+
+
+            return ruleOperation.Context.InContext(formattingContext);
+        }
+
     }
 }

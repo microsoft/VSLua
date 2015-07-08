@@ -11,11 +11,23 @@ namespace FormattingEngine.Ruling
 
     internal class RuleOperationContext
     {
-        internal ContextFilter[] contextFilters;
+        private ContextFilter[] contextFilters;
 
         internal RuleOperationContext(ContextFilter[] contextFilters)
         {
             this.contextFilters = contextFilters;
+        }
+
+        internal bool InContext(FormattingContext formattingContext)
+        {
+            foreach (ContextFilter contextFilter in contextFilters)
+            {
+                if (!contextFilter(formattingContext))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
     }

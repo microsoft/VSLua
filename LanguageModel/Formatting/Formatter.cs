@@ -10,7 +10,8 @@ namespace LanguageModel.Formatting
     {
         public static List<TextEditInfo> Format(string span)
         {
-            return new List<TextEditInfo>();
+            List<TextEditInfo> textEdits = new List<TextEditInfo>();
+            return textEdits;
         }
     }
 }

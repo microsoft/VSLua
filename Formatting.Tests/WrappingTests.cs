@@ -159,11 +159,11 @@ t1 = {
         {
             string original = @"
 t1 = {2}";
-            string expected1 =@"
+            string expected1 = @"
 t1 = {
     2
 }";
-            string expected2 =@"
+            string expected2 = @"
 t1 = {
       2
      }";
