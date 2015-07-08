@@ -40,6 +40,7 @@ namespace LanguageModel.Formatting.Ruling
                     }
 
                     bucket.Add(rule);
+                    this.map[column, row] = bucket;
 
                 }
             }
