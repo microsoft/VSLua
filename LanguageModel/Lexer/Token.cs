@@ -4,13 +4,10 @@ using System.Text;
 
 namespace LanguageModel
 {
-    public enum TokenType //TODO: consider multi-line formatting?
+    public enum TokenType
     {
-        StartingKeyword,
         EndKeyword,
-        Operator,
         Identifier,
-        Punctuation,
         OpenBracket,
         CloseBracket,
         OpenParen,
@@ -26,7 +23,48 @@ namespace LanguageModel
         DoKeyword,
         RepeatKeyword,
         UntilKeyword,
-        ElseIfKeyword
+        ElseIfKeyword,
+        ModulusOperator,
+        ExponentOperator,
+        MinusOperator,
+        TildeUnOp,
+        LengthUnop,
+        NotEqualsOperator,
+        LessOrEqualOperator,
+        GreaterOrEqualOperator,
+        EqualityOperator,
+        PlusOperator,
+        MultiplyOperator,
+        DivideOperator,
+        FloorDivideOperator,
+        BitwiseAndOperator,
+        BitwiseRightOperator,
+        BitwiseOrOperator,
+        Dot,
+        Comma,
+        SemiColon,
+        Colon,
+        DoubleColon,
+        AssignmentOperator,
+        LessThanOperator,
+        GreaterThanOperator,
+        StringConcatOperator,
+        BitwiseLeftOperator,
+        AndBinop,
+        BreakKeyword,
+        FalseKeyValue,
+        ForKeyword,
+        FunctionKeyword,
+        GotoKeyword,
+        IfKeyword,
+        InKeyword,
+        LocalKeyword,
+        NilKeyValue,
+        NotUnop,
+        OrBinop,
+        WhileKeyword,
+        TrueKeyValue,
+        ReturnKeyword
     }
 
     public class Token

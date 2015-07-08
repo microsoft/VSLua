@@ -1,10 +1,4 @@
-﻿// Lua Lexer
-//TODO: peek 2 extension method
-// "skipped" tokens add to trivia rather than having unknown token, 
-// jump tables for is valid character of any kind, whitespace, digit, letter/underscore
-// use stream not MoveableStreamReader
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,55 +8,55 @@ namespace LanguageModel
 {
     public static class Lexer
     {
-        private static readonly HashSet<string> Keywords = new HashSet<string> //TODO: make dictionary
+        private static readonly Dictionary<string, TokenType> AlphaTokens = new Dictionary<string, TokenType>
         {
-            "and", //binop
-            "break",
-            "do",
-            "else",
-            "elseif",
-            "end", //endKeyword
-            "false",//Keyvalue
-            "for",
-            "function",
-            "goto",
-            "if",
-            "in",
-            "local",
-            "nil",//Keyvalue
-            "not", //binop
-            "or", //binop
-            "repeat",
-            "return",
-            "then",
-            "true", //Keyvalue
-            "until",
-            "while"
+            { "and", TokenType.AndBinop },
+            { "break", TokenType.BreakKeyword },
+            { "do", TokenType.DoKeyword },
+            { "else", TokenType.ElseKeyword },
+            { "elseif", TokenType.ElseIfKeyword },
+            { "end", TokenType.EndKeyword },
+            { "false", TokenType.FalseKeyValue },
+            { "for", TokenType.ForKeyword },
+            { "function", TokenType.FunctionKeyword },
+            { "goto", TokenType.GotoKeyword },
+            { "if", TokenType.IfKeyword },
+            { "in", TokenType.InKeyword },
+            { "local", TokenType.LocalKeyword },
+            { "nil", TokenType.NilKeyValue },
+            { "not",  TokenType.NotUnop },
+            { "or",  TokenType.OrBinop },
+            { "repeat", TokenType.RepeatKeyword },
+            { "return", TokenType.ReturnKeyword },
+            { "then", TokenType.ThenKeyword },
+            { "true", TokenType.TrueKeyValue },
+            { "until", TokenType.UntilKeyword },
+            { "while", TokenType.WhileKeyword }
         };
 
         private static readonly Dictionary<string, TokenType> Symbols = new Dictionary<string, TokenType>
         {
-            { "-", TokenType.Operator },
-            { "~", TokenType.Operator },
-            { "#", TokenType.Operator },
-            {"~=", TokenType.Operator },
-            {"<=", TokenType.Operator },
-            {">=", TokenType.Operator },
-            {"==", TokenType.Operator },
-            {"+", TokenType.Operator },
-            {"*", TokenType.Operator },
-            {"/", TokenType.Operator },
-            {"//", TokenType.Operator },
-            {"^", TokenType.Operator },
-            {"%", TokenType.Operator },
-            {"&", TokenType.Operator },
-            {"|", TokenType.Operator },
-            {">>", TokenType.Operator },
-            {"<<", TokenType.Operator },
-            {"..", TokenType.Operator },
-            {">", TokenType.Operator },
-            {"<", TokenType.Operator },
-            {"=", TokenType.Operator },
+            { "-", TokenType.MinusOperator }, //TODO: deal with ambiguity
+            { "~", TokenType.TildeUnOp },
+            { "#", TokenType.LengthUnop },
+            {"~=", TokenType.NotEqualsOperator },
+            {"<=", TokenType.LessOrEqualOperator },
+            {">=", TokenType.GreaterOrEqualOperator },
+            {"==", TokenType.EqualityOperator },
+            {"+", TokenType.PlusOperator },
+            {"*", TokenType.MultiplyOperator },
+            {"/", TokenType.DivideOperator },
+            {"//", TokenType.FloorDivideOperator },
+            {"^", TokenType.ExponentOperator },
+            {"%", TokenType.ModulusOperator },
+            {"&", TokenType.BitwiseAndOperator },
+            {"|", TokenType.BitwiseOrOperator },
+            {">>", TokenType.BitwiseRightOperator },
+            {"<<", TokenType.BitwiseLeftOperator },
+            {"..", TokenType.StringConcatOperator },
+            {">", TokenType.GreaterThanOperator },
+            {"<", TokenType.LessThanOperator },
+            {"=", TokenType.AssignmentOperator },
 
             {"{", TokenType.OpenCurlyBrace },
             {"}", TokenType.CloseCurlyBrace },
@@ -71,16 +65,24 @@ namespace LanguageModel
             {"[", TokenType.OpenBracket },
             {"]", TokenType.CloseBracket },
 
-            {".", TokenType.Punctuation},
-            {",", TokenType.Punctuation},
-            {";", TokenType.Punctuation},
-            {":", TokenType.Punctuation},
-            {"::", TokenType.Punctuation}
+            {".", TokenType.Dot},
+            {",", TokenType.Comma},
+            {";", TokenType.SemiColon},
+            {":", TokenType.Colon},
+            {"::", TokenType.DoubleColon}
         };
 
         private const char Eof = unchecked((char)-1);
         private static readonly char[] longCommentID1 = { '-', '[','[' };
         private static readonly char[] longCommentID2 = { '-', '[', '=' };
+
+        public static Dictionary<string, TokenType> Symbols1
+        {
+            get
+            {
+                return Symbols;
+            }
+        }
 
         public static IEnumerable<Token> Tokenize(Stream stream) //TODO: Return a bool based on if this is a new copy of the lexer or not
         {
@@ -101,6 +103,86 @@ namespace LanguageModel
                 }
             }
         } 
+        private static List<Trivia> ConsumeTrivia(Stream stream)
+        {
+            List<Trivia> triviaList = new List<Trivia>();
+            bool isTrivia = false;
+
+            char next;
+
+            do
+            {
+                next = stream.Peek();
+                
+                switch (next)
+                {
+                    case ' ':
+                    case '\t':
+                        isTrivia = true;
+                        triviaList.Add(CollectWhitespace(stream));
+                        break;
+                    case '\n':
+                        isTrivia = true;
+                        Trivia newLineTrivia = new Trivia(Trivia.TriviaType.Newline, stream.ReadChar().ToString());
+                        triviaList.Add(newLineTrivia);
+                        break;
+
+                   case '\r': //TODO: Is this is just completely redundant IMO.
+                        isTrivia = true;
+                        stream.ReadChar();
+                        next = stream.Peek();
+
+                        Trivia returnTrivia;
+
+                        if (next == '\n')
+                        {
+                            stream.ReadChar();
+                            returnTrivia = new Trivia(Trivia.TriviaType.Newline, "\r\n");
+                        } else
+                        {
+                            returnTrivia = new Trivia(Trivia.TriviaType.Newline, "\r");
+                        }
+
+                        triviaList.Add(returnTrivia);
+                        break;
+
+                    case '-':
+                                                
+                        stream.ReadChar();
+
+                        if(stream.Peek() == '-')
+                        {
+                            isTrivia = true;
+
+							char[] currentCommentID = { stream.Peek(1), stream.Peek(2), stream.Peek(3) };
+
+                            if (currentCommentID.SequenceEqual(longCommentID1) || (currentCommentID.SequenceEqual(longCommentID2)))
+                            {
+								stream.Read(currentCommentID, 0, longCommentID1.Length);
+                                triviaList.Add(ReadLongComment(stream, currentCommentID));
+                            }
+                            else
+                            {
+								
+                                triviaList.Add(ReadLineComment(stream, new char[]{ }));
+                            }
+                        }
+                        else
+                        {
+                            isTrivia = false;
+                            stream.Position--;
+                        }
+                        break;
+
+                    default:
+                        isTrivia = false;
+                        break;
+                }
+
+            } while (isTrivia);
+
+            return triviaList;
+        }
 
         private static Token ReadNextToken(Stream stream, List<Trivia> trivia, int fullStart)
         {
@@ -147,17 +229,17 @@ namespace LanguageModel
             } while (IsAlphaCharacter(nextChar));
 
             string value = word.ToString();
-
-            if (Keywords.Contains(value))
+            
+            if (AlphaTokens.ContainsKey(value))
             {
-                return new Token(TokenType.StartingKeyword, value, trivia, fullStart, tokenStartPosition);
+                return new Token(AlphaTokens[value], value, trivia, fullStart, tokenStartPosition);
             }
             else
             {
                 return new Token(TokenType.Identifier, value, trivia, fullStart, tokenStartPosition);
             }
         }
-        
+
         private static Token ReadNumberToken(Stream stream, List<Trivia> trivia, int fullStart)
         {
             StringBuilder number = new StringBuilder();
@@ -346,55 +428,58 @@ namespace LanguageModel
                     // here use dictionary for minux, plus etc
                     if(nextChar != stream.Peek())
                     {
-                        return new Token(TokenType.Punctuation, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(Symbols[nextChar.ToString()], nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        char[] symbol = { nextChar, nextChar };
-                        return new Token(TokenType.Punctuation, new string(symbol), leadingTrivia, fullStart, tokenStartPosition);
+                        char [] symbol = { nextChar, nextChar };
+                        string symbolKey = new string(symbol);
+                        return new Token(Symbols[symbolKey], symbolKey, leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '<':
                 case '>':
                     // could be doubles or eq sign
                     if ((nextChar != stream.Peek()) && (stream.Peek()!= '='))
                     {
-                        return new Token(TokenType.Operator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(Symbols[nextChar.ToString()], nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
                         char secondOperatorChar = stream.ReadChar();
                         char[] symbol = { nextChar, secondOperatorChar };
-                        return new Token(TokenType.Operator, new string(symbol), leadingTrivia, fullStart, tokenStartPosition);
+                        string symbolKey = new string(symbol);
+                        return new Token(Symbols[symbolKey], symbolKey, leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '=':
                 case '/':
                     if (nextChar != stream.Peek())
                     {
-                        return new Token(TokenType.Operator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(Symbols[nextChar.ToString()], nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        stream.ReadChar(); //TODO: did this fix the bug?
+                        stream.ReadChar();
                         char[] symbol = { nextChar, nextChar };
-                        //string symbol = char.ToString(nextChar) + char.ToString(nextChar);
-                        return new Token(TokenType.Operator, new string(symbol), leadingTrivia, fullStart, tokenStartPosition);
+                        string symbolKey = new string(symbol);
+                        return new Token(Symbols[symbolKey], symbolKey, leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '~':
                     if (stream.Peek() != '=')
                     {
-                        return new Token(TokenType.Operator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(Symbols[nextChar.ToString()], nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
                         char[] symbol = { nextChar, '=' };
-                        return new Token(TokenType.Operator, new string(symbol), leadingTrivia, fullStart, tokenStartPosition);
+                        string symbolKey = new string(symbol);
+                        return new Token(Symbols[symbolKey], symbolKey, leadingTrivia, fullStart, tokenStartPosition);
                     }
                 default:
                     // non repeating symbol
                     string fullSymbol = nextChar.ToString();
-                    if (Symbols.ContainsKey(fullSymbol))
+                    if (Symbols1.ContainsKey(fullSymbol))
                     {
-                        return new Token(Symbols[fullSymbol], fullSymbol, leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(Symbols1[fullSymbol], fullSymbol, leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
@@ -408,86 +493,6 @@ namespace LanguageModel
             return (char.IsLetter(a) || char.IsNumber(a) || (a == '_')); //TODO? Unicode?
         }
 
-        private static List<Trivia> ConsumeTrivia(Stream stream)
-        {
-            List<Trivia> triviaList = new List<Trivia>();
-            bool isTrivia = false;
-
-            char next;
-
-            do
-            {
-                next = stream.Peek();
-                
-                switch (next)
-                {
-                    case ' ':
-                    case '\t':
-                        isTrivia = true;
-                        triviaList.Add(CollectWhitespace(stream));
-                        break;
-                    case '\n':
-                        isTrivia = true;
-                        Trivia newLineTrivia = new Trivia(Trivia.TriviaType.Newline, stream.ReadChar().ToString());
-                        triviaList.Add(newLineTrivia);
-                        break;
-
-                   case '\r': //TODO: Is this is just completely redundant IMO.
-                        isTrivia = true;
-                        stream.ReadChar();
-                        next = stream.Peek();
-
-                        Trivia returnTrivia;
-
-                        if (next == '\n')
-                        {
-                            stream.ReadChar();
-                            returnTrivia = new Trivia(Trivia.TriviaType.Newline, "\r\n");
-                        } else
-                        {
-                            returnTrivia = new Trivia(Trivia.TriviaType.Newline, "\r");
-                        }
-
-                        triviaList.Add(returnTrivia);
-                        break;
-
-                    case '-':
-                                                
-                        stream.ReadChar();
-
-                        if(stream.Peek() == '-')
-                        {
-                            isTrivia = true;
-
-							char[] currentCommentID = { stream.Peek(1), stream.Peek(2), stream.Peek(3) };
-
-                            if (currentCommentID.SequenceEqual(longCommentID1) || (currentCommentID.SequenceEqual(longCommentID2)))
-                            {
-								stream.Read(currentCommentID, 0, longCommentID1.Length);
-                                triviaList.Add(ReadLongComment(stream, currentCommentID));
-                            }
-                            else
-                            {
-								
-                                triviaList.Add(ReadLineComment(stream, new char[]{ }));
-                            }
-                        }
-                        else
-                        {
-                            isTrivia = false;
-                            stream.Position--;
-                        }
-                        break;
-
-                    default:
-                        isTrivia = false;
-                        break;
-                }
-
-            } while (isTrivia);
-
-            return triviaList;
-        }
 
         private static Trivia CollectWhitespace(Stream stream)
         {
