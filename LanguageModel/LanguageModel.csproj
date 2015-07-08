@@ -51,12 +51,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Formatting\Formatter.cs" />
     <Compile Include="Formatting\Ruling\FormattingContext.cs" />
     <Compile Include="Formatting\Ruling\Rule.cs" />
     <Compile Include="Formatting\Ruling\RuleAction.cs" />
     <Compile Include="Formatting\Ruling\RuleDescriptor.cs" />
     <Compile Include="Formatting\Ruling\RuleOperation.cs" />
     <Compile Include="Formatting\Ruling\RuleOperationContext.cs" />
+    <Compile Include="Formatting\TextEditInfo.cs" />
     <Compile Include="Lexer\Lexer.cs" />
     <Compile Include="Lexer\StreamExtension.cs" />
     <Compile Include="Lexer\Token.cs" />
