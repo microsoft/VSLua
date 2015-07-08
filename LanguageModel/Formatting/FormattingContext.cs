@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FormattingEngine.Ruling
+namespace LanguageModel.Formatting
 {
     internal class FormattingContext
     {
+
+        
+
     }
 }

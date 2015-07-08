@@ -1,5 +1,4 @@
-﻿using FormattingEngine.Ruling;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace LanguageModel.Formatting.Ruling
 {
