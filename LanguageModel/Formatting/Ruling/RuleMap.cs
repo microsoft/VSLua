@@ -26,7 +26,7 @@ namespace LanguageModel.Formatting.Ruling
 
         internal static void AddRule(Rule rule)
         {
-            int column = rule.ruleDescriptor.TokenLeft
+            //int column = rule.ruleDescriptor.TokenRangeLeft
         }
 
         private static Rule GetRule(FormattingContext formattingContext)

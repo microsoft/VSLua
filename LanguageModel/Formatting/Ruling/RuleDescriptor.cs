@@ -8,13 +8,13 @@ namespace LanguageModel.Formatting.Ruling
 {
     internal class RuleDescriptor
     {
-        internal TokenType[] TokenLeft { get; private set; }
-        internal TokenType[] TokenRight { get; private set; }
+        internal TokenType[] TokenRangeLeft { get; private set; }
+        internal TokenType[] TokenRangeRight { get; private set; }
 
         internal RuleDescriptor(TokenType[] tokenLeft, TokenType[] tokenRight)
         {
-            this.TokenLeft = tokenLeft;
-            this.TokenRight = tokenRight;
+            this.TokenRangeLeft = tokenLeft;
+            this.TokenRangeRight = tokenRight;
         }
 
         internal RuleDescriptor(TokenType[] tokenLeft, TokenType tokenRight) :
