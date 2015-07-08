@@ -6,7 +6,19 @@ using System.Threading.Tasks;
 
 namespace LanguageModel.Formatting
 {
-    class ParsedToken
+    internal sealed class ParsedToken
     {
+
+        internal Token Token { get; private set; }
+        internal int BlockLevel { get; private set; }
+        internal SyntaxNode Node { get; private set; }
+
+        internal ParsedToken(Token token, int blockLevel, SyntaxNode node)
+        {
+            this.Token = token;
+            this.BlockLevel = blockLevel;
+            this.Node = node;
+        }
+
     }
 }
