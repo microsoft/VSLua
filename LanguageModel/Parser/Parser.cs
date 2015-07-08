@@ -7,7 +7,7 @@ using System.IO;
 
 namespace LanguageModel
 {
-    class Parser
+    public class Parser
     {
         private List<ChunkNode> luaFiles;
 
@@ -18,9 +18,12 @@ namespace LanguageModel
 
         public void CreateNewParseTree(Stream stream)
         {
-            var newProgramRootNode = ChunkNode.CreateBuilder();
-            //newProgramRootNode.Parse(Lexer.Tokenize(stream).GetEnumerator(), TokenType.EndOfFile);
-            //luaFiles.Add(newProgramRootNode);
+            IEnumerator<Token> tokenEnumerator = Lexer.Tokenize(stream).GetEnumerator();
+            if(!tokenEnumerator.MoveNext())
+            {
+                //TODO: error?
+            }
+            luaFiles.Add(NodeCreator.ParseChunkNode(tokenEnumerator));
         }
     }
 }
