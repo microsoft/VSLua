@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-
 namespace LanguageModel
 {
     class Program
@@ -12,13 +11,12 @@ namespace LanguageModel
         static void Main(string[] args)
         {
             Stream testProgramStream = File.OpenRead(@"C:\Users\t-kevimi\Source\Repos\VSIDEProj.Lua\LanguageModel\Testing\Input\if.lua");
-            
+
             Parser parser = new Parser();
             parser.CreateNewParseTree(testProgramStream);
             
-            
-            //TestLexer();
-            //Lexer.PrintTokens(testProgramStream);
+            TestLexer();
+            Lexer.PrintTokens(testProgramStream);
 
             Console.Read();
         }

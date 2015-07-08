@@ -21,7 +21,7 @@ namespace LanguageModel.Formatting.Ruling
         {
             foreach (Rule rule in rules)
             {
-                if (rule.Applies(formattingContext))
+                if (rule.AppliesTo(formattingContext))
                 {
                     return rule;
                 }
