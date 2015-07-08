@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace LanguageModel.Formatting.Ruling
 {
 
-    internal static class RuleMap
+    internal class RuleMap
     {
-        internal static RuleBucket[,] map;
+        internal RuleBucket[,] map;
 
-        internal static void Clear()
+        internal RuleMap()
         {
             if (map != null)
             {
@@ -20,11 +20,11 @@ namespace LanguageModel.Formatting.Ruling
 
             int length = Enum.GetNames(typeof(TokenType)).Length;
 
-            RuleMap.map = new RuleBucket[length, length];
+            this.map = new RuleBucket[length, length];
 
         }
 
-        internal static void AddRule(Rule rule)
+        internal void AddRule(Rule rule)
         {
             foreach (TokenType typeLeft in rule.ruleDescriptor.TokenRangeLeft)
             {
@@ -33,7 +33,7 @@ namespace LanguageModel.Formatting.Ruling
                     int column = (int)typeLeft;
                     int row = (int)typeRight;
 
-                    RuleBucket bucket = RuleMap.map[column, row];
+                    RuleBucket bucket = this.map[column, row];
                     if (bucket == null)
                     {
                         bucket = new RuleBucket();
@@ -45,12 +45,12 @@ namespace LanguageModel.Formatting.Ruling
             }
         }
 
-        private static Rule GetRule(FormattingContext formattingContext)
+        internal Rule GetRule(FormattingContext formattingContext)
         {
             int column = (int)formattingContext.CurrentToken.Token.Type;
             int row = (int)formattingContext.NextToken.Token.Type;
 
-            RuleBucket ruleBucket = RuleMap.map[column,row];
+            RuleBucket ruleBucket = this.map[column,row];
             
             if (ruleBucket != null)
             {
