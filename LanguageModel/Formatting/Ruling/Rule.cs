@@ -20,8 +20,6 @@ namespace LanguageModel.Formatting.Ruling
 
         internal bool AppliesTo(FormattingContext formattingContext)
         {
-
-
             return ruleOperation.Context.InContext(formattingContext);
         }
 
