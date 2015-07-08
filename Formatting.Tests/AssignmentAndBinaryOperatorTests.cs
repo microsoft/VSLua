@@ -8,7 +8,7 @@ namespace Formatting.Tests
         public void GeneralTestFunction(string original, string expected)
         {
             string actual = Tester.Format(original);
-            Assert.Equal(actual, expected);
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
