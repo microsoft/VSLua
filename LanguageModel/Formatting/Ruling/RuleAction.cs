@@ -11,6 +11,6 @@ namespace LanguageModel.Formatting.Ruling
         Space,
         Delete,
         Newline,
-        Ignore
+        Ignore // <- Might not be needed
     }
 }
