@@ -21,7 +21,7 @@ namespace LanguageModel.Formatting
         {
             foreach (Trivia trivia in NextToken.Token.LeadingTrivia)
             {
-                if (trivia.type == triviaType)
+                if (trivia.Type == triviaType)
                 {
                     return true;
                 }

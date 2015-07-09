@@ -6,18 +6,18 @@ namespace LanguageModel
     {
         public enum TriviaType { Whitespace, Comment, Newline} // TODO: skippedtoken
 
-        public TriviaType type { get; private set; }
-        public string trivia { get; private set; }
+        public TriviaType Type { get; private set; }
+        public string Text { get; private set; }
 
         public Trivia(TriviaType type, string trivia)
         {
-            this.type = type;
-            this.trivia = trivia;
+            this.Type = type;
+            this.Text = trivia;
         }
 
         public string ToString()
         {
-            return string.Format("{0},\t{1}", Enum.GetName(typeof(TriviaType), type), ConvertStringToSymbols(trivia));
+            return string.Format("{0},\t{1}", Enum.GetName(typeof(TriviaType), Type), ConvertStringToSymbols(Text));
         }
 
         private string ConvertStringToSymbols(string s) //TODO: temp, just for testing
