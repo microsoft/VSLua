@@ -13,19 +13,19 @@ namespace LanguageModel.Formatting.Ruling
 
         internal static Rule SpaceAfterComma =
             new Rule(
-                new RuleDescriptor(TokenType.Punctuation, TokenRange.Any),
+                new RuleDescriptor(TokenType.Comma, TokenRange.Any),
                 new ContextFilter[] { TokensAreOnSameLine },
                 RuleAction.Space);
 
         internal static Rule SpaceAfterAssignmentOperator =
             new Rule(
-                new RuleDescriptor(TokenRange.Any, TokenType.Operator),
+                new RuleDescriptor(TokenRange.Any, TokenType.AssignmentOperator),
                 new ContextFilter[] { TokensAreOnSameLine },
                 RuleAction.Space);
 
         internal static Rule SpaceBeforeAssignmentOperator =
             new Rule(
-                new RuleDescriptor(TokenRange.Any, TokenType.Operator),
+                new RuleDescriptor(TokenRange.Any, TokenType.AssignmentOperator),
                 new ContextFilter[] { TokensAreOnSameLine },
                 RuleAction.Space);
 
