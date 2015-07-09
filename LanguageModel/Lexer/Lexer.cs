@@ -84,25 +84,28 @@ namespace LanguageModel
             }
         }
 
-        public static IEnumerable<Token> Tokenize(Stream stream) //TODO: Return a bool based on if this is a new copy of the lexer or not
+        public static List<Token> Tokenize(Stream stream) //TODO: Return a bool based on if this is a new copy of the lexer or not
         {
             Token nextToken;
             List<Trivia> trivia;
 
+            List<Token> tokenList = new List<Token>();
+
             while (!stream.EndOfStream())
             {
-				int fullStart = (int) stream.Position;
+                int fullStart = (int)stream.Position;
                 trivia = ConsumeTrivia(stream);
                 nextToken = ReadNextToken(stream, trivia, fullStart);
-				yield return nextToken;
+                tokenList.Add(nextToken);
 
-                if (stream.EndOfStream() && nextToken.Type != TokenType.EndOfFile) //TODO: end of file necessary?
+                if (stream.EndOfStream() && nextToken.Type != TokenType.EndOfFile)
                 {
-                    nextToken = new Token(TokenType.EndOfFile, "", new List<Trivia>(), fullStart, (int)stream.Position); //TODO: new trivia list?
-                    yield return nextToken;
+                    nextToken = new Token(TokenType.EndOfFile, "", new List<Trivia>(), fullStart, (int)stream.Position);
+                    tokenList.Add(nextToken);
                 }
             }
-        } 
+            return tokenList;
+        }
         private static List<Trivia> ConsumeTrivia(Stream stream)
         {
             List<Trivia> triviaList = new List<Trivia>();

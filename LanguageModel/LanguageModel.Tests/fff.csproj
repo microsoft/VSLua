@@ -6,7 +6,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{37954DFD-5E2B-4115-9DD3-64B626937938}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LanguageModel.Tests</RootNamespace>
     <AssemblyName>LanguageModel.Tests</AssemblyName>
@@ -36,6 +36,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LanguageModel\LanguageModel.csproj">
+      <Project>{cff6ef45-ee9f-4a9e-bd4e-8607c2bc9452}</Project>
+      <Name>LanguageModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -59,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LexerTests.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

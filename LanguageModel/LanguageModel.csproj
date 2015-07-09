@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CFF6EF45-EE9F-4A9E-BD4E-8607C2BC9452}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LanguageModel</RootNamespace>
     <AssemblyName>LanguageModel</AssemblyName>
@@ -72,9 +72,7 @@
     <Compile Include="Lexer\StreamExtension.cs" />
     <Compile Include="Lexer\Token.cs" />
     <Compile Include="Lexer\Trivia.cs" />
-    <Compile Include="Parser\NodeCreator.cs" />
     <Compile Include="Parser\Parser.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SyntaxNode.cs">
       <Generator>MSBuild:GenerateCodeFromAttributes</Generator>
