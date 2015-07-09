@@ -8,25 +8,25 @@ namespace LanguageModel.Formatting.Ruling
 {
     internal class RuleDescriptor
     {
-        internal TokenType[] TokenRangeLeft { get; private set; }
-        internal TokenType[] TokenRangeRight { get; private set; }
+        internal List<TokenType> TokenRangeLeft { get; private set; }
+        internal List<TokenType> TokenRangeRight { get; private set; }
 
-        internal RuleDescriptor(TokenType[] tokenLeft, TokenType[] tokenRight)
+        internal RuleDescriptor(List<TokenType> tokenLeft, List<TokenType> tokenRight)
         {
             this.TokenRangeLeft = tokenLeft;
             this.TokenRangeRight = tokenRight;
         }
 
-        internal RuleDescriptor(TokenType[] tokenLeft, TokenType tokenRight) :
-            this(tokenLeft, new TokenType[] { tokenRight })
+        internal RuleDescriptor(List<TokenType> tokenLeft, TokenType tokenRight) :
+            this(tokenLeft, new List<TokenType> { tokenRight })
         { }
 
-        internal RuleDescriptor(TokenType tokenLeft, TokenType[] tokenRight) :
-            this(new TokenType[] { tokenLeft }, tokenRight)
+        internal RuleDescriptor(TokenType tokenLeft, List<TokenType> tokenRight) :
+            this(new List<TokenType> { tokenLeft }, tokenRight)
         { }
 
         internal RuleDescriptor(TokenType tokenLeft, TokenType tokenRight) :
-            this(new TokenType[] { tokenLeft }, new TokenType[] { tokenRight })
+            this(new List<TokenType> { tokenLeft }, new List<TokenType> { tokenRight })
         { }
 
     }

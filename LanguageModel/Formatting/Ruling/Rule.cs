@@ -18,11 +18,37 @@ namespace LanguageModel.Formatting.Ruling
 
         }
 
+        private string GetTextFromAction()
+        {
+            switch (ruleOperation.Action)
+            {
+                case RuleAction.Delete:
+                    return "";
+                case RuleAction.Newline:
+                    return "\n";
+                default:
+                    return " ";
+            }
+        }
+
         internal bool AppliesTo(FormattingContext formattingContext)
         {
-
-
             return ruleOperation.Context.InContext(formattingContext);
+        }
+
+        // Very simple implentation of Apply
+        internal TextEditInfo Apply(FormattingContext formattingContext)
+        {
+
+            Token leftToken = formattingContext.CurrentToken.Token;
+            Token rightToken = formattingContext.NextToken.Token;
+
+            int start = leftToken.Start + leftToken.Text.Length;
+            int length = rightToken.Start - start;
+            string replaceWith = this.GetTextFromAction();
+
+
+            return new TextEditInfo(start, length, replaceWith);
         }
 
     }
