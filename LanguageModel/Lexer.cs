@@ -74,7 +74,7 @@ namespace LanguageModel
 
         private const char Eof = unchecked((char)-1);
         private static readonly char[] longCommentID1 = { '-', '[','[' };
-        private static readonly char[] longCommentID2 = { '-', '[', '=' };
+        private static readonly char[] longCommentID2 = { '-', '[', '=' }; //TODO: flawed approach? what if --[=asdfadf]?
 
         public static Dictionary<string, TokenType> Symbols1
         {
