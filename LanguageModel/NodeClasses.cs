@@ -68,7 +68,36 @@
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class Expression : SyntaxNode
     {
-        //TODO: implement further
-        readonly Token keyvalue;
+        ImmutableList<GenericExpression> expressions;
+
+        public bool IsValidExpression()
+        {
+            //TODO: implement to check if there is a binop and then a missing exp or if there is a missing token or something
+            return false;
+        }
+    }
+
+    //The following level of abstraction is to deal with ambiguities
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class GenericExpression
+    {
+        Token unop;
+        ConcreteExpression exp;
+        Token binop;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class ConcreteExpression { }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class SimpleExpression : ConcreteExpression
+    {
+        Token expressionValue;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class ComplexExpression : ConcreteExpression
+    {
+        SyntaxNode expressionValue;
     }
 }

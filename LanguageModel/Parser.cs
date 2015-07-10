@@ -98,14 +98,15 @@ namespace LanguageModel
             contextStack.Push(parsingContext);
             int start = this.NextToken().FullStart;
             List<SyntaxNode> children = new List<SyntaxNode>();
+
             while (this.IsContextTerminator(parsingContext, currentToken.Type))
             {
                 children.Add(ParseStatement());
             }
 
             int length = currentToken.Start + currentToken.Length - start;
-
             contextStack.Pop();
+
             return Block.Create(start, length, children.ToImmutableList());
         }
 

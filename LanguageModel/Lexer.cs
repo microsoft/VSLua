@@ -36,6 +36,7 @@ namespace LanguageModel
 
         private static readonly Dictionary<string, TokenType> Symbols = new Dictionary<string, TokenType>
         {
+            //TODO: include vararg operators
             { "-", TokenType.MinusOperator }, //TODO: deal with ambiguity
             { "~", TokenType.TildeUnOp },
             { "#", TokenType.LengthUnop },
