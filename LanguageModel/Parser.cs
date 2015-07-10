@@ -13,10 +13,8 @@ namespace LanguageModel
     {
         IfBlockContext,
         ProgramContext,
-        //ExplistContext,
-        //ParlistContext,
-        //FieldlistContext,
-        //ExpressionContext,
+        ElseBlock,
+        ElseIfBlock,
     }
     public class Parser
     {
@@ -58,14 +56,18 @@ namespace LanguageModel
         }
         #endregion
 
-        private bool IsContextTerminator(Context parsingContext, TokenType currentTokentType)
+        private bool IsContextTerminator(Context parsingContext, TokenType currentTokenType)
         {
-            switch(parsingContext)
+            switch (parsingContext)
             {
                 case Context.IfBlockContext:
-                    return (currentTokentType == TokenType.EndKeyword || currentTokentType == TokenType.ElseIfKeyword || currentTokentType == TokenType.ElseKeyword);
+                    return (currentTokenType == TokenType.EndKeyword || currentTokenType == TokenType.ElseIfKeyword || currentTokenType == TokenType.ElseKeyword);
+                case Context.ElseBlock:
+                    return (currentTokenType == TokenType.EndKeyword);
+                case Context.ElseIfBlock:
+                    return (currentTokenType == TokenType.ElseIfKeyword || currentTokenType == TokenType.EndKeyword);
                 case Context.ProgramContext:
-                    return currentTokentType == TokenType.EndOfFile;
+                    return currentTokenType == TokenType.EndOfFile;
                 default:
                     throw new Exception("Unknown Context");
             }
@@ -90,6 +92,7 @@ namespace LanguageModel
             return ChunkNode.Create(start, length, block, currentToken);
         }
 
+        //TODO: deal with edge case where there is nothing contained within the block
         private Block ParseBlock(Context parsingContext)
         {
             contextStack.Push(parsingContext);
@@ -150,13 +153,12 @@ namespace LanguageModel
 
         private IfNode ParseIfNode()
         {
-
             int start = currentToken.Start;
             Token ifKeyword = currentToken;
             Expression expression = this.ParseExpression();
 
             //TODO: do context analysis vs. just returning a missing token?
-            Token thenKeyword = this.ParseExpected(TokenType.ThenKeyword) ? currentToken : Token.CreateMissingToken(currentToken.Start + currentToken.Length);
+            Token thenKeyword = ParseExpected(TokenType.ThenKeyword) ? currentToken : Token.CreateMissingToken(currentToken.Start + currentToken.Length);
             
             int length = currentToken.Start + currentToken.Length - start;
 
@@ -181,90 +183,40 @@ namespace LanguageModel
 
         private ElseBlock ParseElseBlock()
         {
-            throw new NotImplementedException();
+            if(this.ParseExpected(TokenType.ElseKeyword))
+            {
+                int start = currentToken.Start;
+                Token elseKeyword = currentToken;
+                Block elseBlock = ParseBlock(Context.ElseBlock);
+                int length = currentToken.Start + currentToken.Length - start;
+                return ElseBlock.Create(start, length, elseKeyword, elseBlock);
+            } else
+            {
+                return null;
+            }
         }
 
         private List<ElseIfBlock> ParseElseIfList()
         {
-            throw new NotImplementedException();
+            List<ElseIfBlock> elseIfList = new List<ElseIfBlock>();
+
+            while (ParseExpected(TokenType.ElseIfKeyword))
+            {
+                elseIfList.Add(this.ParseElseIfBlock());
+            }
+
+            return elseIfList;
         }
 
-        
-
-        //private ElseIfBlock ParseElseIfBlocks(List<Token> tokenEnumerator)
-        //{
-        //    ElseIfBlock.Builder elseifBlockBuilder = ElseIfBlock.CreateBuilder();
-        //    //elseifBlockBuilder.ExtractTokenInfo(tokenEnumerator.Current);
-
-        //    elseifBlockBuilder.ElseIfKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
-        //    if (!tokenEnumerator.MoveNext())
-        //    {
-        //        //TODO: Error?
-        //    }
-
-        //    elseifBlockBuilder.Exp = ParseExp(tokenEnumerator, TokenType.ThenKeyword);
-
-        //    elseifBlockBuilder.ThenKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
-        //    if (!tokenEnumerator.MoveNext())
-        //    {
-        //        //TODO: Error?
-        //    }
-
-        //    elseifBlockBuilder.Block = ParseIfBlock(tokenEnumerator);
-
-        //    //TODO: elseifBlockBuilder.Length = tokenEnumerator.Current.FullStart - elseifBlockBuilder.FullStartPosition;
-
-        //    return elseifBlockBuilder.ToImmutable();
-        //}
-
-        //private Expression.Builder ParseExp(List<Token> tokenEnumerator, TokenType terminatingKeyword)
-        //{
-        //    Expression.Builder expBuilder = Expression.CreateBuilder();
-        //    expBuilder.ExtractTokenInfo(tokenEnumerator.Current);
-
-        //    while(tokenEnumerator.Current.Type != terminatingKeyword)
-        //    {
-        //        expBuilder.Keyvalue = KeyValue.CreateBuilder();
-        //        expBuilder.Keyvalue.ExtractTokenInfo(tokenEnumerator.Current);
-        //        expBuilder.Keyvalue.Value = tokenEnumerator.Current.Text;
-        //        if (!tokenEnumerator.MoveNext())
-        //        {
-        //            //TODO: Error?
-        //        }
-        //    }
-        //    expBuilder.Length = tokenEnumerator.Current.FullStart - expBuilder.FullStartPosition;
-        //    return expBuilder;
-        //}
-
-
-
-        //private EndOfFileNode.Builder ParseEndOfFile(List<Token> tokenEnumerator)
-        //{
-        //    EndOfFileNode.Builder chunkNodeBuilder = EndOfFileNode.CreateBuilder();
-        //    chunkNodeBuilder.ExtractTokenInfo(tokenEnumerator.Current);
-        //    return chunkNodeBuilder;
-        //}
-
-
-
-        //private Block.Builder ParseIfBlock(List<Token> tokenEnumerator)
-        //{
-        //    Block.Builder ifBlockBuilder = Block.CreateBuilder();
-        //    ifBlockBuilder.ExtractTokenInfo(tokenEnumerator.Current);
-        //    while ((tokenEnumerator.Current.Type != TokenType.ElseKeyword 
-        //    || tokenEnumerator.Current.Type != TokenType.ElseIfKeyword
-        //    || tokenEnumerator.Current.Type != TokenType.EndKeyword) 
-        //    && tokenEnumerator.Current.Type != TokenType.EndOfFile) //TODO: Formating?
-        //    {
-        //        ifBlockBuilder.Children.Add(ParseStatement(tokenEnumerator));
-        //        if (!tokenEnumerator.MoveNext())
-        //        {
-        //            //TODO: Error?
-        //        }
-        //    }
-        //    ifBlockBuilder.Length = tokenEnumerator.Current.FullStart - ifBlockBuilder.FullStartPosition;
-
-        //    return ifBlockBuilder;
-        //}
+        private ElseIfBlock ParseElseIfBlock()
+        {
+            int start = currentToken.Start;
+            Token elseIfKeyword = currentToken;
+            Expression exp = ParseExpression();
+            Token thenKeyword = ParseExpected(TokenType.ThenKeyword) ? currentToken : Token.CreateMissingToken(currentToken.Start + currentToken.Length);
+            Block block = ParseBlock(Context.ElseIfBlock);
+            int length = currentToken.Start + currentToken.Length - start;
+            return ElseIfBlock.Create(start, length, elseIfKeyword, exp, thenKeyword, block);
+        }
     }
 }

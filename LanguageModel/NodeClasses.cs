@@ -45,6 +45,8 @@
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class ElseIfBlock
     { //TODO: file bug: inherit from syntax node
+        readonly int startPosition;
+        readonly int length;
         readonly Token elseIfKeyword;
         readonly Expression exp;
         readonly Token thenKeyword;
