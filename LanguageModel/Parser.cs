@@ -5,214 +5,272 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Collections.Immutable;
+using Xunit;
 
 namespace LanguageModel
 {
-    public static class Parser //TODO: change to streamreader so as to auto deal with encoding issues....
+    public enum Context
     {
-        public static void CreateSyntaxTree(Stream stream)
+        BlockContext,
+        ExplistContext,
+        ParlistContext,
+        FieldlistContext,
+        ExpressionContext,
+    }
+    public class Parser
+    {
+        private Stack<Context> contextStack;
+        private Token currentToken;
+        private List<Token> tokenList;
+        private int positionInTokenList;
+        private List<ParseError> errorList;
+
+        Parser()
         {
-            IEnumerator<Token> tokenEnumerator = Lexer.Tokenize(stream).GetEnumerator();
-            if (!tokenEnumerator.MoveNext())
-            {
-                //TODO: error?
-            }
-            ParseChunkNode(tokenEnumerator);
+            contextStack = new Stack<Context>();
+            errorList = new List<ParseError>();
+            positionInTokenList = -1; //TODO? bad practice?
         }
 
-        private static SyntaxNode ParseStatement(IEnumerator<Token> tokenEnumerator)
+        #region tokenList Accessors
+        private Token NextToken()
         {
-            switch (tokenEnumerator.Current.Text)
+            if(positionInTokenList < tokenList.Count)
             {
-                case "break":
-                    //TODO: Implement
+                currentToken = tokenList[++positionInTokenList];
+            }
+            return currentToken;
+        }
+
+        private bool ParseExpected(TokenType type)
+        {
+            int temp = positionInTokenList;
+            if(tokenList[++temp].Type == type)
+            {
+                currentToken = NextToken();
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        public SyntaxTree CreateSyntaxTree(string filename)
+        {
+            Stream luaStream = File.OpenRead(filename);
+            tokenList = Lexer.Tokenize(luaStream);
+            ChunkNode root = ParseChunkNode();
+            return new SyntaxTree(filename, root, errorList);
+        }
+
+        private ChunkNode ParseChunkNode()
+        {
+            int start = currentToken.FullStart;
+            Block block = ParseBlock();
+            int length = currentToken.Start + currentToken.Length - start;
+
+            Assert.NotEqual(TokenType.EndOfFile, currentToken.Type);
+
+            return ChunkNode.Create(start, length, block, currentToken);
+        }
+
+        private Block ParseBlock()
+        {
+            contextStack.Push(Context.BlockContext);
+            int start = this.NextToken().FullStart;
+            List<SyntaxNode> children = new List<SyntaxNode>();
+            while (currentToken.Type != TokenType.EndOfFile)
+            {
+                children.Add(ParseStatement());
+            }
+
+            int length = currentToken.Start + currentToken.Length - start;
+
+            contextStack.Pop();
+            return Block.Create(start, length, children.ToImmutableList());
+        }
+
+
+        private SyntaxNode ParseStatement()
+        {
+            switch (currentToken.Type)
+            {
+                case TokenType.BreakKeyword:
+                    throw new NotImplementedException();
                     break;
-                case "goto":
-                    //TODO: Implement
+                case TokenType.GotoKeyword:
+                    throw new NotImplementedException();
                     break;
-                case "do":
-                    //TODO: Implement
+                case TokenType.DoKeyword:
+                    throw new NotImplementedException();
                     break;
-                case "while":
-                    //TODO: Implement
+                case TokenType.WhileKeyword:
+                    throw new NotImplementedException();
                     break;
-                case "repeat":
-                    //TODO: Implement
+                case TokenType.RepeatKeyword:
+                    throw new NotImplementedException();
                     break;
-                case "if":
-                    return ParseIfNode(tokenEnumerator);
-                case "for":
-                    //TODO: Implement
+                case TokenType.IfKeyword:
+                    return ParseIfNode();
+                case TokenType.ForKeyword:
+                    throw new NotImplementedException();
                     break;
-                case "function":
-                    //TODO: Implement
+                case TokenType.FunctionKeyword:
+                    throw new NotImplementedException();
                     break;
-                case "local":
-                    //TODO: Implement
+                case TokenType.LocalKeyword:
+                    throw new NotImplementedException();
+                    break;
+                case TokenType.Identifier:
+                    throw new NotImplementedException();
                     break;
                 default:
-                    //TODO: Implement
+                    throw new NotImplementedException();
                     //not the beginning of a statement?
                     break;
             }
             return null;//TODO: remove this
         }
 
-        private static IfNode ParseIfNode(IEnumerator<Token> tokenEnumerator)
+        private IfNode ParseIfNode()
         {
-            IfNode.Builder ifNodeBuilder = IfNode.CreateBuilder();
-            ifNodeBuilder.ExtractTokenInfoWithTrivia(tokenEnumerator.Current);
 
-            ifNodeBuilder.IfKeyword = Keyword.CreateBuilder();
-            ifNodeBuilder.IfKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
+            int fullStart = currentToken.FullStart;
+            Token ifKeyword = currentToken;
 
-            if(!tokenEnumerator.MoveNext())
-            {
-                //TODO: Error?
-            }
 
-            ifNodeBuilder.Exp = Expression.CreateBuilder();
-            ifNodeBuilder.Exp = ParseExp(tokenEnumerator, TokenType.ThenKeyword);
+            //ifNodeBuilder.ExtractTokenInfoWithTrivia(tokenEnumerator.Current);
 
-            if (tokenEnumerator.Current.Text == "then")
-            {
-                ifNodeBuilder.ThenKeyword = Keyword.CreateBuilder();
-                ifNodeBuilder.ThenKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
-            } else
-            {
-                //TODO: error?
-            }
+            //ifNodeBuilder.IfKeyword = Keyword.CreateBuilder();
+            //ifNodeBuilder.IfKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
 
-            if (!tokenEnumerator.MoveNext())
-            {
-                //TODO: Error?
-            }
+            //if (!tokenEnumerator.MoveNext())
+            //{
+            //    //TODO: Error?
+            //}
 
-            ifNodeBuilder.IfBlock = Block.CreateBuilder();
-            ifNodeBuilder.IfBlock = ParseIfBlock(tokenEnumerator);
+            //ifNodeBuilder.Exp = Expression.CreateBuilder();
+            //ifNodeBuilder.Exp = ParseExp(tokenEnumerator, TokenType.ThenKeyword);
 
-            while(tokenEnumerator.Current.Type == TokenType.ElseIfKeyword)
-            {
-                ifNodeBuilder.ElseIfList.Add(ParseElseIfBlocks(tokenEnumerator));
-            }
+            //if (tokenEnumerator.Current.Text == "then")
+            //{
+            //    ifNodeBuilder.ThenKeyword = Keyword.CreateBuilder();
+            //    ifNodeBuilder.ThenKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
+            //}
+            //else
+            //{
+            //    //TODO: error?
+            //}
 
-            if(tokenEnumerator.Current.Type == TokenType.ElseKeyword)
-            {
-                ifNodeBuilder.ElseBlock.ElseKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
-                ifNodeBuilder.ElseBlock.Block = ParseBlock(tokenEnumerator, TokenType.EndKeyword);
-            }
+            //if (!tokenEnumerator.MoveNext())
+            //{
+            //    //TODO: Error?
+            //}
 
-            if(tokenEnumerator.Current.Type != TokenType.EndKeyword)
-            {
-                ifNodeBuilder.EndKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
-            } else
-            {
-                //TODO: error
-            }
-            
-            ifNodeBuilder.Length = tokenEnumerator.Current.FullStart - ifNodeBuilder.FullStartPosition;
-            
-            return ifNodeBuilder.ToImmutable();
+            //ifNodeBuilder.IfBlock = Block.CreateBuilder();
+            //ifNodeBuilder.IfBlock = ParseIfBlock(tokenEnumerator);
 
+            //while (tokenEnumerator.Current.Type == TokenType.ElseIfKeyword)
+            //{
+            //    ifNodeBuilder.ElseIfList.Add(ParseElseIfBlocks(tokenEnumerator));
+            //}
+
+            //if (tokenEnumerator.Current.Type == TokenType.ElseKeyword)
+            //{
+            //    ifNodeBuilder.ElseBlock.ElseKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
+            //    ifNodeBuilder.ElseBlock.Block = ParseBlock(tokenEnumerator, TokenType.EndKeyword);
+            //}
+
+            //if (tokenEnumerator.Current.Type != TokenType.EndKeyword)
+            //{
+            //    ifNodeBuilder.EndKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
+            //}
+            //else
+            //{
+            //    //TODO: error
+            //}
+
+            //ifNodeBuilder.Length = tokenEnumerator.Current.FullStart - ifNodeBuilder.FullStartPosition;
+
+            //return IfNode();
+            return null;
         }
 
-        private static ElseIfBlock ParseElseIfBlocks(IEnumerator<Token> tokenEnumerator)
-        {
-            ElseIfBlock.Builder elseifBlockBuilder = ElseIfBlock.CreateBuilder();
-            //elseifBlockBuilder.ExtractTokenInfo(tokenEnumerator.Current);
+        //private ElseIfBlock ParseElseIfBlocks(List<Token> tokenEnumerator)
+        //{
+        //    ElseIfBlock.Builder elseifBlockBuilder = ElseIfBlock.CreateBuilder();
+        //    //elseifBlockBuilder.ExtractTokenInfo(tokenEnumerator.Current);
 
-            elseifBlockBuilder.ElseIfKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
-            if (!tokenEnumerator.MoveNext())
-            {
-                //TODO: Error?
-            }
+        //    elseifBlockBuilder.ElseIfKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
+        //    if (!tokenEnumerator.MoveNext())
+        //    {
+        //        //TODO: Error?
+        //    }
 
-            elseifBlockBuilder.Exp = ParseExp(tokenEnumerator, TokenType.ThenKeyword);
+        //    elseifBlockBuilder.Exp = ParseExp(tokenEnumerator, TokenType.ThenKeyword);
 
-            elseifBlockBuilder.ThenKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
-            if (!tokenEnumerator.MoveNext())
-            {
-                //TODO: Error?
-            }
+        //    elseifBlockBuilder.ThenKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
+        //    if (!tokenEnumerator.MoveNext())
+        //    {
+        //        //TODO: Error?
+        //    }
 
-            elseifBlockBuilder.Block = ParseIfBlock(tokenEnumerator);
+        //    elseifBlockBuilder.Block = ParseIfBlock(tokenEnumerator);
 
-            //TODO: elseifBlockBuilder.Length = tokenEnumerator.Current.FullStart - elseifBlockBuilder.FullStartPosition;
+        //    //TODO: elseifBlockBuilder.Length = tokenEnumerator.Current.FullStart - elseifBlockBuilder.FullStartPosition;
 
-            return elseifBlockBuilder.ToImmutable();
-        }
+        //    return elseifBlockBuilder.ToImmutable();
+        //}
 
-        private static Expression.Builder ParseExp(IEnumerator<Token> tokenEnumerator, TokenType terminatingKeyword)
-        {
-            Expression.Builder expBuilder = Expression.CreateBuilder();
-            expBuilder.ExtractTokenInfo(tokenEnumerator.Current);
+        //private Expression.Builder ParseExp(List<Token> tokenEnumerator, TokenType terminatingKeyword)
+        //{
+        //    Expression.Builder expBuilder = Expression.CreateBuilder();
+        //    expBuilder.ExtractTokenInfo(tokenEnumerator.Current);
 
-            while(tokenEnumerator.Current.Type != terminatingKeyword)
-            {
-                expBuilder.Keyvalue = KeyValue.CreateBuilder();
-                expBuilder.Keyvalue.ExtractTokenInfo(tokenEnumerator.Current);
-                expBuilder.Keyvalue.Value = tokenEnumerator.Current.Text;
-                if (!tokenEnumerator.MoveNext())
-                {
-                    //TODO: Error?
-                }
-            }
-            expBuilder.Length = tokenEnumerator.Current.FullStart - expBuilder.FullStartPosition;
-            return expBuilder;
-        }
+        //    while(tokenEnumerator.Current.Type != terminatingKeyword)
+        //    {
+        //        expBuilder.Keyvalue = KeyValue.CreateBuilder();
+        //        expBuilder.Keyvalue.ExtractTokenInfo(tokenEnumerator.Current);
+        //        expBuilder.Keyvalue.Value = tokenEnumerator.Current.Text;
+        //        if (!tokenEnumerator.MoveNext())
+        //        {
+        //            //TODO: Error?
+        //        }
+        //    }
+        //    expBuilder.Length = tokenEnumerator.Current.FullStart - expBuilder.FullStartPosition;
+        //    return expBuilder;
+        //}
 
-        private static ChunkNode ParseChunkNode(IEnumerator<Token> tokenEnumerator)
-        {
-            ChunkNode.Builder chunkNodeBuilder = ChunkNode.CreateBuilder();
-            chunkNodeBuilder.ExtractTokenInfo(tokenEnumerator.Current);
-            chunkNodeBuilder.ProgramBlock = ParseBlock(tokenEnumerator, TokenType.EndOfFile);
-            chunkNodeBuilder.EndOfFile = ParseEndOfFile(tokenEnumerator);
-            chunkNodeBuilder.Length = tokenEnumerator.Current.FullStart - chunkNodeBuilder.FullStartPosition;
-            return chunkNodeBuilder.ToImmutable();
-        }
 
-        private static EndOfFileNode.Builder ParseEndOfFile(IEnumerator<Token> tokenEnumerator)
-        {
-            EndOfFileNode.Builder chunkNodeBuilder = EndOfFileNode.CreateBuilder();
-            chunkNodeBuilder.ExtractTokenInfo(tokenEnumerator.Current);
-            return chunkNodeBuilder;
-        }
 
-        private static Block.Builder ParseBlock(IEnumerator<Token> tokenEnumerator, TokenType terminatingType)
-        {
-            Block.Builder blockBuilder = Block.CreateBuilder();
-            blockBuilder.ExtractTokenInfo(tokenEnumerator.Current);
-            while(tokenEnumerator.Current.Type != terminatingType && tokenEnumerator.Current.Type != TokenType.EndOfFile)
-            {
-                blockBuilder.Children.Add(ParseStatement(tokenEnumerator));
-                if (!tokenEnumerator.MoveNext())
-                {
-                    //TODO: Error?
-                }
-            }
-            blockBuilder.Length = tokenEnumerator.Current.FullStart - blockBuilder.FullStartPosition;
+        //private EndOfFileNode.Builder ParseEndOfFile(List<Token> tokenEnumerator)
+        //{
+        //    EndOfFileNode.Builder chunkNodeBuilder = EndOfFileNode.CreateBuilder();
+        //    chunkNodeBuilder.ExtractTokenInfo(tokenEnumerator.Current);
+        //    return chunkNodeBuilder;
+        //}
 
-            return blockBuilder;
-        }
 
-        private static Block.Builder ParseIfBlock(IEnumerator<Token> tokenEnumerator)
-        {
-            Block.Builder ifBlockBuilder = Block.CreateBuilder();
-            ifBlockBuilder.ExtractTokenInfo(tokenEnumerator.Current);
-            while ((tokenEnumerator.Current.Type != TokenType.ElseKeyword 
-            || tokenEnumerator.Current.Type != TokenType.ElseIfKeyword
-            || tokenEnumerator.Current.Type != TokenType.EndKeyword) 
-            && tokenEnumerator.Current.Type != TokenType.EndOfFile) //TODO: Formating?
-            {
-                ifBlockBuilder.Children.Add(ParseStatement(tokenEnumerator));
-                if (!tokenEnumerator.MoveNext())
-                {
-                    //TODO: Error?
-                }
-            }
-            ifBlockBuilder.Length = tokenEnumerator.Current.FullStart - ifBlockBuilder.FullStartPosition;
 
-            return ifBlockBuilder;
-        }
+        //private Block.Builder ParseIfBlock(List<Token> tokenEnumerator)
+        //{
+        //    Block.Builder ifBlockBuilder = Block.CreateBuilder();
+        //    ifBlockBuilder.ExtractTokenInfo(tokenEnumerator.Current);
+        //    while ((tokenEnumerator.Current.Type != TokenType.ElseKeyword 
+        //    || tokenEnumerator.Current.Type != TokenType.ElseIfKeyword
+        //    || tokenEnumerator.Current.Type != TokenType.EndKeyword) 
+        //    && tokenEnumerator.Current.Type != TokenType.EndOfFile) //TODO: Formating?
+        //    {
+        //        ifBlockBuilder.Children.Add(ParseStatement(tokenEnumerator));
+        //        if (!tokenEnumerator.MoveNext())
+        //        {
+        //            //TODO: Error?
+        //        }
+        //    }
+        //    ifBlockBuilder.Length = tokenEnumerator.Current.FullStart - ifBlockBuilder.FullStartPosition;
+
+        //    return ifBlockBuilder;
+        //}
     }
 }

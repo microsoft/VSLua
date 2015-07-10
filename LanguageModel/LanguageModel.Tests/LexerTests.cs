@@ -227,7 +227,7 @@ namespace LanguageModel.Tests
 
         public void TestPositionNumbers()
         {
-            //TODO: implement
+            throw new NotImplementedException();
         }
 
     }
