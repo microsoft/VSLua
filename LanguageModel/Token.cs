@@ -64,7 +64,8 @@ namespace LanguageModel
         OrBinop,
         WhileKeyword,
         TrueKeyValue,
-        ReturnKeyword
+        ReturnKeyword,
+        MissingToken
     }
 
     public class Token
@@ -84,7 +85,25 @@ namespace LanguageModel
             this.LeadingTrivia = trivia;
             this.FullStart = fullStart;
             this.Start = start;
-            this.Length = FullStart - (Text.Length + Start); //TODO: correct?
+            this.Length = Text.Length; //TODO: correct?
+        }
+
+        //public Token(bool generateMissingToken, int position) //TODO: bad practice?
+        //{
+        //    if (generateMissingToken)
+        //    {
+        //        this.Type = TokenType.MissingToken;
+        //        this.Text = "";
+        //        this.LeadingTrivia = null;
+        //        this.FullStart = position;
+        //        this.Start = position;
+        //        this.Length = 0; //TODO: correct?
+        //    } 
+        //}
+
+        public static Token CreateMissingToken(int position)
+        {
+            return new Token(TokenType.MissingToken, "", null, position, position);
         }
 
         public override string ToString()

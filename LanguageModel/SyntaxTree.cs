@@ -8,7 +8,7 @@ namespace LanguageModel
 {
     public class SyntaxTree
     {
-        public SyntaxTree(string fileName, GenericSyntaxNode root, List<ParseError> errorList)
+        public SyntaxTree(string fileName, SyntaxNode root, List<ParseError> errorList)
         {
             this.FileName = fileName;
             this.Root = root;
@@ -16,7 +16,7 @@ namespace LanguageModel
         }
 
         public string FileName { get; private set; }
-        public GenericSyntaxNode Root { get; private set; }
+        public SyntaxNode Root { get; private set; }
         public List<ParseError> ErrorList { get; private set; }
         public SyntaxNode GetNodeAt(int position)
         {

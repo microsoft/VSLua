@@ -11,11 +11,12 @@ namespace LanguageModel
 {
     public enum Context
     {
-        BlockContext,
-        ExplistContext,
-        ParlistContext,
-        FieldlistContext,
-        ExpressionContext,
+        IfBlockContext,
+        ProgramContext,
+        //ExplistContext,
+        //ParlistContext,
+        //FieldlistContext,
+        //ExpressionContext,
     }
     public class Parser
     {
@@ -51,10 +52,24 @@ namespace LanguageModel
                 return true;
             } else
             {
+                //TODO: parse parent contexts?
                 return false;
             }
         }
         #endregion
+
+        private bool IsContextTerminator(Context parsingContext, TokenType currentTokentType)
+        {
+            switch(parsingContext)
+            {
+                case Context.IfBlockContext:
+                    return (currentTokentType == TokenType.EndKeyword || currentTokentType == TokenType.ElseIfKeyword || currentTokentType == TokenType.ElseKeyword);
+                case Context.ProgramContext:
+                    return currentTokentType == TokenType.EndOfFile;
+                default:
+                    throw new Exception("Unknown Context");
+            }
+        }
 
         public SyntaxTree CreateSyntaxTree(string filename)
         {
@@ -67,7 +82,7 @@ namespace LanguageModel
         private ChunkNode ParseChunkNode()
         {
             int start = currentToken.FullStart;
-            Block block = ParseBlock();
+            Block block = ParseBlock(Context.ProgramContext);
             int length = currentToken.Start + currentToken.Length - start;
 
             Assert.NotEqual(TokenType.EndOfFile, currentToken.Type);
@@ -75,12 +90,12 @@ namespace LanguageModel
             return ChunkNode.Create(start, length, block, currentToken);
         }
 
-        private Block ParseBlock()
+        private Block ParseBlock(Context parsingContext)
         {
-            contextStack.Push(Context.BlockContext);
+            contextStack.Push(parsingContext);
             int start = this.NextToken().FullStart;
             List<SyntaxNode> children = new List<SyntaxNode>();
-            while (currentToken.Type != TokenType.EndOfFile)
+            while (this.IsContextTerminator(parsingContext, currentToken.Type))
             {
                 children.Add(ParseStatement());
             }
@@ -136,66 +151,45 @@ namespace LanguageModel
         private IfNode ParseIfNode()
         {
 
-            int fullStart = currentToken.FullStart;
+            int start = currentToken.Start;
             Token ifKeyword = currentToken;
+            Expression expression = this.ParseExpression();
 
+            //TODO: do context analysis vs. just returning a missing token?
+            Token thenKeyword = this.ParseExpected(TokenType.ThenKeyword) ? currentToken : Token.CreateMissingToken(currentToken.Start + currentToken.Length);
+            
+            int length = currentToken.Start + currentToken.Length - start;
 
-            //ifNodeBuilder.ExtractTokenInfoWithTrivia(tokenEnumerator.Current);
+            Block ifBlock = this.ParseBlock(Context.IfBlockContext);
+            List<ElseIfBlock> elseIfList = ParseElseIfList();
+            ElseBlock elseBlock = ParseElseBlock();
 
-            //ifNodeBuilder.IfKeyword = Keyword.CreateBuilder();
-            //ifNodeBuilder.IfKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
-
-            //if (!tokenEnumerator.MoveNext())
-            //{
-            //    //TODO: Error?
-            //}
-
-            //ifNodeBuilder.Exp = Expression.CreateBuilder();
-            //ifNodeBuilder.Exp = ParseExp(tokenEnumerator, TokenType.ThenKeyword);
-
-            //if (tokenEnumerator.Current.Text == "then")
-            //{
-            //    ifNodeBuilder.ThenKeyword = Keyword.CreateBuilder();
-            //    ifNodeBuilder.ThenKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
-            //}
-            //else
-            //{
-            //    //TODO: error?
-            //}
-
-            //if (!tokenEnumerator.MoveNext())
-            //{
-            //    //TODO: Error?
-            //}
-
-            //ifNodeBuilder.IfBlock = Block.CreateBuilder();
-            //ifNodeBuilder.IfBlock = ParseIfBlock(tokenEnumerator);
-
-            //while (tokenEnumerator.Current.Type == TokenType.ElseIfKeyword)
-            //{
-            //    ifNodeBuilder.ElseIfList.Add(ParseElseIfBlocks(tokenEnumerator));
-            //}
-
-            //if (tokenEnumerator.Current.Type == TokenType.ElseKeyword)
-            //{
-            //    ifNodeBuilder.ElseBlock.ElseKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
-            //    ifNodeBuilder.ElseBlock.Block = ParseBlock(tokenEnumerator, TokenType.EndKeyword);
-            //}
-
-            //if (tokenEnumerator.Current.Type != TokenType.EndKeyword)
-            //{
-            //    ifNodeBuilder.EndKeyword.ExtractKeywordInfo(tokenEnumerator.Current);
-            //}
-            //else
-            //{
-            //    //TODO: error
-            //}
-
-            //ifNodeBuilder.Length = tokenEnumerator.Current.FullStart - ifNodeBuilder.FullStartPosition;
-
-            //return IfNode();
-            return null;
+            if (elseIfList == null && elseBlock == null)
+            {
+                return IfNode.Create(start, length, ifKeyword, expression, thenKeyword, ifBlock);
+            }
+            else
+            {
+                return IfNode.Create(start, length, ifKeyword, expression, thenKeyword, ifBlock, elseIfList.ToImmutableList(), elseBlock);
+            }
         }
+
+        private Expression ParseExpression()
+        {
+            throw new NotImplementedException();
+        }
+
+        private ElseBlock ParseElseBlock()
+        {
+            throw new NotImplementedException();
+        }
+
+        private List<ElseIfBlock> ParseElseIfList()
+        {
+            throw new NotImplementedException();
+        }
+
+        
 
         //private ElseIfBlock ParseElseIfBlocks(List<Token> tokenEnumerator)
         //{

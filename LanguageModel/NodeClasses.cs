@@ -11,29 +11,16 @@
 
 
     [GenerateImmutable(GenerateBuilder = false)]
-    public partial class GenericSyntaxNode
-    {
-        [Required]
-        int startPosition;
-        [Required]
-        int length;
-    }
-
-    [GenerateImmutable(GenerateBuilder = false)]
     public partial class SyntaxNode
     {
         [Required]
-        ImmutableList<Trivia> triviaList;
-        [Required]
-        int fullStartPosition;
-        [Required]
         int startPosition;
         [Required]
         int length;
     }
 
     [GenerateImmutable(GenerateBuilder = false)]
-    public partial class ChunkNode : GenericSyntaxNode
+    public partial class ChunkNode : SyntaxNode
     {
         [Required]
         readonly Block programBlock;
@@ -42,17 +29,11 @@
     }
 
     [GenerateImmutable(GenerateBuilder = false)]
-    public partial class Block : GenericSyntaxNode
+    public partial class Block : SyntaxNode
     {
         [Required]
         ImmutableList<SyntaxNode> children;
     }
-
-    [GenerateImmutable(GenerateBuilder = false)]
-    public partial class MissingNode : SyntaxNode
-    {
-    }
-
 
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class ElseBlock : SyntaxNode
@@ -63,7 +44,7 @@
 
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class ElseIfBlock
-    { //TODO: inherit from syntax node
+    { //TODO: file bug: inherit from syntax node
         readonly Token elseIfKeyword;
         readonly Expression exp;
         readonly Token thenKeyword;
