@@ -65,7 +65,8 @@ namespace LanguageModel
         WhileKeyword,
         TrueKeyValue,
         ReturnKeyword,
-        MissingToken
+        MissingToken,
+        VarArgOperator
     }
 
     public class Token

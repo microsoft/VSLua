@@ -69,7 +69,7 @@ namespace LanguageModel
                 case Context.ProgramContext:
                     return currentTokenType == TokenType.EndOfFile;
                 default:
-                    throw new Exception("Unknown Context");
+                    throw new Exception("Unknown Context"); //TODO
             }
         }
 

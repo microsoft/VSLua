@@ -1,12 +1,13 @@
-﻿namespace LanguageModel {
-	using System;
-	using System.Collections.Generic;
-	using System.Collections.Immutable;
-	using System.Diagnostics;
-	using System.IO;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
+﻿namespace LanguageModel
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Immutable;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
     using ImmutableObjectGraph.CodeGeneration;
 
 
@@ -35,6 +36,7 @@
         ImmutableList<SyntaxNode> children;
     }
 
+    #region If Statement Nodes
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class ElseBlock : SyntaxNode
     {
@@ -64,7 +66,9 @@
         readonly ElseBlock elseBlock;
         readonly Token endKeyword;
     }
+    #endregion
 
+    #region Expression nodes
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class Expression : SyntaxNode
     {
@@ -77,27 +81,90 @@
         }
     }
 
-    //The following level of abstraction is to deal with ambiguities
-    [GenerateImmutable(GenerateBuilder = false)]
-    public partial class GenericExpression
-    {
-        Token unop;
-        ConcreteExpression exp;
-        Token binop;
-    }
 
     [GenerateImmutable(GenerateBuilder = false)]
-    public partial class ConcreteExpression { }
+    public abstract partial class ConcreteExpression { }
 
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class SimpleExpression : ConcreteExpression
     {
         Token expressionValue;
+        public static bool IsValidExpressionNode(TokenType type)
+        {
+            switch (type)
+            {
+                case TokenType.Number:
+                case TokenType.TrueKeyValue:
+                case TokenType.FalseKeyValue:
+                case TokenType.NilKeyValue:
+                case TokenType.VarArgOperator:
+                case TokenType.String:
+                    return true;
+                default:
+                    return false;
+            }
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class ComplexExpression : ConcreteExpression
     {
         SyntaxNode expressionValue;
+
+        public static bool IsValidExpressionNode(SyntaxNode node)
+        {
+            return (node is FunctionDef || node is PrefixExp || node is TableConstructor);
+        }
+    }
+    #endregion
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class FunctionDef : SyntaxNode
+    {
+        Token functionKeyword;
+        FuncBody functionBody;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class PrefixExp : SyntaxNode
+    {
+        //TODO: implement
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class TableConstructor : SyntaxNode
+    {
+        //TODO: implement
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class FuncBody : SyntaxNode
+    {
+        Token openParen;
+        ParList parameterList;
+        Token closeParen;
+        Block block;
+        Token endKeyword;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public abstract partial class ParList : SyntaxNode { }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class VarArgPar : ParList
+    {
+        Token varargOperator;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class NameListPar : ParList
+    {
+        NameList names;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class NameList : SyntaxNode
+    {
+        ImmutableList<Tuple<Token,Token>> names;
     }
 }
