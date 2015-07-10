@@ -81,6 +81,14 @@
         }
     }
 
+    //The following level of abstraction is to deal with ambiguities
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class GenericExpression
+    {
+        Token unop;
+        ConcreteExpression exp;
+        Token binop;
+    }
 
     [GenerateImmutable(GenerateBuilder = false)]
     public abstract partial class ConcreteExpression { }
@@ -141,30 +149,31 @@
     public partial class FuncBody : SyntaxNode
     {
         Token openParen;
-        ParList parameterList;
+        //ParList parameterList;
         Token closeParen;
         Block block;
         Token endKeyword;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
-    public abstract partial class ParList : SyntaxNode { }
+    //[GenerateImmutable(GenerateBuilder = false)]
+    //public abstract partial class ParList : SyntaxNode { }
 
-    [GenerateImmutable(GenerateBuilder = false)]
-    public partial class VarArgPar : ParList
-    {
-        Token varargOperator;
-    }
+    //[GenerateImmutable(GenerateBuilder = false)]
+    //public partial class VarArgPar : ParList
+    //{
+    //    Token varargOperator;
+    //}
 
-    [GenerateImmutable(GenerateBuilder = false)]
-    public partial class NameListPar : ParList
-    {
-        NameList names;
-    }
+    //[GenerateImmutable(GenerateBuilder = false)]
+    //public partial class NameListPar : ParList
+    //{
+    //    NameList names;
+    //}
 
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class NameList : SyntaxNode
     {
         ImmutableList<Tuple<Token,Token>> names;
     }
+
 }
