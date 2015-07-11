@@ -94,9 +94,9 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LanguageModel\LanguageModel.csproj">
+    <ProjectReference Include="..\LanguageModel\LanguageService.csproj">
       <Project>{cff6ef45-ee9f-4a9e-bd4e-8607c2bc9452}</Project>
-      <Name>LanguageModel</Name>
+      <Name>LanguageService</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

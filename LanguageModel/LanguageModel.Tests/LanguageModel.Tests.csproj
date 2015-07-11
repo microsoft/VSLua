@@ -99,9 +99,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LanguageModel.csproj">
+    <ProjectReference Include="..\LanguageService.csproj">
       <Project>{cff6ef45-ee9f-4a9e-bd4e-8607c2bc9452}</Project>
-      <Name>LanguageModel</Name>
+      <Name>LanguageService</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

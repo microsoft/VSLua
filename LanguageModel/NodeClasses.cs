@@ -40,62 +40,62 @@
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class ElseBlock : SyntaxNode
     {
+        [Required]
         readonly Token elseKeyword;
+        [Required]
         readonly Block block;
     }
 
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class ElseIfBlock
-    { //TODO: file bug: inherit from syntax node
+    { //TODO: inherit from syntax node once ImmutableGraphObject is bug is fixed
+        [Required]
         readonly int startPosition;
+        [Required]
         readonly int length;
+        [Required]
         readonly Token elseIfKeyword;
+        [Required]
         readonly Expression exp;
+        [Required]
         readonly Token thenKeyword;
+        [Required]
         readonly Block block;
     }
 
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class IfNode : SyntaxNode
     {
+        [Required]
         readonly Token ifKeyword;
+        [Required]
         readonly Expression exp;
+        [Required]
         readonly Token thenKeyword;
+        [Required]
         readonly Block ifBlock;
         readonly ImmutableList<ElseIfBlock> elseIfList;
         readonly ElseBlock elseBlock;
+        [Required]
         readonly Token endKeyword;
     }
     #endregion
 
     #region Expression nodes
     [GenerateImmutable(GenerateBuilder = false)]
-    public partial class Expression : SyntaxNode
+    public partial class Expression
     {
-        ImmutableList<GenericExpression> expressions;
-
-        public bool IsValidExpression()
-        {
-            //TODO: implement to check if there is a binop and then a missing exp or if there is a missing token or something
-            return false;
-        }
-    }
-
-    //The following level of abstraction is to deal with ambiguities
-    [GenerateImmutable(GenerateBuilder = false)]
-    public partial class GenericExpression
-    {
-        Token unop;
-        ConcreteExpression exp;
-        Token binop;
+        //TODO: inherit from syntax node once ImmutableGraphObject is bug is fixed
+        [Required]
+        readonly int startPosition;
+        [Required]
+        readonly int length;
     }
 
     [GenerateImmutable(GenerateBuilder = false)]
-    public abstract partial class ConcreteExpression { }
-
-    [GenerateImmutable(GenerateBuilder = false)]
-    public partial class SimpleExpression : ConcreteExpression
+    public partial class SimpleExpression : Expression
     {
+        [Required]
         Token expressionValue;
         public static bool IsValidExpressionNode(TokenType type)
         {
@@ -115,14 +115,35 @@
     }
 
     [GenerateImmutable(GenerateBuilder = false)]
-    public partial class ComplexExpression : ConcreteExpression
+    public partial class ComplexExpression : Expression
     {
+        [Required]
         SyntaxNode expressionValue;
 
         public static bool IsValidExpressionNode(SyntaxNode node)
         {
             return (node is FunctionDef || node is PrefixExp || node is TableConstructor);
         }
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class BinopExpression : Expression
+    {
+        [Required]
+        Expression exp1;
+        [Required]
+        Token binop;
+        [Required]
+        Expression exp2;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class UnopExpression : Expression
+    {
+        [Required]
+        Token unop;
+        [Required]
+        Expression exp;
     }
     #endregion
 
@@ -148,32 +169,45 @@
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class FuncBody : SyntaxNode
     {
+        [Required]
         Token openParen;
-        //ParList parameterList;
+        [Required]
+        ParList parameterList;
+        [Required]
         Token closeParen;
+        [Required]
         Block block;
+        [Required]
         Token endKeyword;
     }
 
-    //[GenerateImmutable(GenerateBuilder = false)]
-    //public abstract partial class ParList : SyntaxNode { }
+    [GenerateImmutable(GenerateBuilder = false)]
+    public abstract partial class ParList //TODO: Update to inherit from SyntaxNode once bug fixed in Immutable Graph Object
+    {
+        [Required]
+        int startPosition;
+        [Required]
+        int length;
+    }
 
-    //[GenerateImmutable(GenerateBuilder = false)]
-    //public partial class VarArgPar : ParList
-    //{
-    //    Token varargOperator;
-    //}
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class VarArgPar : ParList
+    {
+        [Required]
+        Token varargOperator;
+    }
 
-    //[GenerateImmutable(GenerateBuilder = false)]
-    //public partial class NameListPar : ParList
-    //{
-    //    NameList names;
-    //}
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class NameListPar : ParList
+    {
+        [Required]
+        NameList names;
+    }
 
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class NameList : SyntaxNode
     {
-        ImmutableList<Tuple<Token,Token>> names;
+        //ImmutableList<Tuple<Token,Token>> names;
     }
 
 }

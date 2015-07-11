@@ -83,14 +83,14 @@
     <Compile Include="Formatting\Ruling\Rules.cs" />
     <Compile Include="Formatting\TextEditInfo.cs" />
     <Compile Include="Formatting\TokenRange.cs" />
-    <Compile Include="Lexer.cs" />
-    <Compile Include="ParseError.cs" />
-    <Compile Include="StreamExtension.cs" />
+    <Compile Include="LanguageModel\Lexer.cs" />
+    <Compile Include="LanguageModel\ParseError.cs" />
+    <Compile Include="LanguageModel\StreamExtension.cs" />
     <Compile Include="SyntaxTree.cs" />
-    <Compile Include="Token.cs" />
-    <Compile Include="TrackableStreamReader.cs" />
-    <Compile Include="Trivia.cs" />
-    <Compile Include="Parser.cs" />
+    <Compile Include="LanguageModel\Token.cs" />
+    <Compile Include="LanguageModel\TrackableStreamReader.cs" />
+    <Compile Include="LanguageModel\Trivia.cs" />
+    <Compile Include="LanguageModel\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NodeClasses.cs">
       <Generator>MSBuild:GenerateCodeFromAttributes</Generator>

@@ -167,13 +167,15 @@ namespace LanguageModel
             List<ElseIfBlock> elseIfList = ParseElseIfList();
             ElseBlock elseBlock = ParseElseBlock();
 
+            Token endKeyword = ParseExpected(TokenType.EndKeyword) ? currentToken : Token.CreateMissingToken(currentToken.Start+currentToken.Length);
+
             if (elseIfList == null && elseBlock == null)
             {
-                return IfNode.Create(start, length, ifKeyword, expression, thenKeyword, ifBlock);
+                return IfNode.Create(start, length, ifKeyword, expression, thenKeyword, ifBlock, endKeyword);
             }
             else
             {
-                return IfNode.Create(start, length, ifKeyword, expression, thenKeyword, ifBlock, elseIfList.ToImmutableList(), elseBlock);
+                return IfNode.Create(start, length, ifKeyword, expression, thenKeyword, ifBlock,endKeyword, elseIfList.ToImmutableList(), elseBlock);
             }
         }
 
