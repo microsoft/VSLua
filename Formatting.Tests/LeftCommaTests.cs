@@ -5,7 +5,7 @@ namespace Formatting.Tests
     public class LeftCommaTests
     {
 
-        internal void GeneralRuleTest(string original, string expected)
+        internal void GeneralTest(string original, string expected)
         {
             string actual = Tester.Format(original);
             Assert.Equal(expected, actual);
@@ -16,7 +16,14 @@ namespace Formatting.Tests
         {
             string original = ",x";
             string expected = ", x";
-            GeneralRuleTest(original, expected);
+            GeneralTest(original, expected);
+        }
+
+        [Fact]
+        public void Comment()
+        {
+            string original = ",--[[ comment ]]x";
+            GeneralTest(original, original);
         }
 
         [Fact]
@@ -24,7 +31,7 @@ namespace Formatting.Tests
         {
             string original = "x,y";
             string expected = "x, y";
-            GeneralRuleTest(original, expected);
+            GeneralTest(original, expected);
         }
 
         [Fact]
@@ -32,15 +39,15 @@ namespace Formatting.Tests
         {
             string original = "{ x,y,z }";
             string expected = "{ x, y, z }";
-            GeneralRuleTest(original, expected);
+            GeneralTest(original, expected);
         }
 
         [Fact]
         public void Parameters()
         {
             string original = "function foo(x,y,z)";
-            string expected = "function foo(x, y, z)";
-            GeneralRuleTest(original, expected);
+            string expected = "function foo ( x, y, z )";
+            GeneralTest(original, expected);
         }
 
         [Fact]
@@ -48,7 +55,7 @@ namespace Formatting.Tests
         {
             string original = "{ x, y,}";
             string expected = "{ x, y, }";
-            GeneralRuleTest(original, expected);
+            GeneralTest(original, expected);
         }
 
         [Fact]
@@ -56,7 +63,7 @@ namespace Formatting.Tests
         {
             string original = "x,y = 1,2";
             string expected = "x, y = 1, 2";
-            GeneralRuleTest(original, expected);
+            GeneralTest(original, expected);
         }
 
         [Fact]
@@ -64,7 +71,7 @@ namespace Formatting.Tests
         {
             string original = "x,= 1";
             string expected = "x, = 1";
-            GeneralRuleTest(original, expected);
+            GeneralTest(original, expected);
         }
 
         [Fact]
@@ -72,7 +79,7 @@ namespace Formatting.Tests
         {
             string original = "{ x,,y }";
             string expected = "{ x, , y }";
-            GeneralRuleTest(original, expected);
+            GeneralTest(original, expected);
         }
 
         [Fact]
@@ -80,7 +87,7 @@ namespace Formatting.Tests
         {
             string original = "{ x,y, ,,,, },y32,,,s2,";
             string expected = "{ x, y, , , , , }, y32, , , s2,";
-            GeneralRuleTest(original, expected);
+            GeneralTest(original, expected);
         }
 
         [Fact]
@@ -88,7 +95,7 @@ namespace Formatting.Tests
         {
             string original = "x,             y";
             string expected = "x, y";
-            GeneralRuleTest(original, expected);
+            GeneralTest(original, expected);
         }
 
         [Fact]
@@ -100,7 +107,7 @@ y = 1,2";
             string expected = @"
 x,
 y = 1, 2";
-            GeneralRuleTest(original, expected);
+            GeneralTest(original, expected);
         }
 
 

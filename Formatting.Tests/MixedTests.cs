@@ -17,17 +17,19 @@ namespace Formatting.Tests
         {
             string original = @"
 x= 1
+--this is an add function
 add = function(x, y)
-    return x+y;
+    return x+y;--adding
 end
 
 
 get_zero = function() return 0 end";
             string expected1 = @"
 x = 1
+-- this is an add function
 add = function( x, y )
     return x + y
-    ;
+    ;-- adding
 end
 
 
@@ -36,9 +38,10 @@ get_zero = function()
 end";
             string expected2 = @"
 x = 1
+-- this is an add function
 add = function ( x, y )
       return x + y
-      ;
+      ; -- adding
 end
 
 
