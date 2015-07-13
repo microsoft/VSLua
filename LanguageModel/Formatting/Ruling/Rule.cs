@@ -10,16 +10,10 @@ namespace LanguageModel.Formatting.Ruling
     {
         internal readonly RuleDescriptor ruleDescriptor;
         internal readonly RuleOperation ruleOperation;
-        internal readonly RuleType type;
 
-        internal Rule(RuleDescriptor ruleDescriptor, List<ContextFilter> contextFilters, RuleAction action, RuleType type)
+        internal Rule(RuleDescriptor ruleDescriptor, List<ContextFilter> contextFilters, RuleAction action)
         {
             this.ruleDescriptor = ruleDescriptor;
-            this.type = type;
-            if (this.type == RuleType.Default)
-            {
-                contextFilters.Add(Rules.NoCommentInBetweenTokens);
-            }
             this.ruleOperation = new RuleOperation(new RuleOperationContext(contextFilters), action);
 
         }

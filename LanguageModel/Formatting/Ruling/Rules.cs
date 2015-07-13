@@ -15,19 +15,19 @@ namespace LanguageModel.Formatting.Ruling
             new Rule(
                 new RuleDescriptor(TokenType.Comma, TokenRange.Any),
                 new List<ContextFilter> { TokensAreOnSameLine },
-                RuleAction.Space, RuleType.Default);
+                RuleAction.Space);
 
         internal static Rule SpaceAfterAssignmentOperator =
             new Rule(
                 new RuleDescriptor(TokenRange.Any, TokenType.AssignmentOperator),
                 new List<ContextFilter> { TokensAreOnSameLine },
-                RuleAction.Space, RuleType.Default);
+                RuleAction.Space);
 
         internal static Rule SpaceBeforeAssignmentOperator =
             new Rule(
                 new RuleDescriptor(TokenRange.Any, TokenType.AssignmentOperator),
                 new List<ContextFilter> { TokensAreOnSameLine },
-                RuleAction.Space, RuleType.Default);
+                RuleAction.Space);
 
 
 
