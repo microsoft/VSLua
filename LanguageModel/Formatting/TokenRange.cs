@@ -8,7 +8,10 @@ namespace LanguageModel.Formatting
 {
     internal static class TokenRange
     {
-        internal static List<TokenType> Any = TokenRange.Fill(Enum.GetValues(typeof(TokenType)));
+        internal static List<TokenType> Any =
+            TokenRange.Fill(
+                Enum.GetValues(typeof(TokenType)),
+                new TokenType[] { TokenType.EndOfFile, TokenType.Unknown });
         internal static List<TokenType> BinaryOperators =
             new List<TokenType>
             {
@@ -56,14 +59,17 @@ namespace LanguageModel.Formatting
             TokenType.Identifier,
         };
 
-        private static List<TokenType> Fill(Array values)
+        private static List<TokenType> Fill(Array values, TokenType[] exclude)
         {
 
             List<TokenType> tokenTypes = new List<TokenType>();
 
             foreach (TokenType tokenType in values)
             {
-                tokenTypes.Add(tokenType);
+                if (!exclude.Contains(tokenType))
+                {
+                    tokenTypes.Add(tokenType);
+                }
             }
 
             return tokenTypes;

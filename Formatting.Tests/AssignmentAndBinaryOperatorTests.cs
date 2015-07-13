@@ -117,7 +117,7 @@ x =
         public void Mixed()
         {
             string original = "x +1 == 2   x= 3 /2+4";
-            string expected = "x + 1 == 2    x = 3 / 2 + 4";
+            string expected = "x + 1 == 2   x = 3 / 2 + 4";
             GeneralFunction(original, expected);
         }
 

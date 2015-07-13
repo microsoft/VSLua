@@ -46,7 +46,7 @@ namespace Formatting.Tests
         public void Parameters()
         {
             string original = "function foo(x,y,z)";
-            string expected = "function foo(x, y, z)";
+            string expected = "function foo ( x, y, z )";
             GeneralTest(original, expected);
         }
 
@@ -86,7 +86,7 @@ namespace Formatting.Tests
         public void ManyTestsInOne()
         {
             string original = "{ x,y, ,,,, },y32,,,s2,";
-            string expected = "{ x, y, , , , , }, y32, , , s2, ";
+            string expected = "{ x, y, , , , , }, y32, , , s2,";
             GeneralTest(original, expected);
         }
 

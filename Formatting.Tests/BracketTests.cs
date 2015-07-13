@@ -121,7 +121,7 @@ a, b, c )";
         public void ClosedSquare()
         {
             string original = "](";
-            string expected = "] (";
+            string expected = "](";
             GeneralTest(original, expected);
         }
 
@@ -129,7 +129,7 @@ a, b, c )";
         public void ClosedParen()
         {
             string original = ")(";
-            string expected = ") (";
+            string expected = ")(";
             GeneralTest(original, expected);
         }
 
@@ -137,7 +137,7 @@ a, b, c )";
         public void ClosedCurly()
         {
             string original = "}(";
-            string expected = "} (";
+            string expected = "}(";
             GeneralTest(original, expected);
         }
 
