@@ -9,33 +9,61 @@ namespace LanguageModel
 {
     class TrackableStreamReader : StreamReader
     {
-        private int lastChar = -1;
+        private List<char> lastCharactars = new List<char>();
+        private int historyLimit = 10;
+        private int pushedDistance = 0;
+        public char CurrentCharacter { get; private set; }
+        public int Position { get; private set; }
         public TrackableStreamReader(string path) : base(path)
-        {
-        }
+        { }
 
         public override int Read()
         {
-            int ch;
-
-            if (lastChar >= 0)
+            // if the current character is the final character
+            if (this.CurrentCharacter != -1)
             {
-                ch = lastChar;
-                lastChar = -1;
+                ++Position;
+                // if the stream reader has not been pushed back at all
+                if (this.pushedDistance == 0)
+                {
+                    if (this.CurrentCharacter != 0)
+                    {
+                        this.lastCharactars.Add(this.CurrentCharacter);
+                        if (this.lastCharactars.Count > this.historyLimit)
+                        {
+                            // limits the number of characters in the list
+                            this.lastCharactars = this.lastCharactars.GetRange(1, this.historyLimit);
+                        }
+                    }
+
+                    this.CurrentCharacter = (char) base.Read();
+                    return this.CurrentCharacter;
+                }
+                else
+                {
+                    this.CurrentCharacter = this.lastCharactars[this.lastCharactars.Count - this.pushedDistance];
+                    ++this.pushedDistance;
+                    return this.CurrentCharacter;
+                }
+                
+            }
+
+            return -1;
+        }
+
+        public void PushBack(int n = 1)
+            // if you just call PushBack(), it'll go back only one position
+            // otherwise you can back up to the history limit
+        {
+            if (this.pushedDistance + n > this.historyLimit || n > this.Position)
+            {
+                this.Position -= n;
+                this.pushedDistance += n;
             }
             else
             {
-                ch = base.Read();  // could be -1 
+                // Throw an error or something
             }
-            return ch;
-        }
-
-        public void PushBack(char ch)  // char, don't allow Pushback(-1) TOODO: remove the pushback char...
-        {
-            if (lastChar >= 0)
-                Console.WriteLine("ERROR: InvalidOperation PushBack of more than 1 char");
-
-            lastChar = ch;
         }
     }
 }
