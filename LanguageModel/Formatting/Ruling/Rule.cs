@@ -11,7 +11,7 @@ namespace LanguageModel.Formatting.Ruling
         internal readonly RuleDescriptor ruleDescriptor;
         internal readonly RuleOperation ruleOperation;
 
-        internal Rule(RuleDescriptor ruleDescriptor, ContextFilter[] contextFilters, RuleAction action)
+        internal Rule(RuleDescriptor ruleDescriptor, List<ContextFilter> contextFilters, RuleAction action)
         {
             this.ruleDescriptor = ruleDescriptor;
             this.ruleOperation = new RuleOperation(new RuleOperationContext(contextFilters), action);
