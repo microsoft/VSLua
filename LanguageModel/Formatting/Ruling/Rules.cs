@@ -22,7 +22,7 @@ namespace LanguageModel.Formatting.Ruling
 
         internal static Rule SpaceAfterAssignmentOperator =
             new Rule(
-                new RuleDescriptor(TokenRange.Any, TokenType.AssignmentOperator),
+                new RuleDescriptor(TokenType.AssignmentOperator, TokenRange.Any),
                 defaultFilters, RuleAction.Space);
 
         internal static Rule SpaceBeforeAssignmentOperator =

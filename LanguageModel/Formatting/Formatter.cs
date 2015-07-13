@@ -25,6 +25,17 @@ namespace LanguageModel.Formatting
 
             RuleMap ruleMap = new RuleMap();
             ruleMap.AddRule(Rules.SpaceAfterComma);
+            ruleMap.AddRule(Rules.SpaceAfterAssignmentOperator);
+            ruleMap.AddRule(Rules.SpaceAfterBinaryOperator);
+            ruleMap.AddRule(Rules.SpaceAfterValueBeforeCloseCurlyBrace);
+            ruleMap.AddRule(Rules.SpaceAfterValueBeforeCloseParenthesis);
+            ruleMap.AddRule(Rules.SpaceAfterValueBeforeCloseSquareBracket);
+            ruleMap.AddRule(Rules.SpaceAfterValueBeforeOpenParenthesis);
+            ruleMap.AddRule(Rules.SpaceBeforeAssignmentOperator);
+            ruleMap.AddRule(Rules.SpaceBeforeBinaryOperator);
+            ruleMap.AddRule(Rules.SpaceBeforeValueAfterOpenCurlyBrace);
+            ruleMap.AddRule(Rules.SpaceBeforeValueAfterOpenParenthesis);
+            ruleMap.AddRule(Rules.SpaceBeforeValueAfterOpenSquareBracket);
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
             IEnumerable<Token> tokens = Lexer.Tokenize(GenerateStreamFromString(span));

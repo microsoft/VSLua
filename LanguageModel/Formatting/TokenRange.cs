@@ -20,6 +20,7 @@ namespace LanguageModel.Formatting
                 TokenType.EqualityOperator,
                 TokenType.ExponentOperator,
                 TokenType.FloorDivideOperator,
+                TokenType.DivideOperator,
                 TokenType.GreaterOrEqualOperator,
                 TokenType.GreaterThanOperator,
                 TokenType.LessOrEqualOperator,
