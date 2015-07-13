@@ -11,7 +11,7 @@ namespace LanguageModel
     {
         private List<char> lastCharactars = new List<char>();
         private int historyLimit = 10;
-        private bool pushedDistance = 0;
+        private int pushedDistance = 0;
         public char CurrentCharacter { get; private set; }
         public int Position { get; private set; }
         public TrackableStreamReader(string path) : base(path)
@@ -36,7 +36,7 @@ namespace LanguageModel
                         }
                     }
 
-                    this.CurrentCharacter = base.Read();
+                    this.CurrentCharacter = (char) base.Read();
                     return this.CurrentCharacter;
                 }
                 else
