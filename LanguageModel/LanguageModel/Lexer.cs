@@ -167,7 +167,6 @@ namespace LanguageModel
                             }
                             else
                             {
-								
                                 triviaList.Add(ReadLineComment(stream, new char[]{ }));
                             }
                         }
