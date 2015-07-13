@@ -15,25 +15,30 @@ namespace LanguageModel.Formatting.Ruling
             new Rule(
                 new RuleDescriptor(TokenType.Comma, TokenRange.Any),
                 new List<ContextFilter> { TokensAreOnSameLine },
-                RuleAction.Space);
+                RuleAction.Space, RuleType.Default);
 
         internal static Rule SpaceAfterAssignmentOperator =
             new Rule(
                 new RuleDescriptor(TokenRange.Any, TokenType.AssignmentOperator),
                 new List<ContextFilter> { TokensAreOnSameLine },
-                RuleAction.Space);
+                RuleAction.Space, RuleType.Default);
 
         internal static Rule SpaceBeforeAssignmentOperator =
             new Rule(
                 new RuleDescriptor(TokenRange.Any, TokenType.AssignmentOperator),
                 new List<ContextFilter> { TokensAreOnSameLine },
-                RuleAction.Space);
+                RuleAction.Space, RuleType.Default);
 
 
 
         internal static bool TokensAreOnSameLine(FormattingContext formattingContext)
         {
             return formattingContext.TokensOnSameLine();
+        }
+
+        internal static bool NoCommentInBetweenTokens(FormattingContext formattingContext)
+        {
+            return !formattingContext.CommentsInBetween();
         }
 
     }
