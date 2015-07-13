@@ -49,6 +49,50 @@ t1 =
 }";
             GeneralTest(original, expected1, expected1);
         }
+
+        [Fact]
+        public void Comment1()
+        {
+            string original = @"
+t1 =-- comment
+{}";
+            string expected = @"
+t1 =-- comment
+{
+}";
+            GeneralTest(original, expected, expected);
+        }
+
+        [Fact]
+        public void Comment2()
+        {
+            string original = @"
+t1 =
+{--[[ comment ]]}";
+            string expected = @"
+t1 =
+{
+--[[ comment ]]}";
+        }
+
+        [Fact]
+        public void Comment3()
+        {
+            string original = @"
+t1 = {
+      basic, --[[ comment ]]basic2}";
+            string expected1 = @"
+t1 = {
+    basic,
+    --[[ comment ]]basic2
+}";
+            string expected2 = @"
+t1 = {
+      basic,
+      --[[ comment ]]basic2
+     }";
+            GeneralTest(original, expected1, expected2);
+        }
         
         [Fact]
         public void MultipleElements()

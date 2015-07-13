@@ -36,6 +36,27 @@ namespace Formatting.Tests
         }
 
         [Fact]
+        public void CommentCurly()
+        {
+            string original = "t = {1--[[ comment ]]}";
+            GeneralTest(original, original);
+        }
+
+        [Fact]
+        public void CommentSquare()
+        {
+            string original = "t = [1--[[ comment ]]]";
+            GeneralTest(original, original);
+        }
+
+        [Fact]
+        public void CommentParen()
+        {
+            string original = "foo(1--[[ comment ]])";
+            GeneralTest(original, original);
+        }
+
+        [Fact]
         public void LongTable()
         {
             string original = "t = {1, 3, 4, 5, 6, 7,}";
