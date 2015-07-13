@@ -86,13 +86,13 @@
 
     #region Lua List nodes
     [GenerateImmutable(GenerateBuilder = false)]
-    public partial class NameList
+    public partial class NameList : SyntaxNode
     {
         //TODO: Update to inherit from SyntaxNode once bug fixed in Immutable Graph Object
-        [Required]
-        int startPosition;
-        [Required]
-        int length;
+        //[Required]
+        //int startPosition;
+        //[Required]
+        //int length;
         [Required]
         ImmutableList<NameCommaPair> names;
     }
@@ -112,12 +112,12 @@
     }
 
     [GenerateImmutable(GenerateBuilder = false)]
-    public abstract partial class ParList //TODO: Update to inherit from SyntaxNode once bug fixed in Immutable Graph Object
+    public abstract partial class ParList : SyntaxNode //TODO: Update to inherit from SyntaxNode once bug fixed in Immutable Graph Object
     {
-        [Required]
-        int startPosition;
-        [Required]
-        int length;
+        //[Required]
+        //int startPosition;
+        //[Required]
+        //int length;
     }
 
     [GenerateImmutable(GenerateBuilder = false)]
@@ -152,7 +152,7 @@
         Expression expression;
         [Required]
         Token comma;
-    }    
+    }
 
     [GenerateImmutable(GenerateBuilder = false)]
     public abstract partial class FieldSep { }
@@ -227,13 +227,13 @@
 
     #region Expression nodes
     [GenerateImmutable(GenerateBuilder = false)]
-    public partial class Expression
+    public partial class Expression : SyntaxNode
     {
         //TODO: inherit from syntax node once ImmutableGraphObject is bug is fixed
-        [Required]
-        readonly int startPosition;
-        [Required]
-        readonly int length;
+        //[Required]
+        //readonly int startPosition;
+        //[Required]
+        //readonly int length;
     }
 
     [GenerateImmutable(GenerateBuilder = false)]
