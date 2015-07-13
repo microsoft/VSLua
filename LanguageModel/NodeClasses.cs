@@ -11,7 +11,7 @@
     using ImmutableObjectGraph.CodeGeneration;
 
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class SyntaxNode
     {
         [Required]
@@ -20,7 +20,12 @@
         int length;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class MissingNode : SyntaxNode
+    {
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class ChunkNode : SyntaxNode
     {
         [Required]
@@ -29,7 +34,7 @@
         readonly Token endOfFile;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class Block : SyntaxNode
     {
         [Required]
@@ -37,16 +42,16 @@
         RetStat returnStatement;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class RetStat : SyntaxNode
     {
         [Required]
         Token returnKeyword;
         ExpList returnExpressions;
-        Token semiColonRetStat;
+        //Token semiColonRetStat; TODO: decide if necessary?
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class TableConstructor : SyntaxNode
     {
         [Required]
@@ -56,7 +61,7 @@
         Token closeCurly;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class FuncBody : SyntaxNode
     {
         [Required]
@@ -72,10 +77,10 @@
     }
 
     #region Args Classes
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public abstract partial class Args : SyntaxNode { }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public abstract partial class TableContructorArg : Args
     {
         [Required]
@@ -85,7 +90,7 @@
         Token closeCurly;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public abstract partial class ParenArg : Args
     {
         [Required]
@@ -96,7 +101,7 @@
         Token closeParen;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public abstract partial class StringArg : Args
     {
         [Required]
@@ -106,38 +111,38 @@
     #endregion
 
     #region Lua List nodes
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class NameList : SyntaxNode
     {
         [Required]
         ImmutableList<NameCommaPair> names;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class FieldList : SyntaxNode
     {
         [Required]
         ImmutableList<FieldAndSeperatorPair> fields;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class ExpList : SyntaxNode
     {
         [Required]
         ImmutableList<ExpressionCommaPair> expressions;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public abstract partial class ParList : SyntaxNode { }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class VarArgPar : ParList
     {
         [Required]
         Token varargOperator;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class NameListPar : ParList
     {
         [Required]
@@ -146,7 +151,7 @@
         CommaVarArgPair varArgPar;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class CommaVarArgPair
     {
         [Required]
@@ -155,7 +160,7 @@
         Token varargOperator;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class NameCommaPair
     {
         [Required]
@@ -164,7 +169,7 @@
         Token comma;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class ExpressionCommaPair
     {
         [Required]
@@ -173,22 +178,22 @@
         Token comma;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public abstract partial class FieldSep { }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public abstract partial class CommaFieldSep : FieldSep
     {
         Token comma;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public abstract partial class CollonFieldSep : FieldSep
     {
         Token colon;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class FieldAndSeperatorPair
     {
         [Required]
@@ -199,7 +204,7 @@
     #endregion
 
     #region If Statement Nodes
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class ElseBlock : SyntaxNode
     {
         [Required]
@@ -208,7 +213,7 @@
         readonly Block block;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class ElseIfBlock
     { //TODO: inherit from syntax node once ImmutableGraphObject is bug is fixed
         [Required]
@@ -225,7 +230,7 @@
         readonly Block block;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class IfNode : SyntaxNode
     {
         [Required]
@@ -244,10 +249,10 @@
     #endregion
 
     #region Expression nodes
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class Expression : SyntaxNode { }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class SimpleExpression : Expression
     {
         [Required]
@@ -269,7 +274,7 @@
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class ComplexExpression : Expression
     {
         [Required]
@@ -281,7 +286,7 @@
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class BinopExpression : Expression
     {
         [Required]
@@ -292,7 +297,7 @@
         Expression exp2;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class UnopExpression : Expression
     {
         [Required]
@@ -301,7 +306,7 @@
         Expression exp;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class TableConstructorExp : Expression
     {
         [Required]
@@ -311,27 +316,27 @@
         Token closeCurly;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class FunctionDef : SyntaxNode
     {
         Token functionKeyword;
         FuncBody functionBody;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public abstract partial class PrefixExp : Expression { }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class Var : PrefixExp { }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class NameVar : Var
     {
         [Required]
         Token identifier;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class SquareBracketVar : Var
     {
         [Required]
@@ -344,7 +349,7 @@
         Token closeBracket;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class DotVar : Var
     {
         [Required]
@@ -355,7 +360,7 @@
         Token nameIdentifier;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class FunctionCall : PrefixExp //TODO: bad practice? see reference manual
     {
         [Required]
@@ -366,7 +371,7 @@
         Args args;
     }
 
-    [GenerateImmutable(GenerateBuilder = false)]
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class ParenPrefixExp : PrefixExp
     {
         [Required]

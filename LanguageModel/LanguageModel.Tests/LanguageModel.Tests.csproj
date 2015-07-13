@@ -66,6 +66,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="LexerTests.cs" />
+    <Compile Include="ParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +91,7 @@
     <None Include="CorrectSampleLuaFiles\newlines.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CorrectSampleLuaFiles\smallif.lua" />
     <None Include="CorrectSampleLuaFiles\tabs.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
