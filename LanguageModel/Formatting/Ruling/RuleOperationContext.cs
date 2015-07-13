@@ -11,9 +11,9 @@ namespace LanguageModel.Formatting.Ruling
 
     internal class RuleOperationContext
     {
-        private ContextFilter[] contextFilters;
+        private List<ContextFilter> contextFilters;
 
-        internal RuleOperationContext(ContextFilter[] contextFilters)
+        internal RuleOperationContext(List<ContextFilter> contextFilters)
         {
             this.contextFilters = contextFilters;
         }
