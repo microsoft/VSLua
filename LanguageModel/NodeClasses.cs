@@ -47,19 +47,6 @@
     }
 
     [GenerateImmutable(GenerateBuilder = false)]
-    public partial class FunctionDef : SyntaxNode
-    {
-        Token functionKeyword;
-        FuncBody functionBody;
-    }
-
-    [GenerateImmutable(GenerateBuilder = false)]
-    public partial class PrefixExp : SyntaxNode
-    {
-        //TODO: implement
-    }
-
-    [GenerateImmutable(GenerateBuilder = false)]
     public partial class TableConstructor : SyntaxNode
     {
         [Required]
@@ -84,15 +71,44 @@
         Token endKeyword;
     }
 
+    #region Args Classes
+    [GenerateImmutable(GenerateBuilder = false)]
+    public abstract partial class Args : SyntaxNode { }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public abstract partial class TableContructorArg : Args
+    {
+        [Required]
+        Token openCurly;
+        FieldList fieldList;
+        [Required]
+        Token closeCurly;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public abstract partial class ParenArg : Args
+    {
+        [Required]
+        Token openParen;
+        [Required]
+        ExpList expList;
+        [Required]
+        Token closeParen;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public abstract partial class StringArg : Args
+    {
+        [Required]
+        Token stringLiteral;
+    }
+
+    #endregion
+
     #region Lua List nodes
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class NameList : SyntaxNode
     {
-        //TODO: Update to inherit from SyntaxNode once bug fixed in Immutable Graph Object
-        //[Required]
-        //int startPosition;
-        //[Required]
-        //int length;
         [Required]
         ImmutableList<NameCommaPair> names;
     }
@@ -112,13 +128,7 @@
     }
 
     [GenerateImmutable(GenerateBuilder = false)]
-    public abstract partial class ParList : SyntaxNode //TODO: Update to inherit from SyntaxNode once bug fixed in Immutable Graph Object
-    {
-        //[Required]
-        //int startPosition;
-        //[Required]
-        //int length;
-    }
+    public abstract partial class ParList : SyntaxNode { }
 
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class VarArgPar : ParList
@@ -132,7 +142,16 @@
     {
         [Required]
         NameList namesList;
-        Token comma; //TODO: indicate that these are optional?
+        [Required]
+        CommaVarArgPair varArgPar;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class CommaVarArgPair
+    {
+        [Required]
+        Token comma;
+        [Required]
         Token varargOperator;
     }
 
@@ -168,7 +187,6 @@
     {
         Token colon;
     }
-
 
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class FieldAndSeperatorPair
@@ -227,14 +245,7 @@
 
     #region Expression nodes
     [GenerateImmutable(GenerateBuilder = false)]
-    public partial class Expression : SyntaxNode
-    {
-        //TODO: inherit from syntax node once ImmutableGraphObject is bug is fixed
-        //[Required]
-        //readonly int startPosition;
-        //[Required]
-        //readonly int length;
-    }
+    public partial class Expression : SyntaxNode { }
 
     [GenerateImmutable(GenerateBuilder = false)]
     public partial class SimpleExpression : Expression
@@ -288,6 +299,82 @@
         Token unop;
         [Required]
         Expression exp;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class TableConstructorExp : Expression
+    {
+        [Required]
+        Token openCurly;
+        FieldList fieldList;
+        [Required]
+        Token closeCurly;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class FunctionDef : SyntaxNode
+    {
+        Token functionKeyword;
+        FuncBody functionBody;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public abstract partial class PrefixExp : Expression { }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class Var : PrefixExp { }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class NameVar : Var
+    {
+        [Required]
+        Token identifier;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class SquareBracketVar : Var
+    {
+        [Required]
+        PrefixExp prefixExp;
+        [Required]
+        Token openBracket;
+        [Required]
+        Expression exp;
+        [Required]
+        Token closeBracket;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class DotVar : Var
+    {
+        [Required]
+        PrefixExp prefixExp;
+        [Required]
+        Token dotOperator;
+        [Required]
+        Token nameIdentifier;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class FunctionCall : PrefixExp //TODO: bad practice? see reference manual
+    {
+        [Required]
+        PrefixExp prefixExp;
+        Token colon;
+        Token name;
+        [Required]
+        Args args;
+    }
+
+    [GenerateImmutable(GenerateBuilder = false)]
+    public partial class ParenPrefixExp : PrefixExp
+    {
+        [Required]
+        Token openParen;
+        [Required]
+        Expression exp;
+        [Required]
+        Token closeParen;
     }
     #endregion
 
