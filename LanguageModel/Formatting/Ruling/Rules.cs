@@ -9,25 +9,67 @@ namespace LanguageModel.Formatting.Ruling
     internal class Rules
     {
 
-        // A few test rules for testing
+        private static readonly List<ContextFilter> defaultFilters = new List<ContextFilter>
+        {
+            TokensAreOnSameLine,
+            NoCommentBetweenTokens
+        };
 
         internal static Rule SpaceAfterComma =
             new Rule(
                 new RuleDescriptor(TokenType.Comma, TokenRange.Any),
-                new List<ContextFilter> { TokensAreOnSameLine },
-                RuleAction.Space);
+                defaultFilters, RuleAction.Space);
 
         internal static Rule SpaceAfterAssignmentOperator =
             new Rule(
                 new RuleDescriptor(TokenRange.Any, TokenType.AssignmentOperator),
-                new List<ContextFilter> { TokensAreOnSameLine },
-                RuleAction.Space);
+                defaultFilters, RuleAction.Space);
 
         internal static Rule SpaceBeforeAssignmentOperator =
             new Rule(
                 new RuleDescriptor(TokenRange.Any, TokenType.AssignmentOperator),
-                new List<ContextFilter> { TokensAreOnSameLine },
-                RuleAction.Space);
+                defaultFilters, RuleAction.Space);
+
+        internal static Rule SpaceAfterBinaryOperator =
+            new Rule(
+                new RuleDescriptor(TokenRange.BinaryOperators, TokenRange.Any),
+                defaultFilters, RuleAction.Space);
+
+        internal static Rule SpaceBeforeBinaryOperator =
+            new Rule(
+                new RuleDescriptor(TokenRange.Any, TokenRange.BinaryOperators),
+                defaultFilters, RuleAction.Space);
+
+        internal static Rule SpaceAfterValueBeforeOpenParenthesis =
+            new Rule(
+                new RuleDescriptor(TokenRange.Value, TokenType.OpenParen),
+                defaultFilters, RuleAction.Space);
+
+        internal static Rule SpaceBeforeValueAfterOpenParenthesis =
+            new Rule(
+                new RuleDescriptor(TokenType.OpenParen, TokenRange.Value),
+                defaultFilters, RuleAction.Space);
+
+        internal static Rule SpaceBeforeValueAfterOpenSquareBracket =
+            new Rule(
+                new RuleDescriptor(TokenType.OpenBracket, TokenRange.Value),
+                defaultFilters, RuleAction.Space);
+
+        internal static Rule SpaceBeforeValueAfterOpenCurlyBrace =
+            new Rule(new RuleDescriptor(TokenType.OpenCurlyBrace, TokenRange.Value),
+                defaultFilters, RuleAction.Space);
+
+        internal static Rule SpaceAfterValueBeforeCloseParenthesis =
+            new Rule(new RuleDescriptor(TokenRange.Value, TokenType.CloseParen),
+                defaultFilters, RuleAction.Space);
+
+        internal static Rule SpaceAfterValueBeforeCloseSquareBracket =
+            new Rule(new RuleDescriptor(TokenRange.Value, TokenType.CloseBracket),
+                defaultFilters, RuleAction.Space);
+
+        internal static Rule SpaceAfterValueBeforeCloseCurlyBrace =
+            new Rule(new RuleDescriptor(TokenRange.Value, TokenType.CloseCurlyBrace),
+                defaultFilters, RuleAction.Space);
 
 
 
@@ -36,7 +78,7 @@ namespace LanguageModel.Formatting.Ruling
             return formattingContext.TokensOnSameLine();
         }
 
-        internal static bool NoCommentInBetweenTokens(FormattingContext formattingContext)
+        internal static bool NoCommentBetweenTokens(FormattingContext formattingContext)
         {
             return !formattingContext.CommentsInBetween();
         }
