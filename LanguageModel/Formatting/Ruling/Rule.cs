@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LanguageService.Formatting.Ruling
 {
-    internal class Rule : IRule
+    internal class Rule : AbstractRule
     {
         protected readonly RuleDescriptor ruleDescriptor;
         protected readonly RuleOperation ruleOperation;

@@ -4,22 +4,22 @@ namespace LanguageService.Formatting.Ruling
 {
     internal class RuleBucket
     {
-        private List<IRule> rules;
+        private List<AbstractRule> rules;
 
         // The reason I am wrapping a class around the List collections is because
         // I might want to order the rules... And it looks like I might have to
-        internal void Add(IRule rule)
+        internal void Add(AbstractRule rule)
         {
             if (rules == null)
             {
-                rules = new List<IRule>();
+                rules = new List<AbstractRule>();
             }
             rules.Add(rule);
         }
 
-        internal IRule Get(FormattingContext formattingContext)
+        internal AbstractRule Get(FormattingContext formattingContext)
         {
-            foreach (IRule rule in rules)
+            foreach (AbstractRule rule in rules)
             {
                 if (rule.AppliesTo(formattingContext))
                 {

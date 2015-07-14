@@ -24,7 +24,7 @@ namespace LanguageService.Formatting.Ruling
 
         }
 
-        internal void AddRule(IRule rule)
+        internal void AddRule(AbstractRule rule)
         {
             foreach (TokenType typeLeft in rule.RuleDescriptor.TokenRangeLeft)
             {
@@ -46,7 +46,7 @@ namespace LanguageService.Formatting.Ruling
             }
         }
 
-        internal IRule GetRule(FormattingContext formattingContext)
+        internal AbstractRule GetRule(FormattingContext formattingContext)
         {
             int column = (int)formattingContext.CurrentToken.Token.Type;
             int row = (int)formattingContext.NextToken.Token.Type;

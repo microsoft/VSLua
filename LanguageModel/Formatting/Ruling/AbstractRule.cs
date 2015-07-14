@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LanguageService.Formatting.Ruling
 {
-    internal abstract class IRule
+    internal abstract class AbstractRule
     {
         public abstract RuleDescriptor RuleDescriptor { get; }
         public abstract RuleOperation RuleOperationContext { get; }

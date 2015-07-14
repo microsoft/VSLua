@@ -15,67 +15,67 @@ namespace LanguageService.Formatting.Ruling
             NoCommentBetweenTokens
         };
 
-        internal static IRule SpaceAfterComma =
+        internal static AbstractRule SpaceAfterComma =
             new Rule(
                 new RuleDescriptor(TokenType.Comma, TokenRange.Any),
                 defaultFilters, RuleAction.Space);
 
-        internal static IRule SpaceAfterAssignmentOperator =
+        internal static AbstractRule SpaceAfterAssignmentOperator =
             new Rule(
                 new RuleDescriptor(TokenType.AssignmentOperator, TokenRange.Any),
                 defaultFilters, RuleAction.Space);
 
-        internal static IRule SpaceBeforeAssignmentOperator =
+        internal static AbstractRule SpaceBeforeAssignmentOperator =
             new Rule(
                 new RuleDescriptor(TokenRange.Any, TokenType.AssignmentOperator),
                 defaultFilters, RuleAction.Space);
 
-        internal static IRule SpaceAfterBinaryOperator =
+        internal static AbstractRule SpaceAfterBinaryOperator =
             new Rule(
                 new RuleDescriptor(TokenRange.BinaryOperators, TokenRange.Any),
                 defaultFilters, RuleAction.Space);
 
-        internal static IRule SpaceBeforeBinaryOperator =
+        internal static AbstractRule SpaceBeforeBinaryOperator =
             new Rule(
                 new RuleDescriptor(TokenRange.Any, TokenRange.BinaryOperators),
                 defaultFilters, RuleAction.Space);
 
-        internal static IRule SpaceAfterValueBeforeOpenParenthesis =
+        internal static AbstractRule SpaceAfterValueBeforeOpenParenthesis =
             new Rule(
                 new RuleDescriptor(TokenRange.Value, TokenType.OpenParen),
                 defaultFilters, RuleAction.Space);
 
-        internal static IRule SpaceBeforeValueAfterOpenParenthesis =
+        internal static AbstractRule SpaceBeforeValueAfterOpenParenthesis =
             new Rule(
                 new RuleDescriptor(TokenType.OpenParen, TokenRange.Value),
                 defaultFilters, RuleAction.Space);
 
-        internal static IRule SpaceBeforeValueAfterOpenSquareBracket =
+        internal static AbstractRule SpaceBeforeValueAfterOpenSquareBracket =
             new Rule(
                 new RuleDescriptor(TokenType.OpenBracket, TokenRange.Value),
                 defaultFilters, RuleAction.Space);
 
-        internal static IRule SpaceBeforeValueAfterOpenCurlyBrace =
+        internal static AbstractRule SpaceBeforeValueAfterOpenCurlyBrace =
             new Rule(new RuleDescriptor(TokenType.OpenCurlyBrace, TokenRange.Value),
                 defaultFilters, RuleAction.Space);
 
-        internal static IRule SpaceAfterValueBeforeCloseParenthesis =
+        internal static AbstractRule SpaceAfterValueBeforeCloseParenthesis =
             new Rule(new RuleDescriptor(TokenRange.Value, TokenType.CloseParen),
                 defaultFilters, RuleAction.Space);
 
-        internal static IRule SpaceAfterValueBeforeCloseSquareBracket =
+        internal static AbstractRule SpaceAfterValueBeforeCloseSquareBracket =
             new Rule(new RuleDescriptor(TokenRange.Value, TokenType.CloseBracket),
                 defaultFilters, RuleAction.Space);
 
-        internal static IRule SpaceAfterValueBeforeCloseCurlyBrace =
+        internal static AbstractRule SpaceAfterValueBeforeCloseCurlyBrace =
             new Rule(new RuleDescriptor(TokenRange.Value, TokenType.CloseCurlyBrace),
                 defaultFilters, RuleAction.Space);
 
-        internal static IRule DeleteSpaceBeforeEofToken =
+        internal static AbstractRule DeleteSpaceBeforeEofToken =
             new Rule(new RuleDescriptor(TokenRange.Any, TokenType.EndOfFile),
                 defaultFilters, RuleAction.Delete);
 
-        internal static IRule DeleteTrailingWhitespace = new RuleTrailingWhitespace();
+        internal static AbstractRule DeleteTrailingWhitespace = new RuleTrailingWhitespace();
 
         internal static RuleMap GetRuleMap()
         {
