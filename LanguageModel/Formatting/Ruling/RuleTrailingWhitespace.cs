@@ -20,7 +20,8 @@ namespace LanguageService.Formatting.Ruling
         {
             List<Trivia> leadingTrivia = formattingContext.NextToken.Token.LeadingTrivia;
             string replacingString = this.GetReplacingString(leadingTrivia);
-            int start = formattingContext.NextToken.Token.FullStart;
+            int start = formattingContext.CurrentToken.Token.Start + 
+                formattingContext.CurrentToken.Token.Length;
             int length = formattingContext.NextToken.Token.Start - start;
 
             return new TextEditInfo(start, length, replacingString);

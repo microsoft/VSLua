@@ -71,7 +71,11 @@ namespace LanguageService.Formatting.Ruling
             new Rule(new RuleDescriptor(TokenRange.Value, TokenType.CloseCurlyBrace),
                 defaultFilters, RuleAction.Space);
 
+        internal static IRule DeleteSpaceBeforeEofToken =
+            new Rule(new RuleDescriptor(TokenRange.Any, TokenType.EndOfFile),
+                defaultFilters, RuleAction.Delete);
 
+        internal static IRule DeleteTrailingWhitespace = new RuleTrailingWhitespace();
 
         internal static RuleMap GetRuleMap()
         {
@@ -88,6 +92,8 @@ namespace LanguageService.Formatting.Ruling
             ruleMap.AddRule(Rules.SpaceBeforeValueAfterOpenCurlyBrace);
             ruleMap.AddRule(Rules.SpaceBeforeValueAfterOpenParenthesis);
             ruleMap.AddRule(Rules.SpaceBeforeValueAfterOpenSquareBracket);
+            ruleMap.AddRule(Rules.DeleteTrailingWhitespace);
+            ruleMap.AddRule(Rules.DeleteSpaceBeforeEofToken);
             return ruleMap;
         }
 

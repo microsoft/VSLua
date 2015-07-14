@@ -16,6 +16,28 @@ namespace Formatting.Tests
         }
 
         [Fact]
+        public void LotsOfTrailing()
+        {
+            string original = @"
+x       
+        
+        
+        
+            
+   
+x       ";
+            string expected = @"
+x
+
+
+
+
+
+x";
+            GeneralTest(original, expected);
+        }
+
+        [Fact]
         public void Comments1()
         {
             string original = @"x = 10            -- hello world       ";
