@@ -27,12 +27,7 @@ namespace LanguageService.Formatting
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
             IEnumerable<Token> tokens = Lexer.Tokenize(GenerateStreamFromString(span));
-            List<ParsedToken> parsedTokens = new List<ParsedToken>();
-
-            foreach (Token token in tokens)
-            {
-                parsedTokens.Add(new ParsedToken(token, 0, null));
-            }
+            List<ParsedToken> parsedTokens = ParsedToken.GetParsedTokens(tokens);
 
             for (int i = 0; i < parsedTokens.Count - 1; ++i)
             {
