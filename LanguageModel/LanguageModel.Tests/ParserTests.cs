@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 
 using Assert = Xunit.Assert;
 
-namespace LanguageModel.Tests
+namespace LanguageService.Tests
 {
     [DeploymentItem("CorrectSampleLuaFiles", "CorrectSampleLuaFiles")]
     public class ParserTests

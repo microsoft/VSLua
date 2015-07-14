@@ -339,7 +339,7 @@ namespace LanguageService
             var node = TableConstructor.CreateBuilder();
             node.StartPosition = Peek().Start;
             node.OpenCurly = GetExpectedToken(TokenType.OpenCurlyBrace);
-            //node.FieldList = ParseFieldList().ToBuilder();
+          ////node.FieldList = ParseFieldList().ToBuilder();
             node.CloseCurly = GetExpectedToken(TokenType.CloseCurlyBrace);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
