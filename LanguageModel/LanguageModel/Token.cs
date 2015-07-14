@@ -75,6 +75,12 @@ namespace LanguageService
         public int Start { get; private set; }
         public string Text { get; private set; }
         public int Length { get; private set; }
+        public int End
+        {  get
+            {
+                return Start + Length - 1;
+            }
+        }
         public TokenType Type { get; private set; }
         public List<Trivia> LeadingTrivia { get; private set; } //TODO: change to Immutable List
 

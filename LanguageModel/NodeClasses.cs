@@ -179,27 +179,46 @@
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class FieldSep { }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class CommaFieldSep : FieldSep
-    {
-        Token comma;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class CollonFieldSep : FieldSep
-    {
-        Token colon;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
     public partial class FieldAndSeperatorPair
     {
+        Field field;
+        Token fieldSeparator;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public abstract partial class Field : SyntaxNode { }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class BracketField : Field
+    {
         [Required]
-        Token field;
+        Token openBracket;
         [Required]
-        FieldSep fieldSeparator;
+        Expression identifierExp;
+        [Required]
+        Token closeBracket;
+        [Required]
+        Token assignmentOperator;
+        [Required]
+        Expression assignedExp;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class SimnpleField : Field
+    {
+        [Required]
+        Token name;
+        [Required]
+        Token assignmentOperator;
+        [Required]
+        Expression exp;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class ExpField : Field
+    {
+        [Required]
+        Expression exp;
     }
     #endregion
 
