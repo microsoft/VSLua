@@ -43,6 +43,14 @@ namespace Formatting.Tests
         }
 
         [Fact]
+        public void Concat()
+        {
+            string original = "x..y";
+            string expected = "x .. y";
+            GeneralFunction(original, expected);
+        }
+
+        [Fact]
         public void BinaryComment()
         {
             string original = "x ==--[[ comment ]]y";

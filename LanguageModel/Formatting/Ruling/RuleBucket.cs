@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LanguageModel.Formatting.Ruling
+namespace LanguageService.Formatting.Ruling
 {
     internal class RuleBucket
     {

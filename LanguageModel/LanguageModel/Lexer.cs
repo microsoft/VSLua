@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace LanguageModel
+namespace LanguageService
 {
     public static class Lexer
     {

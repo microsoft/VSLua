@@ -1,4 +1,4 @@
-﻿using LanguageModel.Formatting.Ruling;
+﻿using LanguageService.Formatting.Ruling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace LanguageModel.Formatting
+namespace LanguageService.Formatting
 {
     public static class Formatter
     {

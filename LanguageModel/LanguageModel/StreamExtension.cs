@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace LanguageModel
+namespace LanguageService
 {
     public static class StreamExtension //TODO: change to streamreader so as to auto deal with encoding issues....
     {

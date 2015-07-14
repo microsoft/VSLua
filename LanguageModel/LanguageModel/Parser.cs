@@ -7,7 +7,7 @@ using System.IO;
 using System.Collections.Immutable;
 using Xunit;
 
-namespace LanguageModel
+namespace LanguageService
 {
     public enum Context
     {

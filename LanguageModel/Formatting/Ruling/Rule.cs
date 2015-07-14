@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LanguageModel.Formatting.Ruling
+namespace LanguageService.Formatting.Ruling
 {
     internal class Rule
     {

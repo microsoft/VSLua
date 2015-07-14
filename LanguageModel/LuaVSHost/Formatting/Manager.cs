@@ -9,6 +9,8 @@ using Microsoft.VisualStudio;
 using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
 using Microsoft.VisualStudio.Text.Editor;
 
+using LanguageService.Formatting;
+
 namespace VSLua.Formatting
 {
     internal sealed class Manager : IMiniCommandFilter, IFormatter
@@ -121,6 +123,17 @@ namespace VSLua.Formatting
 
             SnapshotPoint startLinePoint = span.Start.GetContainingLine().Start;
             span = new SnapshotSpan(startLinePoint, span.End);
+
+            List<TextEditInfo> edits = Formatter.Format(span.GetText());
+
+            using (ITextEdit textEdit = this.textBuffer.CreateEdit())
+            {
+                foreach (TextEditInfo edit in edits)
+                {
+                    textEdit.Replace(edit.Start, edit.Length, edit.ReplacingString);
+                }
+                textEdit.Apply();
+            }
 
             return true;
 
