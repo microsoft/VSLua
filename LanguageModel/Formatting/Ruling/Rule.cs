@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LanguageService.Formatting.Ruling
 {
-    internal class Rule : AbstractRule
+    internal class SimpleRule : Rule
     {
         protected readonly RuleDescriptor ruleDescriptor;
         protected readonly RuleOperation ruleOperation;
@@ -28,7 +28,7 @@ namespace LanguageService.Formatting.Ruling
         }
 
 
-        internal Rule(RuleDescriptor ruleDescriptor, List<ContextFilter> contextFilters, RuleAction action)
+        internal SimpleRule(RuleDescriptor ruleDescriptor, List<ContextFilter> contextFilters, RuleAction action)
         {
             this.ruleDescriptor = ruleDescriptor;
             this.ruleOperation = new RuleOperation(new RuleOperationContext(contextFilters), action);

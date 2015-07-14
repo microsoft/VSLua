@@ -26,7 +26,7 @@ namespace LanguageService.Formatting
             RuleMap ruleMap = Rules.GetRuleMap();
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
-            IEnumerable<Token> tokens = Lexer.Tokenize(GenerateStreamFromString(span));
+            List<Token> tokens = Lexer.Tokenize(GenerateStreamFromString(span));
             List<ParsedToken> parsedTokens = ParsedToken.GetParsedTokens(tokens);
 
             for (int i = 0; i < parsedTokens.Count - 1; ++i)
@@ -34,7 +34,7 @@ namespace LanguageService.Formatting
                 FormattingContext formattingContext =
                     new FormattingContext(parsedTokens[i], parsedTokens[i + 1]);
 
-                AbstractRule rule = ruleMap.GetRule(formattingContext);
+                Rule rule = ruleMap.GetRule(formattingContext);
 
                 if (rule != null)
                 {
