@@ -19,19 +19,11 @@ namespace Formatting.Tests
         public void LotsOfTrailing()
         {
             string original = @"
-x       
-        
-        
-        
-            
-   
+x
+       
 x       ";
             string expected = @"
 x
-
-
-
-
 
 x";
             GeneralTest(original, expected);
@@ -69,6 +61,26 @@ x = 10
 comment
 here]]
 x = x + 1";
+            GeneralTest(original, expected);
+        }
+
+        [Fact]
+        public void TrailingWhiteSpaceBeforeEof()
+        {
+            string original = @"
+x   
+     
+      
+            
+      
+    ";
+            string expected = @"
+x
+
+
+
+
+";
             GeneralTest(original, expected);
         }
 

@@ -8,10 +8,16 @@ namespace LanguageService.Formatting
 {
     internal static class TokenRange
     {
-        internal static List<TokenType> Any =
+        internal static List<TokenType> AnyVisible =
             TokenRange.Fill(
                 Enum.GetValues(typeof(TokenType)),
                 new TokenType[] { TokenType.EndOfFile, TokenType.Unknown });
+
+        internal static List<TokenType> All =
+            TokenRange.Fill(
+                Enum.GetValues(typeof(TokenType)),
+                new TokenType[] { }); // Might need to add TokenType.Unknown to skip
+
         internal static List<TokenType> BinaryOperators =
             new List<TokenType>
             {

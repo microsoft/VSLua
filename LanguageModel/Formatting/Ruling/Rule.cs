@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace LanguageService.Formatting.Ruling
 {
-    internal class Rule : IRule
+    internal class SimpleRule : Rule
     {
         protected readonly RuleDescriptor ruleDescriptor;
         protected readonly RuleOperation ruleOperation;
 
-        public RuleDescriptor RuleDescriptor
+        internal override RuleDescriptor RuleDescriptor
         {
             get
             {
@@ -19,7 +19,7 @@ namespace LanguageService.Formatting.Ruling
             }
         }
 
-        public RuleOperation RuleOperationContext
+        internal override RuleOperation RuleOperationContext
         {
             get
             {
@@ -28,7 +28,7 @@ namespace LanguageService.Formatting.Ruling
         }
 
 
-        internal Rule(RuleDescriptor ruleDescriptor, List<ContextFilter> contextFilters, RuleAction action)
+        internal SimpleRule(RuleDescriptor ruleDescriptor, List<ContextFilter> contextFilters, RuleAction action)
         {
             this.ruleDescriptor = ruleDescriptor;
             this.ruleOperation = new RuleOperation(new RuleOperationContext(contextFilters), action);
@@ -48,13 +48,13 @@ namespace LanguageService.Formatting.Ruling
             }
         }
 
-        public bool AppliesTo(FormattingContext formattingContext)
+        internal override bool AppliesTo(FormattingContext formattingContext)
         {
             return ruleOperation.Context.InContext(formattingContext);
         }
 
         // Very simple implentation of Apply
-        public TextEditInfo Apply(FormattingContext formattingContext)
+        internal override TextEditInfo Apply(FormattingContext formattingContext)
         {
 
             Token leftToken = formattingContext.CurrentToken.Token;
