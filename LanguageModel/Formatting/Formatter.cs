@@ -26,29 +26,24 @@ namespace LanguageService.Formatting
             RuleMap ruleMap = Rules.GetRuleMap();
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
-            IEnumerable<Token> tokens = Lexer.Tokenize(GenerateStreamFromString(span));
-            List<ParsedToken> parsedTokens = new List<ParsedToken>();
-
-            foreach (Token token in tokens)
-            {
-                parsedTokens.Add(new ParsedToken(token, 0, null));
-            }
+            List<Token> tokens = Lexer.Tokenize(GenerateStreamFromString(span));
+            List<ParsedToken> parsedTokens = ParsedToken.GetParsedTokens(tokens);
 
             for (int i = 0; i < parsedTokens.Count - 1; ++i)
             {
                 FormattingContext formattingContext =
                     new FormattingContext(parsedTokens[i], parsedTokens[i + 1]);
 
-                IRule rule = ruleMap.GetRule(formattingContext);
+                Rule rule = ruleMap.GetRule(formattingContext);
 
                 if (rule != null)
                 {
+                    /* test */
                     textEdits.Add(rule.Apply(formattingContext));
-
-          
                 }
-
             }
+
+            Indenter.GetIndentations(parsedTokens, textEdits);
 
             return textEdits;
         }

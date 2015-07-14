@@ -20,5 +20,49 @@ namespace LanguageService.Formatting
             this.Node = node;
         }
 
+        internal static List<ParsedToken> GetParsedTokens(List<Token> tokens)
+        {
+            List<ParsedToken> parsedTokens = new List<ParsedToken>();
+
+            List<TokenType> IncreaseIndentAfter = new List<TokenType>
+            {
+                TokenType.DoKeyword,
+                TokenType.ThenKeyword,
+                TokenType.ElseKeyword,
+                TokenType.FunctionKeyword,
+                TokenType.OpenCurlyBrace
+            };
+
+            List<TokenType> DecreaseIndentOn = new List<TokenType>
+            {
+                TokenType.EndKeyword,
+                TokenType.ElseIfKeyword,
+                TokenType.CloseCurlyBrace,
+                TokenType.ElseKeyword
+            };
+
+            int indent_level = 0;
+
+            foreach (Token token in tokens)
+            {
+                if (DecreaseIndentOn.Contains(token.Type))
+                {
+                    indent_level--;
+                }
+
+                indent_level = indent_level < 0 ? 0 : indent_level;
+
+                parsedTokens.Add(new ParsedToken(token, indent_level, null));
+
+                if (IncreaseIndentAfter.Contains(token.Type))
+                {
+                    indent_level++;
+                }
+            }
+
+
+            return parsedTokens;
+        }
+
     }
 }

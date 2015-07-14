@@ -77,9 +77,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Formatting\Formatter.cs" />
+    <Compile Include="Formatting\Indenter.cs" />
     <Compile Include="Formatting\ParsedToken.cs" />
     <Compile Include="Formatting\FormattingContext.cs" />
-    <Compile Include="Formatting\Ruling\IRule.cs" />
+    <Compile Include="Formatting\Ruling\AbstractRule.cs" />
     <Compile Include="Formatting\Ruling\Rule.cs" />
     <Compile Include="Formatting\Ruling\RuleAction.cs" />
     <Compile Include="Formatting\Ruling\RuleBucket.cs" />

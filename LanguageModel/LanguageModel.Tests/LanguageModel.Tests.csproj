@@ -85,6 +85,7 @@
     <None Include="CorrectSampleLuaFiles\assignment.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CorrectSampleLuaFiles\concat.lua" />
     <None Include="CorrectSampleLuaFiles\if.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -94,6 +95,7 @@
     <None Include="CorrectSampleLuaFiles\longcode.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CorrectSampleLuaFiles\longcomment.lua" />
     <None Include="CorrectSampleLuaFiles\longs.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -112,6 +114,7 @@
     <None Include="CorrectSampleLuaFiles\test.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CorrectSampleLuaFiles\trivia1.lua" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
