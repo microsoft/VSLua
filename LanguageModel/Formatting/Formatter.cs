@@ -51,7 +51,7 @@ namespace LanguageService.Formatting
                 FormattingContext formattingContext =
                     new FormattingContext(parsedTokens[i], parsedTokens[i + 1]);
 
-                Rule rule = ruleMap.GetRule(formattingContext);
+                IRule rule = ruleMap.GetRule(formattingContext);
 
                 if (rule != null)
                 {
