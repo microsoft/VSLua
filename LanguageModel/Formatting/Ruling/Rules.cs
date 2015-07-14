@@ -97,6 +97,11 @@ namespace LanguageService.Formatting.Ruling
             return formattingContext.TokensOnSameLine();
         }
 
+        internal static bool TokensAreNotOnSameLine(FormattingContext formattingContext)
+        {
+            return !formattingContext.TokensOnSameLine();
+        }
+
         internal static bool NoCommentBetweenTokens(FormattingContext formattingContext)
         {
             return !formattingContext.CommentsInBetween();

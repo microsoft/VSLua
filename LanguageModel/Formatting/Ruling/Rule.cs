@@ -8,8 +8,8 @@ namespace LanguageService.Formatting.Ruling
 {
     internal class Rule : IRule
     {
-        private readonly RuleDescriptor ruleDescriptor;
-        private readonly RuleOperation ruleOperation;
+        protected readonly RuleDescriptor ruleDescriptor;
+        protected readonly RuleOperation ruleOperation;
 
         public RuleDescriptor RuleDescriptor
         {

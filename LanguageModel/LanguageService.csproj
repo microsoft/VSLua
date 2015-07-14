@@ -88,6 +88,7 @@
     <Compile Include="Formatting\Ruling\RuleOperation.cs" />
     <Compile Include="Formatting\Ruling\RuleOperationContext.cs" />
     <Compile Include="Formatting\Ruling\Rules.cs" />
+    <Compile Include="Formatting\Ruling\RuleTrailingWhitespace.cs" />
     <Compile Include="Formatting\TextEditInfo.cs" />
     <Compile Include="Formatting\TokenRange.cs" />
     <Compile Include="LanguageModel\Lexer.cs" />
