@@ -12,62 +12,49 @@ namespace LanguageService.Formatting.Ruling
             base(
                 new RuleDescriptor(TokenRange.All, TokenRange.All),
                 new List<ContextFilter> { Rules.TokensAreNotOnSameLine },
-                RuleAction.Newline)
+                RuleAction.Delete)
         {
         }
 
         internal override List<TextEditInfo> Apply(FormattingContext formattingContext)
         {
-            List<Trivia> leadingTrivia = formattingContext.NextToken.Token.LeadingTrivia;
+            Token nextToken = formattingContext.NextToken.Token;
 
             // flag for the end of file token where whitespace should be skipped
-            TokenType nextTokenType = formattingContext.NextToken.Token.Type;
-            string replacingString = this.GetReplacingString(leadingTrivia, nextTokenType == TokenType.EndOfFile);
-            int start = formattingContext.CurrentToken.Token.Start +
-                formattingContext.CurrentToken.Token.Length;
-            int length = formattingContext.NextToken.Token.Start - start;
+            List<TextEditInfo> edits = this.GetEdits(nextToken, nextToken.Type == TokenType.EndOfFile);
 
-            return new List<TextEditInfo> { new TextEditInfo(start, length, replacingString) };
+            return edits;
         }
 
 
-        private string GetReplacingString(List<Trivia> leadingTrivia, bool isEndOfFile)
+        private List<TextEditInfo> GetEdits(Token token, bool isEndOfFile)
         {
-            List<Trivia> newLeadingTrivia = new List<Trivia>();
 
+            List<TextEditInfo> edits = new List<TextEditInfo>();
+
+            int start = token.FullStart;
+            int length = 0;
+            var leadingTrivia = token.LeadingTrivia;
             for (int i = 0; i < leadingTrivia.Count; ++i)
             {
-                // this is to skip all whitespace that is before a newline
-                if ((i + 1 < leadingTrivia.Count) &&
+                length = leadingTrivia[i].Text.Length;
+                
+                if (
+                    // this is to delete all whitespace that is before a newline
+                    (i + 1 < leadingTrivia.Count &&
                     leadingTrivia[i].Type == Trivia.TriviaType.Whitespace &&
-                    leadingTrivia[i + 1].Type == Trivia.TriviaType.Newline)
+                    leadingTrivia[i + 1].Type == Trivia.TriviaType.Newline) ||
+                    // this is to delete the trailing whitespace at the end of a file BEFORE Eof
+                    (i + 1 == leadingTrivia.Count && isEndOfFile &&
+                    leadingTrivia[i].Type == Trivia.TriviaType.Whitespace))
                 {
-                    continue;
+                    edits.Add(new TextEditInfo(start, length, ""));
                 }
 
-                // this is to not add the trailing whitespace at the end of a file BEFORE Eof
-                if (i + 1 == leadingTrivia.Count && isEndOfFile &&
-                    leadingTrivia[i].Type == Trivia.TriviaType.Whitespace)
-                {
-                    continue;
-                }
-
-                newLeadingTrivia.Add(leadingTrivia[i]);
+                start += length;
             }
 
-            return this.BuildStringFromLeadingTrivia(newLeadingTrivia);
-        }
-
-        private string BuildStringFromLeadingTrivia(List<Trivia> leadingTrivia)
-        {
-            StringBuilder triviaString = new StringBuilder();
-            foreach (Trivia trivia in leadingTrivia)
-            {
-                triviaString.Append(trivia.Text);
-            }
-
-            return triviaString.ToString();
-
+            return edits;
         }
     }
 }
