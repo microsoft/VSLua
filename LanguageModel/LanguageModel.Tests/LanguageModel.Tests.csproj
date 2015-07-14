@@ -85,7 +85,6 @@
     <None Include="CorrectSampleLuaFiles\assignment.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CorrectSampleLuaFiles\concat.lua" />
     <None Include="CorrectSampleLuaFiles\if.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

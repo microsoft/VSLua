@@ -156,6 +156,49 @@ namespace LanguageService.Tests
         }
 
         [Fact]
+        public void TestLongCommentOnSameLine()
+        {
+            Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\longcomment.lua");
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
+            int tokenIndex = 0;
+            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
+            Assert.Equal(TokenType.EndOfFile, tokenList[tokenIndex++].Type);
+        }
+
+        [Fact]
+        public void TestTrivia1()
+        {
+            Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\trivia1.lua");
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
+
+            List<Trivia.TriviaType> allTrivia = new List<Trivia.TriviaType>();
+
+            foreach (Token token in tokenList)
+            {
+                foreach (Trivia trivia in token.LeadingTrivia)
+                {
+                    allTrivia.Add(trivia.Type);
+                }
+            }
+
+            List<Trivia.TriviaType> compareTrivia = new List<Trivia.TriviaType>
+            {
+                Trivia.TriviaType.Whitespace,
+                Trivia.TriviaType.Newline,
+                Trivia.TriviaType.Newline,
+                Trivia.TriviaType.Whitespace,
+                Trivia.TriviaType.Newline,
+                Trivia.TriviaType.Whitespace,
+            };
+
+            Assert.Equal(compareTrivia, allTrivia);
+
+
+
+
+        }
+
+        [Fact]
         public void TestLongCode()
         {
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\longcode.lua");
