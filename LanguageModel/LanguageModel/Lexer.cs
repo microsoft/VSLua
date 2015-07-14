@@ -502,7 +502,7 @@ namespace LanguageService
             StringBuilder whitespace = new StringBuilder();
             whitespace.Append(stream.ReadChar());
 
-            while (char.IsWhiteSpace(stream.Peek()))
+            while (stream.Peek() == ' ')
             {
                 whitespace.Append(stream.ReadChar());
             }
