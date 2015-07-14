@@ -91,16 +91,17 @@
     <Compile Include="Formatting\Ruling\RuleTrailingWhitespace.cs" />
     <Compile Include="Formatting\TextEditInfo.cs" />
     <Compile Include="Formatting\TokenRange.cs" />
+    <Compile Include="LanguageModel\IndentingTextWriter.cs" />
     <Compile Include="LanguageModel\Lexer.cs" />
     <Compile Include="LanguageModel\ParseError.cs" />
     <Compile Include="LanguageModel\StreamExtension.cs" />
-    <Compile Include="SyntaxTree.cs" />
+    <Compile Include="LanguageModel\SyntaxTree.cs" />
     <Compile Include="LanguageModel\Token.cs" />
     <Compile Include="LanguageModel\TrackableStreamReader.cs" />
     <Compile Include="LanguageModel\Trivia.cs" />
     <Compile Include="LanguageModel\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NodeClasses.cs">
+    <Compile Include="LanguageModel\NodeClasses.cs">
       <Generator>MSBuild:GenerateCodeFromAttributes</Generator>
     </Compile>
   </ItemGroup>

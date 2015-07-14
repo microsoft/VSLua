@@ -18,6 +18,33 @@
         int startPosition;
         [Required]
         int length;
+
+        internal void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            using (indentingWriter.Indent())
+            {
+                indentingWriter.WriteLine("Node");
+            }
+
+            //indentingWriter.WriteLine("ChunkNode");
+            //using (indentingWriter.Indent())
+            //{
+            //    indentingWriter.WriteLine("Block");
+            //    using (indentingWriter.Indent())
+            //    {
+            //        programBlock.ToString(indentingWriter);
+            //    }
+
+            //    indentingWriter.WriteLine("EndOfFile");
+            //    using (indentingWriter.Indent())
+            //    {
+            //        //TODO endOfFile.ToString(indentingWriter);
+            //        indentingWriter.WriteLine("luluul");
+            //    }
+            //}
+            throw new NotImplementedException();
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -38,6 +65,27 @@
         readonly Block programBlock;
         [Required]
         readonly Token endOfFile;
+
+        public void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine("ChunkNode");
+            using (indentingWriter.Indent())
+            {
+                indentingWriter.WriteLine("Block");
+                using (indentingWriter.Indent())
+                {
+                    programBlock.ToString(indentingWriter);
+                }
+
+                indentingWriter.WriteLine("EndOfFile");
+                using (indentingWriter.Indent())
+                {
+                    //TODO endOfFile.ToString(indentingWriter);
+                    indentingWriter.WriteLine("luluul");
+                }
+            }
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -46,6 +94,30 @@
         [Required]
         ImmutableList<SyntaxNode> children;
         RetStat returnStatement;
+
+        internal void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine("Block");
+            using (indentingWriter.Indent())
+            {
+                indentingWriter.WriteLine("Children");
+                foreach (var child in this.children)
+                {
+                    using (indentingWriter.Indent())
+                    {
+                        child.ToString(indentingWriter);
+                    }
+                }
+
+                indentingWriter.WriteLine("RetStat");
+                using (indentingWriter.Indent())
+                {
+                    //TODO endOfFile.ToString(indentingWriter);
+                    indentingWriter.WriteLine("luluul");
+                }
+            };
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]

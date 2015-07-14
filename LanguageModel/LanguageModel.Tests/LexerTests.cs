@@ -250,7 +250,7 @@ namespace LanguageService.Tests
         }
 
         [Fact]
-        public void IdnetifyTabsTokenTypes()
+        public void IdentifyTabsTokenTypes()
         {
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\tabs.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
