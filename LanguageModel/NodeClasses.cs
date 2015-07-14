@@ -26,6 +26,12 @@
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
+    public partial class MisplacedToken : SyntaxNode
+    {
+        Token token;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
     public partial class ChunkNode : SyntaxNode
     {
         [Required]
@@ -106,6 +112,12 @@
     {
         [Required]
         Token stringLiteral;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class SemiColonStatement : SyntaxNode
+    {
+        Token token;
     }
 
     #endregion

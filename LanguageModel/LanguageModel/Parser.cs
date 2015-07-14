@@ -241,6 +241,9 @@ namespace LanguageService
         {//TODO check if it follows contract to recive position where current is already consumed?
             switch (Peek().Type)
             {
+                case TokenType.SemiColon:
+                    NextToken();
+                    return SemiColonStatement.Create(currentToken.Start, currentToken.Length, currentToken);
                 case TokenType.BreakKeyword:
                     throw new NotImplementedException();
                     break;
@@ -268,11 +271,11 @@ namespace LanguageService
                     throw new NotImplementedException();
                     break;
                 case TokenType.Identifier: //TODO remove
-                    var tempNode = NextToken();
-                    return VarArgPar.Create(tempNode.Start, tempNode.Length, tempNode);
-                default: //TODO remove
-                    var tempNode2 = NextToken();
-                    return VarArgPar.Create(tempNode2.Start, tempNode2.Length, tempNode2);
+                    NextToken();
+                    return MisplacedToken.Create(currentToken.Start, currentToken.Length, currentToken);
+                default:
+                    NextToken();
+                    return MisplacedToken.Create(currentToken.Start, currentToken.Length, currentToken);
             }
         }
 
