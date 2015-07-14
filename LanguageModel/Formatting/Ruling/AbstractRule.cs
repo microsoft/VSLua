@@ -8,10 +8,10 @@ namespace LanguageService.Formatting.Ruling
 {
     internal abstract class AbstractRule
     {
-        public abstract RuleDescriptor RuleDescriptor { get; }
-        public abstract RuleOperation RuleOperationContext { get; }
+        internal abstract RuleDescriptor RuleDescriptor { get; }
+        internal abstract RuleOperation RuleOperationContext { get; }
 
-        public abstract bool AppliesTo(FormattingContext formattingContext);
-        public abstract TextEditInfo Apply(FormattingContext formattingContext);
+        internal abstract bool AppliesTo(FormattingContext formattingContext);
+        internal abstract TextEditInfo Apply(FormattingContext formattingContext);
     }
 }

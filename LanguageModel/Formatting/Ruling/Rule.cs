@@ -11,7 +11,7 @@ namespace LanguageService.Formatting.Ruling
         protected readonly RuleDescriptor ruleDescriptor;
         protected readonly RuleOperation ruleOperation;
 
-        public override RuleDescriptor RuleDescriptor
+        internal override RuleDescriptor RuleDescriptor
         {
             get
             {
@@ -19,7 +19,7 @@ namespace LanguageService.Formatting.Ruling
             }
         }
 
-        public override RuleOperation RuleOperationContext
+        internal override RuleOperation RuleOperationContext
         {
             get
             {
@@ -48,13 +48,13 @@ namespace LanguageService.Formatting.Ruling
             }
         }
 
-        public override bool AppliesTo(FormattingContext formattingContext)
+        internal override bool AppliesTo(FormattingContext formattingContext)
         {
             return ruleOperation.Context.InContext(formattingContext);
         }
 
         // Very simple implentation of Apply
-        public override TextEditInfo Apply(FormattingContext formattingContext)
+        internal override TextEditInfo Apply(FormattingContext formattingContext)
         {
 
             Token leftToken = formattingContext.CurrentToken.Token;

@@ -16,7 +16,7 @@ namespace LanguageService.Formatting.Ruling
         {
         }
 
-        public override TextEditInfo Apply(FormattingContext formattingContext)
+        internal override TextEditInfo Apply(FormattingContext formattingContext)
         {
             List<Trivia> leadingTrivia = formattingContext.NextToken.Token.LeadingTrivia;
             string replacingString = this.GetReplacingString(leadingTrivia);
