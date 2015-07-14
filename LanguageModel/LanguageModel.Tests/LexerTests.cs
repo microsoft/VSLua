@@ -12,114 +12,124 @@ namespace LanguageModel.Tests
     public class LexerTests
     {
         [Fact]
-        public void TestIfProgramTest()
+        public void IdentifyCorrectTokenTypes()
         {
+            var expectedTokens = new TokenType[]
+            {
+                TokenType.IfKeyword,
+                TokenType.Identifier,
+                TokenType.EqualityOperator,
+                TokenType.String,
+                TokenType.ThenKeyword,
+                TokenType.Identifier,
+                TokenType.AssignmentOperator,
+                TokenType.Identifier,
+                TokenType.PlusOperator,
+                TokenType.Identifier,
+                TokenType.ElseIfKeyword,
+                TokenType.Identifier,
+                TokenType.EqualityOperator,
+                TokenType.String,
+                TokenType.ThenKeyword,
+                TokenType.Identifier,
+                TokenType.AssignmentOperator,
+                TokenType.Identifier,
+                TokenType.MinusOperator,
+                TokenType.Identifier,
+                TokenType.Identifier,
+                TokenType.Colon,
+                TokenType.Identifier,
+                TokenType.OpenParen,
+                TokenType.Identifier,
+                TokenType.CloseParen,
+                TokenType.SemiColon,
+                TokenType.Identifier,
+                TokenType.Dot,
+                TokenType.Identifier,
+                TokenType.Colon,
+                TokenType.Identifier,
+                TokenType.OpenParen,
+                TokenType.Identifier,
+                TokenType.Dot,
+                TokenType.Identifier,
+                TokenType.MinusOperator,
+                TokenType.Number,
+                TokenType.Comma,
+                TokenType.Identifier,
+                TokenType.Dot,
+                TokenType.Identifier,
+                TokenType.CloseParen,
+                TokenType.Colon,
+                TokenType.Identifier,
+                TokenType.OpenParen,
+                TokenType.Identifier,
+                TokenType.CloseParen,
+                TokenType.ElseIfKeyword,
+                TokenType.Identifier,
+                TokenType.EqualityOperator,
+                TokenType.String,
+                TokenType.ThenKeyword,
+                TokenType.Identifier,
+                TokenType.AssignmentOperator,
+                TokenType.Identifier,
+                TokenType.MultiplyOperator,
+                TokenType.Identifier,
+                TokenType.ElseIfKeyword,
+                TokenType.Identifier,
+                TokenType.EqualityOperator,
+                TokenType.String,
+                TokenType.ThenKeyword,
+                TokenType.Identifier,
+                TokenType.Dot,
+                TokenType.Identifier,
+                TokenType.Colon,
+                TokenType.Identifier,
+                TokenType.OpenParen,
+                TokenType.Identifier,
+                TokenType.Dot,
+                TokenType.Identifier,
+                TokenType.MinusOperator,
+                TokenType.Number,
+                TokenType.Comma,
+                TokenType.Identifier,
+                TokenType.Dot,
+                TokenType.Identifier,
+                TokenType.CloseParen,
+                TokenType.Colon,
+                TokenType.Identifier,
+                TokenType.OpenParen,
+                TokenType.Identifier,
+                TokenType.CloseParen,
+                TokenType.Identifier,
+                TokenType.AssignmentOperator,
+                TokenType.Identifier,
+                TokenType.DivideOperator,
+                TokenType.Identifier,
+                TokenType.ElseKeyword,
+                TokenType.Identifier,
+                TokenType.OpenParen,
+                TokenType.String,
+                TokenType.CloseParen,
+                TokenType.EndKeyword,
+                TokenType.Identifier,
+                TokenType.AssignmentOperator,
+                TokenType.Number,
+                TokenType.EndOfFile,
+            };
+
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\if.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             int tokenIndex = 0;
-            Assert.Equal(TokenType.IfKeyword, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.EqualityOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.String, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.ThenKeyword, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.AssignmentOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.PlusOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.ElseIfKeyword, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.EqualityOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.String, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.ThenKeyword, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.AssignmentOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.MinusOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Colon, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.OpenParen, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.CloseParen, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.SemiColon, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Dot, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Colon, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.OpenParen, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Dot, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.MinusOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Number, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Comma, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Dot, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.CloseParen, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Colon, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.OpenParen, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.CloseParen, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.ElseIfKeyword, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.EqualityOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.String, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.ThenKeyword, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.AssignmentOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.MultiplyOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.ElseIfKeyword, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.EqualityOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.String, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.ThenKeyword, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Dot, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Colon, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.OpenParen, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Dot, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.MinusOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Number, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Comma, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Dot, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.CloseParen, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Colon, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.OpenParen, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.CloseParen, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.AssignmentOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.DivideOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.ElseKeyword, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.OpenParen, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.String, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.CloseParen, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.EndKeyword, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.AssignmentOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Number, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.EndOfFile, tokenList[tokenIndex++].Type);
+
+            for (int i = 0; i < expectedTokens.Length; i++)
+            {
+                Assert.Equal(expectedTokens[i], tokenList[tokenIndex++].Type);
+            }
+
         }
 
         [Fact]
-        public void TestAssignment()
+        public void IdentifyAssignmentTokenTypes()
         {
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\assignment.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
@@ -131,7 +141,7 @@ namespace LanguageModel.Tests
         }
 
         [Fact]
-        public void TestLeveledBlocks()
+        public void IdentifyLeveledBlocksTokenTypes()
         {
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\leveled_blocks.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
@@ -146,11 +156,10 @@ namespace LanguageModel.Tests
         }
 
         [Fact]
-        public void TestLongCode()
+        public void IdentifyLongCodeTokenTypes()
         {
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\longcode.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
-            int tokenIndex = 0;
             foreach (Token tok in tokenList)
             {
                 Assert.NotEqual(TokenType.Unknown, tok.Type);
@@ -158,11 +167,10 @@ namespace LanguageModel.Tests
         }
 
         [Fact]
-        public void TestMaze()
+        public void NoUnknownTokensInCorrectLuaFile()
         {
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\maze.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
-            int tokenIndex = 0;
             foreach (Token tok in tokenList)
             {
                 Assert.NotEqual(TokenType.Unknown, tok.Type);
@@ -170,7 +178,7 @@ namespace LanguageModel.Tests
         }
 
         [Fact]
-        public void TestLongs()
+        public void IdentifyLongsTokenTypes()
         {
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\longs.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
@@ -189,7 +197,7 @@ namespace LanguageModel.Tests
         }
 
         [Fact]
-        public void TestTabs()
+        public void IdnetifyTabsTokenTypes()
         {
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\tabs.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
@@ -200,7 +208,7 @@ namespace LanguageModel.Tests
         }
 
         [Fact]
-        public void TestNewLines()
+        public void IdentifyNewLinesTokenTypes()
         {
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\newlines.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
@@ -224,11 +232,5 @@ namespace LanguageModel.Tests
             Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
             Assert.Equal(TokenType.AssignmentOperator, tokenList[tokenIndex++].Type);
         }
-
-        public void TestPositionNumbers()
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }
