@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LanguageModel
+namespace LanguageService
 {
     public class Trivia
     {

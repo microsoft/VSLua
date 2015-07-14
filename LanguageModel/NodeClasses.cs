@@ -1,4 +1,4 @@
-﻿namespace LanguageModel
+﻿namespace LanguageService
 {
     using System;
     using System.Collections.Generic;

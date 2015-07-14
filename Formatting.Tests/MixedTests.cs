@@ -5,12 +5,8 @@ namespace Formatting.Tests
     // Assumes all Rules are turned on, all with regular indentation...
     public class MixedTests
     {
-        public void GeneralTest(string original, string expected1, string expected2)
-        {
-            string actual = Tester.Format(original);
-            Assert.Equal(expected1, actual);
-            Assert.Equal(expected2, actual);
-        }
+        delegate void TestFunction(string original, string expected1, string expected2);
+        TestFunction GeneralTest = Tester.GeneralTest;
 
         [Fact]
         public void Basic()

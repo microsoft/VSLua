@@ -1,4 +1,4 @@
-﻿using LanguageModel.Formatting.Ruling;
+﻿using LanguageService.Formatting.Ruling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace LanguageModel.Formatting
+namespace LanguageService.Formatting
 {
     public static class Formatter
     {
@@ -23,19 +23,7 @@ namespace LanguageModel.Formatting
         public static List<TextEditInfo> Format(string span)
         {
 
-            RuleMap ruleMap = new RuleMap();
-            ruleMap.AddRule(Rules.SpaceAfterComma);
-            ruleMap.AddRule(Rules.SpaceAfterAssignmentOperator);
-            ruleMap.AddRule(Rules.SpaceAfterBinaryOperator);
-            ruleMap.AddRule(Rules.SpaceAfterValueBeforeCloseCurlyBrace);
-            ruleMap.AddRule(Rules.SpaceAfterValueBeforeCloseParenthesis);
-            ruleMap.AddRule(Rules.SpaceAfterValueBeforeCloseSquareBracket);
-            ruleMap.AddRule(Rules.SpaceAfterValueBeforeOpenParenthesis);
-            ruleMap.AddRule(Rules.SpaceBeforeAssignmentOperator);
-            ruleMap.AddRule(Rules.SpaceBeforeBinaryOperator);
-            ruleMap.AddRule(Rules.SpaceBeforeValueAfterOpenCurlyBrace);
-            ruleMap.AddRule(Rules.SpaceBeforeValueAfterOpenParenthesis);
-            ruleMap.AddRule(Rules.SpaceBeforeValueAfterOpenSquareBracket);
+            RuleMap ruleMap = Rules.GetRuleMap();
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
             IEnumerable<Token> tokens = Lexer.Tokenize(GenerateStreamFromString(span));
@@ -51,7 +39,7 @@ namespace LanguageModel.Formatting
                 FormattingContext formattingContext =
                     new FormattingContext(parsedTokens[i], parsedTokens[i + 1]);
 
-                Rule rule = ruleMap.GetRule(formattingContext);
+                IRule rule = ruleMap.GetRule(formattingContext);
 
                 if (rule != null)
                 {

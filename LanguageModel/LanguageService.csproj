@@ -35,6 +35,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ImmutableObjectGraph, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bfd91f1bd601e0d7, processorArchitecture=MSIL">
       <HintPath>packages\ImmutableObjectGraph.1.0.15192-beta7\lib\portable-net45+win+wp80\ImmutableObjectGraph.dll</HintPath>
@@ -73,6 +79,7 @@
     <Compile Include="Formatting\Formatter.cs" />
     <Compile Include="Formatting\ParsedToken.cs" />
     <Compile Include="Formatting\FormattingContext.cs" />
+    <Compile Include="Formatting\Ruling\IRule.cs" />
     <Compile Include="Formatting\Ruling\Rule.cs" />
     <Compile Include="Formatting\Ruling\RuleAction.cs" />
     <Compile Include="Formatting\Ruling\RuleBucket.cs" />
@@ -97,6 +104,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Key.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

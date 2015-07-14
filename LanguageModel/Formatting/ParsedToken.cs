@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LanguageModel.Formatting
+namespace LanguageService.Formatting
 {
     internal sealed class ParsedToken
     {
