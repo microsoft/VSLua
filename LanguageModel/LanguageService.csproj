@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Formatting\Formatter.cs" />
+    <Compile Include="Formatting\Indenter.cs" />
     <Compile Include="Formatting\ParsedToken.cs" />
     <Compile Include="Formatting\FormattingContext.cs" />
     <Compile Include="Formatting\Ruling\AbstractRule.cs" />

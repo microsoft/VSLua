@@ -38,12 +38,12 @@ namespace LanguageService.Formatting
 
                 if (rule != null)
                 {
+                    /* test */
                     textEdits.Add(rule.Apply(formattingContext));
-
-          
                 }
-
             }
+
+            Indenter.GetIndentations(parsedTokens, textEdits);
 
             return textEdits;
         }
