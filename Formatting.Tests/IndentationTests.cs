@@ -99,6 +99,48 @@ t1 = {
         }
 
         [Fact]
+        public void AlreadyIndented1()
+        {
+            string original = @"
+foo = function()
+    return
+end";
+            string expected2 = @"
+foo = function()
+      return
+end";
+            GeneralTest(original, original, expected2);
+        }
+
+        [Fact]
+        public void OverIndentedFunction()
+        {
+            string original = @"
+foo = function()
+                  return
+end";
+            string expected1 = @"
+foo = function()
+    return
+end";
+            string expected2 = @"
+foo = function()
+      return
+end";
+            GeneralTest(original, expected1, expected2);
+        }
+
+        [Fact]
+        public void SimpleOverIndent()
+        {
+            string original = @"{
+       x";
+            string expected1 = @"{
+    x";
+            GeneralTest(original, expected1, expected1); 
+        }
+
+        [Fact]
         public void Comment()
         {
             string original = @"

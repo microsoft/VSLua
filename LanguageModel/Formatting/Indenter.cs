@@ -57,7 +57,8 @@ namespace LanguageService.Formatting
                     foundNewline = true;
                     start += leadingTrivia[i].Text.Length;
                     length = 0;
-                    if (i + 1 < leadingTrivia.Count)
+                    if (i + 1 < leadingTrivia.Count &&
+                        leadingTrivia[i + 1].Type == Trivia.TriviaType.Whitespace)
                     {
                         length = leadingTrivia[i + 1].Text.Length;
                     }
