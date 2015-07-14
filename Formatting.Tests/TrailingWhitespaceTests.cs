@@ -19,19 +19,11 @@ namespace Formatting.Tests
         public void LotsOfTrailing()
         {
             string original = @"
-x       
-        
-        
-        
-            
-   
+x
+       
 x       ";
             string expected = @"
 x
-
-
-
-
 
 x";
             GeneralTest(original, expected);

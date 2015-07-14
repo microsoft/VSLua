@@ -16,7 +16,7 @@ namespace LanguageService.Formatting.Ruling
         {
         }
 
-        new public TextEditInfo Apply(FormattingContext formattingContext)
+        public override TextEditInfo Apply(FormattingContext formattingContext)
         {
             List<Trivia> leadingTrivia = formattingContext.NextToken.Token.LeadingTrivia;
             string replacingString = this.GetReplacingString(leadingTrivia);
@@ -32,10 +32,11 @@ namespace LanguageService.Formatting.Ruling
         {
             List<Trivia> newLeadingTrivia = new List<Trivia>();
 
-            for (int i = 0; i < leadingTrivia.Count-1; ++i)
+            for (int i = 0; i < leadingTrivia.Count; ++i)
             {
                 // this is to skip all whitespace that is before a newlines
-                if (leadingTrivia[i].Type == Trivia.TriviaType.Whitespace &&
+                if (i + 1 < leadingTrivia.Count &&
+                    leadingTrivia[i].Type == Trivia.TriviaType.Whitespace &&
                     leadingTrivia[i+1].Type == Trivia.TriviaType.Newline)
                 {
                     continue;

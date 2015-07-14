@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace LanguageService.Formatting.Ruling
 {
-    internal interface IRule
+    internal abstract class IRule
     {
-        RuleDescriptor RuleDescriptor { get; }
-        RuleOperation RuleOperationContext { get; }
+        public abstract RuleDescriptor RuleDescriptor { get; }
+        public abstract RuleOperation RuleOperationContext { get; }
 
-        bool AppliesTo(FormattingContext formattingContext);
-        TextEditInfo Apply(FormattingContext formattingContext);
+        public abstract bool AppliesTo(FormattingContext formattingContext);
+        public abstract TextEditInfo Apply(FormattingContext formattingContext);
     }
 }
