@@ -103,7 +103,9 @@
     <None Include="CorrectSampleLuaFiles\newlines.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CorrectSampleLuaFiles\smallif.lua" />
+    <None Include="CorrectSampleLuaFiles\smallif.lua">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="CorrectSampleLuaFiles\tabs.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

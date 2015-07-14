@@ -94,7 +94,7 @@ namespace LanguageModel
 
         private bool IsContextTerminator(Context parsingContext, TokenType currentTokenType)
         {
-            if(currentToken.Type == TokenType.ReturnKeyword)
+            if(currentTokenType == TokenType.ReturnKeyword)
             {
                 return true;
             }
@@ -131,10 +131,10 @@ namespace LanguageModel
             //TODO: deal with edge case where there is nothing contained within the block
 
             contextStack.Push(parsingContext);
-            int start = this.NextToken().FullStart;
+            int start = this.Peek().FullStart;
             List<SyntaxNode> children = new List<SyntaxNode>();
 
-            while (this.IsContextTerminator(parsingContext, currentToken.Type))
+            while (!IsContextTerminator(parsingContext, Peek().Type))
             {
                 children.Add(ParseStatement());
             }
@@ -385,6 +385,8 @@ namespace LanguageModel
 
             //TODO: do context analysis vs. just returning a missing token?
             node.ThenKeyword = ParseExpected(TokenType.ThenKeyword) ? currentToken : Token.CreateMissingToken(currentToken.Start + currentToken.Length);
+
+            node.IfBlock = ParseBlock(Context.IfBlockContext).ToBuilder();
 
             //Block ifBlock = this.ParseBlock(Context.IfBlockContext);
             //List<ElseIfBlock> elseIfList = ParseElseIfList();

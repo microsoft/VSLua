@@ -1,5 +1,5 @@
 
 
-if op == "+" then
+if true == "+" then
     test;
 end
