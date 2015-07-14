@@ -16,7 +16,7 @@ namespace LanguageModel.Tests
         {
             Parser parser = new Parser();
             SyntaxTree tree = parser.CreateSyntaxTree(@"CorrectSampleLuaFiles\smallif.lua");
-            //Assert.Equal(tree.Root.ProgramBlock.ReturnStatement, null);
+            Assert.Equal(tree.Root.ProgramBlock.ReturnStatement, null);
 
         }
 
