@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Xunit;
-
+using LanguageService;
 using Assert = Xunit.Assert;
 
 namespace LanguageModel.Tests

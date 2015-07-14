@@ -146,6 +146,16 @@ namespace LanguageService.Tests
         }
 
         [Fact]
+        public void TestConcat()
+        {
+            Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\concat.lua");
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
+            int tokenIndex = 0;
+            Assert.Equal(TokenType.StringConcatOperator, tokenList[tokenIndex++].Type);
+            Assert.Equal(TokenType.EndOfFile, tokenList[tokenIndex++].Type);
+        }
+
+        [Fact]
         public void TestLongCode()
         {
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\longcode.lua");
