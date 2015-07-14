@@ -16,7 +16,7 @@ namespace LanguageService.Formatting.Ruling
         {
         }
 
-        internal override TextEditInfo Apply(FormattingContext formattingContext)
+        internal override List<TextEditInfo> Apply(FormattingContext formattingContext)
         {
             List<Trivia> leadingTrivia = formattingContext.NextToken.Token.LeadingTrivia;
 
@@ -27,7 +27,7 @@ namespace LanguageService.Formatting.Ruling
                 formattingContext.CurrentToken.Token.Length;
             int length = formattingContext.NextToken.Token.Start - start;
 
-            return new TextEditInfo(start, length, replacingString);
+            return new List<TextEditInfo> { new TextEditInfo(start, length, replacingString) };
         }
 
 

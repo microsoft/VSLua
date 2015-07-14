@@ -80,8 +80,8 @@
     <Compile Include="Formatting\Indenter.cs" />
     <Compile Include="Formatting\ParsedToken.cs" />
     <Compile Include="Formatting\FormattingContext.cs" />
-    <Compile Include="Formatting\Ruling\AbstractRule.cs" />
     <Compile Include="Formatting\Ruling\Rule.cs" />
+    <Compile Include="Formatting\Ruling\SimpleRule.cs" />
     <Compile Include="Formatting\Ruling\RuleAction.cs" />
     <Compile Include="Formatting\Ruling\RuleBucket.cs" />
     <Compile Include="Formatting\Ruling\RuleDescriptor.cs" />

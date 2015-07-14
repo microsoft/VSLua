@@ -39,7 +39,8 @@ namespace LanguageService.Formatting
                 if (rule != null)
                 {
                     /* test */
-                    textEdits.Add(rule.Apply(formattingContext));
+                    foreach (TextEditInfo textEdit in rule.Apply(formattingContext))
+                    textEdits.Add(textEdit);
                 }
             }
 
