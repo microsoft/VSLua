@@ -17,27 +17,27 @@ namespace LanguageService.Formatting.Ruling
 
         internal static AbstractRule SpaceAfterComma =
             new Rule(
-                new RuleDescriptor(TokenType.Comma, TokenRange.Any),
+                new RuleDescriptor(TokenType.Comma, TokenRange.AnyVisible),
                 defaultFilters, RuleAction.Space);
 
         internal static AbstractRule SpaceAfterAssignmentOperator =
             new Rule(
-                new RuleDescriptor(TokenType.AssignmentOperator, TokenRange.Any),
+                new RuleDescriptor(TokenType.AssignmentOperator, TokenRange.AnyVisible),
                 defaultFilters, RuleAction.Space);
 
         internal static AbstractRule SpaceBeforeAssignmentOperator =
             new Rule(
-                new RuleDescriptor(TokenRange.Any, TokenType.AssignmentOperator),
+                new RuleDescriptor(TokenRange.AnyVisible, TokenType.AssignmentOperator),
                 defaultFilters, RuleAction.Space);
 
         internal static AbstractRule SpaceAfterBinaryOperator =
             new Rule(
-                new RuleDescriptor(TokenRange.BinaryOperators, TokenRange.Any),
+                new RuleDescriptor(TokenRange.BinaryOperators, TokenRange.AnyVisible),
                 defaultFilters, RuleAction.Space);
 
         internal static AbstractRule SpaceBeforeBinaryOperator =
             new Rule(
-                new RuleDescriptor(TokenRange.Any, TokenRange.BinaryOperators),
+                new RuleDescriptor(TokenRange.AnyVisible, TokenRange.BinaryOperators),
                 defaultFilters, RuleAction.Space);
 
         internal static AbstractRule SpaceAfterValueBeforeOpenParenthesis =
@@ -72,7 +72,7 @@ namespace LanguageService.Formatting.Ruling
                 defaultFilters, RuleAction.Space);
 
         internal static AbstractRule DeleteSpaceBeforeEofToken =
-            new Rule(new RuleDescriptor(TokenRange.Any, TokenType.EndOfFile),
+            new Rule(new RuleDescriptor(TokenRange.AnyVisible, TokenType.EndOfFile),
                 defaultFilters, RuleAction.Delete);
 
         internal static AbstractRule DeleteTrailingWhitespace = new RuleTrailingWhitespace();

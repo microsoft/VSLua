@@ -64,6 +64,26 @@ x = x + 1";
             GeneralTest(original, expected);
         }
 
+        [Fact]
+        public void TrailingWhiteSpaceBeforeEof()
+        {
+            string original = @"
+x   
+     
+      
+            
+      
+    ";
+            string expected = @"
+x
+
+
+
+
+";
+            GeneralTest(original, expected);
+        }
+
 
     }
 }
