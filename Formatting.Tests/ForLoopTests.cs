@@ -4,11 +4,8 @@ namespace Formatting.Tests
 {
     public class ForLoopTests
     {
-        public void GeneralTest(string original, string expected)
-        {
-            string actual = Tester.Format(original);
-            Assert.Equal(expected, actual);
-        }
+        delegate void TestFunction(string original, string expected);
+        TestFunction GeneralTest = Tester.GeneralTest;
 
         [Fact]
         public void Basic()

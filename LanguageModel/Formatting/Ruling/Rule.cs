@@ -4,12 +4,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LanguageModel.Formatting.Ruling
+namespace LanguageService.Formatting.Ruling
 {
-    internal class Rule
+    internal class Rule : IRule
     {
-        internal readonly RuleDescriptor ruleDescriptor;
-        internal readonly RuleOperation ruleOperation;
+        private readonly RuleDescriptor ruleDescriptor;
+        private readonly RuleOperation ruleOperation;
+
+        public RuleDescriptor RuleDescriptor
+        {
+            get
+            {
+                return ruleDescriptor;
+            }
+        }
+
+        public RuleOperation RuleOperationContext
+        {
+            get
+            {
+                return ruleOperation;
+            }
+        }
+
 
         internal Rule(RuleDescriptor ruleDescriptor, List<ContextFilter> contextFilters, RuleAction action)
         {
@@ -31,13 +48,13 @@ namespace LanguageModel.Formatting.Ruling
             }
         }
 
-        internal bool AppliesTo(FormattingContext formattingContext)
+        public bool AppliesTo(FormattingContext formattingContext)
         {
             return ruleOperation.Context.InContext(formattingContext);
         }
 
         // Very simple implentation of Apply
-        internal TextEditInfo Apply(FormattingContext formattingContext)
+        public TextEditInfo Apply(FormattingContext formattingContext)
         {
 
             Token leftToken = formattingContext.CurrentToken.Token;

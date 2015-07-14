@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LanguageModel.Formatting.Ruling
+namespace LanguageService.Formatting.Ruling
 {
     internal class Rules
     {
@@ -15,62 +15,81 @@ namespace LanguageModel.Formatting.Ruling
             NoCommentBetweenTokens
         };
 
-        internal static Rule SpaceAfterComma =
+        internal static IRule SpaceAfterComma =
             new Rule(
                 new RuleDescriptor(TokenType.Comma, TokenRange.Any),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceAfterAssignmentOperator =
+        internal static IRule SpaceAfterAssignmentOperator =
             new Rule(
                 new RuleDescriptor(TokenType.AssignmentOperator, TokenRange.Any),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceBeforeAssignmentOperator =
+        internal static IRule SpaceBeforeAssignmentOperator =
             new Rule(
                 new RuleDescriptor(TokenRange.Any, TokenType.AssignmentOperator),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceAfterBinaryOperator =
+        internal static IRule SpaceAfterBinaryOperator =
             new Rule(
                 new RuleDescriptor(TokenRange.BinaryOperators, TokenRange.Any),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceBeforeBinaryOperator =
+        internal static IRule SpaceBeforeBinaryOperator =
             new Rule(
                 new RuleDescriptor(TokenRange.Any, TokenRange.BinaryOperators),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceAfterValueBeforeOpenParenthesis =
+        internal static IRule SpaceAfterValueBeforeOpenParenthesis =
             new Rule(
                 new RuleDescriptor(TokenRange.Value, TokenType.OpenParen),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceBeforeValueAfterOpenParenthesis =
+        internal static IRule SpaceBeforeValueAfterOpenParenthesis =
             new Rule(
                 new RuleDescriptor(TokenType.OpenParen, TokenRange.Value),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceBeforeValueAfterOpenSquareBracket =
+        internal static IRule SpaceBeforeValueAfterOpenSquareBracket =
             new Rule(
                 new RuleDescriptor(TokenType.OpenBracket, TokenRange.Value),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceBeforeValueAfterOpenCurlyBrace =
+        internal static IRule SpaceBeforeValueAfterOpenCurlyBrace =
             new Rule(new RuleDescriptor(TokenType.OpenCurlyBrace, TokenRange.Value),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceAfterValueBeforeCloseParenthesis =
+        internal static IRule SpaceAfterValueBeforeCloseParenthesis =
             new Rule(new RuleDescriptor(TokenRange.Value, TokenType.CloseParen),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceAfterValueBeforeCloseSquareBracket =
+        internal static IRule SpaceAfterValueBeforeCloseSquareBracket =
             new Rule(new RuleDescriptor(TokenRange.Value, TokenType.CloseBracket),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceAfterValueBeforeCloseCurlyBrace =
+        internal static IRule SpaceAfterValueBeforeCloseCurlyBrace =
             new Rule(new RuleDescriptor(TokenRange.Value, TokenType.CloseCurlyBrace),
                 defaultFilters, RuleAction.Space);
 
+
+
+        internal static RuleMap GetRuleMap()
+        {
+            RuleMap ruleMap = new RuleMap();
+            ruleMap.AddRule(Rules.SpaceAfterComma);
+            ruleMap.AddRule(Rules.SpaceAfterAssignmentOperator);
+            ruleMap.AddRule(Rules.SpaceAfterBinaryOperator);
+            ruleMap.AddRule(Rules.SpaceAfterValueBeforeCloseCurlyBrace);
+            ruleMap.AddRule(Rules.SpaceAfterValueBeforeCloseParenthesis);
+            ruleMap.AddRule(Rules.SpaceAfterValueBeforeCloseSquareBracket);
+            ruleMap.AddRule(Rules.SpaceAfterValueBeforeOpenParenthesis);
+            ruleMap.AddRule(Rules.SpaceBeforeAssignmentOperator);
+            ruleMap.AddRule(Rules.SpaceBeforeBinaryOperator);
+            ruleMap.AddRule(Rules.SpaceBeforeValueAfterOpenCurlyBrace);
+            ruleMap.AddRule(Rules.SpaceBeforeValueAfterOpenParenthesis);
+            ruleMap.AddRule(Rules.SpaceBeforeValueAfterOpenSquareBracket);
+            return ruleMap;
+        }
 
 
         internal static bool TokensAreOnSameLine(FormattingContext formattingContext)

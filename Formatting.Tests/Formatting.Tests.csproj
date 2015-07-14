@@ -77,10 +77,12 @@
     <Compile Include="AssignmentAndBinaryOperatorTests.cs" />
     <Compile Include="BracketTests.cs" />
     <Compile Include="ForLoopTests.cs" />
+    <Compile Include="IndentationTests.cs" />
     <Compile Include="LeftCommaTests.cs" />
     <Compile Include="MixedTests.cs" />
     <Compile Include="NewlineRuleTesting.cs" />
     <Compile Include="Tester.cs" />
+    <Compile Include="TrailingWhitespaceTests.cs" />
     <Compile Include="WrappingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

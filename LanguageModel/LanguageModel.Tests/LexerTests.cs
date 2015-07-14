@@ -6,7 +6,7 @@ using Xunit;
 
 using Assert = Xunit.Assert;
 
-namespace LanguageModel.Tests
+namespace LanguageService.Tests
 {
     [DeploymentItem("CorrectSampleLuaFiles", "CorrectSampleLuaFiles")]
     public class LexerTests

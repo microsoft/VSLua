@@ -5,11 +5,8 @@ namespace Formatting.Tests
     public class BracketTests
     {
 
-        public void GeneralTest(string original, string expected)
-        {
-            string actual = Tester.Format(original);
-            Assert.Equal(expected, actual);
-        }
+        delegate void TestFunction(string original, string expected);
+        TestFunction GeneralTest = Tester.GeneralTest;
 
         [Fact]
         public void BasicSquare()

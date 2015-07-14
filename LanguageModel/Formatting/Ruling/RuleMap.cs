@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LanguageModel.Formatting.Ruling
+namespace LanguageService.Formatting.Ruling
 {
 
     internal class RuleMap
@@ -24,11 +24,11 @@ namespace LanguageModel.Formatting.Ruling
 
         }
 
-        internal void AddRule(Rule rule)
+        internal void AddRule(IRule rule)
         {
-            foreach (TokenType typeLeft in rule.ruleDescriptor.TokenRangeLeft)
+            foreach (TokenType typeLeft in rule.RuleDescriptor.TokenRangeLeft)
             {
-                foreach (TokenType typeRight in rule.ruleDescriptor.TokenRangeRight)
+                foreach (TokenType typeRight in rule.RuleDescriptor.TokenRangeRight)
                 {
                     int column = (int)typeLeft;
                     int row = (int)typeRight;
@@ -46,7 +46,7 @@ namespace LanguageModel.Formatting.Ruling
             }
         }
 
-        internal Rule GetRule(FormattingContext formattingContext)
+        internal IRule GetRule(FormattingContext formattingContext)
         {
             int column = (int)formattingContext.CurrentToken.Token.Type;
             int row = (int)formattingContext.NextToken.Token.Type;
