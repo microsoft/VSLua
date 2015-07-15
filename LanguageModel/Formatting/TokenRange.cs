@@ -63,6 +63,7 @@ namespace LanguageService.Formatting
             TokenType.TrueKeyValue,
             TokenType.NilKeyValue,
             TokenType.Identifier,
+            TokenType.FunctionKeyword
         };
 
         private static List<TokenType> Fill(Array values, TokenType[] exclude)
