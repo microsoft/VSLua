@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,18 +9,18 @@ namespace LanguageService.Formatting
 {
     internal static class TokenRange
     {
-        internal static List<TokenType> AnyVisible =
+        internal static readonly ImmutableArray<TokenType> AnyVisible =
             TokenRange.Fill(
                 Enum.GetValues(typeof(TokenType)),
                 new TokenType[] { TokenType.EndOfFile, TokenType.Unknown });
 
-        internal static List<TokenType> All =
+        internal static readonly ImmutableArray<TokenType> All =
             TokenRange.Fill(
                 Enum.GetValues(typeof(TokenType)),
                 new TokenType[] { });
 
-        internal static List<TokenType> BinaryOperators =
-            new List<TokenType>
+        internal static readonly ImmutableArray<TokenType> BinaryOperators =
+            new ImmutableArray<TokenType>
             {
                 TokenType.AndBinop,
                 TokenType.BitwiseAndOperator,
@@ -45,7 +46,7 @@ namespace LanguageService.Formatting
                 TokenType.VarArgOperator,
             };
 
-        internal static List<TokenType> Brackets = new List<TokenType>
+        internal static readonly ImmutableArray<TokenType> Brackets = new ImmutableArray<TokenType>
         {
             TokenType.OpenBracket,
             TokenType.CloseBracket,
@@ -55,7 +56,7 @@ namespace LanguageService.Formatting
             TokenType.CloseParen,
         };
 
-        internal static List<TokenType> Value = new List<TokenType>
+        internal static readonly ImmutableArray<TokenType> Value = new ImmutableArray<TokenType>
         {
             TokenType.Number,
             TokenType.String,
@@ -66,9 +67,9 @@ namespace LanguageService.Formatting
             TokenType.FunctionKeyword
         };
 
-        private static List<TokenType> Fill(Array values, TokenType[] exclude)
+        private static ImmutableArray<TokenType> Fill(Array values, TokenType[] exclude)
         {
-            List<TokenType> tokenTypes = new List<TokenType>();
+            ImmutableArray<TokenType> tokenTypes = new ImmutableArray<TokenType>();
 
             foreach (TokenType tokenType in values)
             {

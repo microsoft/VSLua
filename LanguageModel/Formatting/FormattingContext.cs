@@ -13,6 +13,10 @@ namespace LanguageService.Formatting
 
         internal FormattingContext(ParsedToken currentToken, ParsedToken nextToken)
         {
+            if (currentToken == null || nextToken == null)
+            {
+                throw new ArgumentNullException();
+            }
             this.CurrentToken = currentToken;
             this.NextToken = nextToken;
         }

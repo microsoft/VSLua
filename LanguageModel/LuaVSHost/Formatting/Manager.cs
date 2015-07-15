@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio;
@@ -124,7 +121,7 @@ namespace VSLua.Formatting
             SnapshotPoint startLinePoint = span.Start.GetContainingLine().Start;
             span = new SnapshotSpan(startLinePoint, span.End);
 
-            List<TextEditInfo> edits = Formatter.Format(span.GetText());
+            List<TextEditInfo> edits = new List<TextEditInfo>();// = Formatter.Format(span);
 
             using (ITextEdit textEdit = this.textBuffer.CreateEdit())
             {

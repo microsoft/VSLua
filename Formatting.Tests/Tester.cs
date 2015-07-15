@@ -1,14 +1,25 @@
 ﻿using System.Collections.Generic;
 using LanguageService.Formatting;
 using Xunit;
+using System.IO;
 
 namespace Formatting.Tests
 {
     internal static class Tester
     {
+        private static Stream GenerateStreamFromString(string s)
+        {
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
+        }
+
         internal static string Format(string original)
         {
-            List<TextEditInfo> textEdits = Formatter.Format(original);
+            List<TextEditInfo> textEdits = Formatter.Format(Tester.GenerateStreamFromString(original));
 
             var factory = new EditorUtils.EditorHostFactory();
             var host = factory.CreateEditorHost();

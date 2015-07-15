@@ -1,19 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LanguageService.Formatting
 {
-    internal sealed class ParsedToken
+    internal class ParsedToken
     {
-        internal Token Token { get; private set; }
-        internal int BlockLevel { get; private set; }
-        internal SyntaxNode Node { get; private set; }
+        internal Token Token { get; }
+        internal int BlockLevel { get; }
+        internal SyntaxNode Node { get; }
+
+
+        private static readonly ImmutableArray<TokenType> IncreaseIndentAfter = new ImmutableArray<TokenType>
+            {
+                TokenType.DoKeyword,
+                TokenType.ThenKeyword,
+                TokenType.ElseKeyword,
+                TokenType.FunctionKeyword,
+                TokenType.OpenCurlyBrace
+            };
+
+        private static readonly ImmutableArray<TokenType> DecreaseIndentOn = new ImmutableArray<TokenType>
+            {
+                TokenType.EndKeyword,
+                TokenType.ElseIfKeyword,
+                TokenType.CloseCurlyBrace,
+                TokenType.ElseKeyword,
+            };
 
         internal ParsedToken(Token token, int blockLevel, SyntaxNode node)
         {
+            if (token == null || node == null)
+            {
+                throw new ArgumentNullException();
+            }
             this.Token = token;
             this.BlockLevel = blockLevel;
             this.Node = node;
@@ -23,24 +46,11 @@ namespace LanguageService.Formatting
         //   through all the tokens from the lexer, I'd just walk the parsetree from the start
         internal static List<ParsedToken> GetParsedTokens(List<Token> tokens)
         {
+            if (tokens == null)
+            {
+                throw new ArgumentNullException();
+            }
             List<ParsedToken> parsedTokens = new List<ParsedToken>();
-
-            List<TokenType> IncreaseIndentAfter = new List<TokenType>
-            {
-                TokenType.DoKeyword,
-                TokenType.ThenKeyword,
-                TokenType.ElseKeyword,
-                TokenType.FunctionKeyword,
-                TokenType.OpenCurlyBrace
-            };
-
-            List<TokenType> DecreaseIndentOn = new List<TokenType>
-            {
-                TokenType.EndKeyword,
-                TokenType.ElseIfKeyword,
-                TokenType.CloseCurlyBrace,
-                TokenType.ElseKeyword,
-            };
 
             int indent_level = 0;
             foreach (Token token in tokens)

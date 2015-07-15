@@ -14,6 +14,10 @@ namespace LanguageService.Formatting
 
         internal TextEditInfo(int start, int length, string replacingString)
         {
+            if (replacingString == null)
+            {
+                throw new ArgumentNullException();
+            }
             this.Start = start;
             this.Length = length;
             this.ReplacingString = replacingString;

@@ -10,6 +10,10 @@ namespace LanguageService.Formatting
     {
         internal static IEnumerable<TextEditInfo> GetIndentations(List<ParsedToken> parsedTokens)
         {
+            if (parsedTokens == null)
+            {
+                throw new ArgumentNullException();
+            }
             foreach (ParsedToken parsedToken in parsedTokens)
             {
                 int[] lastNewline = Indenter.GetSpacePositionAndLengthAfterLastNewline(parsedToken);
@@ -26,6 +30,11 @@ namespace LanguageService.Formatting
 
         private static string GetIndentationStringFromBlockLevel(int blockLevel, SyntaxNode syntaxNode)
         {
+            if (syntaxNode == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             // Here I would put the calculation for the indentation string parts
             // how many tabs, spaces that I need. I would also check the options for
             // how tabs are setup.
@@ -47,6 +56,10 @@ namespace LanguageService.Formatting
 
         private static int[] GetSpacePositionAndLengthAfterLastNewline(ParsedToken parsedToken)
         {
+            if (parsedToken == null)
+            {
+                throw new ArgumentNullException();
+            }
             int length = 0;
             int start = parsedToken.Token.FullStart;
 
