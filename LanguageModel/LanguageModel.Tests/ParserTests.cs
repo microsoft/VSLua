@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.IO;
 using Xunit;
 using LanguageService;
@@ -19,7 +20,8 @@ namespace LanguageService.Tests
         {
             this.logger = logger;
         }
-        [Fact]
+
+        //[Fact]
         public void testNestedSampleIf()
         {
             Parser parser = new Parser();
@@ -55,16 +57,8 @@ namespace LanguageService.Tests
             Parser parser = new Parser();
             SyntaxTree tree = parser.CreateSyntaxTree(@"CorrectSampleLuaFiles\smallif.lua");
 
-            //SyntaxTree expected = ChunkNode.Create(0, 10,
-            //    Block.Create(0, 0, ImmutableList.Create<SyntaxNode>(
-            //        IfNode.Create(
-
-            //        )));
-            //index/#Microsoft.VisualStudio.Composition/IndentingTextWriter.cs,083b8cac8f07e6cd 
-            //File: IndentingTextWriter.cs
-            //Project: Microsoft.VisualStudio.Composition\Microsoft.VisualStudio.Composition.csproj(Microsoft.VisualStudio.Composition)
-            // DiffPlex
-
+            Debug.WriteLine(tree.ToString());
+            //TODO: fix position numbers...
             SyntaxTree expected = new SyntaxTree("smallif.lua",
                 ChunkNode.Create(0, 247,
                     Block.Create(0, 244, new List<SyntaxNode>()
@@ -88,6 +82,7 @@ namespace LanguageService.Tests
 
             Assert.Equal(expected.ToString(), tree.ToString());
 
+            Debug.WriteLine(expected.ToString());
 
             Assert.Equal(tree.Root.ProgramBlock.ReturnStatement, null);
             Assert.Equal(1, tree.Root.ProgramBlock.Children.Count);

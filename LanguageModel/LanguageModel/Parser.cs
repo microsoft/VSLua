@@ -106,9 +106,10 @@ namespace LanguageService
         }
         #endregion
 
+        #region Helper Methods
         private bool IsContextTerminator(Context parsingContext, TokenType currentTokenType)
         {
-            if(currentTokenType == TokenType.ReturnKeyword)
+            if (currentTokenType == TokenType.ReturnKeyword)
             {
                 return true;
             }
@@ -127,7 +128,40 @@ namespace LanguageService
                     throw new Exception("Unknown Context"); //TODO
             }
         }
+        
+        private bool IsBinop(TokenType type)
+        {
+            switch (type)
+            {
+                case TokenType.PlusOperator:
+                case TokenType.MinusOperator:
+                case TokenType.MultiplyOperator:
+                case TokenType.DivideOperator:
+                case TokenType.FloorDivideOperator:
+                case TokenType.ExponentOperator:
+                case TokenType.ModulusOperator:
+                case TokenType.TildeUnOp: //TODO: deal with ambiguity
+                case TokenType.BitwiseAndOperator:
+                case TokenType.BitwiseOrOperator:
+                case TokenType.BitwiseRightOperator:
+                case TokenType.BitwiseLeftOperator:
+                case TokenType.NotEqualsOperator:
+                case TokenType.LessOrEqualOperator:
+                case TokenType.GreaterOrEqualOperator:
+                case TokenType.EqualityOperator:
+                case TokenType.StringConcatOperator:
+                case TokenType.GreaterThanOperator:
+                case TokenType.LessThanOperator:
+                case TokenType.AndBinop:
+                case TokenType.OrBinop:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        #endregion
 
+        #region Parse Methods
         private ChunkNode ParseChunkNode()
         {
             var node = ChunkNode.CreateBuilder();
@@ -174,69 +208,7 @@ namespace LanguageService
                 return Block.Create(start, length, children.ToImmutableList());
             }
         }
-
-        private RetStat ParseRetStat()
-        {
-            if(ParseExpected(TokenType.ReturnKeyword))
-            {
-                return null;
-            }
-
-            int start = currentToken.Start;
-            Token returnKeyword = currentToken;
-            ExpList expList = ParseExpList();
-            int length = currentToken.End - start;
-            if(expList == null)
-            {
-                return RetStat.Create(start, length, returnKeyword);
-            } else
-            {
-                return RetStat.Create(start, length, returnKeyword, expList);
-            }
-        }
-
-        private ExpList ParseExpList()
-        {
-            int start = Peek().Start;
-            contextStack.Push(Context.ExpListContext);
-            List<ExpressionCommaPair> expressions = new List<ExpressionCommaPair>();
-            bool searchForExps;
-
-            do
-            {
-                Expression exp = ParseExpression();
-
-                if(exp == null)
-                {
-                    if(expressions.Count == 0)
-                    {
-                        return MissingNode.Create(start,0).ToExpList(null); //TODO: is this okay???????
-                    } else
-                    {
-                        expressions.Add(ExpressionCommaPair.Create(MissingNode.Create(currentToken.FullStart, 0).ToExpression(), null)); //TODO: is this okay???????
-                        searchForExps = false;
-                    }
-                }
-
-                if (Peek().Type == TokenType.Comma)
-                {
-                    expressions.Add(ExpressionCommaPair.Create(exp, NextToken()));
-                    searchForExps = true;
-                } else
-                {
-                    expressions.Add(ExpressionCommaPair.Create(exp, null));
-                    searchForExps = false;
-                }
-            } while (searchForExps);
-
-            int length = currentToken.FullStart - start;
-
-            contextStack.Pop();
-            return ExpList.Create(start, length, expressions.ToImmutableList());
-        }
-
-
-
+        
         private SyntaxNode ParseStatement()
         {//TODO check if it follows contract to recive position where current is already consumed?
             switch (Peek().Type)
@@ -279,6 +251,29 @@ namespace LanguageService
             }
         }
 
+        private IfNode ParseIfNode()
+        {
+            var node = IfNode.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            node.IfKeyword = GetExpectedToken(TokenType.IfKeyword);
+            node.Exp = ParseExpression().ToBuilder();
+
+            //TODO: do context analysis vs. just returning a missing token?
+            node.ThenKeyword = GetExpectedToken(TokenType.ThenKeyword);
+
+            node.IfBlock = ParseBlock(Context.IfBlockContext).ToBuilder();
+
+            //Block ifBlock = this.ParseBlock(Context.IfBlockContext);
+            //List<ElseIfBlock> elseIfList = ParseElseIfList();
+            //ElseBlock elseBlock = ParseElseBlock();
+
+            node.EndKeyword = GetExpectedToken(TokenType.EndKeyword);
+
+            int length = currentToken.End - node.StartPosition;
+
+            return node.ToImmutable();
+        }
+
         //pass in null if this is the first time calling the method... if not, this can be called recursively.
         private Expression ParseExpression()
         {
@@ -307,7 +302,7 @@ namespace LanguageService
                         exp = SimpleExpression.Create(NextToken().Start, currentToken.Length, currentToken);
                         break;
                     case TokenType.FunctionKeyword:
-                        exp = ParseFunctionDef().ToExpression(); //TODO: is this okay????
+                        exp = ParseFunctionDef(); //TODO: is this okay????
                         break;
                     case TokenType.OpenParen:
                         exp = ParseParenPrefixExp();
@@ -337,12 +332,33 @@ namespace LanguageService
           
         }
 
+        private RetStat ParseRetStat()
+        {
+            if (ParseExpected(TokenType.ReturnKeyword))
+            {
+                return null;
+            }
+
+            int start = currentToken.Start;
+            Token returnKeyword = currentToken;
+            ExpList expList = ParseExpList();
+            int length = currentToken.End - start;
+            if (expList == null)
+            {
+                return RetStat.Create(start, length, returnKeyword);
+            }
+            else
+            {
+                return RetStat.Create(start, length, returnKeyword, expList);
+            }
+        }
+
         private TableConstructor ParseTableConstructor()
         {
             var node = TableConstructor.CreateBuilder();
             node.StartPosition = Peek().Start;
             node.OpenCurly = GetExpectedToken(TokenType.OpenCurlyBrace);
-          ////node.FieldList = ParseFieldList().ToBuilder();
+            node.FieldList = ParseFieldList().ToBuilder();
             node.CloseCurly = GetExpectedToken(TokenType.CloseCurlyBrace);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -353,41 +369,79 @@ namespace LanguageService
             var node = TableConstructorExp.CreateBuilder();
             node.StartPosition = Peek().Start;
             node.OpenCurly = GetExpectedToken(TokenType.OpenCurlyBrace);
-           // node.FieldList = ParseFieldList().ToBuilder();
+            node.FieldList = ParseFieldList().ToBuilder();
             node.CloseCurly = GetExpectedToken(TokenType.CloseCurlyBrace);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
+        #endregion
 
-        //private FieldList ParseFieldList()
-        //{
-        //    var node = FieldList.CreateBuilder();
-        //    node.StartPosition = currentToken.End + 1; //TODO: inconsistant start and end...
-        //    bool parseFields = true;
-        //    var fields = new List<FieldAndSeperatorPair>();
+        #region Other Methods (Out of scope for Code Review)
+        private FieldList ParseFieldList()
+        {
+            var node = FieldList.CreateBuilder();
+            node.StartPosition = currentToken.End + 1; //TODO: inconsistant start and end...
+            bool parseFields = true;
+            var fields = new List<FieldAndSeperatorPair>();
 
-        //    while (parseFields)
-        //    {
-        //        var fieldAndSep = FieldAndSeperatorPair.CreateBuilder();
-        //        fieldAndSep.Field = ParseField();
-        //        if (ParseExpected(TokenType.Comma) || ParseExpected(TokenType.SemiColon) )
-        //        {
-        //            fieldAndSep.FieldSeparator = currentToken;
-        //            parseFields = true;
-        //        } else
-        //        {
-        //            if (Peek().Type == TokenType.CloseCurlyBrace)
-        //            {
-        //                parseFields = false;
-        //            } else
-        //            {
+            while (parseFields)
+            {
+                var fieldAndSep = FieldAndSeperatorPair.CreateBuilder();
+                fieldAndSep.Field = ParseField().ToBuilder();
+                if (ParseExpected(TokenType.Comma) || ParseExpected(TokenType.SemiColon))
+                {
+                    fieldAndSep.FieldSeparator = currentToken;
+                    parseFields = true;
+                }
+                else
+                {
+                    if (Peek().Type == TokenType.CloseCurlyBrace)
+                    {
+                        parseFields = false;
+                    }
+                    else
+                    {
+                        fieldAndSep.FieldSeparator = Token.CreateMissingToken(currentToken.End);
+                        parseFields = true;
+                    }
+                    fields.Add(fieldAndSep.ToImmutable());
+                }
+            }
 
-        //            }
-        //        fields.Add(fieldAndSep.ToImmutable());
-        //    }
+            node.Fields = fields.ToImmutableList();
+            node.Length = currentToken.End - node.StartPosition;
 
-        //    node.Fields =
-        //}
+            return node.ToImmutable();
+        }
+
+        private Field ParseField()
+        {
+            switch(Peek().Type)
+            {//TODO implement
+                //case TokenType.OpenBracket:
+                //    return ParseBracketField();
+                //case TokenType.Identifier:
+                //    var identifierToken = NextToken();
+                //    if (Peek().Type == TokenType.AssignmentOperator)
+                //    {
+
+                //    } else
+                //    {
+
+                //    }
+                default:
+                    return ParseExpField();
+            }
+        }
+
+        private ExpField ParseExpField()
+        {
+            var node = ExpField.CreateBuilder();
+            node.StartPosition = currentToken.End;
+            node.Exp = ParseExpression().ToBuilder();
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
 
         private Expression ParseParenPrefixExp()
         {
@@ -429,59 +483,48 @@ namespace LanguageService
             return null;
         }
 
-        private bool IsBinop(TokenType type)
+        private ExpList ParseExpList()
         {
-            switch(type)
+            int start = Peek().Start;
+            contextStack.Push(Context.ExpListContext);
+            List<ExpressionCommaPair> expressions = new List<ExpressionCommaPair>();
+            bool searchForExps;
+
+            do
             {
-                case TokenType.PlusOperator:
-                case TokenType.MinusOperator:
-                case TokenType.MultiplyOperator:
-                case TokenType.DivideOperator:
-                case TokenType.FloorDivideOperator:
-                case TokenType.ExponentOperator:
-                case TokenType.ModulusOperator:
-                case TokenType.TildeUnOp: //TODO: deal with ambiguity
-                case TokenType.BitwiseAndOperator:
-                case TokenType.BitwiseOrOperator:
-                case TokenType.BitwiseRightOperator:
-                case TokenType.BitwiseLeftOperator:
-                case TokenType.NotEqualsOperator:
-                case TokenType.LessOrEqualOperator:
-                case TokenType.GreaterOrEqualOperator:
-                case TokenType.EqualityOperator:
-                case TokenType.StringConcatOperator:
-                case TokenType.GreaterThanOperator: 
-                case TokenType.LessThanOperator:
-                case TokenType.AndBinop:
-                case TokenType.OrBinop:
-                    return true;
-                default:
-                    return false;
-            }
+                Expression exp = ParseExpression();
+
+                if (exp == null)
+                {
+                    if (expressions.Count == 0)
+                    {
+                        return MissingNode.Create(start, 0).ToExpList(null); //TODO: is this okay???????
+                    }
+                    else
+                    {
+                        expressions.Add(ExpressionCommaPair.Create(MissingNode.Create(currentToken.FullStart, 0).ToSimpleExpression(null), null)); //TODO: is this okay???????
+                        searchForExps = false;
+                    }
+                }
+
+                if (Peek().Type == TokenType.Comma)
+                {
+                    expressions.Add(ExpressionCommaPair.Create(exp, NextToken()));
+                    searchForExps = true;
+                }
+                else
+                {
+                    expressions.Add(ExpressionCommaPair.Create(exp, null));
+                    searchForExps = false;
+                }
+            } while (searchForExps);
+
+            int length = currentToken.FullStart - start;
+
+            contextStack.Pop();
+            return ExpList.Create(start, length, expressions.ToImmutableList());
         }
-
-        private IfNode ParseIfNode()
-        {
-            var node = IfNode.CreateBuilder();
-            node.StartPosition = Peek().Start;
-            node.IfKeyword = GetExpectedToken(TokenType.IfKeyword);
-            node.Exp = ParseExpression().ToBuilder();
-
-            //TODO: do context analysis vs. just returning a missing token?
-            node.ThenKeyword = GetExpectedToken(TokenType.ThenKeyword);
-
-            node.IfBlock = ParseBlock(Context.IfBlockContext).ToBuilder();
-
-            //Block ifBlock = this.ParseBlock(Context.IfBlockContext);
-            //List<ElseIfBlock> elseIfList = ParseElseIfList();
-            //ElseBlock elseBlock = ParseElseBlock();
-
-            node.EndKeyword = GetExpectedToken(TokenType.EndKeyword);
-
-            int length = currentToken.End - node.StartPosition;
-
-            return node.ToImmutable();
-        }
+        #endregion
 
         //private ElseBlock ParseElseBlock()
         //{

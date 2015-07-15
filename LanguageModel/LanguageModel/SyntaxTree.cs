@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,9 +25,11 @@ namespace LanguageService
             return null;
         }
 
-        public void PrintSyntaxTree()
+        public override string ToString()
         {
-            throw new NotImplementedException();
+            var treeStringWriter = new StringWriter();
+            Root.ToString(treeStringWriter);
+            return treeStringWriter.ToString();
         }
     }
 }
