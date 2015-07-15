@@ -492,9 +492,9 @@
     public partial class ExpressionCommaPair
     {
         [Required]
-        Expression expression;
-        [Required]
         Token comma;
+        [Required]
+        Expression expression;
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
