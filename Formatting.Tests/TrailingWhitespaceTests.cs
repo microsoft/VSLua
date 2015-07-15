@@ -67,19 +67,9 @@ x = x + 1";
         [Fact]
         public void TrailingWhiteSpaceBeforeEof()
         {
-            string original = @"
-x   
-     
-      
-            
-      
+            string original = @"x   
     ";
-            string expected = @"
-x
-
-
-
-
+            string expected = @"x
 ";
             GeneralTest(original, expected);
         }

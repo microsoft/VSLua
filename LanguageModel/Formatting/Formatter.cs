@@ -40,7 +40,9 @@ namespace LanguageService.Formatting
                 {
                     /* test */
                     foreach (TextEditInfo textEdit in rule.Apply(formattingContext))
-                    textEdits.Add(textEdit);
+                    {
+                        textEdits.Add(textEdit);
+                    }
                 }
             }
 

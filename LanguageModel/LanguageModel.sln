@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formatting.Tests", "..\Form
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageModel.Tests", "LanguageModel.Tests\LanguageModel.Tests.csproj", "{FD20D189-B281-4793-8940-EA9BE9428D32}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSLua", "LuaVSHost\VSLua.csproj", "{4C4E17B1-4382-460E-8308-A799C1F000C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{FD20D189-B281-4793-8940-EA9BE9428D32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD20D189-B281-4793-8940-EA9BE9428D32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD20D189-B281-4793-8940-EA9BE9428D32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C4E17B1-4382-460E-8308-A799C1F000C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C4E17B1-4382-460E-8308-A799C1F000C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C4E17B1-4382-460E-8308-A799C1F000C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C4E17B1-4382-460E-8308-A799C1F000C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

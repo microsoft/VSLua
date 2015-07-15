@@ -14,7 +14,7 @@ namespace LanguageService.Formatting
         {
             foreach (ParsedToken parsedToken in parsedTokens)
             {
-                int[] lastNewline = Indenter.GetLastNewlinePositionAndLength(parsedToken);
+                int[] lastNewline = Indenter.GetSpacePositionAndLengthAfterLastNewline(parsedToken);
 
                 if (lastNewline != null)
                 {
@@ -42,9 +42,11 @@ namespace LanguageService.Formatting
             return indentation;
         }
 
-        private static int[] GetLastNewlinePositionAndLength(ParsedToken parsedToken)
+        private static int[] GetSpacePositionAndLengthAfterLastNewline(ParsedToken parsedToken)
         {
             int length = 0;
+            int realStart = parsedToken.Token.FullStart;
+
             int start = parsedToken.Token.FullStart;
             bool foundNewline = false;
 
@@ -52,10 +54,11 @@ namespace LanguageService.Formatting
 
             for (int i = 0; i < leadingTrivia.Count; ++i)
             {
+                
                 if (leadingTrivia[i].Type == Trivia.TriviaType.Newline)
                 {
+                    realStart = start + leadingTrivia[i].Text.Length;
                     foundNewline = true;
-                    start += leadingTrivia[i].Text.Length;
                     length = 0;
                     if (i + 1 < leadingTrivia.Count &&
                         leadingTrivia[i + 1].Type == Trivia.TriviaType.Whitespace)
@@ -63,11 +66,13 @@ namespace LanguageService.Formatting
                         length = leadingTrivia[i + 1].Text.Length;
                     }
                 }
+
+                start += leadingTrivia[i].Text.Length;
             }
 
             if (foundNewline)
             {
-                return new int[2] { start, length };
+                return new int[2] { realStart, length };
             }
             return null;
         }
