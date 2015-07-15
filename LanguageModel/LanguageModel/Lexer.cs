@@ -627,7 +627,7 @@ namespace LanguageService
 			// 1e+1 <- number
 			// 1exexexexe4 <- not a number
         }
-
+       
         public static void PrintTokens(Stream stream)
         {
             IEnumerable<Token> tokenEnumerable = Lexer.Tokenize(stream);
