@@ -34,7 +34,7 @@ namespace LanguageService.Formatting
                 FormattingContext formattingContext =
                     new FormattingContext(parsedTokens[i], parsedTokens[i + 1]);
 
-                Rule rule = ruleMap.GetRule(formattingContext);
+                Rule rule = ruleMap.Get(formattingContext);
 
                 if (rule != null)
                 {

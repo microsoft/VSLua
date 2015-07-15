@@ -32,7 +32,6 @@ namespace LanguageService.Formatting.Ruling
         {
             this.ruleDescriptor = ruleDescriptor;
             this.ruleOperation = new RuleOperation(new RuleOperationContext(contextFilters), action);
-
         }
 
         private string GetTextFromAction()
@@ -43,8 +42,10 @@ namespace LanguageService.Formatting.Ruling
                     return "";
                 case RuleAction.Newline:
                     return "\n";
-                default:
+                case RuleAction.Space:
                     return " ";
+                default:
+                    return "";
             }
         }
 
@@ -53,17 +54,14 @@ namespace LanguageService.Formatting.Ruling
             return ruleOperation.Context.InContext(formattingContext);
         }
 
-        // Very simple implentation of Apply
         internal override List<TextEditInfo> Apply(FormattingContext formattingContext)
         {
-
             Token leftToken = formattingContext.CurrentToken.Token;
             Token rightToken = formattingContext.NextToken.Token;
 
             int start = leftToken.Start + leftToken.Text.Length;
             int length = rightToken.Start - start;
             string replaceWith = this.GetTextFromAction();
-
 
             return new List<TextEditInfo> { new TextEditInfo(start, length, replaceWith) };
         }

@@ -16,7 +16,7 @@ namespace LanguageService.Formatting
         internal static List<TokenType> All =
             TokenRange.Fill(
                 Enum.GetValues(typeof(TokenType)),
-                new TokenType[] { }); // Might need to add TokenType.Unknown to skip
+                new TokenType[] { });
 
         internal static List<TokenType> BinaryOperators =
             new List<TokenType>
@@ -67,7 +67,6 @@ namespace LanguageService.Formatting
 
         private static List<TokenType> Fill(Array values, TokenType[] exclude)
         {
-
             List<TokenType> tokenTypes = new List<TokenType>();
 
             foreach (TokenType tokenType in values)
@@ -77,9 +76,7 @@ namespace LanguageService.Formatting
                     tokenTypes.Add(tokenType);
                 }
             }
-
             return tokenTypes;
         }
-
     }
 }

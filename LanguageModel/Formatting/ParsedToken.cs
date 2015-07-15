@@ -8,7 +8,6 @@ namespace LanguageService.Formatting
 {
     internal sealed class ParsedToken
     {
-
         internal Token Token { get; private set; }
         internal int BlockLevel { get; private set; }
         internal SyntaxNode Node { get; private set; }
@@ -20,6 +19,8 @@ namespace LanguageService.Formatting
             this.Node = node;
         }
 
+        // This function wouldn't exist in the final version since instead of iterating
+        //   through all the tokens from the lexer, I'd just walk the parsetree from the start
         internal static List<ParsedToken> GetParsedTokens(List<Token> tokens)
         {
             List<ParsedToken> parsedTokens = new List<ParsedToken>();
@@ -42,7 +43,6 @@ namespace LanguageService.Formatting
             };
 
             int indent_level = 0;
-
             foreach (Token token in tokens)
             {
                 if (DecreaseIndentOn.Contains(token.Type))
@@ -51,16 +51,12 @@ namespace LanguageService.Formatting
                 }
 
                 indent_level = indent_level < 0 ? 0 : indent_level;
-
                 parsedTokens.Add(new ParsedToken(token, indent_level, null));
-
                 if (IncreaseIndentAfter.Contains(token.Type))
                 {
                     indent_level++;
                 }
             }
-
-
             return parsedTokens;
         }
 

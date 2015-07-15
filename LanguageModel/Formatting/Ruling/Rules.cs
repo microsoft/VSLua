@@ -77,26 +77,27 @@ namespace LanguageService.Formatting.Ruling
 
         internal static Rule DeleteTrailingWhitespace = new DeleteTrailingWhitespaceRule();
 
+        // This would create the RuleMap off the formatting options, but for now
+        //   it just adds all the avaliable rules.
         internal static RuleMap GetRuleMap()
         {
             RuleMap ruleMap = new RuleMap();
-            ruleMap.AddRule(Rules.SpaceAfterComma);
-            ruleMap.AddRule(Rules.SpaceAfterAssignmentOperator);
-            ruleMap.AddRule(Rules.SpaceAfterBinaryOperator);
-            ruleMap.AddRule(Rules.SpaceAfterValueBeforeCloseCurlyBrace);
-            ruleMap.AddRule(Rules.SpaceAfterValueBeforeCloseParenthesis);
-            ruleMap.AddRule(Rules.SpaceAfterValueBeforeCloseSquareBracket);
-            ruleMap.AddRule(Rules.SpaceAfterValueBeforeOpenParenthesis);
-            ruleMap.AddRule(Rules.SpaceBeforeAssignmentOperator);
-            ruleMap.AddRule(Rules.SpaceBeforeBinaryOperator);
-            ruleMap.AddRule(Rules.SpaceBeforeValueAfterOpenCurlyBrace);
-            ruleMap.AddRule(Rules.SpaceBeforeValueAfterOpenParenthesis);
-            ruleMap.AddRule(Rules.SpaceBeforeValueAfterOpenSquareBracket);
-            ruleMap.AddRule(Rules.DeleteTrailingWhitespace);
-            ruleMap.AddRule(Rules.DeleteSpaceBeforeEofToken);
+            ruleMap.Add(Rules.SpaceAfterComma);
+            ruleMap.Add(Rules.SpaceAfterAssignmentOperator);
+            ruleMap.Add(Rules.SpaceAfterBinaryOperator);
+            ruleMap.Add(Rules.SpaceAfterValueBeforeCloseCurlyBrace);
+            ruleMap.Add(Rules.SpaceAfterValueBeforeCloseParenthesis);
+            ruleMap.Add(Rules.SpaceAfterValueBeforeCloseSquareBracket);
+            ruleMap.Add(Rules.SpaceAfterValueBeforeOpenParenthesis);
+            ruleMap.Add(Rules.SpaceBeforeAssignmentOperator);
+            ruleMap.Add(Rules.SpaceBeforeBinaryOperator);
+            ruleMap.Add(Rules.SpaceBeforeValueAfterOpenCurlyBrace);
+            ruleMap.Add(Rules.SpaceBeforeValueAfterOpenParenthesis);
+            ruleMap.Add(Rules.SpaceBeforeValueAfterOpenSquareBracket);
+            ruleMap.Add(Rules.DeleteTrailingWhitespace);
+            ruleMap.Add(Rules.DeleteSpaceBeforeEofToken);
             return ruleMap;
         }
-
 
         internal static bool TokensAreOnSameLine(FormattingContext formattingContext)
         {

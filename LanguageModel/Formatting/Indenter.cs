@@ -8,8 +8,6 @@ namespace LanguageService.Formatting
 {
     internal class Indenter
     {
-
-
         internal static IEnumerable<TextEditInfo> GetIndentations(List<ParsedToken> parsedTokens)
         {
             foreach (ParsedToken parsedToken in parsedTokens)

@@ -13,18 +13,11 @@ namespace LanguageService.Formatting.Ruling
 
         internal RuleMap()
         {
-            if (map != null)
-            {
-                map = null;
-            }
-
             int length = Enum.GetNames(typeof(TokenType)).Length;
-
             this.map = new RuleBucket[length, length];
-
         }
 
-        internal void AddRule(Rule rule)
+        internal void Add(Rule rule)
         {
             foreach (TokenType typeLeft in rule.RuleDescriptor.TokenRangeLeft)
             {
@@ -38,30 +31,24 @@ namespace LanguageService.Formatting.Ruling
                     {
                         bucket = new RuleBucket();
                     }
-
                     bucket.Add(rule);
                     this.map[column, row] = bucket;
-
                 }
             }
         }
 
-        internal Rule GetRule(FormattingContext formattingContext)
+        internal Rule Get(FormattingContext formattingContext)
         {
             int column = (int)formattingContext.CurrentToken.Token.Type;
             int row = (int)formattingContext.NextToken.Token.Type;
 
-            RuleBucket ruleBucket = this.map[column,row];
-            
+            RuleBucket ruleBucket = this.map[column, row];
+
             if (ruleBucket != null)
             {
                 return ruleBucket.Get(formattingContext);
             }
-
             return null;
-
         }
-
-
     }
 }

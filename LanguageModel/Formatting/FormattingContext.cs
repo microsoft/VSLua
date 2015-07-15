@@ -38,7 +38,5 @@ namespace LanguageService.Formatting
         {
             return !this.IsTriviaInBetween(Trivia.TriviaType.Newline);
         }
-        
-
     }
 }

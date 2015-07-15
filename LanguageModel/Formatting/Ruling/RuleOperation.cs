@@ -16,6 +16,5 @@ namespace LanguageService.Formatting.Ruling
             this.Action = action;
             this.Context = context;
         }
-
     }
 }

@@ -19,10 +19,8 @@ namespace LanguageService.Formatting.Ruling
         internal override List<TextEditInfo> Apply(FormattingContext formattingContext)
         {
             Token nextToken = formattingContext.NextToken.Token;
-
-            // flag for the end of file token where whitespace should be skipped
+            // flag for the end of file token where whitespace should be deleted
             List<TextEditInfo> edits = this.GetEdits(nextToken, nextToken.Type == TokenType.EndOfFile);
-
             return edits;
         }
 
@@ -38,7 +36,6 @@ namespace LanguageService.Formatting.Ruling
             for (int i = 0; i < leadingTrivia.Count; ++i)
             {
                 length = leadingTrivia[i].Text.Length;
-                
                 if (
                     // this is to delete all whitespace that is before a newline
                     (i + 1 < leadingTrivia.Count &&
@@ -50,10 +47,8 @@ namespace LanguageService.Formatting.Ruling
                 {
                     edits.Add(new TextEditInfo(start, length, ""));
                 }
-
                 start += length;
             }
-
             return edits;
         }
     }
