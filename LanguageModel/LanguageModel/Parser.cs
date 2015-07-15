@@ -213,7 +213,7 @@ namespace LanguageService
                         return MissingNode.Create(start,0).ToExpList(null); //TODO: is this okay???????
                     } else
                     {
-                        expressions.Add(ExpressionCommaPair.Create(MissingNode.Create(currentToken.FullStart, 0).ToExpression(), null)); //TODO: is this okay???????
+                        expressions.Add(ExpressionCommaPair.Create(MissingNode.Create(currentToken.FullStart, 0).ToSimpleExpression(null), null)); //TODO: is this okay???????
                         searchForExps = false;
                     }
                 }
@@ -307,7 +307,7 @@ namespace LanguageService
                         exp = SimpleExpression.Create(NextToken().Start, currentToken.Length, currentToken);
                         break;
                     case TokenType.FunctionKeyword:
-                        exp = ParseFunctionDef().ToExpression(); //TODO: is this okay????
+                        exp = ParseFunctionDef(); //TODO: is this okay????
                         break;
                     case TokenType.OpenParen:
                         exp = ParseParenPrefixExp();

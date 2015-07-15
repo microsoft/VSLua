@@ -19,43 +19,34 @@
         [Required]
         int length;
 
-        internal void ToString(TextWriter writer)
+        internal virtual void ToString(TextWriter writer)
         {
             var indentingWriter = IndentingTextWriter.Get(writer);
-            using (indentingWriter.Indent())
-            {
-                indentingWriter.WriteLine("Node");
-            }
-
-            //indentingWriter.WriteLine("ChunkNode");
-            //using (indentingWriter.Indent())
-            //{
-            //    indentingWriter.WriteLine("Block");
-            //    using (indentingWriter.Indent())
-            //    {
-            //        programBlock.ToString(indentingWriter);
-            //    }
-
-            //    indentingWriter.WriteLine("EndOfFile");
-            //    using (indentingWriter.Indent())
-            //    {
-            //        //TODO endOfFile.ToString(indentingWriter);
-            //        indentingWriter.WriteLine("luluul");
-            //    }
-            //}
-            throw new NotImplementedException();
+            indentingWriter.WriteLine("Syntax Node");
         }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class MissingNode : SyntaxNode
     {
+        //TODO: add missing type
+        internal override void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine("Missing Node");
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class MisplacedToken : SyntaxNode
     {
         Token token;
+
+        internal override void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine("Missing Token: " + token.ToString());
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -72,19 +63,14 @@
             indentingWriter.WriteLine("ChunkNode");
             using (indentingWriter.Indent())
             {
-                indentingWriter.WriteLine("Block");
-                using (indentingWriter.Indent())
-                {
-                    programBlock.ToString(indentingWriter);
-                }
-
-                indentingWriter.WriteLine("EndOfFile");
-                using (indentingWriter.Indent())
-                {
-                    //TODO endOfFile.ToString(indentingWriter);
-                    indentingWriter.WriteLine("luluul");
-                }
+                programBlock.ToString(indentingWriter);
             }
+            
+            using (indentingWriter.Indent())
+            {
+                indentingWriter.WriteLine(endOfFile.ToString());
+            }
+
         }
     }
 
@@ -95,28 +81,25 @@
         ImmutableList<SyntaxNode> children;
         RetStat returnStatement;
 
-        internal void ToString(TextWriter writer)
+        internal override void ToString(TextWriter writer)
         {
             var indentingWriter = IndentingTextWriter.Get(writer);
             indentingWriter.WriteLine("Block");
-            using (indentingWriter.Indent())
+            foreach (var child in this.children)
             {
-                indentingWriter.WriteLine("Children");
-                foreach (var child in this.children)
-                {
-                    using (indentingWriter.Indent())
-                    {
-                        child.ToString(indentingWriter);
-                    }
-                }
-
-                indentingWriter.WriteLine("RetStat");
                 using (indentingWriter.Indent())
                 {
-                    //TODO endOfFile.ToString(indentingWriter);
-                    indentingWriter.WriteLine("luluul");
+                    child.ToString(indentingWriter);
                 }
-            };
+            }
+
+            if(returnStatement != null)
+            {
+                using (indentingWriter.Indent())
+                {
+                    returnStatement.ToString(indentingWriter);
+                }
+            }            
         }
     }
 
@@ -127,6 +110,16 @@
         Token returnKeyword;
         ExpList returnExpressions;
         //Token semiColonRetStat; TODO: decide if necessary?
+
+        internal override void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine("RetStat");
+            using (indentingWriter.Indent())
+            {
+                indentingWriter.WriteLine("explist... implement"); //TODO
+            }
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -137,6 +130,16 @@
         FieldList fieldList;
         [Required]
         Token closeCurly;
+
+        internal override void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine("TableConstructor");
+            using (indentingWriter.Indent())
+            {
+                FieldList.ToString(indentingWriter);
+            }
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -190,6 +193,12 @@
     public partial class SemiColonStatement : SyntaxNode
     {
         Token token;
+
+        internal override void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine(token.ToString());
+        }
     }
 
     #endregion
@@ -285,6 +294,11 @@
         Token assignmentOperator;
         [Required]
         Expression assignedExp;
+
+        internal override void ToString(TextWriter indentingWriter)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -331,6 +345,21 @@
         readonly Token thenKeyword;
         [Required]
         readonly Block block;
+
+        internal void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine("ElseIfBlock: ");
+            using (indentingWriter.Indent())
+            {
+                exp.ToString(indentingWriter);
+            }
+
+            using (indentingWriter.Indent())
+            {
+                block.ToString(indentingWriter);
+            }
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -348,12 +377,48 @@
         readonly ElseBlock elseBlock;
         [Required]
         readonly Token endKeyword;
+
+        internal override void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine("IfNode");
+            using (indentingWriter.Indent())
+            {
+                exp.ToString(indentingWriter);
+            }
+
+            using (indentingWriter.Indent())
+            {
+                ifBlock.ToString(indentingWriter);
+            }
+
+            if(elseIfList != null)
+            {
+                foreach(var block in elseIfList)
+                {
+                    using (indentingWriter.Indent())
+                    {
+                        block.ToString(indentingWriter);
+                    }
+                }
+            }
+
+            if(elseBlock != null)
+            {
+                using (indentingWriter.Indent())
+                {
+                    elseBlock.ToString(indentingWriter);
+                }
+            }
+        }
     }
     #endregion
 
     #region Expression nodes
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class Expression : SyntaxNode { }
+    public abstract partial class Expression : SyntaxNode
+    {
+    }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class SimpleExpression : Expression
@@ -375,18 +440,17 @@
                     return false;
             }
         }
-    }
 
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class ComplexExpression : Expression
-    {
-        [Required]
-        SyntaxNode expressionValue;
-
-        public static bool IsValidExpressionNode(SyntaxNode node)
+        internal override void ToString(TextWriter writer)
         {
-            return (node is FunctionDef || node is PrefixExp || node is TableConstructor);
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine("Expression:\t" + expressionValue.ToString());
+            //using (indentingWriter.Indent())
+            //{
+            //    indentingWriter.WriteLine(expressionValue.ToString());
+            //}
         }
+
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -398,6 +462,24 @@
         Token binop;
         [Required]
         Expression exp2;
+
+        internal override void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine("Expression");
+            using (indentingWriter.Indent())
+            {
+                exp1.ToString(indentingWriter);
+            }
+            using (indentingWriter.Indent())
+            {
+                indentingWriter.WriteLine(binop.ToString());
+            }
+            using (indentingWriter.Indent())
+            {
+                exp2.ToString(indentingWriter);
+            }
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -407,6 +489,20 @@
         Token unop;
         [Required]
         Expression exp;
+
+        internal override void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine("Expression");
+            using (indentingWriter.Indent())
+            {
+                indentingWriter.WriteLine(unop.ToString());
+            }
+            using (indentingWriter.Indent())
+            {
+                exp.ToString(indentingWriter);
+            }
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -417,12 +513,23 @@
         FieldList fieldList;
         [Required]
         Token closeCurly;
+        internal override void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine("TableConstructor");
+            using (indentingWriter.Indent())
+            {
+                FieldList.ToString(indentingWriter);
+            }
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class FunctionDef : SyntaxNode
+    public partial class FunctionDef : Expression
     {
+        [Required]
         Token functionKeyword;
+        [Required]
         FuncBody functionBody;
     }
 
@@ -483,6 +590,16 @@
         Expression exp;
         [Required]
         Token closeParen;
+
+        internal override void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine("ParenPrefixExp");
+            using (indentingWriter.Indent())
+            {
+                exp.ToString(indentingWriter);
+            }
+        }
     }
     #endregion
 

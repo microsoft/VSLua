@@ -95,19 +95,6 @@ namespace LanguageService
             this.Length = Text.Length; //TODO: correct?
         }
 
-        //public Token(bool generateMissingToken, int position) //TODO: bad practice?
-        //{
-        //    if (generateMissingToken)
-        //    {
-        //        this.Type = TokenType.MissingToken;
-        //        this.Text = "";
-        //        this.LeadingTrivia = null;
-        //        this.FullStart = position;
-        //        this.Start = position;
-        //        this.Length = 0; //TODO: correct?
-        //    } 
-        //}
-
         public static Token CreateMissingToken(int position)
         {
             return new Token(TokenType.MissingToken, "", null, position, position);
@@ -117,21 +104,21 @@ namespace LanguageService
         {
 
             StringBuilder sb = new StringBuilder();
-            sb.Append("==============================================\nTrivia:\n");
+            //sb.Append("==============================================\nTrivia:\n");
 
-            foreach (Trivia triv in LeadingTrivia)
-            {
-                sb.Append("\t");
-                sb.Append(triv.ToString());
-                sb.Append("\n");
-            }
+            //foreach (Trivia triv in LeadingTrivia)
+            //{
+            //    sb.Append("\t");
+            //    sb.Append(triv.ToString());
+            //    sb.Append("\n");
+            //}
 
-            sb.Append("Data:\n\t");
+            //sb.Append("Data:\n\t");
             sb.Append(this.Type.ToString());
             sb.Append("\t");
             sb.Append(Text);
-            sb.Append("\t");
-            sb.Append(Start);
+            //sb.Append("\t");
+            //sb.Append(Start);
 
             return sb.ToString();
         }

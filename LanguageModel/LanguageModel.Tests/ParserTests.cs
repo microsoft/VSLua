@@ -82,6 +82,7 @@ namespace LanguageService.Tests
 
             Assert.Equal(expected.ToString(), tree.ToString());
 
+            Debug.WriteLine(expected.ToString());
 
             Assert.Equal(tree.Root.ProgramBlock.ReturnStatement, null);
             Assert.Equal(1, tree.Root.ProgramBlock.Children.Count);

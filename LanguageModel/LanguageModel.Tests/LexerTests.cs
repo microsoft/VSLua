@@ -202,10 +202,6 @@ namespace LanguageService.Tests
             };
 
             Assert.Equal(compareTrivia, allTrivia);
-
-
-
-
         }
 
         [Fact]
