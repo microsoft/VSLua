@@ -121,17 +121,17 @@ namespace LanguageService.Formatting.Ruling
             return ruleMap;
         }
 
-        internal static bool TokensAreOnSameLine(FormattingContext formattingContext)
+        internal static bool TokensAreOnSameLine(ref FormattingContext formattingContext)
         {
             return formattingContext.TokensOnSameLine();
         }
 
-        internal static bool TokensAreNotOnSameLine(FormattingContext formattingContext)
+        internal static bool TokensAreNotOnSameLine(ref FormattingContext formattingContext)
         {
             return !formattingContext.TokensOnSameLine();
         }
 
-        internal static bool NoCommentBetweenTokens(FormattingContext formattingContext)
+        internal static bool NoCommentBetweenTokens(ref FormattingContext formattingContext)
         {
             return !formattingContext.CommentsInBetween();
         }

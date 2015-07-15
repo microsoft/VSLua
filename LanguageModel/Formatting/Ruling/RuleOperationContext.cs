@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace LanguageService.Formatting.Ruling
 {
 
-    internal delegate bool ContextFilter(FormattingContext formattingContext);
+    internal delegate bool ContextFilter(ref FormattingContext formattingContext);
 
     internal class RuleOperationContext
     {
@@ -18,11 +18,11 @@ namespace LanguageService.Formatting.Ruling
             this.contextFilters = contextFilters;
         }
 
-        internal bool InContext(FormattingContext formattingContext)
+        internal bool InContext(ref FormattingContext formattingContext)
         {
             foreach (ContextFilter contextFilter in contextFilters)
             {
-                if (!contextFilter(formattingContext))
+                if (!contextFilter(ref formattingContext))
                 {
                     return false;
                 }

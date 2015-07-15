@@ -38,11 +38,11 @@ namespace LanguageService.Formatting
                 FormattingContext formattingContext =
                     new FormattingContext(parsedTokens[i], parsedTokens[i + 1]);
 
-                Rule rule = ruleMap.Get(formattingContext);
+                Rule rule = ruleMap.Get(ref formattingContext);
 
                 if (rule != null)
                 {
-                    foreach (TextEditInfo textEdit in rule.Apply(formattingContext))
+                    foreach (TextEditInfo textEdit in rule.Apply(ref formattingContext))
                     {
                         textEdits.Add(textEdit);
                     }

@@ -49,12 +49,12 @@ namespace LanguageService.Formatting.Ruling
             }
         }
 
-        internal override bool AppliesTo(FormattingContext formattingContext)
+        internal override bool AppliesTo(ref FormattingContext formattingContext)
         {
-            return ruleOperation.Context.InContext(formattingContext);
+            return ruleOperation.Context.InContext(ref formattingContext);
         }
 
-        internal override List<TextEditInfo> Apply(FormattingContext formattingContext)
+        internal override List<TextEditInfo> Apply(ref FormattingContext formattingContext)
         {
             Token leftToken = formattingContext.CurrentToken.Token;
             Token rightToken = formattingContext.NextToken.Token;

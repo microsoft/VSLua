@@ -11,7 +11,7 @@ namespace LanguageService.Formatting.Ruling
         internal abstract RuleDescriptor RuleDescriptor { get; }
         internal abstract RuleOperation RuleOperationContext { get; }
 
-        internal abstract bool AppliesTo(FormattingContext formattingContext);
-        internal abstract List<TextEditInfo> Apply(FormattingContext formattingContext);
+        internal abstract bool AppliesTo(ref FormattingContext formattingContext);
+        internal abstract List<TextEditInfo> Apply(ref FormattingContext formattingContext);
     }
 }

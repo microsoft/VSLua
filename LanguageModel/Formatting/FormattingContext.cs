@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LanguageService.Formatting
 {
-    internal class FormattingContext
+    internal struct FormattingContext
     {
         internal ParsedToken CurrentToken { get; private set; }
         internal ParsedToken NextToken { get; private set; }

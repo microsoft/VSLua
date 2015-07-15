@@ -37,7 +37,7 @@ namespace LanguageService.Formatting.Ruling
             }
         }
 
-        internal Rule Get(FormattingContext formattingContext)
+        internal Rule Get(ref FormattingContext formattingContext)
         {
             int column = (int)formattingContext.CurrentToken.Token.Type;
             int row = (int)formattingContext.NextToken.Token.Type;
@@ -46,7 +46,7 @@ namespace LanguageService.Formatting.Ruling
 
             if (ruleBucket != null)
             {
-                return ruleBucket.Get(formattingContext);
+                return ruleBucket.Get(ref formattingContext);
             }
             return null;
         }
