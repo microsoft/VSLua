@@ -75,6 +75,24 @@ namespace LanguageService.Formatting.Ruling
             new SimpleRule(new RuleDescriptor(TokenRange.AnyVisible, TokenType.EndOfFile),
                 defaultFilters, RuleAction.Delete);
 
+        internal static Rule DeleteSpaceAfterValueBeforeDot =
+            new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.Dot),
+                defaultFilters, RuleAction.Delete);
+
+        internal static Rule DeleteSpaceBeforeValueAfterDot =
+            new SimpleRule(new RuleDescriptor(TokenType.Dot, TokenRange.Value),
+                defaultFilters, RuleAction.Delete);
+
+        internal static Rule DeleteSpaceAfterValueBeforeColon =
+            new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.Colon),
+                defaultFilters, RuleAction.Delete);
+
+        internal static Rule DeleteSpaceBeforeValueAfterColon =
+            new SimpleRule(new RuleDescriptor(TokenType.Colon, TokenRange.Value),
+                defaultFilters, RuleAction.Delete);
+
+
+
         internal static Rule DeleteTrailingWhitespace = new DeleteTrailingWhitespaceRule();
 
         // This would create the RuleMap off the formatting options, but for now
@@ -96,6 +114,10 @@ namespace LanguageService.Formatting.Ruling
             ruleMap.Add(Rules.SpaceBeforeValueAfterOpenSquareBracket);
             ruleMap.Add(Rules.DeleteTrailingWhitespace);
             ruleMap.Add(Rules.DeleteSpaceBeforeEofToken);
+            ruleMap.Add(Rules.DeleteSpaceAfterValueBeforeColon);
+            ruleMap.Add(Rules.DeleteSpaceAfterValueBeforeDot);
+            ruleMap.Add(Rules.DeleteSpaceBeforeValueAfterColon);
+            ruleMap.Add(Rules.DeleteSpaceBeforeValueAfterDot);
             return ruleMap;
         }
 

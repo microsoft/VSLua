@@ -39,7 +39,7 @@ namespace LanguageService.Formatting
                 TokenType.EndKeyword,
                 TokenType.ElseIfKeyword,
                 TokenType.CloseCurlyBrace,
-                TokenType.ElseKeyword
+                TokenType.ElseKeyword,
             };
 
             int indent_level = 0;
@@ -56,6 +56,12 @@ namespace LanguageService.Formatting
                 {
                     indent_level++;
                 }
+
+                if (token.Type == TokenType.ReturnKeyword)
+                {
+                    indent_level--;
+                }
+
             }
             return parsedTokens;
         }
