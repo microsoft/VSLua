@@ -33,6 +33,7 @@ namespace LanguageService
             positionInTokenList = -1; //Issue: bad practice?
         }
 
+        //TODO: remove string filename param and take a StreamReader
         public SyntaxTree CreateSyntaxTree(string filename)
         {
             Stream luaStream = File.OpenRead(filename);
@@ -41,7 +42,7 @@ namespace LanguageService
             return new SyntaxTree(filename, root, errorList);
         }
 
-        //Question: should this be wrapped in its own class?
+        //Question: should the TokenList Accessing logic be wrapped in its own class?
         #region tokenList Accessors 
         private Token NextToken()
         {
@@ -113,7 +114,7 @@ namespace LanguageService
         {
             var node = ChunkNode.CreateBuilder();
             node.StartPosition = Peek().FullStart; //Question: okay to use peek? It is assumed here that Index is at -1, contract is that token is only consumed when parser is sure what to do with it.
-            node.ProgramBlock = ParseBlock(Context.ProgramContext).ToBuilder();
+            node.ProgramBlock = ParseBlock(Context.ProgramContext)?.ToBuilder();
 
             if (ParseExpected(TokenType.EndOfFile))
             {
@@ -146,7 +147,7 @@ namespace LanguageService
 
             if (Peek().Type == TokenType.ReturnKeyword)
             {
-                node.ReturnStatement = ParseRetStat().ToBuilder(); //Question if builder returns null... to bulder pattern?
+                node.ReturnStatement = ParseRetStat()?.ToBuilder();
             }
 
             node.Length = currentToken.End - node.StartPosition;
@@ -155,7 +156,7 @@ namespace LanguageService
         }
 
         private SyntaxNode ParseStatement()
-        {//TODO check if it follows contract to recive position where current is already consumed?
+        {
             switch (Peek().Type)
             {
                 case TokenType.SemiColon:
@@ -201,9 +202,9 @@ namespace LanguageService
             var node = IfNode.CreateBuilder();
             node.StartPosition = Peek().Start;
             node.IfKeyword = GetExpectedToken(TokenType.IfKeyword);
-            node.Exp = ParseExpression().ToBuilder();
+            node.Exp = ParseExpression()?.ToBuilder();
             node.ThenKeyword = GetExpectedToken(TokenType.ThenKeyword); //Question @cyrus: do context analysis vs. just returning a missing token?
-            node.IfBlock = ParseBlock(Context.IfBlockContext).ToBuilder();
+            node.IfBlock = ParseBlock(Context.IfBlockContext)?.ToBuilder();
 
             if(Peek().Type == TokenType.ElseIfKeyword)
             {
@@ -212,7 +213,7 @@ namespace LanguageService
 
             if (Peek().Type == TokenType.ElseIfKeyword)
             {
-                node.ElseBlock = ParseElseBlock().ToBuilder();
+                node.ElseBlock = ParseElseBlock()?.ToBuilder();
             }
                 
             node.EndKeyword = GetExpectedToken(TokenType.EndKeyword);
@@ -233,7 +234,7 @@ namespace LanguageService
                 var node = UnopExpression.CreateBuilder();
                 node.StartPosition = currentToken.Start;
                 node.Unop = currentToken;
-                node.Exp = ParseExpression().ToBuilder();
+                node.Exp = ParseExpression()?.ToBuilder();
                 exp = node.ToImmutable();
             }
             else
@@ -262,7 +263,7 @@ namespace LanguageService
                         exp = ParsePrefixExp();
                         break;
                     default:
-                        exp = null; ////Question @cyrus: correct?
+                        exp = null; //Question @cyrus: correct?
                         break;
                 }
             }
@@ -288,7 +289,7 @@ namespace LanguageService
             var node = ElseBlock.CreateBuilder();
             node.StartPosition = currentToken.Start;
             node.ElseKeyword = currentToken;
-            node.Block = ParseBlock(Context.ElseBlock).ToBuilder();
+            node.Block = ParseBlock(Context.ElseBlock)?.ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -314,9 +315,9 @@ namespace LanguageService
             var node = ElseIfBlock.CreateBuilder();
             node.StartPosition = currentToken.Start;
             node.ElseIfKeyword = currentToken;
-            node.Exp = ParseExpression().ToBuilder();
+            node.Exp = ParseExpression()?.ToBuilder();
             node.ThenKeyword = GetExpectedToken(TokenType.ThenKeyword);
-            node.Block = ParseBlock(Context.ElseIfBlock).ToBuilder();
+            node.Block = ParseBlock(Context.ElseIfBlock)?.ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
 
             return node.ToImmutable();
@@ -342,7 +343,7 @@ namespace LanguageService
             var node = RetStat.CreateBuilder();
             node.StartPosition = currentToken.Start;
             node.ReturnKeyword = currentToken;
-            node.ReturnExpressions = ParseExpList().ToBuilder();
+            node.ReturnExpressions = ParseExpList()?.ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -352,7 +353,7 @@ namespace LanguageService
             var node = TableConstructor.CreateBuilder();
             node.StartPosition = Peek().Start;
             node.OpenCurly = GetExpectedToken(TokenType.OpenCurlyBrace);
-            node.FieldList = ParseFieldList().ToBuilder();
+            node.FieldList = ParseFieldList()?.ToBuilder();
             node.CloseCurly = GetExpectedToken(TokenType.CloseCurlyBrace);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -363,7 +364,7 @@ namespace LanguageService
             var node = TableConstructorExp.CreateBuilder();
             node.StartPosition = Peek().Start;
             node.OpenCurly = GetExpectedToken(TokenType.OpenCurlyBrace);
-            node.FieldList = ParseFieldList().ToBuilder();
+            node.FieldList = ParseFieldList()?.ToBuilder();
             node.CloseCurly = GetExpectedToken(TokenType.CloseCurlyBrace);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -372,39 +373,40 @@ namespace LanguageService
         private FieldList ParseFieldList()
         {
             //TODO: complete implementation... not well tested.
-            var node = FieldList.CreateBuilder();
-            node.StartPosition = Peek().Start; //TODO: inconsistant start and end...
-            bool parseFields = true;
-            var fields = new List<FieldAndSeperatorPair>();
+            return null;
+            //var node = FieldList.CreateBuilder();
+            //node.StartPosition = Peek().Start;
+            //bool parseFields = true;
+            //var fields = new List<FieldAndSeperatorPair>();
 
-            while (parseFields)
-            {
-                var fieldAndSep = FieldAndSeperatorPair.CreateBuilder();
-                fieldAndSep.Field = ParseField().ToBuilder();
-                if (ParseExpected(TokenType.Comma) || ParseExpected(TokenType.SemiColon))
-                {
-                    fieldAndSep.FieldSeparator = currentToken;
-                    parseFields = true;
-                }
-                else
-                {
-                    if (Peek().Type == TokenType.CloseCurlyBrace)
-                    {
-                        parseFields = false;
-                    }
-                    else
-                    {
-                        fieldAndSep.FieldSeparator = Token.CreateMissingToken(currentToken.End);
-                        parseFields = true;
-                    }
-                    fields.Add(fieldAndSep.ToImmutable());
-                }
-            }
+            //while (parseFields)
+            //{
+            //    var fieldAndSep = FieldAndSeperatorPair.CreateBuilder();
+            //    fieldAndSep.Field = ParseField()?.ToBuilder();
+            //    if (ParseExpected(TokenType.Comma) || ParseExpected(TokenType.SemiColon))
+            //    {
+            //        fieldAndSep.FieldSeparator = currentToken;
+            //        parseFields = true;
+            //    }
+            //    else
+            //    {
+            //        if (Peek().Type == TokenType.CloseCurlyBrace)
+            //        {
+            //            parseFields = false;
+            //        }
+            //        else
+            //        {
+            //            fieldAndSep.FieldSeparator = Token.CreateMissingToken(currentToken.End);
+            //            parseFields = true;
+            //        }
+            //        fields.Add(fieldAndSep.ToImmutable());
+            //    }
+            //}
 
-            node.Fields = fields.ToImmutableList();
-            node.Length = currentToken.End - node.StartPosition;
+            //node.Fields = fields.ToImmutableList();
+            //node.Length = currentToken.End - node.StartPosition;
 
-            return node.ToImmutable();
+            //return node.ToImmutable();
         }
 
         private Field ParseField()
@@ -434,7 +436,7 @@ namespace LanguageService
         {
             var node = ExpField.CreateBuilder();
             node.StartPosition = currentToken.End;
-            node.Exp = ParseExpression().ToBuilder();
+            node.Exp = ParseExpression()?.ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -444,7 +446,7 @@ namespace LanguageService
             var node = ParenPrefixExp.CreateBuilder();
             node.StartPosition = currentToken.Start;
             node.OpenParen = GetExpectedToken(TokenType.OpenParen);
-            node.Exp = ParseExpression().ToBuilder(); //Question... null
+            node.Exp = ParseExpression()?.ToBuilder();
             node.CloseParen = GetExpectedToken(TokenType.CloseParen);
             node.Length = currentToken.End;
             return node.ToImmutable();
@@ -455,7 +457,7 @@ namespace LanguageService
             var node = FunctionDef.CreateBuilder();
             node.StartPosition = Peek().Start;
             node.FunctionKeyword = GetExpectedToken(TokenType.FunctionKeyword);
-            node.FunctionBody = ParseFunctionBody().ToBuilder();
+            node.FunctionBody = ParseFunctionBody()?.ToBuilder();
             node.Length = Peek().FullStart - node.StartPosition - 1;
             return node.ToImmutable();
         }
@@ -465,9 +467,9 @@ namespace LanguageService
             var node = FuncBody.CreateBuilder();
             node.StartPosition = Peek().Start;
             node.OpenParen = GetExpectedToken(TokenType.OpenParen);
-            node.ParameterList = ParseParList().ToBuilder();
+            node.ParameterList = ParseParList()?.ToBuilder();
             node.CloseParen = GetExpectedToken(TokenType.CloseParen);
-            node.Block = ParseBlock(Context.FuncBodyContext).ToBuilder();
+            node.Block = ParseBlock(Context.FuncBodyContext)?.ToBuilder();
             node.EndKeyword = GetExpectedToken(TokenType.EndKeyword);
             node.Length = Peek().FullStart - node.StartPosition - 1;
             return node.ToImmutable();
