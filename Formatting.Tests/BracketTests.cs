@@ -35,21 +35,21 @@ namespace Formatting.Tests
         [Fact]
         public void CommentCurly()
         {
-            string original = "t = {1--[[ comment ]]}";
+            string original = "t = { 1--[[ comment ]]}";
             GeneralTest(original, original);
         }
 
         [Fact]
         public void CommentSquare()
         {
-            string original = "t = [1--[[ comment ]]]";
+            string original = "t = [ 1--[[ comment ]]]";
             GeneralTest(original, original);
         }
 
         [Fact]
         public void CommentParen()
         {
-            string original = "foo(1--[[ comment ]])";
+            string original = "foo ( 1--[[ comment ]])";
             GeneralTest(original, original);
         }
 
@@ -107,10 +107,10 @@ t = [
         {
             string original = @"
 foo = function (
-a, b, c)";
+    a, b, c)";
             string expected = @"
 foo = function (
-a, b, c )";
+    a, b, c )";
             GeneralTest(original, expected);
         }
 

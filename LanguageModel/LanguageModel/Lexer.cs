@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace LanguageService
 {
@@ -74,7 +75,7 @@ namespace LanguageService
         };
 
         private const char Eof = unchecked((char)-1);
-        private static readonly char[] longCommentID1 = { '-', '[','[' };
+        private static readonly char[] longCommentID1 = { '-', '[', '[' };
         private static readonly char[] longCommentID2 = { '-', '[', '=' }; //TODO: flawed approach? what if --[=asdfadf]?
 
         public static Dictionary<string, TokenType> Symbols1
@@ -117,7 +118,7 @@ namespace LanguageService
             do
             {
                 next = stream.Peek();
-                
+
                 switch (next)
                 {
                     case ' ':
@@ -131,7 +132,7 @@ namespace LanguageService
                         triviaList.Add(newLineTrivia);
                         break;
 
-                   case '\r': //TODO: Is this is just completely redundant IMO.
+                    case '\r': //TODO: Is this is just completely redundant IMO.
                         isTrivia = true;
                         stream.ReadChar();
                         next = stream.Peek();
@@ -142,7 +143,8 @@ namespace LanguageService
                         {
                             stream.ReadChar();
                             returnTrivia = new Trivia(Trivia.TriviaType.Newline, "\r\n");
-                        } else
+                        }
+                        else
                         {
                             returnTrivia = new Trivia(Trivia.TriviaType.Newline, "\r");
                         }
@@ -151,24 +153,35 @@ namespace LanguageService
                         break;
 
                     case '-':
-                                                
+
                         stream.ReadChar();
 
-                        if(stream.Peek() == '-')
+                        if (stream.Peek() == '-')
                         {
                             isTrivia = true;
+                            stream.ReadChar();
+                            string commentSoFar = "";
 
-							char[] currentCommentID = { stream.Peek(1), stream.Peek(2), stream.Peek(3) };
+                            int? level = Lexer.GetLongCommentOpenBracket(stream, ref commentSoFar);
 
-                            if (currentCommentID.SequenceEqual(longCommentID1) || (currentCommentID.SequenceEqual(longCommentID2)))
+                            if (level != null)
                             {
-								stream.Read(currentCommentID, 0, longCommentID1.Length);
-                                triviaList.Add(ReadLongComment(stream, currentCommentID));
+                                triviaList.Add(ReadLongComment(stream, "--"+commentSoFar, level));
                             }
                             else
                             {
-                                triviaList.Add(ReadLineComment(stream, new char[]{ }));
+                                triviaList.Add(ReadLineComment(stream, new char[] { '-', '-' }));
                             }
+
+                            //if (currentCommentID.SequenceEqual(longCommentID1) || (currentCommentID.SequenceEqual(longCommentID2)))
+                            //{
+                            //    stream.Read(currentCommentID, 0, longCommentID1.Length);
+                            //    triviaList.Add(ReadLongComment(stream, currentCommentID));
+                            //}
+                            //else
+                            //{
+                            //    triviaList.Add(ReadLineComment(stream, new char[] { }));
+                            //}
                         }
                         else
                         {
@@ -186,6 +199,53 @@ namespace LanguageService
 
             return triviaList;
         }
+
+        private static Trivia ReadLongComment(Stream stream, string commentSoFar, int? level)
+        {
+            if (level == null)
+            {
+                // throw some error
+            }
+
+            Regex closeBracketPattern = new Regex(@"\]={"+ level.ToString() + @"}\]");
+
+            while (!closeBracketPattern.IsMatch(commentSoFar))
+            {
+                commentSoFar += stream.ReadChar();
+            }
+
+            return new Trivia(Trivia.TriviaType.Comment, commentSoFar);
+        }
+
+        private static int? GetLongCommentOpenBracket(Stream stream, ref string commentSoFar)
+        {
+            if (stream.Peek() != '[')
+            {
+                return null;
+            }
+            Regex openBracketPattern = new Regex(@"=*\[");
+            int previousMatchLength = 0;
+            commentSoFar += stream.ReadChar();
+            while (true)
+            {
+                char c = stream.Peek();
+                // I just need something to work right now... (don't really care for efficiency)
+                Match match = openBracketPattern.Match(commentSoFar);
+                if (match.Length > previousMatchLength)
+                {
+                    commentSoFar += c;
+                    previousMatchLength = match.Length;
+                    stream.ReadChar();
+                    if (c == '[')
+                    {
+                        return commentSoFar.Length - 2;
+                    }
+                    continue;
+                }
+                return null;
+            }
+        }
+
 
         private static Token ReadNextToken(Stream stream, List<Trivia> trivia, int fullStart)
         {
@@ -206,7 +266,7 @@ namespace LanguageService
             // Number
             else if (char.IsDigit(nextChar))
             {
-               return ReadNumberToken(stream, trivia, fullStart);
+                return ReadNumberToken(stream, trivia, fullStart);
             }
             // String
             else if (IsQuote(nextChar))
@@ -217,14 +277,14 @@ namespace LanguageService
             else
             {
                 return ReadSymbolToken(stream, trivia, fullStart);
-            } 
+            }
         }
         private static Token ReadAlphaToken(Stream stream, List<Trivia> trivia, int fullStart)
         {
             // Keyword or Identifier
             char nextChar;
             StringBuilder word = new StringBuilder();
-            int tokenStartPosition = (int) stream.Position;
+            int tokenStartPosition = (int)stream.Position;
             do
             {
                 word.Append(stream.ReadChar());
@@ -232,7 +292,7 @@ namespace LanguageService
             } while (IsAlphaCharacter(nextChar));
 
             string value = word.ToString();
-            
+
             if (AlphaTokens.ContainsKey(value))
             {
                 return new Token(AlphaTokens[value], value, trivia, fullStart, tokenStartPosition);
@@ -246,11 +306,11 @@ namespace LanguageService
         private static Token ReadNumberToken(Stream stream, List<Trivia> trivia, int fullStart)
         {
             StringBuilder number = new StringBuilder();
-            int tokenStartPosition = (int) stream.Position;
+            int tokenStartPosition = (int)stream.Position;
             char next = stream.Peek();
             // TODO: verify only one decimal point
 
-            while (IsValidNumber(next)) 
+            while (IsValidNumber(next))
             {
                 number.Append(stream.ReadChar());
                 next = stream.Peek();
@@ -270,7 +330,7 @@ namespace LanguageService
         {
             StringBuilder fullString = new StringBuilder();
             int tokenStartPosition = (int)stream.Position;
-            char nextChar = stream.Peek(); 
+            char nextChar = stream.Peek();
 
             switch (nextChar)
             {
@@ -297,7 +357,7 @@ namespace LanguageService
                         {
                             return new Token(TokenType.Unknown, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                         }
-                        
+
                     }
                 case '\'':
                     do
@@ -335,7 +395,7 @@ namespace LanguageService
 
                             while (!terminated && !stream.EndOfStream())
                             {
-                                if(nextChar == ']')
+                                if (nextChar == ']')
                                 {
                                     fullString.Append(stream.ReadChar());
                                     nextChar = stream.Peek();
@@ -361,7 +421,7 @@ namespace LanguageService
                         case '=':
                             fullString.Append(stream.ReadChar());
                             int level = 1;
-                            
+
                             nextChar = stream.Peek();
 
                             // Get levels (=) 
@@ -372,27 +432,27 @@ namespace LanguageService
                                 nextChar = stream.Peek();
                             }
 
-                            if(nextChar == '[')
+                            if (nextChar == '[')
                             {
                                 fullString.Append(stream.ReadChar());
                                 nextChar = stream.Peek();
 
                                 while (!terminated && !stream.EndOfStream())
                                 {
-                                    if(nextChar == ']')
+                                    if (nextChar == ']')
                                     {
                                         fullString.Append(stream.ReadChar());
                                         nextChar = stream.Peek();
                                         int currentLevel = level;
 
-                                        while(nextChar == '=')
+                                        while (nextChar == '=')
                                         {
                                             fullString.Append(stream.ReadChar());
                                             level--;
                                             nextChar = stream.Peek();
                                         }
 
-                                        if((nextChar == ']') && (level == 0) )
+                                        if ((nextChar == ']') && (level == 0))
                                         {
                                             fullString.Append(stream.ReadChar());
                                             return new Token(TokenType.String, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
@@ -421,7 +481,7 @@ namespace LanguageService
 
         private static Token ReadSymbolToken(Stream stream, List<Trivia> leadingTrivia, int fullStart)
         {
-            int tokenStartPosition = (int) stream.Position;
+            int tokenStartPosition = (int)stream.Position;
             char nextChar = stream.ReadChar();
 
             switch (nextChar)
@@ -429,20 +489,20 @@ namespace LanguageService
                 case ':':
                 case '.':
                     // here use dictionary for minux, plus etc
-                    if(nextChar != stream.Peek())
+                    if (nextChar != stream.Peek())
                     {
                         return new Token(Symbols[nextChar.ToString()], nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        char [] symbol = { nextChar, stream.ReadChar() };
+                        char[] symbol = { nextChar, stream.ReadChar() };
                         string symbolKey = new string(symbol);
                         return new Token(Symbols[symbolKey], symbolKey, leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '<':
                 case '>':
                     // could be doubles or eq sign
-                    if ((nextChar != stream.Peek()) && (stream.Peek()!= '='))
+                    if ((nextChar != stream.Peek()) && (stream.Peek() != '='))
                     {
                         return new Token(Symbols[nextChar.ToString()], nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
@@ -524,110 +584,110 @@ namespace LanguageService
         {
             string comment = "-" + new string(commentRead);
 
-			while (stream.Peek() != '\n' && stream.Peek() != '\r' && stream.Peek() != Eof) // Todo: maybe not the safest way of checking for newline
-			{
-				 comment += stream.ReadChar();
-			}
-			
+            while (stream.Peek() != '\n' && stream.Peek() != '\r' && stream.Peek() != Eof) // Todo: maybe not the safest way of checking for newline
+            {
+                comment += stream.ReadChar();
+            }
+
             return new Trivia(Trivia.TriviaType.Comment, comment);
         }
 
-        private static Trivia ReadLongComment(Stream stream, char[] commentRead)
-        {
-            StringBuilder comment = new StringBuilder();
-            comment.Append("-").Append(new string(commentRead));
+        //private static Trivia ReadLongComment(Stream stream, char[] commentRead)
+        //{
+        //    StringBuilder comment = new StringBuilder();
+        //    comment.Append("-").Append(new string(commentRead));
 
-            int level = 0;
-            char next;
+        //    int level = 0;
+        //    char next;
 
-            switch (commentRead[commentRead.Length - 1])
-            {
-                case '=':
-                    level++;
-                    next = stream.Peek();
+        //    switch (commentRead[commentRead.Length - 1])
+        //    {
+        //        case '=':
+        //            level++;
+        //            next = stream.Peek();
 
-                    // Get levels (=) 
-                    while (next == '=')
-                    {
-                        comment.Append(stream.ReadChar());
-                        level++;
-                        next = stream.Peek();
-                    }
+        //            // Get levels (=) 
+        //            while (next == '=')
+        //            {
+        //                comment.Append(stream.ReadChar());
+        //                level++;
+        //                next = stream.Peek();
+        //            }
 
-                    if(next == '[')
-                    {
-                        comment.Append(stream.ReadChar());
+        //            if (next == '[')
+        //            {
+        //                comment.Append(stream.ReadChar());
 
-                        while(level != 0)
-                        {
-                            next = stream.Peek();
+        //                while (level != 0)
+        //                {
+        //                    next = stream.Peek();
 
-                            if (next == ']')
-                            {
-                                comment.Append(stream.ReadChar());
-                                int currentLevel = level;
-                                next = stream.Peek();
+        //                    if (next == ']')
+        //                    {
+        //                        comment.Append(stream.ReadChar());
+        //                        int currentLevel = level;
+        //                        next = stream.Peek();
 
-                                while((next == '=') && (currentLevel > 0))
-                                {
-                                    comment.Append(stream.ReadChar());
-                                    currentLevel--;
-                                    next = stream.Peek();
-                                }
+        //                        while ((next == '=') && (currentLevel > 0))
+        //                        {
+        //                            comment.Append(stream.ReadChar());
+        //                            currentLevel--;
+        //                            next = stream.Peek();
+        //                        }
 
-                                if((next == ']') && (currentLevel == 0))
-                                {
-                                    comment.Append(stream.ReadChar());
-                                    level = 0;
-                                    return new Trivia(Trivia.TriviaType.Comment, comment.ToString());
-                                }
-                            }
-                            else
-                            {
-                                comment.Append(stream.ReadChar());
-                            }
-                        } 
-                    }
-                    else
-                    {
-                        // TODO: fix that double type cast
-                        char[] alreadyConsumed = comment.ToString().ToCharArray();
+        //                        if ((next == ']') && (currentLevel == 0))
+        //                        {
+        //                            comment.Append(stream.ReadChar());
+        //                            level = 0;
+        //                            return new Trivia(Trivia.TriviaType.Comment, comment.ToString());
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        comment.Append(stream.ReadChar());
+        //                    }
+        //                }
+        //            }
+        //            else
+        //            {
+        //                // TODO: fix that double type cast
+        //                char[] alreadyConsumed = comment.ToString().ToCharArray();
 
-                        return ReadLineComment(stream, alreadyConsumed);
-                    }
+        //                return ReadLineComment(stream, alreadyConsumed);
+        //            }
 
-                    break;
-                case '[':
-                    comment.Append(stream.ReadChar());
-                    char[] validEnd = { ']', ']' };
-                    char[] currentEnd = new char[validEnd.Length];
-                    stream.Read(currentEnd, 0, validEnd.Length);
+        //            break;
+        //        case '[':
+        //            comment.Append(stream.ReadChar());
+        //            char[] validEnd = { ']', ']' };
+        //            char[] currentEnd = new char[validEnd.Length];
+        //            stream.Read(currentEnd, 0, validEnd.Length);
 
-                    while(currentEnd != validEnd)
-                    {
-                        comment.Append(currentEnd);
-                        stream.Read(currentEnd, 0, validEnd.Length);
-                    }
+        //            while (currentEnd != validEnd)
+        //            {
+        //                comment.Append(currentEnd);
+        //                stream.Read(currentEnd, 0, validEnd.Length);
+        //            }
 
-                    comment.Append(currentEnd);
-                    return new Trivia(Trivia.TriviaType.Comment, comment.ToString());
-            }
+        //            comment.Append(currentEnd);
+        //            return new Trivia(Trivia.TriviaType.Comment, comment.ToString());
+        //    }
 
-            return new Trivia(Trivia.TriviaType.Comment, comment.ToString());
-        }
+        //    return new Trivia(Trivia.TriviaType.Comment, comment.ToString());
+        //}
 
         private static bool IsValidNumber(char character)
         {
             // switch 1-9, . , e, x
             return (char.IsDigit(character) || (character == '.') || (character == 'e') || (character == 'x'));
-			// TODO: rewrite to truly validate numbers - considering using regex
-			// 1....2 <- not a number
-			// 1e <- not a number
-			// 1e-1 <- number
-			// 1e+1 <- number
-			// 1exexexexe4 <- not a number
+            // TODO: rewrite to truly validate numbers - considering using regex
+            // 1....2 <- not a number
+            // 1e <- not a number
+            // 1e-1 <- number
+            // 1e+1 <- number
+            // 1exexexexe4 <- not a number
         }
-       
+
         public static void PrintTokens(Stream stream)
         {
             IEnumerable<Token> tokenEnumerable = Lexer.Tokenize(stream);

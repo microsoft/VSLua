@@ -58,7 +58,7 @@ x = x + 1            ";
 x = 10
 -- comment here
 --[[ block
-comment
+comment 
 here]]
 x = x + 1";
             GeneralTest(original, expected);
