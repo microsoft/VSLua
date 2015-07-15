@@ -435,7 +435,7 @@ namespace LanguageService
                     }
                     else
                     {
-                        char [] symbol = { nextChar, nextChar };
+                        char [] symbol = { nextChar, stream.ReadChar() };
                         string symbolKey = new string(symbol);
                         return new Token(Symbols[symbolKey], symbolKey, leadingTrivia, fullStart, tokenStartPosition);
                     }

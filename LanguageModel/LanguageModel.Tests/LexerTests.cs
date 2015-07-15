@@ -160,9 +160,22 @@ namespace LanguageService.Tests
         {
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\concat.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
-            int tokenIndex = 0;
-            Assert.Equal(TokenType.StringConcatOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.EndOfFile, tokenList[tokenIndex++].Type);
+            List<string> actual = new List<string>();
+
+            foreach (Token token in tokenList)
+            {
+                actual.Add(token.Text);
+            }
+
+
+            List<string> compare = new List<string>
+            {
+                "..",
+                ""
+            };
+
+            Assert.Equal(compare, actual);
+
         }
 
         [Fact]
