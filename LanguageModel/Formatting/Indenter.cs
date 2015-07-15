@@ -10,7 +10,7 @@ namespace LanguageService.Formatting
     {
 
 
-        internal static void GetIndentations(List<ParsedToken> parsedTokens, List<TextEditInfo> edits)
+        internal static IEnumerable<TextEditInfo> GetIndentations(List<ParsedToken> parsedTokens)
         {
             foreach (ParsedToken parsedToken in parsedTokens)
             {
@@ -21,7 +21,7 @@ namespace LanguageService.Formatting
                     string indentationString =
                         Indenter.GetIndentationStringFromBlockLevel(parsedToken.BlockLevel, null);
 
-                    edits.Add(new TextEditInfo(lastNewline[0], lastNewline[1], indentationString));
+                    yield return new TextEditInfo(lastNewline[0], lastNewline[1], indentationString);
                 }
             }
         }

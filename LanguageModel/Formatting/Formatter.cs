@@ -44,7 +44,10 @@ namespace LanguageService.Formatting
                     }
                 }
             }
-            Indenter.GetIndentations(parsedTokens, textEdits);
+            foreach (TextEditInfo edit in Indenter.GetIndentations(parsedTokens))
+            {
+                textEdits.Add(edit);
+            }
             return textEdits;
         }
     }
