@@ -55,6 +55,11 @@ namespace LanguageService.Formatting
             for (int i = 0; i < leadingTrivia.Count; ++i)
             {
                 
+                if (parsedToken.Token.FullStart == 0)
+                {
+                    //TODO: Make this indentation work on first line
+                }
+
                 if (leadingTrivia[i].Type == Trivia.TriviaType.Newline)
                 {
                     realStart = start + leadingTrivia[i].Text.Length;

@@ -113,6 +113,14 @@ end";
         }
 
         [Fact]
+        public void FirstLineIndentedWrong()
+        {
+            string original = "     foo";
+            string expected = "foo";
+            GeneralTest(original, expected, expected);
+        }
+
+        [Fact]
         public void OverIndentedFunction()
         {
             string original = @"
