@@ -10,7 +10,6 @@
     using System.Threading.Tasks;
     using ImmutableObjectGraph.CodeGeneration;
 
-
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class SyntaxNode
     {
@@ -57,7 +56,7 @@
         [Required]
         readonly Token endOfFile;
 
-        public void ToString(TextWriter writer)
+        internal override void ToString(TextWriter writer)
         {
             var indentingWriter = IndentingTextWriter.Get(writer);
             indentingWriter.WriteLine("ChunkNode");
@@ -103,224 +102,58 @@
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class RetStat : SyntaxNode
-    {
-        [Required]
-        Token returnKeyword;
-        ExpList returnExpressions;
-        //Token semiColonRetStat; TODO: decide if necessary?
-
-        internal override void ToString(TextWriter writer)
-        {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("RetStat");
-            using (indentingWriter.Indent())
-            {
-                indentingWriter.WriteLine("explist... implement"); //TODO
-            }
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class TableConstructor : SyntaxNode
-    {
-        [Required]
-        Token openCurly;
-        FieldList fieldList;
-        [Required]
-        Token closeCurly;
-
-        internal override void ToString(TextWriter writer)
-        {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("TableConstructor");
-            using (indentingWriter.Indent())
-            {
-                FieldList.ToString(indentingWriter);
-            }
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class FuncBody : SyntaxNode
-    {
-        [Required]
-        Token openParen;
-        [Required]
-        ParList parameterList;
-        [Required]
-        Token closeParen;
-        [Required]
-        Block block;
-        [Required]
-        Token endKeyword;
-    }
-
-    #region Args Classes
-    [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class Args : SyntaxNode { }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class TableContructorArg : Args
-    {
-        [Required]
-        Token openCurly;
-        FieldList fieldList;
-        [Required]
-        Token closeCurly;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class ParenArg : Args
-    {
-        [Required]
-        Token openParen;
-        [Required]
-        ExpList expList;
-        [Required]
-        Token closeParen;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class StringArg : Args
-    {
-        [Required]
-        Token stringLiteral;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class SemiColonStatement : SyntaxNode
-    {
-        Token token;
-
-        internal override void ToString(TextWriter writer)
-        {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine(token.ToString());
-        }
-    }
-
-    #endregion
-
-    #region Lua List nodes
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class NameList : SyntaxNode
-    {
-        [Required]
-        ImmutableList<NameCommaPair> names;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class FieldList : SyntaxNode
-    {
-        [Required]
-        ImmutableList<FieldAndSeperatorPair> fields;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class ExpList : SyntaxNode
-    {
-        [Required]
-        ImmutableList<ExpressionCommaPair> expressions;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class ParList : SyntaxNode { }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class VarArgPar : ParList
-    {
-        [Required]
-        Token varargOperator;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class NameListPar : ParList
-    {
-        [Required]
-        NameList namesList;
-        [Required]
-        CommaVarArgPair varArgPar;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class CommaVarArgPair
-    {
-        [Required]
-        Token comma;
-        [Required]
-        Token varargOperator;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class NameCommaPair
-    {
-        [Required]
-        Token name;
-        [Required]
-        Token comma;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class ExpressionCommaPair
-    {
-        [Required]
-        Expression expression;
-        [Required]
-        Token comma;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class FieldAndSeperatorPair
-    {
-        Field field;
-        Token fieldSeparator;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class Field : SyntaxNode { }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class BracketField : Field
-    {
-        [Required]
-        Token openBracket;
-        [Required]
-        Expression identifierExp;
-        [Required]
-        Token closeBracket;
-        [Required]
-        Token assignmentOperator;
-        [Required]
-        Expression assignedExp;
-
-        internal override void ToString(TextWriter indentingWriter)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class SimnpleField : Field
-    {
-        [Required]
-        Token name;
-        [Required]
-        Token assignmentOperator;
-        [Required]
-        Expression exp;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class ExpField : Field
-    {
-        [Required]
-        Expression exp;
-    }
-    #endregion
-
     #region If Statement Nodes
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class IfNode : SyntaxNode
+    {
+        [Required]
+        readonly Token ifKeyword;
+        [Required]
+        readonly Expression exp;
+        [Required]
+        readonly Token thenKeyword;
+        [Required]
+        readonly Block ifBlock;
+        readonly ImmutableList<ElseIfBlock> elseIfList;
+        readonly ElseBlock elseBlock;
+        [Required]
+        readonly Token endKeyword;
+
+        internal override void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine("IfNode");
+            using (indentingWriter.Indent())
+            {
+                exp.ToString(indentingWriter);
+            }
+
+            using (indentingWriter.Indent())
+            {
+                ifBlock.ToString(indentingWriter);
+            }
+
+            if (elseIfList != null)
+            {
+                foreach (var block in elseIfList)
+                {
+                    using (indentingWriter.Indent())
+                    {
+                        block.ToString(indentingWriter);
+                    }
+                }
+            }
+
+            if (elseBlock != null)
+            {
+                using (indentingWriter.Indent())
+                {
+                    elseBlock.ToString(indentingWriter);
+                }
+            }
+        }
+    }
+
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class ElseBlock : SyntaxNode
     {
@@ -361,57 +194,6 @@
             }
         }
     }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class IfNode : SyntaxNode
-    {
-        [Required]
-        readonly Token ifKeyword;
-        [Required]
-        readonly Expression exp;
-        [Required]
-        readonly Token thenKeyword;
-        [Required]
-        readonly Block ifBlock;
-        readonly ImmutableList<ElseIfBlock> elseIfList;
-        readonly ElseBlock elseBlock;
-        [Required]
-        readonly Token endKeyword;
-
-        internal override void ToString(TextWriter writer)
-        {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("IfNode");
-            using (indentingWriter.Indent())
-            {
-                exp.ToString(indentingWriter);
-            }
-
-            using (indentingWriter.Indent())
-            {
-                ifBlock.ToString(indentingWriter);
-            }
-
-            if(elseIfList != null)
-            {
-                foreach(var block in elseIfList)
-                {
-                    using (indentingWriter.Indent())
-                    {
-                        block.ToString(indentingWriter);
-                    }
-                }
-            }
-
-            if(elseBlock != null)
-            {
-                using (indentingWriter.Indent())
-                {
-                    elseBlock.ToString(indentingWriter);
-                }
-            }
-        }
-    }
     #endregion
 
     #region Expression nodes
@@ -445,10 +227,6 @@
         {
             var indentingWriter = IndentingTextWriter.Get(writer);
             indentingWriter.WriteLine("Expression:\t" + expressionValue.ToString());
-            //using (indentingWriter.Indent())
-            //{
-            //    indentingWriter.WriteLine(expressionValue.ToString());
-            //}
         }
 
     }
@@ -504,7 +282,9 @@
             }
         }
     }
+    #endregion
 
+    #region Other Expression Nodes (out of scope for Code review)
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class TableConstructorExp : Expression
     {
@@ -600,6 +380,225 @@
                 exp.ToString(indentingWriter);
             }
         }
+    }
+    #endregion
+
+    #region Args Nodes
+    [GenerateImmutable(GenerateBuilder = true)]
+    public abstract partial class Args : SyntaxNode { }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public abstract partial class TableContructorArg : Args
+    {
+        [Required]
+        Token openCurly;
+        FieldList fieldList;
+        [Required]
+        Token closeCurly;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public abstract partial class ParenArg : Args
+    {
+        [Required]
+        Token openParen;
+        [Required]
+        ExpList expList;
+        [Required]
+        Token closeParen;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public abstract partial class StringArg : Args
+    {
+        [Required]
+        Token stringLiteral;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class SemiColonStatement : SyntaxNode
+    {
+        Token token;
+
+        internal override void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine(token.ToString());
+        }
+    }
+
+    #endregion
+
+    #region List nodes
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class NameList : SyntaxNode
+    {
+        [Required]
+        ImmutableList<NameCommaPair> names;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class FieldList : SyntaxNode
+    {
+        [Required]
+        ImmutableList<FieldAndSeperatorPair> fields;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class ExpList : SyntaxNode
+    {
+        [Required]
+        ImmutableList<ExpressionCommaPair> expressions;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public abstract partial class ParList : SyntaxNode { }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class VarArgPar : ParList
+    {
+        [Required]
+        Token varargOperator;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class NameListPar : ParList
+    {
+        [Required]
+        NameList namesList;
+        [Required]
+        CommaVarArgPair varArgPar;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class CommaVarArgPair
+    {
+        [Required]
+        Token comma;
+        [Required]
+        Token varargOperator;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class NameCommaPair
+    {
+        [Required]
+        Token name;
+        [Required]
+        Token comma;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class ExpressionCommaPair
+    {
+        [Required]
+        Expression expression;
+        [Required]
+        Token comma;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class FieldAndSeperatorPair
+    {
+        Field field;
+        Token fieldSeparator;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public abstract partial class Field : Expression { } //TODO: is this inheritance okay?
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class BracketField : Field
+    {
+        [Required]
+        Token openBracket;
+        [Required]
+        Expression identifierExp;
+        [Required]
+        Token closeBracket;
+        [Required]
+        Token assignmentOperator;
+        [Required]
+        Expression assignedExp;
+
+        internal override void ToString(TextWriter indentingWriter)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class SimpleField : Field
+    {
+        [Required]
+        Token name;
+        [Required]
+        Token assignmentOperator;
+        [Required]
+        Expression exp;
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class ExpField : Field
+    {
+        [Required]
+        Expression exp;
+    }
+    #endregion
+
+    #region Other Nodes
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class RetStat : SyntaxNode
+    {
+        [Required]
+        Token returnKeyword;
+        ExpList returnExpressions;
+        //Token semiColonRetStat; TODO: decide if necessary?
+
+        internal override void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine("RetStat");
+            using (indentingWriter.Indent())
+            {
+                indentingWriter.WriteLine("explist... implement"); //TODO
+            }
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class TableConstructor : SyntaxNode
+    {
+        [Required]
+        Token openCurly;
+        FieldList fieldList;
+        [Required]
+        Token closeCurly;
+
+        internal override void ToString(TextWriter writer)
+        {
+            var indentingWriter = IndentingTextWriter.Get(writer);
+            indentingWriter.WriteLine("TableConstructor");
+            using (indentingWriter.Indent())
+            {
+                FieldList.ToString(indentingWriter);
+            }
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class FuncBody : SyntaxNode
+    {
+        [Required]
+        Token openParen;
+        [Required]
+        ParList parameterList;
+        [Required]
+        Token closeParen;
+        [Required]
+        Block block;
+        [Required]
+        Token endKeyword;
     }
     #endregion
 

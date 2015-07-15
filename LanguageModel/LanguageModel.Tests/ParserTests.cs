@@ -58,7 +58,7 @@ namespace LanguageService.Tests
             SyntaxTree tree = parser.CreateSyntaxTree(@"CorrectSampleLuaFiles\smallif.lua");
 
             Debug.WriteLine(tree.ToString());
-
+            //TODO: fix position numbers...
             SyntaxTree expected = new SyntaxTree("smallif.lua",
                 ChunkNode.Create(0, 247,
                     Block.Create(0, 244, new List<SyntaxNode>()
