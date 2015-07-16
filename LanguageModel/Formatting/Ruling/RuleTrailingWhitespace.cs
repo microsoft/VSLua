@@ -16,7 +16,7 @@ namespace LanguageService.Formatting.Ruling
         {
         }
 
-        internal override List<TextEditInfo> Apply(ref FormattingContext formattingContext)
+        internal override List<TextEditInfo> Apply(FormattingContext formattingContext)
         {
             Token nextToken = formattingContext.NextToken.Token;
             // flag for the end of file token where whitespace should be deleted

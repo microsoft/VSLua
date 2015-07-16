@@ -16,11 +16,11 @@ namespace LanguageService.Formatting.Ruling
             rules.Add(rule);
         }
 
-        internal Rule Get(ref FormattingContext formattingContext)
+        internal Rule Get(FormattingContext formattingContext)
         {
             foreach (Rule rule in rules)
             {
-                if (rule.AppliesTo(ref formattingContext))
+                if (rule.AppliesTo(formattingContext))
                 {
                     return rule;
                 }

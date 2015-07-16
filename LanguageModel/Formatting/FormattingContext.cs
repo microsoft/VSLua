@@ -8,8 +8,8 @@ namespace LanguageService.Formatting
 {
     internal struct FormattingContext
     {
-        internal ParsedToken CurrentToken { get; private set; }
-        internal ParsedToken NextToken { get; private set; }
+        internal ParsedToken CurrentToken { get; }
+        internal ParsedToken NextToken { get; }
 
         internal FormattingContext(ParsedToken currentToken, ParsedToken nextToken)
         {
@@ -33,7 +33,7 @@ namespace LanguageService.Formatting
             return false;
         }
 
-        internal bool CommentsInBetween()
+        internal bool ContainsCommentsBetweenTokens()
         {
             return this.IsTriviaInBetween(Trivia.TriviaType.Comment);
         }

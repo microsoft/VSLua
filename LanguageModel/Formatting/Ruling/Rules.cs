@@ -12,7 +12,7 @@ namespace LanguageService.Formatting.Ruling
         private static readonly List<ContextFilter> defaultFilters = new List<ContextFilter>
         {
             TokensAreOnSameLine,
-            NoCommentBetweenTokens
+            NoCommentsBetweenTokens
         };
 
         internal static Rule SpaceAfterComma =
@@ -121,19 +121,19 @@ namespace LanguageService.Formatting.Ruling
             return ruleMap;
         }
 
-        internal static bool TokensAreOnSameLine(ref FormattingContext formattingContext)
+        internal static bool TokensAreOnSameLine(FormattingContext formattingContext)
         {
             return formattingContext.TokensOnSameLine();
         }
 
-        internal static bool TokensAreNotOnSameLine(ref FormattingContext formattingContext)
+        internal static bool TokensAreNotOnSameLine(FormattingContext formattingContext)
         {
             return !formattingContext.TokensOnSameLine();
         }
 
-        internal static bool NoCommentBetweenTokens(ref FormattingContext formattingContext)
+        internal static bool NoCommentsBetweenTokens(FormattingContext formattingContext)
         {
-            return !formattingContext.CommentsInBetween();
+            return !formattingContext.ContainsCommentsBetweenTokens();
         }
 
     }
