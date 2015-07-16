@@ -8,6 +8,18 @@ namespace LanguageService.Formatting
 {
     internal class Indenter
     {
+
+        private struct IndentInfo
+        {
+            internal int Start { get; }
+            internal int Length { get; }
+            internal IndentInfo(int start, int length)
+            {
+                this.Start = start;
+                this.Length = length;
+            }
+        }
+
         internal static IEnumerable<TextEditInfo> GetIndentations(List<ParsedToken> parsedTokens)
         {
             if (parsedTokens == null)
@@ -16,14 +28,13 @@ namespace LanguageService.Formatting
             }
             foreach (ParsedToken parsedToken in parsedTokens)
             {
-                int[] lastNewline = Indenter.GetSpacePositionAndLengthAfterLastNewline(parsedToken);
+                IndentInfo? indentInfo = Indenter.GetSpacePositionAndLengthAfterLastNewline(parsedToken);
 
-                if (lastNewline != null)
+                if (indentInfo != null)
                 {
                     string indentationString =
                         Indenter.GetIndentationStringFromBlockLevel(parsedToken.BlockLevel, null);
-
-                    yield return new TextEditInfo(lastNewline[0], lastNewline[1], indentationString);
+                    yield return new TextEditInfo(((IndentInfo)indentInfo).Start, ((IndentInfo)indentInfo).Length, indentationString);
                 }
             }
         }
@@ -46,15 +57,10 @@ namespace LanguageService.Formatting
         // For now the parameter just takes how many spaces are needed.
         private static string MakeIndentation(int spaces)
         {
-            string indentation = "";
-            for (int i = 0; i < spaces; ++i)
-            {
-                indentation += ' ';
-            }
-            return indentation;
+            return new string(' ', spaces);
         }
 
-        private static int[] GetSpacePositionAndLengthAfterLastNewline(ParsedToken parsedToken)
+        private static IndentInfo? GetSpacePositionAndLengthAfterLastNewline(ParsedToken parsedToken)
         {
             if (parsedToken == null)
             {
@@ -87,7 +93,7 @@ namespace LanguageService.Formatting
 
             if (foundNewline)
             {
-                return new int[2] { start, length };
+                return new IndentInfo(start, length);
             }
             return null;
         }

@@ -21,7 +21,7 @@ namespace LanguageService.Formatting
             this.NextToken = nextToken;
         }
 
-        internal bool IsTriviaInBetween(Trivia.TriviaType triviaType)
+        internal bool TriviaBetweenTokensContains(Trivia.TriviaType triviaType)
         {
             foreach (Trivia trivia in NextToken.Token.LeadingTrivia)
             {
@@ -35,12 +35,12 @@ namespace LanguageService.Formatting
 
         internal bool ContainsCommentsBetweenTokens()
         {
-            return this.IsTriviaInBetween(Trivia.TriviaType.Comment);
+            return this.TriviaBetweenTokensContains(Trivia.TriviaType.Comment);
         }
 
         internal bool TokensOnSameLine()
         {
-            return !this.IsTriviaInBetween(Trivia.TriviaType.Newline);
+            return !this.TriviaBetweenTokensContains(Trivia.TriviaType.Newline);
         }
     }
 }
