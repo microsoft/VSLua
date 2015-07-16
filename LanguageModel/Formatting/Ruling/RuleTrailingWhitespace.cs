@@ -24,7 +24,6 @@ namespace LanguageService.Formatting.Ruling
             return edits;
         }
 
-
         private List<TextEditInfo> GetEdits(Token token, bool isEndOfFile)
         {
 
@@ -37,11 +36,11 @@ namespace LanguageService.Formatting.Ruling
             {
                 length = leadingTrivia[i].Text.Length;
                 if (
-                    // this is to delete all whitespace that is before a newline
+                    // this is to delete all whitespace that is before a newline and
+                    //   all the trailing whitespace at the end of a file BEFORE Eof
                     (i + 1 < leadingTrivia.Count &&
                     leadingTrivia[i].Type == Trivia.TriviaType.Whitespace &&
                     leadingTrivia[i + 1].Type == Trivia.TriviaType.Newline) ||
-                    // this is to delete the trailing whitespace at the end of a file BEFORE Eof
                     (i + 1 == leadingTrivia.Count && isEndOfFile &&
                     leadingTrivia[i].Type == Trivia.TriviaType.Whitespace))
                 {

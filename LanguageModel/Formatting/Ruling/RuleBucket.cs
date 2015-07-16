@@ -27,7 +27,5 @@ namespace LanguageService.Formatting.Ruling
             }
             return null;
         }
-
-
     }
 }

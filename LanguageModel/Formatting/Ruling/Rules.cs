@@ -91,8 +91,6 @@ namespace LanguageService.Formatting.Ruling
             new SimpleRule(new RuleDescriptor(TokenType.Colon, TokenRange.Value),
                 defaultFilters, RuleAction.Delete);
 
-
-
         internal static Rule DeleteTrailingWhitespace = new DeleteTrailingWhitespaceRule();
 
         // This would create the RuleMap off the formatting options, but for now

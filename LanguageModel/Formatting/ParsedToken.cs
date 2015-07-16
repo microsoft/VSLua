@@ -71,10 +71,8 @@ namespace LanguageService.Formatting
                 {
                     indent_level--;
                 }
-
             }
             return parsedTokens;
         }
-
     }
 }

@@ -8,7 +8,6 @@ namespace LanguageService.Formatting
 {
     internal class Indenter
     {
-
         private struct IndentInfo
         {
             internal int Start { get; }
