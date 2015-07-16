@@ -6,21 +6,18 @@ using System.Threading.Tasks;
 
 namespace LanguageService.Formatting.Ruling
 {
-
-    internal delegate bool ContextFilter(FormattingContext formattingContext);
-
     internal class RuleOperationContext
     {
-        private List<ContextFilter> contextFilters;
+        private List<Func<FormattingContext, bool>> contextFilters;
 
-        internal RuleOperationContext(List<ContextFilter> contextFilters)
+        internal RuleOperationContext(List<Func<FormattingContext, bool>> contextFilters)
         {
             this.contextFilters = contextFilters;
         }
 
         internal bool InContext(FormattingContext formattingContext)
         {
-            foreach (ContextFilter contextFilter in contextFilters)
+            foreach (Func<FormattingContext, bool> contextFilter in contextFilters)
             {
                 if (!contextFilter(formattingContext))
                 {

@@ -11,7 +11,7 @@ namespace LanguageService.Formatting.Ruling
         internal DeleteTrailingWhitespaceRule() :
             base(
                 new RuleDescriptor(TokenRange.All, TokenRange.All),
-                new List<ContextFilter> { Rules.TokensAreNotOnSameLine },
+                new List<Func<FormattingContext, bool>> { Rules.TokensAreNotOnSameLine },
                 RuleAction.Delete)
         {
         }

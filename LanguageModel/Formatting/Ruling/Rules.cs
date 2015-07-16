@@ -9,7 +9,7 @@ namespace LanguageService.Formatting.Ruling
     internal class Rules
     {
 
-        private static readonly List<ContextFilter> defaultFilters = new List<ContextFilter>
+        private static readonly List<Func<FormattingContext, bool>> defaultFilters = new List<Func<FormattingContext, bool>>
         {
             TokensAreOnSameLine,
             NoCommentsBetweenTokens

@@ -28,7 +28,7 @@ namespace LanguageService.Formatting.Ruling
         }
 
 
-        internal SimpleRule(RuleDescriptor ruleDescriptor, List<ContextFilter> contextFilters, RuleAction action)
+        internal SimpleRule(RuleDescriptor ruleDescriptor, List<Func<FormattingContext, bool>> contextFilters, RuleAction action)
         {
             this.ruleDescriptor = ruleDescriptor;
             this.ruleOperation = new RuleOperation(new RuleOperationContext(contextFilters), action);
