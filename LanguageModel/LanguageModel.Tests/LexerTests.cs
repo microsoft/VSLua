@@ -118,7 +118,7 @@ namespace LanguageService.Tests
             };
 
             TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\if.lua");
-            List<Token> tokenList = Lexer.Tokenize(new TrackableTextReader(testProgramStream));
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             int tokenIndex = 0;
 
             for (int i = 0; i < expectedTokens.Length; i++)
@@ -132,7 +132,7 @@ namespace LanguageService.Tests
         public void IdentifyAssignmentTokenTypes()
         {
             TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\assignment.lua");
-            List<Token> tokenList = Lexer.Tokenize(new TrackableTextReader(testProgramStream));
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             int tokenIndex = 0;
             Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
             Assert.Equal(TokenType.AssignmentOperator, tokenList[tokenIndex++].Type);
@@ -144,7 +144,7 @@ namespace LanguageService.Tests
         public void IdentifyLeveledBlocksTokenTypes()
         {
             TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\leveled_blocks.lua");
-            List<Token> tokenList = Lexer.Tokenize(new TrackableTextReader(testProgramStream));
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             int tokenIndex = 0;
             Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
             Assert.Equal(TokenType.AssignmentOperator, tokenList[tokenIndex++].Type);
@@ -159,7 +159,7 @@ namespace LanguageService.Tests
         public void TestConcat()
         {
             TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\concat.lua");
-            List<Token> tokenList = Lexer.Tokenize(new TrackableTextReader(testProgramStream));
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             List<string> actual = new List<string>();
 
             foreach (Token token in tokenList)
@@ -182,7 +182,7 @@ namespace LanguageService.Tests
         public void TestLongCommentOnSameLine()
         {
             TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\longcomment.lua");
-            List<Token> tokenList = Lexer.Tokenize(new TrackableTextReader(testProgramStream));
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             int tokenIndex = 0;
             Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
             Assert.Equal(TokenType.EndOfFile, tokenList[tokenIndex++].Type);
@@ -192,7 +192,7 @@ namespace LanguageService.Tests
         public void TestTrivia1()
         {
             TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\trivia1.lua");
-            List<Token> tokenList = Lexer.Tokenize(new TrackableTextReader(testProgramStream));
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
 
             List<Trivia.TriviaType> allTrivia = new List<Trivia.TriviaType>();
 
@@ -221,7 +221,7 @@ namespace LanguageService.Tests
         public void IdentifyLongCodeTokenTypes()
         {
             TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\longcode.lua");
-            List<Token> tokenList = Lexer.Tokenize(new TrackableTextReader(testProgramStream));
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             foreach (Token tok in tokenList)
             {
                 Assert.NotEqual(TokenType.Unknown, tok.Type);
@@ -232,7 +232,7 @@ namespace LanguageService.Tests
         public void Comments1()
         {
             TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\comments1.lua");
-            List<Token> tokenList = Lexer.Tokenize(new TrackableTextReader(testProgramStream));
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             foreach (Token tok in tokenList)
             {
                 Assert.NotEqual(TokenType.Unknown, tok.Type);
@@ -243,7 +243,7 @@ namespace LanguageService.Tests
         public void NoUnknownTokensInCorrectLuaFile()
         {
             TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\maze.lua");
-            List<Token> tokenList = Lexer.Tokenize(new TrackableTextReader(testProgramStream));
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             foreach (Token tok in tokenList)
             {
                 Assert.NotEqual(TokenType.Unknown, tok.Type);
@@ -254,7 +254,7 @@ namespace LanguageService.Tests
         public void IdentifyLongsTokenTypes()
         {
             TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\longs.lua");
-            List<Token> tokenList = Lexer.Tokenize(new TrackableTextReader(testProgramStream));
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             int tokenIndex = 0;
             Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
             Assert.Equal(TokenType.Number, tokenList[tokenIndex++].Type);
@@ -273,7 +273,7 @@ namespace LanguageService.Tests
         public void IdentifyTabsTokenTypes()
         {
             TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\tabs.lua");
-            List<Token> tokenList = Lexer.Tokenize(new TrackableTextReader(testProgramStream));
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
 
             Assert.Equal(1, tokenList.Count);
             Assert.Equal("\t\t\t\t\t\t", tokenList[0].LeadingTrivia[0].Text);
@@ -284,7 +284,7 @@ namespace LanguageService.Tests
         public void IdentifyNewLinesTokenTypes()
         {
             TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\newlines.lua");
-            List<Token> tokenList = Lexer.Tokenize(new TrackableTextReader(testProgramStream));
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             for (int triviaIndex = 0; triviaIndex < 8; triviaIndex++)
             {
                 Assert.Equal(Trivia.TriviaType.Newline, tokenList[0].LeadingTrivia[triviaIndex].Type);
@@ -295,7 +295,7 @@ namespace LanguageService.Tests
         public void TestSampleProgram()
         {
             TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\test.lua");
-            List<Token> tokenList = Lexer.Tokenize(new TrackableTextReader(testProgramStream));
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             int tokenIndex = 0;
             Assert.Equal(TokenType.EndKeyword, tokenList[tokenIndex++].Type);
             int triviaIndex = 0;

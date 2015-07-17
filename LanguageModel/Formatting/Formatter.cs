@@ -30,7 +30,7 @@ namespace LanguageService.Formatting
             RuleMap ruleMap = Rules.GetRuleMap();
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
-            List<Token> tokens = Lexer.Tokenize(new TrackableTextReader(span));
+            List<Token> tokens = Lexer.Tokenize(span);
             List<ParsedToken> parsedTokens = ParsedToken.GetParsedTokens(tokens);
 
             for (int i = 0; i < parsedTokens.Count - 1; ++i)

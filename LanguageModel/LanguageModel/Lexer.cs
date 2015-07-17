@@ -86,23 +86,26 @@ namespace LanguageService
             }
         }
 
-        public static List<Token> Tokenize(TrackableTextReader stream) //TODO: Return a bool based on if this is a new copy of the lexer or not
+        public static List<Token> Tokenize(TextReader textReader) //TODO: Return a bool based on if this is a new copy of the lexer or not
         {
+
+            TrackableTextReader trackableTextReader = new TrackableTextReader(textReader);
+
             Token nextToken;
             List<Trivia> trivia;
 
             List<Token> tokenList = new List<Token>();
 
-            while (!stream.EndOfStream())
+            while (!trackableTextReader.EndOfStream())
             {
-                int fullStart = (int)stream.Position;
-                trivia = ConsumeTrivia(stream);
-                nextToken = ReadNextToken(stream, trivia, fullStart);
+                int fullStart = trackableTextReader.Position;
+                trivia = ConsumeTrivia(trackableTextReader);
+                nextToken = ReadNextToken(trackableTextReader, trivia, fullStart);
                 tokenList.Add(nextToken);
 
-                if (stream.EndOfStream() && nextToken.Type != TokenType.EndOfFile)
+                if (trackableTextReader.EndOfStream() && nextToken.Type != TokenType.EndOfFile)
                 {
-                    nextToken = new Token(TokenType.EndOfFile, "", new List<Trivia>(), fullStart, (int)stream.Position);
+                    nextToken = new Token(TokenType.EndOfFile, "", new List<Trivia>(), fullStart, trackableTextReader.Position);
                     tokenList.Add(nextToken);
                 }
             }
@@ -594,7 +597,7 @@ namespace LanguageService
             // 1exexexexe4 <- not a number
         }
 
-        public static void PrintTokens(TrackableTextReader stream)
+        public static void PrintTokens(TextReader stream)
         {
             IEnumerable<Token> tokenEnumerable = Lexer.Tokenize(stream);
             foreach (Token t in tokenEnumerable)

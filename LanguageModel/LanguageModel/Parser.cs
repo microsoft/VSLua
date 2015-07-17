@@ -37,7 +37,7 @@ namespace LanguageService
         public SyntaxTree CreateSyntaxTree(string filename)
         {
             TextReader luaStream = File.OpenText(filename);
-            tokenList = Lexer.Tokenize(new TrackableTextReader(luaStream));
+            tokenList = Lexer.Tokenize(luaStream);
             ChunkNode root = ParseChunkNode();
             return new SyntaxTree(filename, root, errorList);
         }
