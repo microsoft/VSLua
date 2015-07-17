@@ -121,7 +121,7 @@ namespace VSLua.Formatting
             SnapshotPoint startLinePoint = span.Start.GetContainingLine().Start;
             span = new SnapshotSpan(startLinePoint, span.End);
 
-            List<TextEditInfo> edits = new List<TextEditInfo>();// = Formatter.Format(span);
+            List<TextEditInfo> edits = Formatter.Format(new TextSnapshotToTextReader(this.textBuffer.CurrentSnapshot));
 
             using (ITextEdit textEdit = this.textBuffer.CreateEdit())
             {
