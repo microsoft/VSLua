@@ -64,8 +64,8 @@ namespace Formatting.Tests
         [Fact]
         public void LongParams()
         {
-            string original = "foo = function(x, y, z, w) end";
-            string expected = "foo = function( x, y, z, w ) end";
+            string original = "foo = function (x, y, z, w) end";
+            string expected = "foo = function ( x, y, z, w ) end";
             GeneralTest(original, expected);
         }
 

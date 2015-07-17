@@ -42,7 +42,7 @@ namespace LanguageService.Formatting
         {
             if (syntaxNode == null)
             {
-                throw new ArgumentNullException();
+                //throw new ArgumentNullException();
             }
 
             // Here I would put the calculation for the indentation string parts

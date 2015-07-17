@@ -102,11 +102,11 @@ t1 = {
         public void AlreadyIndented1()
         {
             string original = @"
-foo = function()
+foo = function ()
     return
 end";
             string expected2 = @"
-foo = function()
+foo = function ()
       return
 end";
             GeneralTest(original, original, expected2);
@@ -124,15 +124,15 @@ end";
         public void OverIndentedFunction()
         {
             string original = @"
-foo = function()
+foo = function ()
                   return
 end";
             string expected1 = @"
-foo = function()
+foo = function ()
     return
 end";
             string expected2 = @"
-foo = function()
+foo = function ()
       return
 end";
             GeneralTest(original, expected1, expected2);

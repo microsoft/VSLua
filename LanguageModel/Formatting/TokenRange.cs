@@ -12,15 +12,15 @@ namespace LanguageService.Formatting
         internal static readonly ImmutableArray<TokenType> AnyVisible =
             TokenRange.Fill(
                 Enum.GetValues(typeof(TokenType)),
-                new TokenType[] { TokenType.EndOfFile, TokenType.Unknown });
+                new TokenType[] { TokenType.EndOfFile, TokenType.Unknown }).ToImmutableArray();
 
         internal static readonly ImmutableArray<TokenType> All =
             TokenRange.Fill(
                 Enum.GetValues(typeof(TokenType)),
-                new TokenType[] { });
+                new TokenType[] { }).ToImmutableArray();
 
         internal static readonly ImmutableArray<TokenType> BinaryOperators =
-            new ImmutableArray<TokenType>
+            new List<TokenType>
             {
                 TokenType.AndBinop,
                 TokenType.BitwiseAndOperator,
@@ -44,9 +44,9 @@ namespace LanguageService.Formatting
                 TokenType.StringConcatOperator,
                 TokenType.TildeUnOp,
                 TokenType.VarArgOperator,
-            };
+            }.ToImmutableArray();
 
-        internal static readonly ImmutableArray<TokenType> Brackets = new ImmutableArray<TokenType>
+        internal static readonly ImmutableArray<TokenType> Brackets = new List<TokenType>
         {
             TokenType.OpenBracket,
             TokenType.CloseBracket,
@@ -54,9 +54,9 @@ namespace LanguageService.Formatting
             TokenType.CloseCurlyBrace,
             TokenType.OpenParen,
             TokenType.CloseParen,
-        };
+        }.ToImmutableArray();
 
-        internal static readonly ImmutableArray<TokenType> Value = new ImmutableArray<TokenType>
+        internal static readonly ImmutableArray<TokenType> Value = new List<TokenType>
         {
             TokenType.Number,
             TokenType.String,
@@ -65,11 +65,11 @@ namespace LanguageService.Formatting
             TokenType.NilKeyValue,
             TokenType.Identifier,
             TokenType.FunctionKeyword
-        };
+        }.ToImmutableArray();
 
-        private static ImmutableArray<TokenType> Fill(Array values, TokenType[] exclude)
+        private static List<TokenType> Fill(Array values, TokenType[] exclude)
         {
-            ImmutableArray<TokenType> tokenTypes = new ImmutableArray<TokenType>();
+            List<TokenType> tokenTypes = new List<TokenType>();
 
             foreach (TokenType tokenType in values)
             {

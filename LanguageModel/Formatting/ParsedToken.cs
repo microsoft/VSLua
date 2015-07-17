@@ -14,28 +14,28 @@ namespace LanguageService.Formatting
         internal SyntaxNode Node { get; }
 
 
-        private static readonly ImmutableArray<TokenType> IncreaseIndentAfter = new ImmutableArray<TokenType>
+        private static readonly ImmutableArray<TokenType> IncreaseIndentAfter = new List<TokenType>
             {
                 TokenType.DoKeyword,
                 TokenType.ThenKeyword,
                 TokenType.ElseKeyword,
                 TokenType.FunctionKeyword,
                 TokenType.OpenCurlyBrace
-            };
+            }.ToImmutableArray();
 
-        private static readonly ImmutableArray<TokenType> DecreaseIndentOn = new ImmutableArray<TokenType>
+        private static readonly ImmutableArray<TokenType> DecreaseIndentOn = new List<TokenType>
             {
                 TokenType.EndKeyword,
                 TokenType.ElseIfKeyword,
                 TokenType.CloseCurlyBrace,
                 TokenType.ElseKeyword,
-            };
+            }.ToImmutableArray();
 
         internal ParsedToken(Token token, int blockLevel, SyntaxNode node)
         {
-            if (token == null || node == null)
+            if (token == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("token null");
             }
             this.Token = token;
             this.BlockLevel = blockLevel;

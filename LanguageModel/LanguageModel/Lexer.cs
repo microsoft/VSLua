@@ -172,16 +172,6 @@ namespace LanguageService
                             {
                                 triviaList.Add(ReadLineComment(stream, new char[] { '-', '-' }));
                             }
-
-                            //if (currentCommentID.SequenceEqual(longCommentID1) || (currentCommentID.SequenceEqual(longCommentID2)))
-                            //{
-                            //    stream.Read(currentCommentID, 0, longCommentID1.Length);
-                            //    triviaList.Add(ReadLongComment(stream, currentCommentID));
-                            //}
-                            //else
-                            //{
-                            //    triviaList.Add(ReadLineComment(stream, new char[] { }));
-                            //}
                         }
                         else
                         {

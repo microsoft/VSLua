@@ -27,11 +27,10 @@ namespace LanguageService
             if (this.CurrentCharacter != unchecked((char)-1))
             {
                 ++Position;
-                this.CurrentCharacter = (char)textReader.Read();
                 // if the stream reader has not been pushed back at all
                 if (this.pushedDistance == 0)
                 {
-
+                    this.CurrentCharacter = (char)textReader.Read();
                     this.lastCharactars.Add(this.CurrentCharacter);
                     if (this.lastCharactars.Count > this.historyLimit)
                     {
@@ -59,7 +58,14 @@ namespace LanguageService
 
         public char Peek()
         {
-            return (char)textReader.Peek();
+            if (this.pushedDistance == 0)
+            {
+                return (char)textReader.Peek();
+            }
+            else
+            {
+                return this.lastCharactars[this.lastCharactars.Count - this.pushedDistance];
+            }
         }
 
         public char ReadChar()
