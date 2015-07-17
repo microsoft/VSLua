@@ -139,7 +139,14 @@
                 {
                     using (indentingWriter.Indent())
                     {
-                        block.ToString(indentingWriter);
+                        if (block != null)
+                        {
+                            block.ToString(indentingWriter);
+                        }
+                        else
+                        {
+                            indentingWriter.WriteLine("null");
+                      }
                     }
                 }
             }
@@ -351,7 +358,7 @@
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class FunctionCall : PrefixExp //TODO: bad practice? see reference manual
+    public partial class FunctionCall : PrefixExp //TODO: is this inheritance okay? Could be used as a statement, and not a prefixexp... does that matter?
     {
         [Required]
         PrefixExp prefixExp;
@@ -377,7 +384,13 @@
             indentingWriter.WriteLine("ParenPrefixExp");
             using (indentingWriter.Indent())
             {
-                exp.ToString(indentingWriter);
+                if (exp != null)
+                {
+                    exp.ToString(indentingWriter);
+                } else
+                {
+                    indentingWriter.WriteLine("null");
+                }
             }
         }
     }
@@ -492,9 +505,9 @@
     public partial class ExpressionCommaPair
     {
         [Required]
-        Expression expression;
-        [Required]
         Token comma;
+        [Required]
+        Expression expression;
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -553,7 +566,7 @@
         [Required]
         Token returnKeyword;
         ExpList returnExpressions;
-        //Token semiColonRetStat; TODO: decide if necessary?
+        //Token semiColonRetStat; Question: is this really necessary even though defined in the language?
 
         internal override void ToString(TextWriter writer)
         {
@@ -561,7 +574,7 @@
             indentingWriter.WriteLine("RetStat");
             using (indentingWriter.Indent())
             {
-                indentingWriter.WriteLine("explist... implement"); //TODO
+                indentingWriter.WriteLine("explist... implement"); //TODO: implement
             }
         }
     }

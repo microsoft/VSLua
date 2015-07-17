@@ -102,6 +102,9 @@
     <None Include="CorrectSampleLuaFiles\maze.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CorrectSampleLuaFiles\nestedif.lua">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="CorrectSampleLuaFiles\newlines.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
