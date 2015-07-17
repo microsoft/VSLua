@@ -19,15 +19,15 @@ namespace LanguageService.Formatting.Ruling
         }
 
         internal RuleDescriptor(ImmutableArray<TokenType> tokenLeft, TokenType tokenRight) :
-            this(tokenLeft, new List<TokenType> { tokenRight }.ToImmutableArray())
+            this(tokenLeft, ImmutableArray.Create(tokenRight))
         { }
 
         internal RuleDescriptor(TokenType tokenLeft, ImmutableArray<TokenType> tokenRight) :
-            this(new List<TokenType> { tokenLeft }.ToImmutableArray(), tokenRight)
+            this(ImmutableArray.Create(tokenLeft), tokenRight)
         { }
 
         internal RuleDescriptor(TokenType tokenLeft, TokenType tokenRight) :
-            this(new List<TokenType> { tokenLeft }.ToImmutableArray(), new List<TokenType> { tokenRight }.ToImmutableArray())
+            this(ImmutableArray.Create(tokenLeft), ImmutableArray.Create(tokenRight))
         { }
 
     }

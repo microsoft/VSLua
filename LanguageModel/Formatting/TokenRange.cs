@@ -12,16 +12,16 @@ namespace LanguageService.Formatting
         internal static readonly ImmutableArray<TokenType> AnyVisible =
             TokenRange.Fill(
                 Enum.GetValues(typeof(TokenType)),
-                new TokenType[] { TokenType.EndOfFile, TokenType.Unknown }).ToImmutableArray();
+                new TokenType[] { TokenType.EndOfFile, TokenType.Unknown });
 
         internal static readonly ImmutableArray<TokenType> All =
             TokenRange.Fill(
                 Enum.GetValues(typeof(TokenType)),
-                new TokenType[] { }).ToImmutableArray();
+                new TokenType[] { });
 
         internal static readonly ImmutableArray<TokenType> BinaryOperators =
-            new List<TokenType>
-            {
+            ImmutableArray.Create
+            (
                 TokenType.AndBinop,
                 TokenType.BitwiseAndOperator,
                 TokenType.BitwiseLeftOperator,
@@ -43,21 +43,20 @@ namespace LanguageService.Formatting
                 TokenType.PlusOperator,
                 TokenType.StringConcatOperator,
                 TokenType.TildeUnOp,
-                TokenType.VarArgOperator,
-            }.ToImmutableArray();
+                TokenType.VarArgOperator
+            );
 
-        internal static readonly ImmutableArray<TokenType> Brackets = new List<TokenType>
-        {
+        internal static readonly ImmutableArray<TokenType> Brackets = ImmutableArray.Create
+        (
             TokenType.OpenBracket,
             TokenType.CloseBracket,
             TokenType.OpenCurlyBrace,
             TokenType.CloseCurlyBrace,
             TokenType.OpenParen,
-            TokenType.CloseParen,
-        }.ToImmutableArray();
+            TokenType.CloseParen
+        );
 
-        internal static readonly ImmutableArray<TokenType> Value = new List<TokenType>
-        {
+        internal static readonly ImmutableArray<TokenType> Value = ImmutableArray.Create(
             TokenType.Number,
             TokenType.String,
             TokenType.FalseKeyValue,
@@ -65,11 +64,11 @@ namespace LanguageService.Formatting
             TokenType.NilKeyValue,
             TokenType.Identifier,
             TokenType.FunctionKeyword
-        }.ToImmutableArray();
+        );
 
-        private static List<TokenType> Fill(Array values, TokenType[] exclude)
+        private static ImmutableArray<TokenType> Fill(Array values, TokenType[] exclude)
         {
-            List<TokenType> tokenTypes = new List<TokenType>();
+            var tokenTypes = ImmutableArray.CreateBuilder<TokenType>(values.Length);
 
             foreach (TokenType tokenType in values)
             {
@@ -78,7 +77,7 @@ namespace LanguageService.Formatting
                     tokenTypes.Add(tokenType);
                 }
             }
-            return tokenTypes;
+            return tokenTypes.ToImmutable();
         }
     }
 }

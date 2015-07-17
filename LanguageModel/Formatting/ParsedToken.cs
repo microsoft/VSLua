@@ -14,22 +14,22 @@ namespace LanguageService.Formatting
         internal SyntaxNode Node { get; }
 
 
-        private static readonly ImmutableArray<TokenType> IncreaseIndentAfter = new List<TokenType>
-            {
+        private static readonly ImmutableArray<TokenType> IncreaseIndentAfter = ImmutableArray.Create
+            (
                 TokenType.DoKeyword,
                 TokenType.ThenKeyword,
                 TokenType.ElseKeyword,
                 TokenType.FunctionKeyword,
                 TokenType.OpenCurlyBrace
-            }.ToImmutableArray();
+            );
 
-        private static readonly ImmutableArray<TokenType> DecreaseIndentOn = new List<TokenType>
-            {
+        private static readonly ImmutableArray<TokenType> DecreaseIndentOn = ImmutableArray.Create
+            (
                 TokenType.EndKeyword,
                 TokenType.ElseIfKeyword,
                 TokenType.CloseCurlyBrace,
-                TokenType.ElseKeyword,
-            }.ToImmutableArray();
+                TokenType.ElseKeyword
+            );
 
         internal ParsedToken(Token token, int blockLevel, SyntaxNode node)
         {

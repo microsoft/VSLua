@@ -8,7 +8,6 @@ namespace LanguageService.Formatting.Ruling
 {
     internal class Rules
     {
-
         private static readonly List<Func<FormattingContext, bool>> defaultFilters = new List<Func<FormattingContext, bool>>
         {
             TokensAreOnSameLine,
