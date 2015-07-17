@@ -17,5 +17,10 @@ namespace LanguageModel
         {
             TextProvider.parseTree = Lexer.Tokenize(textReader);
         }
+
+        public static List<Token> Get()
+        {
+            return parseTree;
+        }
     }
 }

@@ -80,6 +80,7 @@
     <Compile Include="Formatting\Indenter.cs" />
     <Compile Include="Formatting\ParsedToken.cs" />
     <Compile Include="Formatting\FormattingContext.cs" />
+    <Compile Include="Formatting\Ruling\DeleteSpaceBeforeEofToken.cs" />
     <Compile Include="Formatting\Ruling\Rule.cs" />
     <Compile Include="Formatting\Ruling\SimpleRule.cs" />
     <Compile Include="Formatting\Ruling\RuleAction.cs" />
@@ -89,7 +90,7 @@
     <Compile Include="Formatting\Ruling\RuleOperation.cs" />
     <Compile Include="Formatting\Ruling\RuleOperationContext.cs" />
     <Compile Include="Formatting\Ruling\Rules.cs" />
-    <Compile Include="Formatting\Ruling\RuleTrailingWhitespace.cs" />
+    <Compile Include="Formatting\Ruling\DeleteTrailingWhitespace.cs" />
     <Compile Include="Formatting\TextEditInfo.cs" />
     <Compile Include="Formatting\TokenRange.cs" />
     <Compile Include="LanguageModel\IndentingTextWriter.cs" />

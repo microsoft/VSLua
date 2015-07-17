@@ -70,9 +70,7 @@ namespace LanguageService.Formatting.Ruling
             new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.CloseCurlyBrace),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule DeleteSpaceBeforeEofToken =
-            new SimpleRule(new RuleDescriptor(TokenRange.AnyVisible, TokenType.EndOfFile),
-                defaultFilters, RuleAction.Delete);
+        internal static DeleteSpaceBeforeEofToken DeleteSpaceBeforeEofToken = new DeleteSpaceBeforeEofToken();
 
         internal static Rule DeleteSpaceAfterValueBeforeDot =
             new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.Dot),
@@ -90,7 +88,7 @@ namespace LanguageService.Formatting.Ruling
             new SimpleRule(new RuleDescriptor(TokenType.Colon, TokenRange.Value),
                 defaultFilters, RuleAction.Delete);
 
-        internal static Rule DeleteTrailingWhitespace = new DeleteTrailingWhitespaceRule();
+        internal static Rule DeleteTrailingWhitespace = new DeleteTrailingWhitespace();
 
         // This would create the RuleMap off the formatting options, but for now
         //   it just adds all the avaliable rules.

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace LanguageService.Formatting.Ruling
 {
-    internal class DeleteTrailingWhitespaceRule : SimpleRule
+    internal class DeleteTrailingWhitespace : SimpleRule
     {
-        internal DeleteTrailingWhitespaceRule() :
+        internal DeleteTrailingWhitespace() :
             base(
                 new RuleDescriptor(TokenRange.All, TokenRange.All),
                 new List<Func<FormattingContext, bool>> { Rules.TokensAreNotOnSameLine },
