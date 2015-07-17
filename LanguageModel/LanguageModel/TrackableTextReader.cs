@@ -27,29 +27,26 @@ namespace LanguageService
             if (this.CurrentCharacter != unchecked((char)-1))
             {
                 ++Position;
+                this.CurrentCharacter = (char)textReader.Read();
                 // if the stream reader has not been pushed back at all
                 if (this.pushedDistance == 0)
                 {
-                    if (this.CurrentCharacter != 0)
-                    {
-                        this.lastCharactars.Add(this.CurrentCharacter);
-                        if (this.lastCharactars.Count > this.historyLimit)
-                        {
-                            // limits the number of characters in the list
-                            this.lastCharactars = this.lastCharactars.GetRange(1, this.historyLimit);
-                        }
-                    }
 
-                    this.CurrentCharacter = (char) textReader.Read();
+                    this.lastCharactars.Add(this.CurrentCharacter);
+                    if (this.lastCharactars.Count > this.historyLimit)
+                    {
+                        // limits the number of characters in the list
+                        this.lastCharactars = this.lastCharactars.GetRange(1, this.historyLimit);
+                    }
                     return this.CurrentCharacter;
                 }
                 else
                 {
                     this.CurrentCharacter = this.lastCharactars[this.lastCharactars.Count - this.pushedDistance];
-                    ++this.pushedDistance;
+                    --this.pushedDistance;
                     return this.CurrentCharacter;
                 }
-                
+
             }
 
             return unchecked((char)-1);
@@ -71,10 +68,10 @@ namespace LanguageService
         }
 
         public void PushBack(int n = 1)
-            // if you just call PushBack(), it'll go back only one position
-            // otherwise you can back up to the history limit
+        // if you just call PushBack(), it'll go back only one position
+        // otherwise you can back up to the history limit
         {
-            if (this.pushedDistance + n > this.historyLimit || n > this.Position)
+            if (this.pushedDistance + n < this.historyLimit && n <= this.Position)
             {
                 this.Position -= n;
                 this.pushedDistance += n;
