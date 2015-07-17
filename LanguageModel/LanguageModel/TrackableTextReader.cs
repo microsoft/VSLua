@@ -7,20 +7,24 @@ using System.Threading.Tasks;
 
 namespace LanguageService
 {
-    class TrackableStreamReader : StreamReader
+    public class TrackableTextReader
     {
         private List<char> lastCharactars = new List<char>();
         private int historyLimit = 10;
         private int pushedDistance = 0;
         public char CurrentCharacter { get; private set; }
         public int Position { get; private set; }
-        public TrackableStreamReader(string path) : base(path)
-        { }
+        private readonly TextReader textReader;
 
-        public override int Read()
+        public TrackableTextReader(TextReader textReader)
+        {
+            this.textReader = textReader;
+        }
+
+        public int Read()
         {
             // if the current character is the final character
-            if (this.CurrentCharacter != -1)
+            if (this.CurrentCharacter != unchecked((char)-1))
             {
                 ++Position;
                 // if the stream reader has not been pushed back at all
@@ -36,7 +40,7 @@ namespace LanguageService
                         }
                     }
 
-                    this.CurrentCharacter = (char) base.Read();
+                    this.CurrentCharacter = (char) textReader.Read();
                     return this.CurrentCharacter;
                 }
                 else
@@ -48,7 +52,22 @@ namespace LanguageService
                 
             }
 
-            return -1;
+            return unchecked((char)-1);
+        }
+
+        public bool EndOfStream()
+        {
+            return this.Peek() == unchecked((char)-1);
+        }
+
+        public char Peek()
+        {
+            return (char)textReader.Peek();
+        }
+
+        public char ReadChar()
+        {
+            return (char)this.Read();
         }
 
         public void PushBack(int n = 1)

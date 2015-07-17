@@ -36,8 +36,8 @@ namespace LanguageService
         //TODO: remove string filename param and take a StreamReader
         public SyntaxTree CreateSyntaxTree(string filename)
         {
-            Stream luaStream = File.OpenRead(filename);
-            tokenList = Lexer.Tokenize(luaStream);
+            TextReader luaStream = File.OpenText(filename);
+            tokenList = Lexer.Tokenize(new TrackableTextReader(luaStream));
             ChunkNode root = ParseChunkNode();
             return new SyntaxTree(filename, root, errorList);
         }

@@ -25,12 +25,12 @@ namespace LanguageService.Formatting
         /// indentation text edits from the spacing text edits in the future but for now they are in
         /// the same list.
         /// </returns>
-        public static List<TextEditInfo> Format(Stream span)
+        public static List<TextEditInfo> Format(TextReader span)
         {
             RuleMap ruleMap = Rules.GetRuleMap();
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
-            List<Token> tokens = Lexer.Tokenize(span);
+            List<Token> tokens = Lexer.Tokenize(new TrackableTextReader(span));
             List<ParsedToken> parsedTokens = ParsedToken.GetParsedTokens(tokens);
 
             for (int i = 0; i < parsedTokens.Count - 1; ++i)

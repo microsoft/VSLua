@@ -86,7 +86,7 @@ namespace LanguageService
             }
         }
 
-        public static List<Token> Tokenize(Stream stream) //TODO: Return a bool based on if this is a new copy of the lexer or not
+        public static List<Token> Tokenize(TrackableTextReader stream) //TODO: Return a bool based on if this is a new copy of the lexer or not
         {
             Token nextToken;
             List<Trivia> trivia;
@@ -108,7 +108,7 @@ namespace LanguageService
             }
             return tokenList;
         }
-        private static List<Trivia> ConsumeTrivia(Stream stream)
+        private static List<Trivia> ConsumeTrivia(TrackableTextReader stream)
         {
             List<Trivia> triviaList = new List<Trivia>();
             bool isTrivia = false;
@@ -186,7 +186,7 @@ namespace LanguageService
                         else
                         {
                             isTrivia = false;
-                            stream.Position--;
+                            stream.PushBack();
                         }
                         break;
 
@@ -200,7 +200,7 @@ namespace LanguageService
             return triviaList;
         }
 
-        private static Trivia ReadLongComment(Stream stream, string commentSoFar, int? level)
+        private static Trivia ReadLongComment(TrackableTextReader stream, string commentSoFar, int? level)
         {
             if (level == null)
             {
@@ -217,7 +217,7 @@ namespace LanguageService
             return new Trivia(Trivia.TriviaType.Comment, commentSoFar);
         }
 
-        private static int? GetLongCommentOpenBracket(Stream stream, ref string commentSoFar)
+        private static int? GetLongCommentOpenBracket(TrackableTextReader stream, ref string commentSoFar)
         {
             if (stream.Peek() != '[')
             {
@@ -247,7 +247,7 @@ namespace LanguageService
         }
 
 
-        private static Token ReadNextToken(Stream stream, List<Trivia> trivia, int fullStart)
+        private static Token ReadNextToken(TrackableTextReader stream, List<Trivia> trivia, int fullStart)
         {
             char nextChar;
 
@@ -279,7 +279,7 @@ namespace LanguageService
                 return ReadSymbolToken(stream, trivia, fullStart);
             }
         }
-        private static Token ReadAlphaToken(Stream stream, List<Trivia> trivia, int fullStart)
+        private static Token ReadAlphaToken(TrackableTextReader stream, List<Trivia> trivia, int fullStart)
         {
             // Keyword or Identifier
             char nextChar;
@@ -303,7 +303,7 @@ namespace LanguageService
             }
         }
 
-        private static Token ReadNumberToken(Stream stream, List<Trivia> trivia, int fullStart)
+        private static Token ReadNumberToken(TrackableTextReader stream, List<Trivia> trivia, int fullStart)
         {
             StringBuilder number = new StringBuilder();
             int tokenStartPosition = (int)stream.Position;
@@ -326,7 +326,7 @@ namespace LanguageService
             }
         }
 
-        private static Token ReadStringToken(Stream stream, List<Trivia> leadingTrivia, int fullStart)
+        private static Token ReadStringToken(TrackableTextReader stream, List<Trivia> leadingTrivia, int fullStart)
         {
             StringBuilder fullString = new StringBuilder();
             int tokenStartPosition = (int)stream.Position;
@@ -479,7 +479,7 @@ namespace LanguageService
             }
         }
 
-        private static Token ReadSymbolToken(Stream stream, List<Trivia> leadingTrivia, int fullStart)
+        private static Token ReadSymbolToken(TrackableTextReader stream, List<Trivia> leadingTrivia, int fullStart)
         {
             int tokenStartPosition = (int)stream.Position;
             char nextChar = stream.ReadChar();
@@ -557,7 +557,7 @@ namespace LanguageService
         }
 
 
-        private static Trivia CollectWhitespace(Stream stream)
+        private static Trivia CollectWhitespace(TrackableTextReader stream)
         {
             StringBuilder whitespace = new StringBuilder();
             whitespace.Append(stream.ReadChar());
@@ -580,7 +580,7 @@ namespace LanguageService
             return ((nextChar == '"') || (nextChar == '\'') || (nextChar == '['));
         }
 
-        private static Trivia ReadLineComment(Stream stream, char[] commentRead)
+        private static Trivia ReadLineComment(TrackableTextReader stream, char[] commentRead)
         {
             string comment = "-" + new string(commentRead);
 
@@ -604,7 +604,7 @@ namespace LanguageService
             // 1exexexexe4 <- not a number
         }
 
-        public static void PrintTokens(Stream stream)
+        public static void PrintTokens(TrackableTextReader stream)
         {
             IEnumerable<Token> tokenEnumerable = Lexer.Tokenize(stream);
             foreach (Token t in tokenEnumerable)

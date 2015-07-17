@@ -19,7 +19,7 @@ namespace Formatting.Tests
 
         internal static string Format(string original)
         {
-            List<TextEditInfo> textEdits = Formatter.Format(Tester.GenerateStreamFromString(original));
+            List<TextEditInfo> textEdits = Formatter.Format(new StringReader(original));
 
             var factory = new EditorUtils.EditorHostFactory();
             var host = factory.CreateEditorHost();

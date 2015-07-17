@@ -98,7 +98,7 @@
     <Compile Include="LanguageModel\StreamExtension.cs" />
     <Compile Include="LanguageModel\SyntaxTree.cs" />
     <Compile Include="LanguageModel\Token.cs" />
-    <Compile Include="LanguageModel\TrackableStreamReader.cs" />
+    <Compile Include="LanguageModel\TrackableTextReader.cs" />
     <Compile Include="LanguageModel\Trivia.cs" />
     <Compile Include="LanguageModel\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
