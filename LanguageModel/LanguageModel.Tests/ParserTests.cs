@@ -21,13 +21,15 @@ namespace LanguageService.Tests
             this.logger = logger;
         }
 
-        //[Fact]
+        [Fact]
         public void testNestedSampleIf()
         {
             Parser parser = new Parser();
-            SyntaxTree tree = parser.CreateSyntaxTree(@"CorrectSampleLuaFiles\smallif.lua");
-
-            SyntaxTree expected = new SyntaxTree("smallif.lua",
+            SyntaxTree tree = parser.CreateSyntaxTree(@"CorrectSampleLuaFiles\nestedif.lua");
+            
+            //The expected tree ignores Trivia, hence all the null parameteres
+            //TODO: complete construction of neste
+            SyntaxTree expected = new SyntaxTree("nestedif.lua",
                 ChunkNode.Create(0, 247,
                     Block.Create(0, 244, new List<SyntaxNode>()
                     {
@@ -57,8 +59,7 @@ namespace LanguageService.Tests
             Parser parser = new Parser();
             SyntaxTree tree = parser.CreateSyntaxTree(@"CorrectSampleLuaFiles\smallif.lua");
 
-            Debug.WriteLine(tree.ToString());
-            //TODO: fix position numbers...
+            //TODO: find more maintainable way to add position numbers...
             SyntaxTree expected = new SyntaxTree("smallif.lua",
                 ChunkNode.Create(0, 247,
                     Block.Create(0, 244, new List<SyntaxNode>()
@@ -80,14 +81,15 @@ namespace LanguageService.Tests
                     new Token(TokenType.EndOfFile, "", null, 35, 35)),/*TODO: change once expanded*/
                     null);
 
-            Assert.Equal(expected.ToString(), tree.ToString());
-
+            Debug.WriteLine(tree.ToString());
             Debug.WriteLine(expected.ToString());
 
+            Assert.Equal(expected.ToString(), tree.ToString());
+
+            //TODO: refactor  test code
             Assert.Equal(tree.Root.ProgramBlock.ReturnStatement, null);
             Assert.Equal(1, tree.Root.ProgramBlock.Children.Count);
             Assert.Equal(tree.Root.ProgramBlock.Children[0] is IfNode, true);
-            this.logger.WriteLine("blahblah");
             Assert.Equal((tree.Root.ProgramBlock.Children[0] as IfNode).Exp is BinopExpression, true);
             Assert.Equal(((tree.Root.ProgramBlock.Children[0] as IfNode).Exp as BinopExpression).Binop.Type, TokenType.EqualityOperator);
             Assert.Equal((tree.Root.ProgramBlock.Children[0] as IfNode).IfBlock.Children.Count, 2);

@@ -16,13 +16,13 @@ namespace LanguageService
             this.ErrorList = errorList;
         }
 
+        //TODO: remove filename and finalize design based on host API
         public string FileName { get; private set; }
         public ChunkNode Root { get; private set; }
         public List<ParseError> ErrorList { get; private set; }
         public SyntaxNode GetNodeAt(int position)
         {
             throw new NotImplementedException();
-            return null;
         }
 
         public override string ToString()

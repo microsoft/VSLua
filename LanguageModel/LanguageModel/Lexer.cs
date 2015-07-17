@@ -39,7 +39,7 @@ namespace LanguageService
         {
             //TODO: include vararg operators
             { "-", TokenType.MinusOperator }, //TODO: deal with ambiguity
-            { "~", TokenType.TildeUnOp },
+            { "~", TokenType.TildeUnOp }, //TODO: deal with ambiguity
             { "#", TokenType.LengthUnop },
             {"~=", TokenType.NotEqualsOperator },
             {"<=", TokenType.LessOrEqualOperator },
@@ -562,7 +562,7 @@ namespace LanguageService
             StringBuilder whitespace = new StringBuilder();
             whitespace.Append(stream.ReadChar());
 
-            while (stream.Peek() == ' ' || stream.Peek() == '\t') // TODO: check other whitespace types
+            while (stream.Peek() == ' ' || stream.Peek() == '\t') // Question: are there any other types of whitespace?
             {
                 whitespace.Append(stream.ReadChar());
             }
@@ -572,7 +572,7 @@ namespace LanguageService
 
         private static bool IsValidTerminator(char next)
         {
-            return !char.IsLetter(next); //TODO: check if this is alright problems with isletter?
+            return !char.IsLetter(next); //Question are there any problems with isletter?
         }
 
         private static bool IsQuote(char nextChar)
@@ -591,90 +591,6 @@ namespace LanguageService
 
             return new Trivia(Trivia.TriviaType.Comment, comment);
         }
-
-        //private static Trivia ReadLongComment(Stream stream, char[] commentRead)
-        //{
-        //    StringBuilder comment = new StringBuilder();
-        //    comment.Append("-").Append(new string(commentRead));
-
-        //    int level = 0;
-        //    char next;
-
-        //    switch (commentRead[commentRead.Length - 1])
-        //    {
-        //        case '=':
-        //            level++;
-        //            next = stream.Peek();
-
-        //            // Get levels (=) 
-        //            while (next == '=')
-        //            {
-        //                comment.Append(stream.ReadChar());
-        //                level++;
-        //                next = stream.Peek();
-        //            }
-
-        //            if (next == '[')
-        //            {
-        //                comment.Append(stream.ReadChar());
-
-        //                while (level != 0)
-        //                {
-        //                    next = stream.Peek();
-
-        //                    if (next == ']')
-        //                    {
-        //                        comment.Append(stream.ReadChar());
-        //                        int currentLevel = level;
-        //                        next = stream.Peek();
-
-        //                        while ((next == '=') && (currentLevel > 0))
-        //                        {
-        //                            comment.Append(stream.ReadChar());
-        //                            currentLevel--;
-        //                            next = stream.Peek();
-        //                        }
-
-        //                        if ((next == ']') && (currentLevel == 0))
-        //                        {
-        //                            comment.Append(stream.ReadChar());
-        //                            level = 0;
-        //                            return new Trivia(Trivia.TriviaType.Comment, comment.ToString());
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        comment.Append(stream.ReadChar());
-        //                    }
-        //                }
-        //            }
-        //            else
-        //            {
-        //                // TODO: fix that double type cast
-        //                char[] alreadyConsumed = comment.ToString().ToCharArray();
-
-        //                return ReadLineComment(stream, alreadyConsumed);
-        //            }
-
-        //            break;
-        //        case '[':
-        //            comment.Append(stream.ReadChar());
-        //            char[] validEnd = { ']', ']' };
-        //            char[] currentEnd = new char[validEnd.Length];
-        //            stream.Read(currentEnd, 0, validEnd.Length);
-
-        //            while (currentEnd != validEnd)
-        //            {
-        //                comment.Append(currentEnd);
-        //                stream.Read(currentEnd, 0, validEnd.Length);
-        //            }
-
-        //            comment.Append(currentEnd);
-        //            return new Trivia(Trivia.TriviaType.Comment, comment.ToString());
-        //    }
-
-        //    return new Trivia(Trivia.TriviaType.Comment, comment.ToString());
-        //}
 
         private static bool IsValidNumber(char character)
         {
