@@ -2,6 +2,7 @@
 using LanguageService.Formatting;
 using Xunit;
 using System.IO;
+using LanguageModel;
 
 namespace Formatting.Tests
 {
@@ -19,7 +20,7 @@ namespace Formatting.Tests
 
         internal static string Format(string original)
         {
-            List<TextEditInfo> textEdits = Formatter.Format(new StringReader(original));
+            List<TextEditInfo> textEdits = Formatter.Format(new SourceText(new StringReader(original)));
 
             var factory = new EditorUtils.EditorHostFactory();
             var host = factory.CreateEditorHost();

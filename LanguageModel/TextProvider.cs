@@ -9,18 +9,21 @@ using System.IO;
 
 namespace LanguageModel
 {
-    public static class TextProvider
+    public static class ParseTreeProvider
     {
-        private static List<Token> parseTree = null;
-        
-        public static void Update(TextReader textReader)
-        {
-            TextProvider.parseTree = Lexer.Tokenize(textReader);
-        }
+        private static ConditionalWeakTable<SourceText, List<Token>> sources = 
+            new ConditionalWeakTable<SourceText, List<Token>>();
 
-        public static List<Token> Get()
+        public static List<Token> Get(SourceText sourceText)
         {
-            return parseTree;
+            List<Token> tokens = null;
+            if (sources.TryGetValue(sourceText, out tokens))
+            {
+                return tokens;
+            }
+            tokens = Lexer.Tokenize(sourceText.textReader);
+            sources.Add(sourceText, tokens);
+            return tokens;
         }
     }
 }

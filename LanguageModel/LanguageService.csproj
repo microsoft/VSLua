@@ -106,6 +106,7 @@
     <Compile Include="LanguageModel\NodeClasses.cs">
       <Generator>MSBuild:GenerateCodeFromAttributes</Generator>
     </Compile>
+    <Compile Include="SourceText.cs" />
     <Compile Include="TextProvider.cs" />
   </ItemGroup>
   <ItemGroup>
