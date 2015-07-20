@@ -24,7 +24,7 @@ namespace VSLua.Formatting
         /// <summary>
         /// Formats the statenent made by the user. A statement as defined in the Formatting Functional Spec.
         /// </summary>
-        void FormatStatement();
+        // void FormatStatement();
 
         /// <summary>
         /// Formats the pasted content.

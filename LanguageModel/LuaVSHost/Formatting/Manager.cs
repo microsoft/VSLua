@@ -108,10 +108,10 @@ namespace VSLua.Formatting
             throw new NotImplementedException();
         }
 
-        public void FormatStatement()
-        {
-            throw new NotImplementedException();
-        }
+        //public void FormatStatement()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         private bool Format(SnapshotSpan span)
         {
