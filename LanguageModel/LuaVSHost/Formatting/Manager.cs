@@ -95,7 +95,11 @@ namespace VSLua.Formatting
 
         public void FormatOnEnter(SnapshotPoint caret)
         {
-            throw new NotImplementedException();
+            var snapshotLine = caret.GetContainingLine();
+            int startPos = snapshotLine.Start.Position;
+            int endPos = caret.Position;
+            SnapshotSpan span = new SnapshotSpan(this.textBuffer.CurrentSnapshot, Span.FromBounds(startPos, endPos));
+            this.Format(span);
         }
 
         public void FormatOnPaste()
@@ -123,10 +127,11 @@ namespace VSLua.Formatting
 
             SnapshotPoint startLinePoint = span.Start.GetContainingLine().Start;
             span = new SnapshotSpan(startLinePoint, span.End);
+            ITextSnapshot textSnapshot = span.Snapshot;
 
-            SourceText sourceText = SourceTextProvider.Get(this.textBuffer.CurrentSnapshot);
+            SourceText sourceText = SourceTextProvider.Get(textSnapshot);
 
-            List<TextEditInfo> edits = Formatter.Format(sourceText);
+            List<TextEditInfo> edits = Formatter.Format(sourceText, span.Start.Position, span.End.Position);
 
             using (ITextEdit textEdit = this.textBuffer.CreateEdit())
             {
