@@ -15,6 +15,11 @@ namespace LanguageService
     {
         ParseError(ErrorType type, string message, int start, int end)
         {
+            if(message == null)
+            {
+                throw new ArgumentNullException("message");
+            }
+
             this.Type = type;
             this.Message = message;
             this.Start = start;

@@ -189,6 +189,7 @@ namespace LanguageService
         {
             Validate.IsNotNull(level, nameof(level));
 
+            //TODO: re-write without regex
             Regex closeBracketPattern = new Regex(@"\]={"+ level.ToString() + @"}\]");
 
             while (!closeBracketPattern.IsMatch(commentSoFar))
@@ -428,55 +429,73 @@ namespace LanguageService
             switch (nextChar)
             {
                 case ':':
-                case '.':
-                    // here use dictionary for minus, plus etc
                     if (nextChar != stream.Peek())
                     {
-                        return new Token(Symbols[nextChar.ToString()], nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(TokenType.Colon, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        char[] symbol = { nextChar, stream.ReadChar() };
-                        string symbolKey = new string(symbol);
-                        return new Token(Symbols[symbolKey], symbolKey, leadingTrivia, fullStart, tokenStartPosition);
+                        stream.ReadChar();
+                        return new Token(TokenType.DoubleColon, "::", leadingTrivia, fullStart, tokenStartPosition);
+                    }
+                case '.':
+                    if (nextChar != stream.Peek())
+                    {
+                        return new Token(TokenType.Dot, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                    }
+                    else
+                    {
+                        stream.ReadChar();
+                        return new Token(TokenType.StringConcatOperator, "..", leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '<':
+                    if ((nextChar != stream.Peek()) && (stream.Peek() != '='))
+                    {
+                        return new Token(TokenType.LessThanOperator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                    }
+                    else
+                    {
+                        stream.ReadChar();
+                        return new Token(TokenType.LessOrEqualOperator, "<=", leadingTrivia, fullStart, tokenStartPosition);
+                    }
                 case '>':
-                    // could be doubles or eq sign
                     if ((nextChar != stream.Peek()) && (stream.Peek() != '='))
                     {
                         return new Token(Symbols[nextChar.ToString()], nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        char secondOperatorChar = stream.ReadChar();
-                        char[] symbol = { nextChar, secondOperatorChar };
-                        string symbolKey = new string(symbol);
-                        return new Token(Symbols[symbolKey], symbolKey, leadingTrivia, fullStart, tokenStartPosition);
+                        stream.ReadChar();
+                        return new Token(TokenType.GreaterOrEqualOperator, ">=", leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '=':
-                case '/':
                     if (nextChar != stream.Peek())
                     {
-                        return new Token(Symbols[nextChar.ToString()], nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(TokenType.AssignmentOperator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
                         stream.ReadChar();
-                        char[] symbol = { nextChar, nextChar };
-                        string symbolKey = new string(symbol);
-                        return new Token(Symbols[symbolKey], symbolKey, leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(TokenType.EqualityOperator, "==", leadingTrivia, fullStart, tokenStartPosition);
+                    }
+                case '/':
+                    if (nextChar != stream.Peek())
+                    {
+                        return new Token(TokenType.DivideOperator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                    }
+                    else
+                    {
+                        stream.ReadChar();
+                        return new Token(TokenType.FloorDivideOperator, "//", leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '~':
                     if (stream.Peek() != '=')
                     {
-                        return new Token(Symbols[nextChar.ToString()], nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(TokenType.TildeUnOp, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        char[] symbol = { nextChar, '=' };
-                        string symbolKey = new string(symbol);
-                        return new Token(Symbols[symbolKey], symbolKey, leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(TokenType.NotEqualsOperator, "~=", leadingTrivia, fullStart, tokenStartPosition);
                     }
                 default:
                     // non repeating symbol
