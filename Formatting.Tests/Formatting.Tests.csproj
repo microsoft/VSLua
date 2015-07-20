@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="AssignmentAndBinaryOperatorTests.cs" />
     <Compile Include="BracketTests.cs" />
+    <Compile Include="DotColonTests.cs" />
     <Compile Include="ForLoopTests.cs" />
     <Compile Include="IndentationTests.cs" />
     <Compile Include="LeftCommaTests.cs" />
