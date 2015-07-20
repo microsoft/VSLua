@@ -66,7 +66,7 @@ namespace VSLua.Formatting
                 switch ((VSConstants.VSStd2KCmdID)commandId)
                 {
                     case VSConstants.VSStd2KCmdID.RETURN:
-                        this.FormatOnEnter(this.textView.Caret.Position.BufferPosition);
+                        this.FormatOnEnter();
                         break;
                 }
             }
@@ -154,8 +154,9 @@ namespace VSLua.Formatting
             this.Format(span);
         }
 
-        public void FormatOnEnter(SnapshotPoint caret)
+        public void FormatOnEnter()
         {
+            SnapshotPoint caret = this.textView.Caret.Position.BufferPosition;
             int lineNumber = caret.GetContainingLine().LineNumber;
 
             if (lineNumber > 0)
