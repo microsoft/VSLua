@@ -21,9 +21,9 @@ namespace LanguageService
             this.End = end;
         }
 
-        public ErrorType Type { get; private set; }
-        public string Message { get; private set; }
-        public int Start { get; private set; }
-        public int End { get; private set; }
+        public ErrorType Type { get; }
+        public string Message { get; }
+        public int Start { get; }
+        public int End { get; }
     }
 }

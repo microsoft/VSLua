@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace LanguageService
 {
+    //UNFINISHED PROTOTYPE CODE! IGNORE FOR REVIEW
     class TrackableStreamReader : StreamReader
     {
         private List<char> lastCharactars = new List<char>();

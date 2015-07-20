@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace LanguageService
@@ -42,7 +41,7 @@ namespace LanguageService
         BitwiseOrOperator,
         Dot,
         Comma,
-        SemiColon,
+        Semicolon,
         Colon,
         DoubleColon,
         AssignmentOperator,

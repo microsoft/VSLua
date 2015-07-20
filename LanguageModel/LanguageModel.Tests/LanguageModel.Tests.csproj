@@ -82,9 +82,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CorrectSampleLuaFiles\assignment.lua">
+    <EmbeddedResource Include="CorrectSampleLuaFiles\assignment.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </EmbeddedResource>
     <None Include="CorrectSampleLuaFiles\concat.lua" />
     <None Include="CorrectSampleLuaFiles\if.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

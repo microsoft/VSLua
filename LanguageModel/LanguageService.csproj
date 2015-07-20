@@ -8,8 +8,8 @@
     <ProjectGuid>{CFF6EF45-EE9F-4A9E-BD4E-8607C2BC9452}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LanguageModel</RootNamespace>
-    <AssemblyName>LanguageModel</AssemblyName>
+    <RootNamespace>LanguageService</RootNamespace>
+    <AssemblyName>LanguageService</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -46,6 +46,7 @@
       <HintPath>packages\ImmutableObjectGraph.1.0.15192-beta7\lib\portable-net45+win+wp80\ImmutableObjectGraph.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Utilities, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.1.36.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Collections.Immutable.1.1.36\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
@@ -94,6 +95,7 @@
     <Compile Include="Formatting\TokenRange.cs" />
     <Compile Include="LanguageModel\IndentingTextWriter.cs" />
     <Compile Include="LanguageModel\Lexer.cs" />
+    <Compile Include="LanguageModel\ParseContexts.cs" />
     <Compile Include="LanguageModel\ParseError.cs" />
     <Compile Include="LanguageModel\StreamExtension.cs" />
     <Compile Include="LanguageModel\SyntaxTree.cs" />

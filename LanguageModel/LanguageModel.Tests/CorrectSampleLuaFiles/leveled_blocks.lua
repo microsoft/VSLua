@@ -1,3 +1,6 @@
 x = [==========[leveled string]==========]
-y = [==========================[ onesided!
+y = [[adsf
+asf]]
 z = [= unfinished
+y = [==========================[ onesided!
+ds

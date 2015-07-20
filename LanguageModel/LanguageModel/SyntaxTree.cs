@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LanguageService
 {
     public class SyntaxTree
     {
-        public SyntaxTree(string fileName, ChunkNode root, List<ParseError> errorList)
+        public SyntaxTree(string fileName, ChunkNode root, ImmutableList<ParseError> errorList)
         {
             this.FileName = fileName;
             this.Root = root;
@@ -17,9 +15,9 @@ namespace LanguageService
         }
 
         //TODO: remove filename and finalize design based on host API
-        public string FileName { get; private set; }
-        public ChunkNode Root { get; private set; }
-        public List<ParseError> ErrorList { get; private set; }
+        public string FileName { get; }
+        public ChunkNode Root { get; }
+        public ImmutableList<ParseError> ErrorList { get; }
         public SyntaxNode GetNodeAt(int position)
         {
             throw new NotImplementedException();

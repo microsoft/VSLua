@@ -21,7 +21,7 @@ namespace LanguageService
         {
             if (inner == null)
             {
-                throw new ArgumentNullException("inner textwriter");
+                throw new ArgumentNullException("inner");
             }
 
             this.inner = inner;
@@ -36,7 +36,7 @@ namespace LanguageService
         {
             if (writer == null)
             {
-                throw new ArgumentNullException("writter textwriter");
+                throw new ArgumentNullException("writer");
             }
 
             return writer as IndentingTextWriter ?? new IndentingTextWriter(writer);
@@ -76,7 +76,7 @@ namespace LanguageService
             {
                 if (writer == null)
                 {
-                    throw new ArgumentNullException("writter textwriter");
+                    throw new ArgumentNullException("writer");
                 }
 
                 this.writer = writer;

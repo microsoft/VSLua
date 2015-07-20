@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Xunit;
 
@@ -42,7 +42,7 @@ namespace LanguageService.Tests
                 TokenType.OpenParen,
                 TokenType.Identifier,
                 TokenType.CloseParen,
-                TokenType.SemiColon,
+                TokenType.Semicolon,
                 TokenType.Identifier,
                 TokenType.Dot,
                 TokenType.Identifier,
@@ -143,16 +143,32 @@ namespace LanguageService.Tests
         [Fact]
         public void IdentifyLeveledBlocksTokenTypes()
         {
+            var expectedTokens = new TokenType[]
+            {
+                TokenType.Identifier,
+                TokenType.AssignmentOperator,
+                TokenType.String,
+                TokenType.Identifier,
+                TokenType.AssignmentOperator,
+                TokenType.String,
+                TokenType.Identifier,
+                TokenType.AssignmentOperator,
+                TokenType.Unknown,
+                TokenType.Identifier,
+                TokenType.Identifier,
+                TokenType.AssignmentOperator,
+                TokenType.String,
+                TokenType.EndOfFile,
+            };
+
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\leveled_blocks.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             int tokenIndex = 0;
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.AssignmentOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.String, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.AssignmentOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.String, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.EndOfFile, tokenList[tokenIndex++].Type);
+
+            for (int i = 0; i < expectedTokens.Length; i++)
+            {
+                Assert.Equal(expectedTokens[i], tokenList[tokenIndex++].Type);
+            }
         }
 
         [Fact]
@@ -224,6 +240,7 @@ namespace LanguageService.Tests
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             foreach (Token tok in tokenList)
             {
+                Debug.WriteLine(tok.ToString());
                 Assert.NotEqual(TokenType.Unknown, tok.Type);
             }
         }
@@ -235,6 +252,7 @@ namespace LanguageService.Tests
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             foreach (Token tok in tokenList)
             {
+                Debug.WriteLine(tok.ToString());
                 Assert.NotEqual(TokenType.Unknown, tok.Type);
             }
         }
