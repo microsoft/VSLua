@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.Text.Editor;
 
 using LanguageService.Formatting;
 using LanguageModel;
+using System.IO;
 
 namespace VSLua.Formatting
 {
@@ -123,7 +124,7 @@ namespace VSLua.Formatting
             SnapshotPoint startLinePoint = span.Start.GetContainingLine().Start;
             span = new SnapshotSpan(startLinePoint, span.End);
 
-            SourceText sourceText = Service.Get(this.textBuffer.CurrentSnapshot);
+            SourceText sourceText = SourceTextProvider.Get(this.textBuffer.CurrentSnapshot);
 
             List<TextEditInfo> edits = Formatter.Format(sourceText);
 

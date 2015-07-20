@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace VSLua.Shared
 {
-    internal static class Service
+    internal static class SourceTextProvider
     {
         private static ConditionalWeakTable<ITextSnapshot, SourceText> sources =
             new ConditionalWeakTable<ITextSnapshot, SourceText>();
@@ -21,6 +21,7 @@ namespace VSLua.Shared
             {
                 return sourceText;
             }
+    
             sourceText = new SourceText(new TextSnapshotToTextReader(textSnapshot));
             sources.Add(textSnapshot, sourceText);
             return sourceText;

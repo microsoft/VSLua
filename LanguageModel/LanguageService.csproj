@@ -107,7 +107,7 @@
       <Generator>MSBuild:GenerateCodeFromAttributes</Generator>
     </Compile>
     <Compile Include="SourceText.cs" />
-    <Compile Include="TextProvider.cs" />
+    <Compile Include="ParseTreeProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
