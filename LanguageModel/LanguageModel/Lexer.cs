@@ -575,7 +575,7 @@ namespace LanguageService
 
         private static Trivia ReadLineComment(TrackableTextReader stream, char[] commentRead)
         {
-            string comment = "-" + new string(commentRead);
+            string comment = new string(commentRead);
 
             while (stream.Peek() != '\n' && stream.Peek() != '\r' && stream.Peek() != Eof) // Todo: maybe not the safest way of checking for newline
             {
