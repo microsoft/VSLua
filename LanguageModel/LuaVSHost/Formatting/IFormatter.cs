@@ -13,7 +13,7 @@ namespace VSLua.Formatting
         /// Formats the line based on the caret position.
         /// </summary>
         /// <param name="caret"> The position of the caret in the text buffer </param>
-        void FormatOnEnter(SnapshotPoint caret);
+        void FormatOnEnter();
 
         /// <summary>
         /// Formats the selection made by the user.
@@ -24,7 +24,7 @@ namespace VSLua.Formatting
         /// <summary>
         /// Formats the statenent made by the user. A statement as defined in the Formatting Functional Spec.
         /// </summary>
-        void FormatStatement();
+        // void FormatStatement();
 
         /// <summary>
         /// Formats the pasted content.
