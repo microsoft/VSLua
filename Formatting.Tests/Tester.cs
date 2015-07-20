@@ -18,13 +18,38 @@ namespace Formatting.Tests
             return stream;
         }
 
+        internal struct PasteInfo
+        {
+            internal string PasteString { get; }
+            internal int From { get; }
+            internal int To { get; }
+            internal PasteInfo(string pasteString, int from, int to)
+            {
+                this.PasteString = pasteString;
+                this.From = from;
+                this.To = to;
+            }
+        }
+
+
+        internal static string FormatOnPaste(string original, PasteInfo pasteInfo)
+        {
+
+            var factory = new EditorUtils.EditorHostFactory();
+            var host = factory.CreateEditorHost();
+            var buffer = host.CreateTextBuffer(original);
+            //Manager.
+
+            return null;
+        }
+
+
         internal static string Format(string original)
         {
             List<TextEditInfo> textEdits = Formatter.Format(new SourceText(new StringReader(original)));
 
             var factory = new EditorUtils.EditorHostFactory();
             var host = factory.CreateEditorHost();
-
             var buffer = host.CreateTextBuffer(original);
             var edit = buffer.CreateEdit();
 
