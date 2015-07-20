@@ -55,7 +55,7 @@ namespace LanguageService.Formatting
             int indent_level = 0;
             foreach (Token token in tokens)
             {
-                
+
 
                 if (token.FullStart > to)
                 {

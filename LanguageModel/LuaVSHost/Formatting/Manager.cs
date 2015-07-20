@@ -18,6 +18,7 @@ namespace VSLua.Formatting
         private ITextBuffer textBuffer;
         private ITextView textView;
         private bool isClosed;
+        private ITextSnapshot prePasteSnapshot;
 
         internal Manager(ITextBuffer textBuffer, ITextView textView)
         {
@@ -26,22 +27,63 @@ namespace VSLua.Formatting
             this.textView = textView;
         }
 
-        public void PostProcessCommand(Guid guidCmdGroup, uint commandId, IntPtr variantIn, bool wasHandled)
-        {
-            // For typing stuff (after semicolin, } or enter and stuff)
-        }
-
         public bool PreProcessCommand(Guid guidCmdGroup, uint commandId, IntPtr variantIn)
         {
             if (guidCmdGroup == VSConstants.VSStd2K)
             {
-                if ((VSConstants.VSStd2KCmdID)commandId == VSConstants.VSStd2KCmdID.FORMATDOCUMENT)
+                switch ((VSConstants.VSStd2KCmdID)commandId)
                 {
-                    this.FormatDocument();
-                    return true;
+                    case VSConstants.VSStd2KCmdID.FORMATDOCUMENT:
+                        {
+                            this.FormatDocument();
+                            return true;
+                        }
+                    case VSConstants.VSStd2KCmdID.FORMATSELECTION:
+                        {
+                            this.FormatSelection();
+                            return true;
+                        }
+                }
+            }
+            else if (guidCmdGroup == typeof(VSConstants.VSStd97CmdID).GUID)
+            {
+                switch ((VSConstants.VSStd97CmdID)commandId)
+                {
+                    case VSConstants.VSStd97CmdID.Paste:
+                        {
+                            this.prePasteSnapshot = this.textView.TextSnapshot;
+                        }
+                        break;
                 }
             }
             return false;
+        }
+
+        public void PostProcessCommand(Guid guidCmdGroup, uint commandId, IntPtr variantIn, bool wasHandled)
+        {
+            if (guidCmdGroup == VSConstants.VSStd2K)
+            {
+                switch ((VSConstants.VSStd2KCmdID)commandId)
+                {
+                    case VSConstants.VSStd2KCmdID.RETURN:
+                        this.FormatOnEnter(this.textView.Caret.Position.BufferPosition);
+                        break;
+                }
+            }
+            else if (guidCmdGroup == typeof(VSConstants.VSStd97CmdID).GUID)
+            {
+                switch ((VSConstants.VSStd97CmdID)commandId)
+                {
+                    case VSConstants.VSStd97CmdID.Paste:
+                        {
+                            this.FormatOnPaste();
+                        }
+                        break;
+                }
+            }
+
+
+            // For typing stuff (after semicolin, } or enter and stuff)
         }
 
         public bool QueryCommandStatus(Guid guidCmdGroup, uint commandId, IntPtr commandText, out OLECMDF commandStatus)
@@ -50,13 +92,27 @@ namespace VSLua.Formatting
 
             if (guidCmdGroup == VSConstants.VSStd2K)
             {
-                if ((VSConstants.VSStd2KCmdID)commandId == VSConstants.VSStd2KCmdID.FORMATDOCUMENT)
+                switch ((VSConstants.VSStd2KCmdID)commandId)
                 {
-                    if (this.CanFormatDocument())
-                    {
-                        commandStatus = OLECommandFlags.OLECMDF_ENABLED | OLECommandFlags.OLECMDF_SUPPORTED;
-                        return true;
-                    }
+                    case VSConstants.VSStd2KCmdID.FORMATDOCUMENT:
+                        if (this.CanFormatDocument())
+                        {
+                            commandStatus = OLECommandFlags.OLECMDF_ENABLED | OLECommandFlags.OLECMDF_SUPPORTED;
+                            return true;
+                        }
+                        break;
+
+                    case VSConstants.VSStd2KCmdID.FORMATSELECTION:
+                        if (this.CanFormatSelection())
+                        {
+                            commandStatus = OLECommandFlags.OLECMDF_SUPPORTED;
+                            if (!this.textView.Selection.IsEmpty)
+                            {
+                                commandStatus |= OLECommandFlags.OLECMDF_ENABLED;
+                            }
+                            return true;
+                        }
+                        break;
                 }
             }
             return false;
@@ -80,6 +136,11 @@ namespace VSLua.Formatting
             return this.CanFormatSpan(new SnapshotSpan(this.textView.TextSnapshot, Span.FromBounds(0, endPos)));
         }
 
+        private bool CanFormatSelection()
+        {
+            return true;
+        }
+
         private bool CanFormatSpan(SnapshotSpan span)
         {
             return !this.textBuffer.IsReadOnly(span);
@@ -95,21 +156,48 @@ namespace VSLua.Formatting
 
         public void FormatOnEnter(SnapshotPoint caret)
         {
-            var snapshotLine = caret.GetContainingLine();
-            int startPos = snapshotLine.Start.Position;
-            int endPos = caret.Position;
-            SnapshotSpan span = new SnapshotSpan(this.textBuffer.CurrentSnapshot, Span.FromBounds(startPos, endPos));
-            this.Format(span);
+            int lineNumber = caret.GetContainingLine().LineNumber;
+
+            if (lineNumber > 0)
+            {
+                var snapshotLine = caret.Snapshot.GetLineFromLineNumber(lineNumber - 1);
+                int startPos = snapshotLine.Start.Position;
+                int endPos = caret.Position;
+                SnapshotSpan span = new SnapshotSpan(this.textBuffer.CurrentSnapshot, Span.FromBounds(startPos, endPos));
+                this.Format(span);
+            }
         }
 
         public void FormatOnPaste()
         {
-            throw new NotImplementedException();
+            INormalizedTextChangeCollection changes = this.prePasteSnapshot.Version.Changes;
+            if (changes != null && changes.Count > 0)
+            {
+                ITextChange firstChange = changes[0];
+                ITextChange lastChange = changes[changes.Count - 1];
+                //int length = (lastChange.OldPosition + lastChange.OldLength) - firstChange.OldPosition;
+                //SnapshotSpan oldSpan = EditorUtilities.CreateSnapshotSpan(this.prePasteSnapshot, firstChange.OldPosition, length);
+                //SnapshotSpan newSpan = oldSpan.TranslateTo(this.textView.TextSnapshot, SpanTrackingMode.EdgeExclusive);
+
+                SnapshotSpan newSpan = new SnapshotSpan(this.textView.TextSnapshot, Span.FromBounds(firstChange.NewPosition, lastChange.NewEnd));
+
+                this.Format(newSpan);
+            }
         }
 
         public void FormatSelection()
         {
-            throw new NotImplementedException();
+            SnapshotSpan snapshotSpan = this.GetSelectionSpan();
+            this.Format(snapshotSpan);
+        }
+
+        private SnapshotSpan GetSelectionSpan() // TODO: need meaningful format
+        {
+            int startPos = this.textView.Selection.Start.Position.Position;
+            int endPos = this.textView.Selection.End.Position.Position;
+            Span span = Span.FromBounds(startPos, endPos);
+            SnapshotSpan snapshotSpan = new SnapshotSpan(this.textView.TextSnapshot, span);
+            return snapshotSpan;
         }
 
         //public void FormatStatement()
