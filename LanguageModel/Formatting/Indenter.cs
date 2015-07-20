@@ -27,13 +27,11 @@ namespace LanguageService.Formatting
             }
             foreach (ParsedToken parsedToken in parsedTokens)
             {
-                IndentInfo? indentInfo = Indenter.GetSpacePositionAndLengthAfterLastNewline(parsedToken);
-
-                if (indentInfo != null)
-                {
-                    string indentationString =
+                string indentationString =
                         Indenter.GetIndentationStringFromBlockLevel(parsedToken.BlockLevel, null);
-                    yield return new TextEditInfo(((IndentInfo)indentInfo).Start, ((IndentInfo)indentInfo).Length, indentationString);
+                foreach (IndentInfo indentInfo in Indenter.GetIndentInfos(parsedToken))
+                {
+                    yield return new TextEditInfo(indentInfo.Start, indentInfo.Length, indentationString);
                 }
             }
         }
@@ -59,42 +57,48 @@ namespace LanguageService.Formatting
             return new string(' ', amount);
         }
 
-        private static IndentInfo? GetSpacePositionAndLengthAfterLastNewline(ParsedToken parsedToken)
+        private static IEnumerable<IndentInfo> GetIndentInfos(ParsedToken parsedToken)
         {
             if (parsedToken == null)
             {
                 throw new ArgumentNullException();
             }
-            int length = 0;
-            int start = parsedToken.Token.FullStart;
 
-            int currentStart = parsedToken.Token.FullStart;
-            bool foundNewline = false;
+            List<Trivia> leadingTrivia = parsedToken.Token.LeadingTrivia;
 
-            var leadingTrivia = parsedToken.Token.LeadingTrivia;
-
-            for (int i = 0; i < leadingTrivia.Count; ++i)
+            if (leadingTrivia.Count > 0)
             {
-                if (leadingTrivia[i].Type == Trivia.TriviaType.Newline)
+                if (parsedToken.Token.FullStart == 0 && leadingTrivia[0].Type == Trivia.TriviaType.Whitespace)
                 {
-                    foundNewline = true;
-                    start = currentStart + leadingTrivia[i].Text.Length;
-                    length = 0;
-                    if (i + 1 < leadingTrivia.Count &&
-                        leadingTrivia[i + 1].Type == Trivia.TriviaType.Whitespace)
-                    {
-                        length = leadingTrivia[i + 1].Text.Length;
-                    }
+                    yield return new IndentInfo(parsedToken.Token.FullStart, leadingTrivia[0].Text.Length);
                 }
 
-                currentStart += leadingTrivia[i].Text.Length;
+                int start = parsedToken.Token.FullStart;
+
+                for (int i = 0; i < leadingTrivia.Count; ++i)
+                {
+                    Trivia currentTrivia = leadingTrivia[i];
+                    if (currentTrivia.Type == Trivia.TriviaType.Newline)
+                    {
+                        int indentStart = start + currentTrivia.Text.Length;
+                        if (i + 1 >= leadingTrivia.Count ||
+                            leadingTrivia[i + 1].Type != Trivia.TriviaType.Whitespace)
+                        {
+                            yield return new IndentInfo(indentStart, 0);
+                        }
+                        else
+                        {
+                            Trivia nextTrivia = leadingTrivia[i + 1];
+                            if (nextTrivia.Type == Trivia.TriviaType.Whitespace)
+                            {
+                                yield return new IndentInfo(indentStart, nextTrivia.Text.Length);
+                            }
+                        }
+                    }
+                    start += leadingTrivia[i].Text.Length;
+                }
             }
 
-            if (foundNewline)
-            {
-                return new IndentInfo(start, length);
-            }
-            return null;
         }
     }
 }
