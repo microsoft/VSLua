@@ -16,6 +16,11 @@ namespace VSLua.Shared
 
         internal static SourceText Get(ITextSnapshot textSnapshot)
         {
+            if (textSnapshot == null)
+            {
+                throw new ArgumentNullException("textSnapshot");
+            }
+
             SourceText sourceText = null;
             if (sources.TryGetValue(textSnapshot, out sourceText))
             {

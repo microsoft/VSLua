@@ -16,6 +16,11 @@ namespace LanguageModel
 
         public static List<Token> Get(SourceText sourceText)
         {
+            if (sourceText == null)
+            {
+                throw new ArgumentNullException("sourceText");
+            }
+
             List<Token> tokens = null;
             if (sources.TryGetValue(sourceText, out tokens))
             {

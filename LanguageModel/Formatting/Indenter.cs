@@ -54,9 +54,9 @@ namespace LanguageService.Formatting
 
         // This is for the actual construction of the indentation, the actual string.
         // For now the parameter just takes how many spaces are needed.
-        private static string MakeIndentation(int spaces)
+        private static string MakeIndentation(int amount)
         {
-            return new string(' ', spaces);
+            return new string(' ', amount);
         }
 
         private static IndentInfo? GetSpacePositionAndLengthAfterLastNewline(ParsedToken parsedToken)
