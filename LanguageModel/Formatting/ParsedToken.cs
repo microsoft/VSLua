@@ -69,7 +69,7 @@ namespace LanguageService.Formatting
                 }
 
                 indent_level = indent_level < 0 ? 0 : indent_level;
-                if (token.Start < from)
+                if (token.Start >= from)
                 {
                     parsedTokens.Add(new ParsedToken(token, indent_level, null));
                 }
