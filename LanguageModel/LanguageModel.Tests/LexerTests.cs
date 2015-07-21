@@ -157,7 +157,7 @@ namespace LanguageService.Tests
                 TokenType.Identifier,
                 TokenType.Identifier,
                 TokenType.AssignmentOperator,
-                TokenType.String,
+                TokenType.UnterminatedString,
                 TokenType.EndOfFile,
             };
 

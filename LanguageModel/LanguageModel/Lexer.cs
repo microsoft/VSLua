@@ -59,14 +59,14 @@ namespace LanguageService
             { ">", TokenType.GreaterThanOperator },
             { "<", TokenType.LessThanOperator },
             { "=", TokenType.AssignmentOperator },
-              
+
             { "{", TokenType.OpenCurlyBrace },
             { "}", TokenType.CloseCurlyBrace },
             { "(", TokenType.OpenParen },
             { ")", TokenType.CloseParen },
             { "[", TokenType.OpenBracket },
             { "]", TokenType.CloseBracket },
-              
+
             { ".", TokenType.Dot},
             { ",", TokenType.Comma},
             { ";", TokenType.Semicolon},
@@ -161,7 +161,7 @@ namespace LanguageService
 
                             if (level != null)
                             {
-                                triviaList.Add(ReadLongComment(stream, "--"+commentSoFar, level));
+                                triviaList.Add(ReadLongComment(stream, "--" + commentSoFar, level));
                             }
                             else
                             {
@@ -190,7 +190,7 @@ namespace LanguageService
             Validate.IsNotNull(level, nameof(level));
 
             //TODO: re-write without regex
-            Regex closeBracketPattern = new Regex(@"\]={"+ level.ToString() + @"}\]");
+            Regex closeBracketPattern = new Regex(@"\]={" + level.ToString() + @"}\]");
 
             while (!closeBracketPattern.IsMatch(commentSoFar))
             {
@@ -222,7 +222,8 @@ namespace LanguageService
                     if (c == '[')
                     {
                         return commentSoFar.Length - 2;
-                    } else
+                    }
+                    else
                     {
                         return null;
                     }
@@ -315,6 +316,7 @@ namespace LanguageService
         {
             StringBuilder fullString = new StringBuilder();
             int tokenStartPosition = (int)stream.Position;
+            TokenType type = TokenType.String;
             char nextChar;
 
             switch (stringDelimiter)
@@ -323,25 +325,23 @@ namespace LanguageService
                 case '\'':
                     fullString.Append(stream.ReadChar());
                     nextChar = stream.Peek();
-                    //Lua ignores a new line directly after the opening delimiter of a string.
-                    if (nextChar == '\r' || nextChar == '\n')
-                    {
-                        if (nextChar == '\r')
-                            stream.ReadChar();
-                        if (stream.Peek() == '\n')
-                            stream.ReadChar();
-                    }
-
-                    do
+                    bool terminateString = false;
+                    while ((nextChar != stringDelimiter) && !stream.EndOfStream() && !terminateString)
                     {
                         fullString.Append(stream.ReadChar());
                         nextChar = stream.Peek();
-                    } while ((nextChar != stringDelimiter) && !stream.EndOfStream());
 
-                    if (nextChar == stringDelimiter)
+                        if (nextChar == '\r' || nextChar == '\n')
+                        {
+                            type = TokenType.UnterminatedString;
+                            terminateString = true;
+                        }
+                    }
+
+                    if (nextChar == stringDelimiter || terminateString)
                     {
                         fullString.Append(stream.ReadChar());
-                        return new Token(TokenType.String, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(type, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
@@ -351,15 +351,10 @@ namespace LanguageService
                 case '[':
                     fullString.Append(stream.ReadChar());
                     int bracketLevel = 0;
-                    bool terminated = false;
                     nextChar = stream.Peek();
 
-                    while (nextChar == '=' && !stream.EndOfStream())
-                    {
-                        fullString.Append(stream.ReadChar());
-                        bracketLevel++;
-                        nextChar = stream.Peek();
-                    }
+                    bracketLevel = CountLevels(false, nextChar, 0, stream, fullString);
+                    nextChar = stream.Peek();
 
                     if (nextChar == '[')
                     {
@@ -373,9 +368,10 @@ namespace LanguageService
                                 stream.ReadChar();
                             if (stream.Peek() == '\n')
                                 stream.ReadChar();
+                            type = TokenType.IgnoreNewLineString;
                         }
 
-                        while (!terminated && !stream.EndOfStream())
+                        while (!stream.EndOfStream())
                         {
                             if (nextChar == ']')
                             {
@@ -383,17 +379,13 @@ namespace LanguageService
                                 nextChar = stream.Peek();
                                 int currentLevel = bracketLevel;
 
-                                while (nextChar == '=' && !stream.EndOfStream())
-                                {
-                                    fullString.Append(stream.ReadChar());
-                                    currentLevel--;
-                                    nextChar = stream.Peek();
-                                }
+                                currentLevel = CountLevels(true, nextChar, currentLevel, stream, fullString);
+                                nextChar = stream.Peek();
 
                                 if ((nextChar == ']') && (currentLevel == 0))
                                 {
                                     fullString.Append(stream.ReadChar());
-                                    return new Token(TokenType.String, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                                    return new Token(type, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                                 }
                             }
                             else
@@ -403,8 +395,9 @@ namespace LanguageService
                             nextChar = stream.Peek();
                         }
 
-                        return new Token(TokenType.String, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
-                    } else
+                        return new Token(TokenType.UnterminatedString, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                    }
+                    else
                     {
                         if (bracketLevel == 0)
                         {
@@ -417,7 +410,7 @@ namespace LanguageService
                         }
                     }
                 default:
-                    throw new ArgumentOutOfRangeException("Unrecognized String delimiter");
+                    throw new ArgumentOutOfRangeException(nameof(stringDelimiter), "Unrecognized String delimiter");
             }
         }
 
@@ -429,23 +422,21 @@ namespace LanguageService
             switch (nextChar)
             {
                 case ':':
-                    if (nextChar != stream.Peek())
+                    if (CheckAndConsumeNextToken(nextChar, stream))
                     {
                         return new Token(TokenType.Colon, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        stream.ReadChar();
                         return new Token(TokenType.DoubleColon, "::", leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '.':
-                    if (nextChar != stream.Peek())
+                    if (CheckAndConsumeNextToken(nextChar, stream))
                     {
                         return new Token(TokenType.Dot, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        stream.ReadChar();
                         return new Token(TokenType.StringConcatOperator, "..", leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '<':
@@ -455,8 +446,8 @@ namespace LanguageService
                     }
                     else
                     {
-                        stream.ReadChar();
-                        return new Token(TokenType.LessOrEqualOperator, "<=", leadingTrivia, fullStart, tokenStartPosition);
+                        string symbol = nextChar.ToString() + stream.ReadChar();
+                        return new Token(Symbols[symbol], symbol, leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '>':
                     if ((nextChar != stream.Peek()) && (stream.Peek() != '='))
@@ -465,31 +456,29 @@ namespace LanguageService
                     }
                     else
                     {
-                        stream.ReadChar();
-                        return new Token(TokenType.GreaterOrEqualOperator, ">=", leadingTrivia, fullStart, tokenStartPosition);
+                        string symbol = nextChar.ToString() + stream.ReadChar();
+                        return new Token(Symbols[symbol], symbol, leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '=':
-                    if (nextChar != stream.Peek())
+                    if (CheckAndConsumeNextToken(nextChar, stream))
                     {
                         return new Token(TokenType.AssignmentOperator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        stream.ReadChar();
                         return new Token(TokenType.EqualityOperator, "==", leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '/':
-                    if (nextChar != stream.Peek())
+                    if (CheckAndConsumeNextToken(nextChar, stream))
                     {
                         return new Token(TokenType.DivideOperator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        stream.ReadChar();
                         return new Token(TokenType.FloorDivideOperator, "//", leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '~':
-                    if (stream.Peek() != '=')
+                    if (CheckAndConsumeNextToken('=', stream))
                     {
                         return new Token(TokenType.TildeUnOp, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
@@ -572,5 +561,37 @@ namespace LanguageService
             }
         }
 
+        public static bool CheckAndConsumeNextToken(char character, Stream stream)
+        {
+            if (character != stream.Peek())
+            {
+                return true;
+            }
+            else
+            {
+                stream.ReadChar();
+                return false;
+            }
+        }
+
+        public static int CountLevels(bool validateCount, char character, int counter, Stream stream, StringBuilder builder)
+        {
+            int levelCount = counter;
+            while (character == '=' && !stream.EndOfStream())
+            {
+                builder.Append(stream.ReadChar());
+                if (validateCount)
+                {
+                    levelCount--;
+                }
+                else
+                {
+                    levelCount++;
+                }
+
+                character = stream.Peek();
+            }
+            return levelCount;
+        }
     }
 }

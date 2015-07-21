@@ -65,7 +65,9 @@ namespace LanguageService
         TrueKeyValue,
         ReturnKeyword,
         MissingToken,
-        VarArgOperator
+        VarArgOperator,
+        UnterminatedString,
+        IgnoreNewLineString
     }
 
     public class Token

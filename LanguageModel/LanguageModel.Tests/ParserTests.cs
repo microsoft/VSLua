@@ -52,7 +52,7 @@ namespace LanguageService.Tests
             //TODO: complete construction of neste
             SyntaxTree expected = new SyntaxTree("nestedif.lua",
                 ChunkNode.Create(0, 247,
-                    BlockNode.Create(0, 244, new List<SyntaxNode>()
+                    BlockNode.Create(0, 244, new List<StatementNode>()
                     {
                         IfStatementNode.Create(2, 117,
                             new Token(TokenType.IfKeyword, "if", null, 0, 2),
@@ -61,7 +61,7 @@ namespace LanguageService.Tests
                                 new Token(TokenType.EqualityOperator, "==", null, 9, 10),
                                 SimpleExpression.Create(13, 3, new Token(TokenType.String, "\"+\"", null, 12, 13))),
                             new Token(TokenType.ThenKeyword, "then", null, 16, 17),
-                            BlockNode.Create(26, 5/*TODO: change once expanded*/, new List<SyntaxNode>()
+                            BlockNode.Create(26, 5/*TODO: change once expanded*/, new List<StatementNode>()
                             {
                                 MisplacedTokenNode.Create(26, 4, new Token(TokenType.Identifier, "test", null, 21, 26)),
                                 SemiColonStatementNode.Create(30, 1, new Token(TokenType.Semicolon, ";", null, 30, 30))
@@ -84,7 +84,7 @@ namespace LanguageService.Tests
             //TODO: find more maintainable way to add position numbers...
             SyntaxTree expected = new SyntaxTree("smallif.lua",
                 ChunkNode.Create(0, 247,
-                    BlockNode.Create(0, 244, new List<SyntaxNode>()
+                    BlockNode.Create(0, 244, new List<StatementNode>()
                     {
                         IfStatementNode.Create(2, 117,
                             new Token(TokenType.IfKeyword, "if", null, 0, 2),
@@ -93,7 +93,7 @@ namespace LanguageService.Tests
                                 new Token(TokenType.EqualityOperator, "==", null, 9, 10),
                                 SimpleExpression.Create(13, 3, new Token(TokenType.String, "\"+\"", null, 12, 13))),
                             new Token(TokenType.ThenKeyword, "then", null, 16, 17),
-                            BlockNode.Create(26, 5/*TODO: change once expanded*/, new List<SyntaxNode>()
+                            BlockNode.Create(26, 5/*TODO: change once expanded*/, new List<StatementNode>()
                             {
                                 MisplacedTokenNode.Create(26, 4, new Token(TokenType.Identifier, "test", null, 21, 26)),
                                 SemiColonStatementNode.Create(30, 1, new Token(TokenType.Semicolon, ";", null, 30, 30))

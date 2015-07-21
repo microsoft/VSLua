@@ -22,19 +22,12 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class MissingNode : SyntaxNode
-    {
-        //TODO: add missing type
-        internal override void ToString(TextWriter writer)
-        {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("Missing Node");
-        }
-    }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class MisplacedTokenNode : SyntaxNode
+    public partial class StatementNode : SyntaxNode { }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class MisplacedTokenNode : StatementNode
     {
         [Required]
         readonly Token token;
@@ -47,7 +40,7 @@ namespace LanguageService
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class SemiColonStatementNode : SyntaxNode
+    public partial class SemiColonStatementNode : StatementNode
     {
         [Required]
         readonly Token token;
@@ -84,8 +77,9 @@ namespace LanguageService
     public partial class BlockNode : SyntaxNode
     {
         [Required]
-        readonly ImmutableList<SyntaxNode> statements;
-        readonly RetStatNode returnStatement;
+        [NotRecursive]
+        readonly ImmutableList<StatementNode> statements;
+        readonly ReturnStatNode returnStatement;
 
         internal override void ToString(TextWriter writer)
         {
@@ -111,7 +105,7 @@ namespace LanguageService
 
     #region If Statement Nodes
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class IfStatementNode : SyntaxNode
+    public partial class IfStatementNode : StatementNode
     {
         [Required]
         readonly Token ifKeyword;
@@ -372,7 +366,7 @@ namespace LanguageService
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class FunctionCall : PrefixExp //TODO: is this inheritance okay? Could be used as a statement, and not a prefixexp... does that matter?
+    public partial class FunctionCallExp : PrefixExp 
     {
         [Required]
         readonly PrefixExp prefixExp;
@@ -381,7 +375,17 @@ namespace LanguageService
         [Required]
         readonly Args args;
     }
-
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class FunctionCallStatement : StatementNode 
+    {
+        [Required]
+        readonly PrefixExp prefixExp;
+        readonly Token colon;
+        readonly Token name;
+        [Required]
+        readonly Args args;
+    }
+    
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class ParenPrefixExp : PrefixExp
     {
@@ -562,7 +566,7 @@ namespace LanguageService
 
     #region Other Nodes
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class RetStatNode : SyntaxNode
+    public partial class ReturnStatNode : SyntaxNode
     {
         [Required]
         readonly Token returnKeyword;
@@ -572,7 +576,7 @@ namespace LanguageService
         internal override void ToString(TextWriter writer)
         {
             var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("RetStat");
+            indentingWriter.WriteLine("ReturnStat");
             using (indentingWriter.Indent())
             {
                 indentingWriter.WriteLine("explist... implement"); //TODO: implement

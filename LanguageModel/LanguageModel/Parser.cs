@@ -73,12 +73,7 @@ namespace LanguageService
         }
         else
         {
-            //Question... this should always be End of file... is this bad practice? 
-            //Should I return null? I just dont want to deal with the annoying null 
-            //reference checks which might might make my code ugly... ideally the end
-            //of file token would filter through the parser creating missing nodes and tokens till it popped out to chunknode?
             return tokenList[tokenList.Count - 1];
-            //return null;
         }
     }
 
@@ -116,7 +111,7 @@ namespace LanguageService
         contextStack.Push(parsingContext);
         var node = BlockNode.CreateBuilder();
         node.StartPosition = this.Peek().FullStart;
-        List<SyntaxNode> children = new List<SyntaxNode>();
+        List<StatementNode> children = new List<StatementNode>();
 
         while (!IsContextTerminator(parsingContext, Peek().Type))
         {
@@ -135,7 +130,7 @@ namespace LanguageService
         return node.ToImmutable();
     }
 
-    private SyntaxNode ParseStatement()
+    private StatementNode ParseStatement()
     {
         switch (Peek().Type)
         {
@@ -313,14 +308,14 @@ namespace LanguageService
         return null;
     }
 
-    private RetStatNode ParseRetStat()
+    private ReturnStatNode ParseRetStat()
     {
         if (ParseExpected(TokenType.ReturnKeyword))
         {
             return null;
         }
 
-        var node = RetStatNode.CreateBuilder();
+        var node = ReturnStatNode.CreateBuilder();
         node.StartPosition = currentToken.Start;
         node.ReturnKeyword = currentToken;
         node.ReturnExpressions = ParseExpList()?.ToBuilder();

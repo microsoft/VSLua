@@ -17,7 +17,7 @@ namespace LanguageService
         {
             if(message == null)
             {
-                throw new ArgumentNullException("message");
+                throw new ArgumentNullException(nameof(message));
             }
 
             this.Type = type;
