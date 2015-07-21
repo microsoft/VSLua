@@ -169,20 +169,14 @@ namespace VSLua.Formatting
             }
         }
 
+        
+
         public void FormatOnPaste()
         {
-            INormalizedTextChangeCollection changes = this.prePasteSnapshot.Version.Changes;
-            if (changes != null && changes.Count > 0)
+            SnapshotSpan? newSpan = EditorUtilities.GetPasteSpan(this.prePasteSnapshot, this.textView.TextSnapshot);
+            if (newSpan != null)
             {
-                ITextChange firstChange = changes[0];
-                ITextChange lastChange = changes[changes.Count - 1];
-                //int length = (lastChange.OldPosition + lastChange.OldLength) - firstChange.OldPosition;
-                //SnapshotSpan oldSpan = EditorUtilities.CreateSnapshotSpan(this.prePasteSnapshot, firstChange.OldPosition, length);
-                //SnapshotSpan newSpan = oldSpan.TranslateTo(this.textView.TextSnapshot, SpanTrackingMode.EdgeExclusive);
-
-                SnapshotSpan newSpan = new SnapshotSpan(this.textView.TextSnapshot, Span.FromBounds(firstChange.NewPosition, lastChange.NewEnd));
-
-                this.Format(newSpan);
+                this.Format((SnapshotSpan)newSpan);
             }
         }
 

@@ -74,6 +74,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\LanguageModel\LuaVSHost\Shared\EditorUtilities.cs">
+      <Link>Shared\EditorUtilities.cs</Link>
+    </Compile>
     <Compile Include="FormatRulesAndIndentation\AssignmentAndBinaryOperatorTests.cs" />
     <Compile Include="FormatRulesAndIndentation\BracketTests.cs" />
     <Compile Include="FormatRulesAndIndentation\DotColonTests.cs" />
@@ -101,6 +104,10 @@
     <ProjectReference Include="..\LanguageModel\LanguageService.csproj">
       <Project>{cff6ef45-ee9f-4a9e-bd4e-8607c2bc9452}</Project>
       <Name>LanguageService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LanguageModel\LuaVSHost\VSLua.csproj">
+      <Project>{4c4e17b1-4382-460e-8308-a799c1f000c3}</Project>
+      <Name>VSLua</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
