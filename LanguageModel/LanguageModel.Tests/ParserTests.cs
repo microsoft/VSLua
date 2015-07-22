@@ -57,7 +57,7 @@ namespace LanguageService.Tests
                     }.ToImmutableList()),
                     new Token(TokenType.EndOfFile, "", null, 35, 35)),/*TODO: change once expanded*/
                     null);
-
+            Debug.WriteLine(tree.ToString());
             Assert.Equal(expected.ToString(), tree.ToString());
         }
 

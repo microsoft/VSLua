@@ -201,6 +201,21 @@ namespace LanguageService.LanguageModel.TreeVisitors
             throw new NotImplementedException();
         }
 
+        public void Visit(BreakStatementNode breakStatementNode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Visit(NameDotPair nameDotPair)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Visit(FuncNameNode funcNameNode)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Visit(StringArg stringArg)
         {
             throw new NotImplementedException();

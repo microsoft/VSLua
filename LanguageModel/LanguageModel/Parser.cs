@@ -140,41 +140,209 @@ namespace LanguageService
                     NextToken();
                     return SemiColonStatementNode.Create(currentToken.Start, currentToken.Length, currentToken); //Question: could just use next token as first param
                 case TokenType.BreakKeyword:
-                    throw new NotImplementedException();
-                    break;
+                    return ParseBreakStatementNode();
                 case TokenType.GotoKeyword:
-                    throw new NotImplementedException();
-                    break;
+                    return ParseGoToStatementNode();
                 case TokenType.DoKeyword:
-                    throw new NotImplementedException();
-                    break;
+                    return ParseDoStatementNode();
                 case TokenType.WhileKeyword:
-                    throw new NotImplementedException();
-                    break;
+                    return ParseWhileStatementNode();
                 case TokenType.RepeatKeyword:
-                    throw new NotImplementedException();
-                    break;
+                    return ParseRepeatStatementNode();
                 case TokenType.IfKeyword:
-                    return ParseIfNode();
+                    return ParseIfStatementNode();
                 case TokenType.ForKeyword:
-                    throw new NotImplementedException();
-                    break;
+                    if (tokenList[positionInTokenList + 2].Type == TokenType.Identifier && tokenList[positionInTokenList + 3].Type == TokenType.AssignmentOperator)
+                    {
+                        return ParseSimpleForStatementNode();
+                    } else
+                    {
+                        return ParseMultipleArgForStatementNode();
+                    }
                 case TokenType.FunctionKeyword:
-                    throw new NotImplementedException();
-                    break;
+                    return ParseGlobalFunctionStatementNode();
+                case TokenType.DoubleColon:
+                    return ParseLabelStatementNode();
                 case TokenType.LocalKeyword:
-                    throw new NotImplementedException();
-                    break;
+                    if(tokenList[positionInTokenList + 2].Type == TokenType.FunctionKeyword)
+                    {
+                        return ParseLocalFunctionStatementNode();
+                    } else
+                    {
+                        return ParseLocalAssignmentStatementNode();
+                    }
                 case TokenType.Identifier: //TODO implement, Misplaced Token node is just a placeholder for now.
                     NextToken();
                     return MisplacedTokenNode.Create(currentToken.Start, currentToken.Length, currentToken);
                 default:
+                    //TODO turn into skipped Trivia;
                     NextToken();
-                    return MisplacedTokenNode.Create(currentToken.Start, currentToken.Length, currentToken);
+                    return null;
             }
         }
 
-        private IfStatementNode ParseIfNode()
+        private MultipleArgForStatementNode ParseMultipleArgForStatementNode()
+        {
+            var node = MultipleArgForStatementNode.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            node.ForKeyword = GetExpectedToken(TokenType.ForKeyword);
+            node.NameList = ParseNamesList()?.ToBuilder();
+            node.InKeyword = GetExpectedToken(TokenType.InKeyword);
+            node.ExpList = ParseExpList()?.ToBuilder();
+            node.DoKeyword = GetExpectedToken(TokenType.DoKeyword);
+            node.Block = ParseBlock(Context.ForStatementContext)?.ToBuilder();
+            node.EndKeyword = GetExpectedToken(TokenType.EndKeyword);
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
+
+        private SimpleForStatementNode ParseSimpleForStatementNode()
+        {
+            var node = SimpleForStatementNode.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            node.ForKeyword = GetExpectedToken(TokenType.ForKeyword);
+            node.Name = GetExpectedToken(TokenType.Identifier);
+            node.AssignmentOperator = GetExpectedToken(TokenType.AssignmentOperator);
+            node.Exp1 = ParseExpression()?.ToBuilder();
+            node.Comma = GetExpectedToken(TokenType.Comma);
+            node.Exp2 = ParseExpression()?.ToBuilder();
+            if(Peek().Type == TokenType.Comma)
+            {
+                node.OptionalComma = GetExpectedToken(TokenType.Comma);
+                node.OptionalExp3 = ParseExpression()?.ToBuilder();
+            }
+            node.DoKeyword = GetExpectedToken(TokenType.DoKeyword);
+            node.Block = ParseBlock(Context.ForStatementContext)?.ToBuilder();
+            node.EndKeyword = GetExpectedToken(TokenType.EndKeyword);
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
+
+        private LocalAssignmentStatementNode ParseLocalAssignmentStatementNode()
+        {
+            var node = LocalAssignmentStatementNode.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            node.LocalKeyword = GetExpectedToken(TokenType.LocalKeyword);
+            node.NameList = ParseNamesList()?.ToBuilder();
+            if(Peek().Type == TokenType.AssignmentOperator)
+            {
+                node.AssignmentOperator = GetExpectedToken(TokenType.AssignmentOperator);
+                node.ExpList = ParseExpList()?.ToBuilder();
+            }
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
+
+        private LocalFunctionStatementNode ParseLocalFunctionStatementNode()
+        {
+            var node = LocalFunctionStatementNode.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            node.LocalKeyword = GetExpectedToken(TokenType.LocalKeyword);
+            node.FunctionKeyword = GetExpectedToken(TokenType.FunctionKeyword);
+            node.Name = GetExpectedToken(TokenType.Identifier);
+            node.FuncBody = ParseFunctionBody()?.ToBuilder();
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
+
+        private LabelStatementNode ParseLabelStatementNode()
+        {
+            var node = LabelStatementNode.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            node.DoubleColon1 = GetExpectedToken(TokenType.DoubleColon);
+            node.Name = GetExpectedToken(TokenType.Identifier);
+            node.DoubleColon2 = GetExpectedToken(TokenType.DoubleColon);
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
+
+        private GlobalFunctionStatementNode ParseGlobalFunctionStatementNode()
+        {
+            var node = GlobalFunctionStatementNode.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            node.FunctionKeyword = GetExpectedToken(TokenType.FunctionKeyword);
+            node.FuncName = ParseFuncNameNode()?.ToBuilder();
+            node.FuncBody = ParseFunctionBody()?.ToBuilder();
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
+
+        private FuncNameNode ParseFuncNameNode()
+        {
+            var node = FuncNameNode.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            node.Name = GetExpectedToken(TokenType.Identifier);
+            var names = new List<NameDotPair>();
+            while(ParseExpected(TokenType.Dot))
+            {
+                if (Peek().Type == TokenType.Identifier)
+                {
+                    names.Add(NameDotPair.Create(currentToken, NextToken()));
+                } else
+                {
+                    names.Add(NameDotPair.Create(currentToken, null));
+                }
+            }
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
+
+        private RepeatStatementNode ParseRepeatStatementNode()
+        {
+            var node = RepeatStatementNode.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            node.RepeatKeyword = GetExpectedToken(TokenType.RepeatKeyword);
+            node.Block = ParseBlock(Context.RepeatStatementContext)?.ToBuilder();
+            node.UntilKeyword = GetExpectedToken(TokenType.UntilKeyword);
+            node.Exp = ParseExpression()?.ToBuilder();
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
+
+        private WhileStatementNode ParseWhileStatementNode()
+        {
+            var node = WhileStatementNode.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            node.WhileKeyword = GetExpectedToken(TokenType.WhileKeyword);
+            node.Exp = ParseExpression()?.ToBuilder();
+            node.DoKeyword = GetExpectedToken(TokenType.DoKeyword);
+            node.Block = ParseBlock(Context.WhileContext)?.ToBuilder();
+            node.EndKeyword = GetExpectedToken(TokenType.EndKeyword);
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
+
+        private DoStatementNode ParseDoStatementNode()
+        {
+            var node = DoStatementNode.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            node.DoKeyword = GetExpectedToken(TokenType.DoKeyword);
+            node.Block = ParseBlock(Context.DoStatementContext)?.ToBuilder();
+            node.EndKeyword = GetExpectedToken(TokenType.EndKeyword);
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
+
+        private BreakStatementNode ParseBreakStatementNode()
+        {
+            var node = BreakStatementNode.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            node.BreakKeyword = GetExpectedToken(TokenType.BreakKeyword);
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
+
+        private GoToStatementNode ParseGoToStatementNode()
+        {
+            var node = GoToStatementNode.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            node.GoToKeyword = GetExpectedToken(TokenType.GotoKeyword);
+            node.Name = GetExpectedToken(TokenType.Identifier);
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
+
+        private IfStatementNode ParseIfStatementNode()
         {
             var node = IfStatementNode.CreateBuilder();
             node.StartPosition = Peek().Start;
@@ -315,14 +483,14 @@ namespace LanguageService
                         case TokenType.String:
                             var functionCallBuilder = FunctionCallExp.CreateBuilder();
                             functionCallBuilder.StartPosition = Peek().Start;
-                            functionCallBuilder.PrefixExp = ParsePrefixExp()?.ToBuilder();
+                            functionCallBuilder.PrefixExp = ParseNameVar()?.ToBuilder();
                             functionCallBuilder.Args = ParseArgs()?.ToBuilder();
                             functionCallBuilder.Length = currentToken.End - functionCallBuilder.StartPosition;
                             return functionCallBuilder.ToImmutable();
                         case TokenType.Dot:
                             var dotVarBuilder = DotVar.CreateBuilder();
                             dotVarBuilder.StartPosition = Peek().Start;
-                            dotVarBuilder.PrefixExp = ParsePrefixExp()?.ToBuilder();
+                            dotVarBuilder.PrefixExp = ParseNameVar()?.ToBuilder();
                             dotVarBuilder.DotOperator = GetExpectedToken(TokenType.Dot);
                             dotVarBuilder.NameIdentifier = GetExpectedToken(TokenType.Identifier);
                             dotVarBuilder.Length = currentToken.End - dotVarBuilder.StartPosition;
@@ -339,7 +507,7 @@ namespace LanguageService
                         case TokenType.Colon:
                             var functionCallExpBuilder = FunctionCallExp.CreateBuilder();
                             functionCallExpBuilder.StartPosition = Peek().Start;
-                            functionCallExpBuilder.PrefixExp = ParsePrefixExp()?.ToBuilder();
+                            functionCallExpBuilder.PrefixExp = ParseNameVar()?.ToBuilder();
                             functionCallExpBuilder.Colon = GetExpectedToken(TokenType.Colon);
                             functionCallExpBuilder.Name = GetExpectedToken(TokenType.Identifier);
                             functionCallExpBuilder.Args = ParseArgs()?.ToBuilder();
@@ -352,6 +520,21 @@ namespace LanguageService
                     return null;
             }
         }
+
+        //public FunctionCallExp ParseFunctionCallExp()
+        //{
+
+        //}
+
+        //public FunctionCall ParseFunctionCall()
+        //{
+
+        //}
+
+        //public Var ParseVar()
+        //{
+            
+        //}
 
         private Args ParseArgs()
         {

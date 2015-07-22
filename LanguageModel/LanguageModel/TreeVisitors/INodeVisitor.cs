@@ -39,6 +39,9 @@ namespace LanguageService.LanguageModel.TreeVisitors
         void Visit(TableConstructorNode node);
         void Visit(FuncBodyNode node);
         void Visit(StringArg stringArg);
+        void Visit(BreakStatementNode breakStatementNode);
+        void Visit(FuncNameNode funcNameNode);
+        void Visit(NameDotPair nameDotPair);
     }
 }
 

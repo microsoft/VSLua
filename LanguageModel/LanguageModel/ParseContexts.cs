@@ -15,5 +15,9 @@ namespace LanguageService
         ExpListContext,
         FuncBodyContext,
         NameListContext,
+        DoStatementContext,
+        WhileContext,
+        RepeatStatementContext,
+        ForStatementContext,
     }
 }
