@@ -1,5 +1,6 @@
 ﻿using ImmutableObjectGraph;
 using ImmutableObjectGraph.CodeGeneration;
+using LanguageService.LanguageModel.TreeVisitors;
 using System;
 using System.Collections.Immutable;
 using System.IO;
@@ -8,23 +9,18 @@ namespace LanguageService
 {
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class SyntaxNode
+    public abstract partial class SyntaxNode
     {
         [Required]
         readonly int startPosition;
         [Required]
         readonly int length;
 
-        internal virtual void ToString(TextWriter writer)
-        {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("Syntax Node");
-        }
+        public abstract void Accept(INodeVisitor visitor);
     }
 
-
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class StatementNode : SyntaxNode { }
+    public abstract partial class StatementNode : SyntaxNode { }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class MisplacedTokenNode : StatementNode
@@ -32,10 +28,9 @@ namespace LanguageService
         [Required]
         readonly Token token;
 
-        internal override void ToString(TextWriter writer)
+        public override void Accept(INodeVisitor visitor)
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("Missing Token: " + token.ToString());
+            visitor.Visit(this);
         }
     }
 
@@ -43,12 +38,11 @@ namespace LanguageService
     public partial class SemiColonStatementNode : StatementNode
     {
         [Required]
-        readonly Token token;
+        readonly Token semiColon;
 
-        internal override void ToString(TextWriter writer)
+        public override void Accept(INodeVisitor visitor)
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine(token.ToString());
+            visitor.Visit(this);
         }
     }
 
@@ -60,16 +54,9 @@ namespace LanguageService
         [Required]
         readonly Token endOfFile;
 
-        internal override void ToString(TextWriter writer)
+        public override void Accept(INodeVisitor visitor)
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("ChunkNode");
-            using (indentingWriter.Indent())
-            {
-                programBlock.ToString(indentingWriter);
-                indentingWriter.WriteLine(endOfFile.ToString());
-            }
-
+            visitor.Visit(this);
         }
     }
 
@@ -79,27 +66,11 @@ namespace LanguageService
         [Required]
         [NotRecursive]
         readonly ImmutableList<StatementNode> statements;
-        readonly ReturnStatNode returnStatement;
+        readonly ReturnStatementNode returnStatement;
 
-        internal override void ToString(TextWriter writer)
+        public override void Accept(INodeVisitor visitor)
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("Block");
-            foreach (var child in this.statements)
-            {
-                using (indentingWriter.Indent())
-                {
-                    child.ToString(indentingWriter);
-                }
-            }
-
-            if(returnStatement != null)
-            {
-                using (indentingWriter.Indent())
-                {
-                    returnStatement.ToString(indentingWriter);
-                }
-            }            
+            visitor.Visit(this);
         }
     }
 
@@ -110,7 +81,7 @@ namespace LanguageService
         [Required]
         readonly Token ifKeyword;
         [Required]
-        readonly Expression exp;
+        readonly ExpressionNode exp;
         [Required]
         readonly Token thenKeyword;
         [Required]
@@ -121,45 +92,9 @@ namespace LanguageService
         [Required]
         readonly Token endKeyword;
 
-        internal override void ToString(TextWriter writer)
+        public override void Accept(INodeVisitor visitor)
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("IfNode");
-            using (indentingWriter.Indent())
-            {
-                exp.ToString(indentingWriter);
-            }
-
-            using (indentingWriter.Indent())
-            {
-                ifBlock.ToString(indentingWriter);
-            }
-
-            if (elseIfList != null)
-            {
-                foreach (var block in elseIfList)
-                {
-                    using (indentingWriter.Indent())
-                    {
-                        if (block != null)
-                        {
-                            block.ToString(indentingWriter);
-                        }
-                        else
-                        {
-                            indentingWriter.WriteLine("null");
-                      }
-                    }
-                }
-            }
-
-            if (elseBlock != null)
-            {
-                using (indentingWriter.Indent())
-                {
-                    elseBlock.ToString(indentingWriter);
-                }
-            }
+            visitor.Visit(this);
         }
     }
 
@@ -171,14 +106,9 @@ namespace LanguageService
         [Required]
         readonly BlockNode block;
 
-        internal override void ToString(TextWriter writer)
+        public override void Accept(INodeVisitor visitor)
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("ElseBlock");
-            using (indentingWriter.Indent())
-            {
-                block.ToString(indentingWriter);
-            }
+            visitor.Visit(this);
         }
     }
 
@@ -188,37 +118,25 @@ namespace LanguageService
         [Required]
         readonly Token elseIfKeyword;
         [Required]
-        readonly Expression exp;
+        readonly ExpressionNode exp;
         [Required]
         readonly Token thenKeyword;
         [Required]
         readonly BlockNode block;
 
-        internal void ToString(TextWriter writer)
+        public override void Accept(INodeVisitor visitor)
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("ElseIfBlock: ");
-            using (indentingWriter.Indent())
-            {
-                exp.ToString(indentingWriter);
-            }
-
-            using (indentingWriter.Indent())
-            {
-                block.ToString(indentingWriter);
-            }
+            visitor.Visit(this);
         }
     }
     #endregion
 
     #region Expression nodes
     [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class Expression : SyntaxNode
-    {
-    }
+    public abstract partial class ExpressionNode : SyntaxNode { }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class SimpleExpression : Expression
+    public partial class SimpleExpression : ExpressionNode
     {
         [Required]
         readonly Token expressionValue;
@@ -238,107 +156,88 @@ namespace LanguageService
             }
         }
 
-        internal override void ToString(TextWriter writer)
+        public override void Accept(INodeVisitor visitor)
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("Expression:\t" + expressionValue.ToString());
+            visitor.Visit(this);
         }
-
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class BinaryOperatorExpression : Expression
+    public partial class BinaryOperatorExpression : ExpressionNode
     {
         [Required]
-        readonly Expression exp1;
+        readonly ExpressionNode exp1;
         [Required]
         readonly Token binaryOperator;
         [Required]
-        readonly Expression exp2;
+        readonly ExpressionNode exp2;
 
-        internal override void ToString(TextWriter writer)
+        public override void Accept(INodeVisitor visitor)
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("Expression");
-            using (indentingWriter.Indent())
-            {
-                exp1.ToString(indentingWriter);
-            }
-            using (indentingWriter.Indent())
-            {
-                indentingWriter.WriteLine(binaryOperator.ToString());
-            }
-            using (indentingWriter.Indent())
-            {
-                exp2.ToString(indentingWriter);
-            }
+            visitor.Visit(this);
         }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class UnaryOperatorExpression : Expression
+    public partial class UnaryOperatorExpression : ExpressionNode
     {
         [Required]
         readonly Token unaryOperator;
         [Required]
-        readonly Expression exp;
+        readonly ExpressionNode exp;
 
-        internal override void ToString(TextWriter writer)
+        public override void Accept(INodeVisitor visitor)
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("Expression");
-            using (indentingWriter.Indent())
-            {
-                indentingWriter.WriteLine(unaryOperator.ToString());
-            }
-            using (indentingWriter.Indent())
-            {
-                exp.ToString(indentingWriter);
-            }
+            visitor.Visit(this);
         }
     }
     #endregion
 
     #region Other Expression Nodes (out of scope for Code review)
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class TableConstructorExp : Expression
+    public partial class TableConstructorExp : ExpressionNode
     {
         [Required]
         readonly Token openCurly;
         FieldList fieldList;
         [Required]
         readonly Token closeCurly;
-        internal override void ToString(TextWriter writer)
+        public override void Accept(INodeVisitor visitor)
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("TableConstructor");
-            using (indentingWriter.Indent())
-            {
-                FieldList.ToString(indentingWriter);
-            }
+            visitor.Visit(this);
         }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class FunctionDef : Expression
+    public partial class FunctionDef : ExpressionNode
     {
         [Required]
         readonly Token functionKeyword;
         [Required]
         readonly FuncBodyNode functionBody;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class PrefixExp : Expression { }
+    public abstract partial class PrefixExp : ExpressionNode { }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class Var : PrefixExp { }
+    public abstract partial class Var : PrefixExp { }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class NameVar : Var
     {
         [Required]
         readonly Token identifier;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -349,9 +248,13 @@ namespace LanguageService
         [Required]
         readonly Token openBracket;
         [Required]
-        readonly Expression exp;
+        readonly ExpressionNode exp;
         [Required]
         readonly Token closeBracket;
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -363,6 +266,11 @@ namespace LanguageService
         readonly Token dotOperator;
         [Required]
         readonly Token nameIdentifier;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -374,6 +282,11 @@ namespace LanguageService
         readonly Token name;
         [Required]
         readonly Args args;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class FunctionCallStatement : StatementNode 
@@ -384,6 +297,11 @@ namespace LanguageService
         readonly Token name;
         [Required]
         readonly Args args;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
     
     [GenerateImmutable(GenerateBuilder = true)]
@@ -392,25 +310,30 @@ namespace LanguageService
         [Required]
         readonly Token openParen;
         [Required]
-        readonly Expression exp;
+        readonly ExpressionNode exp;
         [Required]
         readonly Token closeParen;
 
-        internal override void ToString(TextWriter writer)
+        public override void Accept(INodeVisitor visitor)
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("ParenPrefixExp");
-            using (indentingWriter.Indent())
-            {
-                if (exp != null)
-                {
-                    exp.ToString(indentingWriter);
-                } else
-                {
-                    indentingWriter.WriteLine("null");
-                }
-            }
+            visitor.Visit(this);
         }
+
+        //internal override void ToString(TextWriter writer)
+        //{
+        //    var indentingWriter = IndentingTextWriter.Get(writer);
+        //    indentingWriter.WriteLine("ParenPrefixExp");
+        //    using (indentingWriter.Indent())
+        //    {
+        //        if (exp != null)
+        //        {
+        //            exp.ToString(indentingWriter);
+        //        } else
+        //        {
+        //            indentingWriter.WriteLine("null");
+        //        }
+        //    }
+        //}
     }
     #endregion
 
@@ -426,6 +349,11 @@ namespace LanguageService
         readonly FieldList fieldList;
         [Required]
         readonly Token closeCurly;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -437,6 +365,11 @@ namespace LanguageService
         readonly ExpList expList;
         [Required]
         readonly Token closeParen;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -444,6 +377,11 @@ namespace LanguageService
     {
         [Required]
         readonly Token stringLiteral;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            throw new NotImplementedException();
+        }
     }
     #endregion
 
@@ -453,6 +391,11 @@ namespace LanguageService
     {
         [Required]
         readonly ImmutableList<NameCommaPair> names;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -460,6 +403,11 @@ namespace LanguageService
     {
         [Required]
         readonly ImmutableList<FieldAndSeperatorPair> fields;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -467,6 +415,11 @@ namespace LanguageService
     {
         [Required]
         readonly ImmutableList<ExpressionCommaPair> expressions;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -477,6 +430,11 @@ namespace LanguageService
     {
         [Required]
         readonly Token varargOperator;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -486,6 +444,11 @@ namespace LanguageService
         readonly NameList namesList;
         [Required]
         readonly CommaVarArgPair varArgPar;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -512,7 +475,7 @@ namespace LanguageService
         [Required]
         readonly Token comma;
         [Required]
-        readonly Expression expression;
+        readonly ExpressionNode expression;
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -523,7 +486,7 @@ namespace LanguageService
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class FieldNode : Expression { } //TODO: is this inheritance okay?
+    public abstract partial class FieldNode : ExpressionNode { } //TODO: is this inheritance okay?
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class BracketField : FieldNode
@@ -531,17 +494,17 @@ namespace LanguageService
         [Required]
         readonly Token openBracket;
         [Required]
-        readonly Expression identifierExp;
+        readonly ExpressionNode identifierExp;
         [Required]
         readonly Token closeBracket;
         [Required]
         readonly Token assignmentOperator;
         [Required]
-        readonly Expression assignedExp;
+        readonly ExpressionNode assignedExp;
 
-        internal override void ToString(TextWriter indentingWriter)
+        public override void Accept(INodeVisitor visitor)
         {
-            throw new NotImplementedException();
+            visitor.Visit(this);
         }
     }
 
@@ -553,35 +516,50 @@ namespace LanguageService
         [Required]
         readonly Token assignmentOperator;
         [Required]
-        readonly Expression exp;
+        readonly ExpressionNode exp;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class ExpField : FieldNode
     {
         [Required]
-        readonly Expression exp;
+        readonly ExpressionNode exp;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
     #endregion
 
     #region Other Nodes
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class ReturnStatNode : SyntaxNode
+    public partial class ReturnStatementNode : SyntaxNode
     {
         [Required]
         readonly Token returnKeyword;
         readonly ExpList returnExpressions;
         //Token semiColonRetStat; Question: is this really necessary even though defined in the language?
 
-        internal override void ToString(TextWriter writer)
+        public override void Accept(INodeVisitor visitor)
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("ReturnStat");
-            using (indentingWriter.Indent())
-            {
-                indentingWriter.WriteLine("explist... implement"); //TODO: implement
-            }
+            visitor.Visit(this);
         }
+
+        //internal override void ToString(TextWriter writer)
+        //{
+        //    var indentingWriter = IndentingTextWriter.Get(writer);
+        //    indentingWriter.WriteLine("ReturnStat");
+        //    using (indentingWriter.Indent())
+        //    {
+        //        indentingWriter.WriteLine("explist... implement"); //TODO: implement
+        //    }
+        //}
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -593,15 +571,20 @@ namespace LanguageService
         [Required]
         readonly Token closeCurly;
 
-        internal override void ToString(TextWriter writer)
+        public override void Accept(INodeVisitor visitor)
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("TableConstructor");
-            using (indentingWriter.Indent())
-            {
-                FieldList.ToString(indentingWriter);
-            }
+            visitor.Visit(this);
         }
+
+        //internal override void ToString(TextWriter writer)
+        //{
+        //    var indentingWriter = IndentingTextWriter.Get(writer);
+        //    indentingWriter.WriteLine("TableConstructor");
+        //    using (indentingWriter.Indent())
+        //    {
+        //        FieldList.ToString(indentingWriter);
+        //    }
+        //}
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -617,6 +600,11 @@ namespace LanguageService
         readonly BlockNode block;
         [Required]
         readonly Token endKeyword;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
     #endregion
 

@@ -83,6 +83,7 @@ namespace LanguageService
             }
         }
         public TokenType Type { get; private set; }
+
         public List<Trivia> LeadingTrivia { get; private set; } //TODO: change to Immutable List
 
 

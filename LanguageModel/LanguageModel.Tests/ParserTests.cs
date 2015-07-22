@@ -10,6 +10,7 @@ using Assert = Xunit.Assert;
 namespace LanguageService.Tests
 {
     [DeploymentItem("CorrectSampleLuaFiles", "CorrectSampleLuaFiles")]
+    [DeploymentItem("SerializedJsonOutput", "SerializedJsonOutput")]
     public class ParserTests
     {
         private ITestOutputHelper logger;
@@ -27,31 +28,16 @@ namespace LanguageService.Tests
             }
         }
 
-        //private SyntaxTree GetSampleSyntaxTree(string file)
-        //{
-        //    Parser parser = new Parser();
-        //    return parser.CreateSyntaxTree(ReadTestSource(file));
-        //}
-
-        //private void AssertExpectedTree(SyntaxTree actual, string expectedAnswerFilePath)
-        //{
-        //    string actualAsJson = SerializeAsJson(actual);
-        //    DiffPlex.Diff(actualAsJson, ReadTestSource(expectedAnswerFilePath));
-
-        //}
-
         [Fact]
         public void testNestedSampleIf()
         {
-            //SyntaxTree tree = GetSampleSyntaxTree(@"CorrectSampleLuaFiles\nestedif.lua");
-
             Parser parser = new Parser();
             SyntaxTree tree = parser.CreateSyntaxTree(@"CorrectSampleLuaFiles\nestedif.lua");
 
             //The expected tree ignores Trivia, hence all the null parameteres
             //TODO: complete construction of neste
             SyntaxTree expected = new SyntaxTree("nestedif.lua",
-                ChunkNode.Create(0, 247,
+                ChunkNode.Create(0, 38,
                     BlockNode.Create(0, 244, new List<StatementNode>()
                     {
                         IfStatementNode.Create(2, 117,
@@ -73,6 +59,15 @@ namespace LanguageService.Tests
                     null);
 
             Assert.Equal(expected.ToString(), tree.ToString());
+        }
+
+        [Fact]
+        public void testSyntaxTreeJsonSerialization()
+        {
+            Parser parser = new Parser();
+            SyntaxTree tree = parser.CreateSyntaxTree(@"CorrectSampleLuaFiles\smallif.lua");
+            string expected = File.ReadAllText(@"SerializedJsonOutput\smallif.json");
+            Assert.Equal(expected, tree.ToJson());
         }
 
         [Fact]

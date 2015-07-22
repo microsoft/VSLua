@@ -90,5 +90,10 @@ namespace LanguageService
                 }
             }
         }
+
+        public override string ToString()
+        {
+            return inner.ToString();
+        }
     }
 }

@@ -1,6 +1,9 @@
-﻿using System;
+﻿using LanguageService.LanguageModel.TreeVisitors;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.IO;
 
 namespace LanguageService
@@ -25,9 +28,14 @@ namespace LanguageService
 
         public override string ToString()
         {
-            var treeStringWriter = new StringWriter();
-            Root.ToString(treeStringWriter);
-            return treeStringWriter.ToString();
+            var visitor = new ToStringVisitor();
+            Root.Accept(visitor);
+            return visitor.indentingWriter.ToString();
+        }
+
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(Root);
         }
     }
 }

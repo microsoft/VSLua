@@ -85,6 +85,7 @@
     <EmbeddedResource Include="CorrectSampleLuaFiles\assignment.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <None Include="App.config" />
     <None Include="CorrectSampleLuaFiles\concat.lua" />
     <None Include="CorrectSampleLuaFiles\if.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -119,6 +120,9 @@
     </None>
     <None Include="CorrectSampleLuaFiles\trivia1.lua" />
     <None Include="packages.config" />
+    <None Include="SerializedJsonOutput\smallif.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LanguageService.csproj">

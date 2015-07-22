@@ -47,6 +47,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Utilities, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.1.36.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Collections.Immutable.1.1.36\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
@@ -94,6 +98,7 @@
     <Compile Include="Formatting\TextEditInfo.cs" />
     <Compile Include="Formatting\TokenRange.cs" />
     <Compile Include="LanguageModel\IndentingTextWriter.cs" />
+    <Compile Include="LanguageModel\TreeVisitors\INodeVisitor.cs" />
     <Compile Include="LanguageModel\Lexer.cs" />
     <Compile Include="LanguageModel\ParseContexts.cs" />
     <Compile Include="LanguageModel\ParseError.cs" />
@@ -101,6 +106,7 @@
     <Compile Include="LanguageModel\SyntaxTree.cs" />
     <Compile Include="LanguageModel\Token.cs" />
     <Compile Include="LanguageModel\TrackableStreamReader.cs" />
+    <Compile Include="LanguageModel\TreeVisitors\ToStringVisitor.cs" />
     <Compile Include="LanguageModel\Trivia.cs" />
     <Compile Include="LanguageModel\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -109,6 +115,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Key.snk" />
     <None Include="packages.config" />
   </ItemGroup>
