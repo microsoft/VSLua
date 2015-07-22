@@ -232,7 +232,7 @@ namespace LanguageService
     public partial class NameVar : Var
     {
         [Required]
-        readonly Token identifier;
+        readonly Token name;
 
         public override void Accept(INodeVisitor visitor)
         {
@@ -342,7 +342,7 @@ namespace LanguageService
     public abstract partial class Args : SyntaxNode { }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class TableContructorArg : Args
+    public partial class TableContructorArg : Args
     {
         [Required]
         readonly Token openCurly;
@@ -357,7 +357,7 @@ namespace LanguageService
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class ParenArg : Args
+    public partial class ParenArg : Args
     {
         [Required]
         readonly Token openParen;
@@ -373,14 +373,14 @@ namespace LanguageService
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class StringArg : Args
+    public partial class StringArg : Args
     {
         [Required]
         readonly Token stringLiteral;
 
         public override void Accept(INodeVisitor visitor)
         {
-            throw new NotImplementedException();
+            visitor.Visit(this);
         }
     }
     #endregion
@@ -464,9 +464,9 @@ namespace LanguageService
     public partial class NameCommaPair
     {
         [Required]
-        readonly Token name;
-        [Required]
         readonly Token comma;
+        [Required]
+        readonly Token name;
     }
 
     [GenerateImmutable(GenerateBuilder = true)]

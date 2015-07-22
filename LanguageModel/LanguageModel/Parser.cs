@@ -28,7 +28,7 @@ namespace LanguageService
             ChunkNode root = ParseChunkNode();
             return new SyntaxTree(filename, root, errorList.ToImmutableList());
         }
-        
+
         #region tokenList Accessors 
         private Token NextToken()
         {
@@ -59,38 +59,40 @@ namespace LanguageService
             if (ParseExpected(type))
             {
                 return currentToken;
-            }else
+            }
+            else
             {
                 return Token.CreateMissingToken(currentToken.End);
             }
         }
 
-    private Token Peek()
-    {
-        if (positionInTokenList + 1 < tokenList.Count)
+        //TODO: write Peek(2) and get rid of TokenList[position + 2]
+        private Token Peek()
         {
-            return tokenList[positionInTokenList + 1];
+            if (positionInTokenList + 1 < tokenList.Count)
+            {
+                return tokenList[positionInTokenList + 1];
+            }
+            else
+            {
+                return tokenList[tokenList.Count - 1];
+            }
         }
-        else
-        {
-            return tokenList[tokenList.Count - 1];
-        }
-    }
 
-    private bool PushBack()
-    {
-        if (positionInTokenList - 1 >= 0)
+        private bool PushBack()
         {
-            positionInTokenList--;
-            currentToken = tokenList[positionInTokenList];
-            return true;
+            if (positionInTokenList - 1 >= 0)
+            {
+                positionInTokenList--;
+                currentToken = tokenList[positionInTokenList];
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-        else
-        {
-            return false;
-        }
-    }
-    #endregion
+        #endregion
 
         #region Parse Methods
         private ChunkNode ParseChunkNode()
@@ -298,14 +300,119 @@ namespace LanguageService
             return node.ToImmutable();
         }
 
-        private ExpressionNode ParsePrefixExp()
+        private PrefixExp ParsePrefixExp()
         {
-            //TODO: Implement
-            //switch (Peek().Type)
-            //{
+            switch (Peek().Type)
+            {
+                case TokenType.OpenParen:
+                    return ParseParenPrefixExp();
+                case TokenType.Identifier:
 
-            //}
-            return null;
+                    switch (tokenList[positionInTokenList + 2].Type)
+                    {
+                        case TokenType.OpenCurlyBrace:
+                        case TokenType.OpenParen: //TODO: ??? real world scenario of this?
+                        case TokenType.String:
+                            var functionCallBuilder = FunctionCallExp.CreateBuilder();
+                            functionCallBuilder.StartPosition = Peek().Start;
+                            functionCallBuilder.PrefixExp = ParsePrefixExp()?.ToBuilder();
+                            functionCallBuilder.Args = ParseArgs()?.ToBuilder();
+                            functionCallBuilder.Length = currentToken.End - functionCallBuilder.StartPosition;
+                            return functionCallBuilder.ToImmutable();
+                        case TokenType.Dot:
+                            var dotVarBuilder = DotVar.CreateBuilder();
+                            dotVarBuilder.StartPosition = Peek().Start;
+                            dotVarBuilder.PrefixExp = ParsePrefixExp()?.ToBuilder();
+                            dotVarBuilder.DotOperator = GetExpectedToken(TokenType.Dot);
+                            dotVarBuilder.NameIdentifier = GetExpectedToken(TokenType.Identifier);
+                            dotVarBuilder.Length = currentToken.End - dotVarBuilder.StartPosition;
+                            return dotVarBuilder.ToImmutable();
+                        case TokenType.OpenBracket:
+                            var bracketVarBuilder = SquareBracketVar.CreateBuilder();
+                            bracketVarBuilder.StartPosition = Peek().Start;
+                            bracketVarBuilder.PrefixExp = ParsePrefixExp()?.ToBuilder();
+                            bracketVarBuilder.OpenBracket = GetExpectedToken(TokenType.OpenBracket);
+                            bracketVarBuilder.Exp = ParseExpression()?.ToBuilder();
+                            bracketVarBuilder.CloseBracket = GetExpectedToken(TokenType.CloseBracket);
+                            bracketVarBuilder.Length = currentToken.End - bracketVarBuilder.StartPosition;
+                            return bracketVarBuilder.ToImmutable();
+                        case TokenType.Colon:
+                            var functionCallExpBuilder = FunctionCallExp.CreateBuilder();
+                            functionCallExpBuilder.StartPosition = Peek().Start;
+                            functionCallExpBuilder.PrefixExp = ParsePrefixExp()?.ToBuilder();
+                            functionCallExpBuilder.Colon = GetExpectedToken(TokenType.Colon);
+                            functionCallExpBuilder.Name = GetExpectedToken(TokenType.Identifier);
+                            functionCallExpBuilder.Args = ParseArgs()?.ToBuilder();
+                            functionCallExpBuilder.Length = currentToken.End - functionCallExpBuilder.StartPosition;
+                            return functionCallExpBuilder.ToImmutable();
+                        default:
+                            return ParseNameVar();
+                    }
+                default:
+                    return null;
+            }
+        }
+
+        private Args ParseArgs()
+        {
+            switch (Peek().Type)
+            {
+                case TokenType.OpenParen:
+                    return ParseParenArg();
+                case TokenType.OpenCurlyBrace:
+                    return ParseTableConstructorArg();
+                case TokenType.String:
+                    return ParseStringArg();
+                default:
+                    return null;
+            }
+        }
+
+        private StringArg ParseStringArg()
+        {
+            var node = StringArg.CreateBuilder();
+            node.StartPosition = currentToken.Start;
+            node.StringLiteral = GetExpectedToken(TokenType.String);
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
+
+        private TableContructorArg ParseTableConstructorArg()
+        {
+            var node = TableContructorArg.CreateBuilder();
+            node.StartPosition = currentToken.Start;
+            node.OpenCurly = GetExpectedToken(TokenType.OpenCurlyBrace);
+            node.FieldList = ParseFieldList()?.ToBuilder();
+            node.CloseCurly = GetExpectedToken(TokenType.CloseCurlyBrace);
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
+
+        private ParenArg ParseParenArg()
+        {
+            var node = ParenArg.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            node.OpenParen = GetExpectedToken(TokenType.OpenParen);
+            node.ExpList = ParseExpList()?.ToBuilder();
+            node.CloseParen = GetExpectedToken(TokenType.CloseParen);
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
+
+        private NameVar ParseNameVar()
+        {
+            if (ParseExpected(TokenType.Identifier))
+            {
+                var node = NameVar.CreateBuilder();
+                node.StartPosition = currentToken.Start;
+                node.Name = currentToken;
+                node.Length = currentToken.End - node.StartPosition;
+                return node.ToImmutable();
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private ReturnStatementNode ParseRetStat()
@@ -334,7 +441,7 @@ namespace LanguageService
             return node.ToImmutable();
         }
 
-        private ExpressionNode ParseTableConstructorExp()
+        private TableConstructorExp ParseTableConstructorExp()
         {
             var node = TableConstructorExp.CreateBuilder();
             node.StartPosition = Peek().Start;
@@ -347,64 +454,77 @@ namespace LanguageService
 
         private FieldList ParseFieldList()
         {
-            //TODO: complete implementation... not well tested.
-            return null;
-            //var node = FieldList.CreateBuilder();
-            //node.StartPosition = Peek().Start;
-            //bool parseFields = true;
-            //var fields = new List<FieldAndSeperatorPair>();
+            var node = FieldList.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            bool parseFields = true;
+            var fields = new List<FieldAndSeperatorPair>();
 
-            //while (parseFields)
-            //{
-            //    var fieldAndSep = FieldAndSeperatorPair.CreateBuilder();
-            //    fieldAndSep.Field = ParseField()?.ToBuilder();
-            //    if (ParseExpected(TokenType.Comma) || ParseExpected(TokenType.SemiColon))
-            //    {
-            //        fieldAndSep.FieldSeparator = currentToken;
-            //        parseFields = true;
-            //    }
-            //    else
-            //    {
-            //        if (Peek().Type == TokenType.CloseCurlyBrace)
-            //        {
-            //            parseFields = false;
-            //        }
-            //        else
-            //        {
-            //            fieldAndSep.FieldSeparator = Token.CreateMissingToken(currentToken.End);
-            //            parseFields = true;
-            //        }
-            //        fields.Add(fieldAndSep.ToImmutable());
-            //    }
-            //}
+            while (parseFields)
+            {
+                var fieldAndSep = FieldAndSeperatorPair.CreateBuilder();
+                fieldAndSep.Field = ParseField()?.ToBuilder();
+                if (ParseExpected(TokenType.Comma) || ParseExpected(TokenType.Semicolon))
+                {
+                    fieldAndSep.FieldSeparator = currentToken;
+                    parseFields = true;
+                }
+                else
+                {
+                    if (Peek().Type == TokenType.CloseCurlyBrace)
+                    {
+                        parseFields = false;
+                    }
+                    else
+                    {
+                        fieldAndSep.FieldSeparator = Token.CreateMissingToken(currentToken.End);
+                        parseFields = true;
+                    }
+                    fields.Add(fieldAndSep.ToImmutable());
+                }
+            }
 
-            //node.Fields = fields.ToImmutableList();
-            //node.Length = currentToken.End - node.StartPosition;
+            node.Fields = fields.ToImmutableList();
+            node.Length = currentToken.End - node.StartPosition;
 
-            //return node.ToImmutable();
+            return node.ToImmutable();
         }
 
         private FieldNode ParseField()
         {
-            //TODO implement
-            return null;
-            //switch (Peek().Type)
-            //{
-            //    case TokenType.OpenBracket:
-            //        return ParseBracketField();
-            //    case TokenType.Identifier:
-            //        var identifierToken = NextToken();
-            //        if (Peek().Type == TokenType.AssignmentOperator)
-            //        {
+            switch (Peek().Type)
+            {
+                case TokenType.OpenBracket:
+                    return ParseBracketField();
+                case TokenType.Identifier:
+                    if (tokenList[positionInTokenList + 2].Type == TokenType.AssignmentOperator)
+                    {
+                        var node = SimpleField.CreateBuilder();
+                        node.StartPosition = Peek().Start;
+                        node.Name = GetExpectedToken(TokenType.Identifier);
+                        node.AssignmentOperator = GetExpectedToken(TokenType.AssignmentOperator);
+                        node.Exp = ParseExpression()?.ToBuilder();
+                        node.Length = currentToken.End - node.StartPosition;
+                        return node.ToImmutable();
+                    }
+                    else
+                    {
+                        return ParseExpField();
+                    }
+                default:
+                    return ParseExpField();
+            }
+        }
 
-            //        }
-            //        else
-            //        {
-
-            //        }
-            //    default:
-            //        return ParseExpField();
-            //}
+        private BracketField ParseBracketField()
+        {
+            var node = BracketField.CreateBuilder();
+            node.StartPosition = currentToken.Start;
+            node.OpenBracket = GetExpectedToken(TokenType.OpenBracket);
+            node.IdentifierExp = ParseExpression()?.ToBuilder();
+            node.CloseBracket = GetExpectedToken(TokenType.CloseBracket);
+            node.AssignedExp = ParseExpression()?.ToBuilder();
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
         }
 
         private ExpField ParseExpField()
@@ -416,7 +536,7 @@ namespace LanguageService
             return node.ToImmutable();
         }
 
-        private ExpressionNode ParseParenPrefixExp()
+        private ParenPrefixExp ParseParenPrefixExp()
         {
             var node = ParenPrefixExp.CreateBuilder();
             node.StartPosition = currentToken.Start;
@@ -452,8 +572,64 @@ namespace LanguageService
 
         private ParList ParseParList()
         {
-            //TODO: implement;
-            return null;
+            if (Peek().Type == TokenType.VarArgOperator)
+            {
+                var node = VarArgPar.CreateBuilder();
+                node.StartPosition = Peek().Start;
+                node.VarargOperator = GetExpectedToken(TokenType.VarArgOperator);
+                node.Length = currentToken.End - node.StartPosition;
+                return node.ToImmutable();
+            }
+            else
+            {
+                var node = NameListPar.CreateBuilder();
+                node.StartPosition = Peek().Start;
+                node.NamesList = ParseNamesList()?.ToBuilder();
+                if (ParseExpected(TokenType.Comma))
+                {
+                    if (Peek().Type == TokenType.VarArgOperator)
+                    {
+                        node.VarArgPar = CommaVarArgPair.Create(currentToken, NextToken())?.ToBuilder();
+                    }
+                    else
+                    {
+                        node.VarArgPar = CommaVarArgPair.Create(currentToken, null)?.ToBuilder();
+                    }
+                }
+                node.Length = currentToken.End - node.StartPosition;
+                return node.ToImmutable();
+            }
+        }
+
+        private NameList ParseNamesList()
+        {
+            if (ParseExpected(TokenType.Identifier))
+            {
+                contextStack.Push(Context.NameListContext);
+
+                var node = NameList.CreateBuilder();
+                node.StartPosition = Peek().Start;
+
+                List<NameCommaPair> names = new List<NameCommaPair>();
+
+                //Add initial mandatory name with no preceding comma
+                names.Add(NameCommaPair.Create(null, currentToken));
+
+                while (ParseExpected(TokenType.Comma))
+                {
+                    names.Add(NameCommaPair.Create(currentToken, GetExpectedToken(TokenType.Identifier)));
+                }
+
+                node.Names = names.ToImmutableList();
+                node.Length = currentToken.End - node.StartPosition;
+
+                contextStack.Pop();
+                return node.ToImmutable();
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private ExpList ParseExpList()

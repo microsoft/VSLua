@@ -38,6 +38,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
         void Visit(ExpField node);
         void Visit(TableConstructorNode node);
         void Visit(FuncBodyNode node);
+        void Visit(StringArg stringArg);
     }
 }
 

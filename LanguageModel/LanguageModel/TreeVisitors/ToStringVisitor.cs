@@ -201,6 +201,11 @@ namespace LanguageService.LanguageModel.TreeVisitors
             throw new NotImplementedException();
         }
 
+        public void Visit(StringArg stringArg)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Visit(SemiColonStatementNode node)
         {
             indentingWriter.WriteLine("SemiColonStatement\t ;");

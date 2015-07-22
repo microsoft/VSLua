@@ -14,5 +14,6 @@ namespace LanguageService
         ElseIfBlock,
         ExpListContext,
         FuncBodyContext,
+        NameListContext,
     }
 }
