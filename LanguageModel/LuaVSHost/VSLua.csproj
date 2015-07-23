@@ -57,6 +57,7 @@
     <Compile Include="Formatting\Manager.cs" />
     <Compile Include="Formatting\TextView.cs" />
     <Compile Include="Formatting\WpfTextViewConnectionListener.cs" />
+    <Compile Include="LuaContentTypes.cs" />
     <Compile Include="LuaPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shared\Constants.cs" />
