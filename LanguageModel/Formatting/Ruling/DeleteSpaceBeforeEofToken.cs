@@ -16,7 +16,7 @@ namespace LanguageService.Formatting.Ruling
         {
         }
 
-        internal override List<TextEditInfo> Apply(FormattingContext formattingContext)
+        internal override IEnumerable<TextEditInfo> Apply(FormattingContext formattingContext)
         {
             List<TextEditInfo> edits = new List<TextEditInfo>();
             TextEditInfo edit = this.GetLastSpaceTriviaInfo(formattingContext.NextToken.Token);

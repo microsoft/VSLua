@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Immutable;
 
 namespace LanguageService.Formatting.Ruling
 {
     internal class RuleDescriptor
     {
-        internal readonly ImmutableArray<TokenType> TokenRangeLeft;
-        internal readonly ImmutableArray<TokenType> TokenRangeRight;
-
         internal RuleDescriptor(ImmutableArray<TokenType> tokenLeft, ImmutableArray<TokenType> tokenRight)
         {
             this.TokenRangeLeft = tokenLeft;
@@ -30,5 +22,7 @@ namespace LanguageService.Formatting.Ruling
             this(ImmutableArray.Create(tokenLeft), ImmutableArray.Create(tokenRight))
         { }
 
+        internal ImmutableArray<TokenType> TokenRangeLeft { get; }
+        internal ImmutableArray<TokenType> TokenRangeRight { get; }
     }
 }

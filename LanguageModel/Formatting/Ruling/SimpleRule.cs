@@ -53,7 +53,7 @@ namespace LanguageService.Formatting.Ruling
             return ruleOperation.Context.InContext(formattingContext);
         }
 
-        internal override List<TextEditInfo> Apply(FormattingContext formattingContext)
+        internal override IEnumerable<TextEditInfo> Apply(FormattingContext formattingContext)
         {
             Token leftToken = formattingContext.CurrentToken.Token;
             Token rightToken = formattingContext.NextToken.Token;

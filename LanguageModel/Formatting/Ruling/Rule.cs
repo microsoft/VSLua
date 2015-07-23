@@ -12,6 +12,6 @@ namespace LanguageService.Formatting.Ruling
         internal abstract RuleOperation RuleOperationContext { get; }
 
         internal abstract bool AppliesTo(FormattingContext formattingContext);
-        internal abstract List<TextEditInfo> Apply(FormattingContext formattingContext);
+        internal abstract IEnumerable<TextEditInfo> Apply(FormattingContext formattingContext);
     }
 }

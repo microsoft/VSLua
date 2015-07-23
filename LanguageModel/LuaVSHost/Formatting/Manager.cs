@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using LanguageModel;
+using LanguageService.Formatting;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio;
-using VSLua.Shared;
-using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
 using Microsoft.VisualStudio.Text.Editor;
+using VSLua.Shared;
 
-using LanguageService.Formatting;
-using LanguageModel;
-using System.IO;
+using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
 
 namespace VSLua.Formatting
 {

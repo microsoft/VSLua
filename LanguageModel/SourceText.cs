@@ -9,15 +9,13 @@ namespace LanguageModel
 {
     public class SourceText
     {
-        public readonly TextReader textReader;
+        public TextReader TextReader { get; }
+
         public SourceText(TextReader textReader)
         {
-            if (textReader == null)
-            {
-                throw new ArgumentNullException("textReader");
-            }
+            Validation.Assumes.NotNull(textReader);
 
-            this.textReader = textReader;
+            this.TextReader = textReader;
         }
     }
 }

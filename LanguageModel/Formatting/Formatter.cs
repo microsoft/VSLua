@@ -1,5 +1,6 @@
 ﻿using LanguageModel;
 using LanguageService.Formatting.Ruling;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -43,19 +44,16 @@ namespace LanguageService.Formatting
 
                 Rule rule = ruleMap.Get(formattingContext);
 
-                if (rule != null)
+                if (rule == null)
                 {
-                    foreach (TextEditInfo textEdit in rule.Apply(formattingContext))
-                    {
-                        textEdits.Add(textEdit);
-                    }
+                    continue;
                 }
+
+                textEdits.AddRange(rule.Apply(formattingContext));
             }
 
-            foreach (TextEditInfo edit in Indenter.GetIndentations(parsedTokens))
-            {
-                textEdits.Add(edit);
-            }
+            textEdits.AddRange(Indenter.GetIndentations(parsedTokens));
+
             return textEdits;
         }
     }

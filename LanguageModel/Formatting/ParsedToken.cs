@@ -13,7 +13,6 @@ namespace LanguageService.Formatting
         internal int BlockLevel { get; }
         internal SyntaxNode Node { get; }
 
-
         private static readonly ImmutableArray<TokenType> IncreaseIndentAfter = ImmutableArray.Create
             (
                 TokenType.DoKeyword,
@@ -33,10 +32,8 @@ namespace LanguageService.Formatting
 
         internal ParsedToken(Token token, int blockLevel, SyntaxNode node)
         {
-            if (token == null)
-            {
-                throw new ArgumentNullException("token null");
-            }
+            Validation.Assumes.NotNull(token);
+
             this.Token = token;
             this.BlockLevel = blockLevel;
             this.Node = node;
@@ -46,10 +43,8 @@ namespace LanguageService.Formatting
         //   through all the tokens from the lexer, I'd just walk the parsetree from the start
         internal static List<ParsedToken> GetParsedTokens(List<Token> tokens)
         {
-            if (tokens == null)
-            {
-                throw new ArgumentNullException();
-            }
+            Validation.Assumes.NotNull(tokens);
+
             List<ParsedToken> parsedTokens = new List<ParsedToken>();
 
             int indent_level = 0;
@@ -72,6 +67,7 @@ namespace LanguageService.Formatting
                     indent_level--;
                 }
             }
+
             return parsedTokens;
         }
     }

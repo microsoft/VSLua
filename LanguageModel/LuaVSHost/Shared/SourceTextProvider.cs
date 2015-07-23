@@ -1,11 +1,7 @@
-﻿using LanguageModel;
+﻿using System.Runtime.CompilerServices;
+using LanguageModel;
+using Microsoft.Internal.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VSLua.Shared
 {
@@ -16,10 +12,7 @@ namespace VSLua.Shared
 
         internal static SourceText Get(ITextSnapshot textSnapshot)
         {
-            if (textSnapshot == null)
-            {
-                throw new ArgumentNullException("textSnapshot");
-            }
+            Validate.IsNotNull(textSnapshot, nameof(textSnapshot));
 
             SourceText sourceText = null;
             if (sources.TryGetValue(textSnapshot, out sourceText))

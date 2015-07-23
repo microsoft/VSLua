@@ -16,11 +16,12 @@ namespace LanguageService.Formatting.Ruling
         {
         }
 
-        internal override List<TextEditInfo> Apply(FormattingContext formattingContext)
+        internal override IEnumerable<TextEditInfo> Apply(FormattingContext formattingContext)
         {
             Token nextToken = formattingContext.NextToken.Token;
             // flag for the end of file token where whitespace should be deleted
             List<TextEditInfo> edits = this.GetEdits(nextToken, nextToken.Type == TokenType.EndOfFile);
+
             return edits;
         }
 
@@ -35,20 +36,38 @@ namespace LanguageService.Formatting.Ruling
             for (int i = 0; i < leadingTrivia.Count; ++i)
             {
                 length = leadingTrivia[i].Text.Length;
-                if (
-                    // this is to delete all whitespace that is before a newline and
-                    //   all the trailing whitespace at the end of a file BEFORE Eof
-                    (i + 1 < leadingTrivia.Count &&
-                    leadingTrivia[i].Type == Trivia.TriviaType.Whitespace &&
-                    leadingTrivia[i + 1].Type == Trivia.TriviaType.Newline) ||
-                    (i + 1 == leadingTrivia.Count && isEndOfFile &&
-                    leadingTrivia[i].Type == Trivia.TriviaType.Whitespace))
+                if (this.IsNewLineAfterSpace(i, leadingTrivia) ||
+                    this.IsSpaceBeforeEndOfFile(i, leadingTrivia, isEndOfFile))
                 {
-                    edits.Add(new TextEditInfo(start, length, ""));
+                    edits.Add(new TextEditInfo(start, length, string.Empty));
                 }
+
                 start += length;
             }
+
             return edits;
+        }
+
+        private bool IsNewLineAfterSpace(int index, List<Trivia> triviaList)
+        {
+            if (index + 1 >= triviaList.Count)
+            {
+                return false;
+            }
+
+            return triviaList[index].Type == Trivia.TriviaType.Whitespace &&
+                   triviaList[index + 1].Type == Trivia.TriviaType.Newline;
+        }
+
+        private bool IsSpaceBeforeEndOfFile(int index, List<Trivia> triviaList, bool isEndOfFile)
+        {
+            if (index >= triviaList.Count)
+            {
+                return false;
+            }
+
+            return isEndOfFile &&
+                   triviaList[index].Type == Trivia.TriviaType.Whitespace;
         }
     }
 }
