@@ -24,7 +24,6 @@ namespace VSLua.Formatting
         /// <summary>
         /// Puts the command status in commandStatus, a wrapper for the QueryStatus in IOleCommandTarget
         /// </summary>
-
         bool QueryCommandStatus(Guid guidCmdGroup, uint commandId, IntPtr commandText, out OLECommandFlags commandStatus);
     }
 }
