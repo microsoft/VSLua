@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LanguageService.Formatting.Options
 {
-    public enum OptionalRule
+    public enum OptionalRuleGroup
     {
         WrappingOneLineForFors,
         WrappingOneLineForFunctions,
@@ -14,12 +14,12 @@ namespace LanguageService.Formatting.Options
         WrappingMoreLinesForTableConstructors,
         SpaceBeforeOpenParenthesis,
         SpaceOnInsideOfParenthesis,
-        SpaceOnInsideOfCurlyBrackets,
+        SpaceOnInsideOfCurlyBraces,
         SpaceOnInsideOfSquareBrackets,
         SpaceAfterCommas,
         SpaceBeforeAndAfterBinaryOperations,
         SpaceBeforeAndAfterAssignmentForField,
-        SpaceBeforeAndAfterAssignmentForStatment,
+        SpaceBeforeAndAfterAssignmentForStatement,
         FormattingInFor
     }
 }
