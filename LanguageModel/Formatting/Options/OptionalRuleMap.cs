@@ -48,7 +48,7 @@ namespace LanguageService.Formatting.Options
                 {
                     return;
                 }
-
+                DisabledRuleGroups.Add(optionalRuleGroup);
                 addRemoveFunc = AddRuleGroup;
             }
             else
@@ -57,7 +57,7 @@ namespace LanguageService.Formatting.Options
                 {
                     return;
                 }
-
+                DisabledRuleGroups.Remove(optionalRuleGroup);
                 addRemoveFunc = DeleteRuleGroup;
             }
 
@@ -106,21 +106,17 @@ namespace LanguageService.Formatting.Options
 
             foreach (Rule rule in ruleGroup)
             {
-                if (!DisabledRules.Contains(rule))
-                {
-                    DisabledRules.Add(rule);
-                }
+                DisabledRules.Add(rule);
             }
         }
 
         private static void DeleteRuleGroup(IEnumerable<Rule> ruleGroup)
         {
+            Validation.Requires.NotNull(ruleGroup, nameof(ruleGroup));
+
             foreach (Rule rule in ruleGroup)
             {
-                if (DisabledRules.Contains(rule))
-                {
-                    DisabledRules.Remove(rule);
-                }
+                DisabledRules.Remove(rule);
             }
         }
 
