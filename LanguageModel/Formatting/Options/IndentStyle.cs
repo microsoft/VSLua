@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LanguageModel.Formatting.Options
+namespace LanguageService.Formatting.Options
 {
     /// <summary>
     /// None - No indent formatting is applied

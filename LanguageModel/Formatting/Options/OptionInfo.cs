@@ -9,13 +9,34 @@ namespace LanguageService.Formatting.Options
 {
     public class OptionInfo
     {
-        public OptionInfo(uint tabSize, List<OptionalRuleGroup> optionRuleGroups)
+        /// <summary>
+        /// The genernal rule options for the formatter
+        /// </summary>
+        /// <param name="enabledRuleGroups">
+        /// The enabled rules for the formatter.
+        /// </param>
+        /// <param name="disabledRuleGroups">
+        /// The disabled rules for the formatter.
+        /// </param>
+        /// <param name="indentSize">
+        /// How big in spaces the indents are.
+        /// </param>
+        /// <param name="indentStyleInfo">The indentation information for the Indenter.</param>
+        public OptionInfo(
+            List<OptionalRuleGroup> enabledRuleGroups,
+            List<OptionalRuleGroup> disabledRuleGroups,
+            uint indentSize,
+            IndentStyleInfo indentStyleInfo)
         {
-            this.TabSize = tabSize;
-            this.OptionalRuleGroups = optionRuleGroups.ToImmutableArray();
+            this.IndentSize = indentSize;
+            this.EnabledRuleGroups = enabledRuleGroups.ToImmutableArray();
+            this.DisabledRuleGroups = disabledRuleGroups.ToImmutableArray();
+            this.IndentStyleInfo = indentStyleInfo;
         }
 
-        internal uint TabSize { get; }
-        internal ImmutableArray<OptionalRuleGroup> OptionalRuleGroups { get; }
+        internal uint IndentSize { get; }
+        internal ImmutableArray<OptionalRuleGroup> EnabledRuleGroups { get; }
+        internal ImmutableArray<OptionalRuleGroup> DisabledRuleGroups { get; }
+        internal IndentStyleInfo IndentStyleInfo { get; }
     }
 }

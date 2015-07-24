@@ -13,6 +13,7 @@ namespace LanguageService.Formatting.Options
         private delegate void AddRemoveFunc(IEnumerable<Rule> ruleGroup);
 
         internal static HashSet<Rule> DisabledRules = new HashSet<Rule>();
+        internal static HashSet<OptionalRuleGroup> DisabledRuleGroups = new HashSet<OptionalRuleGroup>();
 
         /// <summary>
         /// Allows Rule disabling.
@@ -22,7 +23,7 @@ namespace LanguageService.Formatting.Options
         /// </param>
         public static void Disable(OptionalRuleGroup optionalRuleGroup)
         {
-            EnableDisableGeneral(optionalRuleGroup, AddRuleGroup);
+            EnableDisableGeneral(optionalRuleGroup, true);
         }
 
         /// <summary>
@@ -33,48 +34,74 @@ namespace LanguageService.Formatting.Options
         /// </param>
         public static void Enable(OptionalRuleGroup optionalRuleGroup)
         {
-            EnableDisableGeneral(optionalRuleGroup, DeleteRuleGroup);
+            EnableDisableGeneral(optionalRuleGroup, false);
         }
 
-        private static void EnableDisableGeneral(OptionalRuleGroup optionalRuleGroup, AddRemoveFunc addRemoveFunc)
+        private static void EnableDisableGeneral(OptionalRuleGroup optionalRuleGroup, bool disabling)
         {
+            AddRemoveFunc addRemoveFunc;
+            bool alreadyDisabled = DisabledRuleGroups.Contains(optionalRuleGroup);
+
+            if (disabling)
+            {
+                if (alreadyDisabled)
+                {
+                    return;
+                }
+                addRemoveFunc = AddRuleGroup;
+            }
+            else
+            {
+                if (!alreadyDisabled)
+                {
+                    return;
+                }
+                addRemoveFunc = DeleteRuleGroup;
+            }
+
+            IEnumerable<Rule> ruleGroup;
+
             switch (optionalRuleGroup)
             {
                 case OptionalRuleGroup.SpaceBeforeOpenParenthesis:
-                    addRemoveFunc(SpaceBeforeOpenParenthesis);
+                    ruleGroup = SpaceBeforeOpenParenthesis;
                     break;
 
                 case OptionalRuleGroup.SpaceOnInsideOfParenthesis:
-                    addRemoveFunc(SpaceOnInsideOfParenthesis);
+                    ruleGroup = SpaceOnInsideOfParenthesis;
                     break;
 
                 case OptionalRuleGroup.SpaceOnInsideOfCurlyBraces:
-                    addRemoveFunc(SpaceOnInsideOfCurlyBraces);
+                    ruleGroup = SpaceOnInsideOfCurlyBraces;
                     break;
 
                 case OptionalRuleGroup.SpaceOnInsideOfSquareBrackets:
-                    addRemoveFunc(SpaceOnInsideOfSquareBrackets);
+                    ruleGroup = SpaceOnInsideOfSquareBrackets;
                     break;
 
                 case OptionalRuleGroup.SpaceAfterCommas:
-                    addRemoveFunc(SpaceAfterCommas);
+                    ruleGroup = SpaceAfterCommas;
                     break;
 
                 case OptionalRuleGroup.SpaceBeforeAndAfterBinaryOperations:
-                    addRemoveFunc(SpaceBeforeAndAfterBinaryOperations);
+                    ruleGroup = SpaceBeforeAndAfterBinaryOperations;
                     break;
 
                 case OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForStatement:
-                    addRemoveFunc(SpaceBeforeAndAfterAssignment);
+                    ruleGroup = SpaceBeforeAndAfterAssignment;
                     break;
 
                 default:
                     throw new NotImplementedException();
             }
+
+            addRemoveFunc(ruleGroup);
         }
 
         private static void AddRuleGroup(IEnumerable<Rule> ruleGroup)
         {
+            Validation.Requires.NotNull(ruleGroup, nameof(ruleGroup));
+
             foreach (Rule rule in ruleGroup)
             {
                 if (!DisabledRules.Contains(rule))
