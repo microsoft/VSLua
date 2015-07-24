@@ -9,7 +9,8 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
 
         internal sealed class Guids
         {
-            internal static readonly Guid LuaLanguageService = new Guid("88A1F488-9D00-4896-A255-6F8251208B90");
+            internal const string LuaLanguageServiceString = "88A1F488-9D00-4896-A255-6F8251208B90";
+            internal static readonly Guid LuaLanguageService = new Guid(LuaLanguageServiceString);
         }
     }
 }
