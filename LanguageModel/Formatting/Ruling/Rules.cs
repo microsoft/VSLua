@@ -87,32 +87,6 @@ namespace LanguageService.Formatting.Ruling
 
         internal static Rule DeleteTrailingWhitespace = new DeleteTrailingWhitespace();
 
-        // This would create the RuleMap off the formatting options, but for now
-        //   it just adds all the avaliable rules.
-        internal static RuleMap GetRuleMap()
-        {
-            RuleMap ruleMap = new RuleMap();
-            ruleMap.Add(Rules.SpaceAfterComma);
-            ruleMap.Add(Rules.SpaceAfterAssignmentOperator);
-            ruleMap.Add(Rules.SpaceAfterBinaryOperator);
-            ruleMap.Add(Rules.SpaceAfterValueBeforeCloseCurlyBrace);
-            ruleMap.Add(Rules.SpaceAfterValueBeforeCloseParenthesis);
-            ruleMap.Add(Rules.SpaceAfterValueBeforeCloseSquareBracket);
-            ruleMap.Add(Rules.SpaceAfterValueBeforeOpenParenthesis);
-            ruleMap.Add(Rules.SpaceBeforeAssignmentOperator);
-            ruleMap.Add(Rules.SpaceBeforeBinaryOperator);
-            ruleMap.Add(Rules.SpaceBeforeValueAfterOpenCurlyBrace);
-            ruleMap.Add(Rules.SpaceBeforeValueAfterOpenParenthesis);
-            ruleMap.Add(Rules.SpaceBeforeValueAfterOpenSquareBracket);
-            ruleMap.Add(Rules.DeleteTrailingWhitespace);
-            ruleMap.Add(Rules.DeleteSpaceBeforeEofToken);
-            ruleMap.Add(Rules.DeleteSpaceAfterValueBeforeColon);
-            ruleMap.Add(Rules.DeleteSpaceAfterValueBeforeDot);
-            ruleMap.Add(Rules.DeleteSpaceBeforeValueAfterColon);
-            ruleMap.Add(Rules.DeleteSpaceBeforeValueAfterDot);
-            return ruleMap;
-        }
-
         internal static bool TokensAreOnSameLine(FormattingContext formattingContext)
         {
             return formattingContext.TokensOnSameLine();

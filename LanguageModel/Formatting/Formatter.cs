@@ -27,7 +27,6 @@ namespace LanguageService.Formatting
         /// </returns>
         public static List<TextEditInfo> Format(SourceText span)
         {
-            RuleMap ruleMap = Rules.GetRuleMap();
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
             List<Token> tokens = ParseTreeProvider.Get(span);
@@ -39,7 +38,7 @@ namespace LanguageService.Formatting
                 FormattingContext formattingContext =
                     new FormattingContext(parsedTokens[i], parsedTokens[i + 1]);
 
-                Rule rule = ruleMap.Get(formattingContext);
+                Rule rule = RuleMap.Get(formattingContext);
 
                 if (rule == null)
                 {
