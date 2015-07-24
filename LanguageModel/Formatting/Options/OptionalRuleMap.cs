@@ -65,7 +65,10 @@ namespace LanguageService.Formatting.Options
         {
             foreach (Rule rule in ruleGroup)
             {
-                DisabledRules.Add(rule);
+                if (!DisabledRules.Contains(rule))
+                {
+                    DisabledRules.Add(rule);
+                }
             }
         }
 
