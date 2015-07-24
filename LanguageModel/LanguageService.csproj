@@ -74,6 +74,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Formatting\Options\IndentStyle.cs" />
+    <Compile Include="Formatting\Options\IndentStyleInfo.cs" />
     <Compile Include="Formatting\Options\OptionalRuleGroup.cs" />
     <Compile Include="Formatting\Options\OptionalRuleMap.cs" />
     <Compile Include="Formatting\Options\OptionInfo.cs" />

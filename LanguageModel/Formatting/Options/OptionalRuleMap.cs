@@ -14,11 +14,23 @@ namespace LanguageService.Formatting.Options
 
         internal static HashSet<Rule> DisabledRules = new HashSet<Rule>();
 
+        /// <summary>
+        /// Allows Rule disabling.
+        /// </summary>
+        /// <param name="optionalRuleGroup">
+        /// The OptionalRuleGroup that is to be disabled/skipped.
+        /// </param>
         public static void Disable(OptionalRuleGroup optionalRuleGroup)
         {
             EnableDisableGeneral(optionalRuleGroup, AddRuleGroup);
         }
 
+        /// <summary>
+        /// Allows Rule enabling
+        /// </summary>
+        /// <param name="optionalRuleGroup">
+        /// The OptionRuleGroup that is to be enabled/applied.
+        /// </param>
         public static void Enable(OptionalRuleGroup optionalRuleGroup)
         {
             EnableDisableGeneral(optionalRuleGroup, DeleteRuleGroup);

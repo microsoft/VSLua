@@ -55,7 +55,7 @@ namespace Formatting.Tests
 
             foreach (var textEdit in textEdits)
             {
-                edit.Replace(textEdit.Start, textEdit.Length, textEdit.ReplacingString);
+                edit.Replace(textEdit.Start, textEdit.Length, textEdit.ReplacingWith);
             }
 
             var applied = edit.Apply();

@@ -133,7 +133,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
             {
                 foreach (TextEditInfo edit in edits)
                 {
-                    textEdit.Replace(edit.Start, edit.Length, edit.ReplacingString);
+                    textEdit.Replace(edit.Start, edit.Length, edit.ReplacingWith);
                 }
                 textEdit.Apply();
             }
