@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.LuaLanguageService.Shared;
 
 namespace Microsoft.VisualStudio.LuaLanguageService
 {
-    [Guid(Constants.Guids.LuaLanguageServiceString)]
+    [Guid(Constants.Guids.LanguageServiceString)]
     public sealed class LuaLanguageService : IServiceProvider
     {
         private IServiceProvider serviceProvider;

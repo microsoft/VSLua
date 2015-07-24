@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.LuaLanguageService.Shared;
 namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 {
     [Export(typeof(IWpfTextViewConnectionListener))]
-    [ContentType(Constants.LuaLanguageName)]
+    [ContentType(Constants.LanguageName)]
     [TextViewRole(PredefinedTextViewRoles.Interactive)]
     class WpfTextViewConnectionListener : IWpfTextViewConnectionListener
     {

@@ -62,6 +62,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shared\ConnectionPointCookie.cs" />
     <Compile Include="Shared\Constants.cs" />
+    <Compile Include="Shared\ContentTypes.cs" />
     <Compile Include="Shared\GlobalEditorOptions.cs" />
     <Compile Include="Shared\SourceTextProvider.cs" />
   </ItemGroup>
@@ -73,7 +74,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="index.html" />
     <Content Include="LuaLanguageServicePackage.pkgdef">
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

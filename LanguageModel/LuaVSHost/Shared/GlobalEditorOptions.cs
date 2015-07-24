@@ -29,7 +29,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
             ThreadHelper.ThrowIfNotOnUIThread();
             IVsTextManager2 textManager = (IVsTextManager2)serviceProvider.GetService(typeof(SVsTextManager));
             VIEWPREFERENCES2[] viewPreferences = new VIEWPREFERENCES2[] { new VIEWPREFERENCES2() };
-            LANGPREFERENCES2[] languagePreferences = new LANGPREFERENCES2[] { new LANGPREFERENCES2() { guidLang = Constants.Guids.LuaLanguageService } };
+            LANGPREFERENCES2[] languagePreferences = new LANGPREFERENCES2[] { new LANGPREFERENCES2() { guidLang = Constants.Guids.LanguageService } };
 
             int hresult = textManager.GetUserPreferences2(viewPreferences, pFramePrefs: null, pLangPrefs: languagePreferences, pColorPrefs: null);
             ErrorHandler.ThrowOnFailure(hresult);
@@ -47,7 +47,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
             }
 
             if (languagePreferences != null && languagePreferences.Length > 0 &&
-                Guid.Equals(languagePreferences[0].guidLang, Constants.Guids.LuaLanguageService))
+                Guid.Equals(languagePreferences[0].guidLang, Constants.Guids.LanguageService))
             {
                 this.IndentStyle = languagePreferences[0].IndentStyle;
                 this.TabSize = languagePreferences[0].uTabSize;
