@@ -1,13 +1,13 @@
-﻿using VSLua.Shared;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Differencing;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
-using System.Collections.ObjectModel;
-using Microsoft.VisualStudio.Editor;
-using System;
-using System.Collections.Generic;
+using VSLua.Shared;
 
 namespace VSLua.Formatting
 {

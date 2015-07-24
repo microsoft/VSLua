@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using LanguageModel;
 using LanguageService.Formatting;
 using Microsoft.VisualStudio;

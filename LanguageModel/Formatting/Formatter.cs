@@ -1,9 +1,6 @@
-﻿using LanguageModel;
+﻿using System.Collections.Generic;
+using LanguageModel;
 using LanguageService.Formatting.Ruling;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 
 namespace LanguageService.Formatting
 {

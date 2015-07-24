@@ -1,4 +1,5 @@
 ﻿using System;
+
 using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
 
 namespace VSLua.Formatting
