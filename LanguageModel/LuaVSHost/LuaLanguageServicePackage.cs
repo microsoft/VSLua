@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
@@ -33,20 +34,28 @@ namespace Microsoft.VisualStudio.LuaLanguageService
 
         public const string PackageGuidString = "40c3d121-7e37-4d03-a9f8-f10bca9805f3";
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Lua.Host"/> class.
-    /// </summary>
-    public LuaLanguageServicePackage()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Lua.Host"/> class.
+        /// </summary>
+        public LuaLanguageServicePackage()
         {
             // initiaization stuff before package creation
         }
 
-#region Package Members
+        #region Package Members
 
-protected override void Initialize()
-{
+        protected override void Initialize()
+        {
+            var container = this as IServiceContainer;
+
+            if (container != null)
+            {
+                container.AddService(typeof(LuaLanguageService),
+                    (serviceContainer, t) => new LuaLanguageService(serviceContainer), true);
+            }
+
             base.Initialize();
-}
+        }
 
         #endregion
     }
