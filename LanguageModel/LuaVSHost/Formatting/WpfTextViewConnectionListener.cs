@@ -21,15 +21,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 
         public void SubjectBuffersConnected(IWpfTextView textView, ConnectionReason reason, Collection<ITextBuffer> subjectBuffers)
         {
-            if (textView == null)
-            {
-                throw new ArgumentNullException("textView");
-            }
-
-            if (subjectBuffers == null)
-            {
-                throw new ArgumentNullException("subjectBuffers");
-            }
+            Validation.Requires.NotNull(subjectBuffers, nameof(subjectBuffers));
 
             List<ITextBuffer> textBuffers = IgnoreLeftTextBufferInInlineDiffView(textView, subjectBuffers);
 
@@ -62,15 +54,8 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 
         public void SubjectBuffersDisconnected(IWpfTextView textView, ConnectionReason reason, Collection<ITextBuffer> subjectBuffers)
         {
-            if (textView == null)
-            {
-                throw new ArgumentNullException("textView");
-            }
-
-            if (subjectBuffers == null)
-            {
-                throw new ArgumentNullException("subjectBuffers");
-            }
+            Validation.Requires.NotNull(textView, nameof(textView));
+            Validation.Requires.NotNull(subjectBuffers, nameof(subjectBuffers));
 
             List<ITextBuffer> textBuffers = IgnoreLeftTextBufferInInlineDiffView(textView, subjectBuffers);
 

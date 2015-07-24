@@ -28,10 +28,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 
             this.editorAdaptersService = editorAdaptersService;
 
-            if (wpfTextView == null)
-            {
-                throw new ArgumentNullException("wpfTextView");
-            }
+            Validation.Requires.NotNull(wpfTextView, nameof(wpfTextView));
 
             this.WpfTextView = wpfTextView;
             this.VsTextView = this.editorAdaptersService.GetViewAdapter(this.WpfTextView);
