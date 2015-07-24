@@ -74,6 +74,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Formatting\Options\OptionalRule.cs" />
+    <Compile Include="Formatting\Options\OptionInfo.cs" />
     <Compile Include="Formatting\Formatter.cs" />
     <Compile Include="Formatting\FormattingContext.cs" />
     <Compile Include="Formatting\Indenter.cs" />
