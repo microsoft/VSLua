@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.Editor;
+using Microsoft.VisualStudio.LuaLanguageService.Shared;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Differencing;
@@ -22,11 +23,12 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
         protected bool IsClosed { get; private set; }
 
         protected IVsEditorAdaptersFactoryService editorAdaptersService;
+        protected ICore core;
 
-        public TextView(IWpfTextView wpfTextView, IVsEditorAdaptersFactoryService editorAdaptersService)
+        public TextView(IWpfTextView wpfTextView, ICore core)
         {
-
-            this.editorAdaptersService = editorAdaptersService;
+            this.core = core;
+            this.editorAdaptersService = core.EditorAdaptersFactory;
 
             Validation.Requires.NotNull(wpfTextView, nameof(wpfTextView));
 
@@ -47,7 +49,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
         {
             CommandFilter filter = new CommandFilter();
 
-            Manager formattingManager = new Manager(textBuffer, this.WpfTextView);
+            Manager formattingManager = new Manager(textBuffer, this.WpfTextView, this.core);
             filter.MiniFilters.Add(formattingManager);
 
             IOleCommandTarget nextFilter = null;

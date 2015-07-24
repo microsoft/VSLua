@@ -63,7 +63,9 @@
     <Compile Include="Shared\ConnectionPointCookie.cs" />
     <Compile Include="Shared\Constants.cs" />
     <Compile Include="Shared\ContentTypes.cs" />
+    <Compile Include="Shared\Core.cs" />
     <Compile Include="Shared\GlobalEditorOptions.cs" />
+    <Compile Include="Shared\ICore.cs" />
     <Compile Include="Shared\SourceTextProvider.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.LuaLanguageService.Shared;
 
 using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
+using System.ComponentModel.Composition;
 
 namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 {
@@ -17,10 +18,11 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
         private ITextBuffer textBuffer;
         private ITextView textView;
         private bool isClosed;
+        private ICore core;
 
-        internal Manager(ITextBuffer textBuffer, ITextView textView)
+        internal Manager(ITextBuffer textBuffer, ITextView textView, ICore core)
         {
-            // setup the undo history here...
+            this.core = core;
             this.textBuffer = textBuffer;
             this.textView = textView;
         }

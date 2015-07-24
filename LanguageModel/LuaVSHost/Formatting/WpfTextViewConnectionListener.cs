@@ -17,7 +17,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
     class WpfTextViewConnectionListener : IWpfTextViewConnectionListener
     {
         [Import]
-        internal IVsEditorAdaptersFactoryService EditorAdaptersFactory { get; private set; }
+        private ICore core;
 
         public void SubjectBuffersConnected(IWpfTextView textView, ConnectionReason reason, Collection<ITextBuffer> subjectBuffers)
         {
@@ -30,7 +30,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
                 return;
             }
 
-            TextView internalTextView = new TextView(textView, this.EditorAdaptersFactory);
+            TextView internalTextView = new TextView(textView, this.core);
             internalTextView.Connect(textBuffers[0]);
 
         }

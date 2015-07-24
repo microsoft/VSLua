@@ -14,7 +14,6 @@ using Microsoft.VisualStudio.Shell;
 namespace Microsoft.VisualStudio.LuaLanguageService.Shared
 {
     [Export(typeof(GlobalEditorOptions))]
-    [PartCreationPolicy(CreationPolicy.Shared)]
     internal sealed class GlobalEditorOptions : IVsTextManagerEvents2
     {
         internal vsIndentStyle IndentStyle { get; private set; }
