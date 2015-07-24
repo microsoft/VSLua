@@ -48,6 +48,7 @@ namespace LanguageService.Formatting.Options
                 {
                     return;
                 }
+
                 addRemoveFunc = AddRuleGroup;
             }
             else
@@ -56,6 +57,7 @@ namespace LanguageService.Formatting.Options
                 {
                     return;
                 }
+
                 addRemoveFunc = DeleteRuleGroup;
             }
 
