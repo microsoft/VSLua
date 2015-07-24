@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using LanguageService.Formatting.Options;
 
 namespace LanguageService.Formatting.Ruling
 {
@@ -47,7 +48,7 @@ namespace LanguageService.Formatting.Ruling
 
         internal override bool AppliesTo(FormattingContext formattingContext)
         {
-            return ruleOperation.Context.InContext(formattingContext);
+            return OptionalRuleMap.DisabledRules.Contains(this) && ruleOperation.Context.InContext(formattingContext);
         }
 
         internal override IEnumerable<TextEditInfo> Apply(FormattingContext formattingContext)
