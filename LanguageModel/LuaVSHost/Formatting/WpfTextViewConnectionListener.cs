@@ -7,9 +7,9 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Differencing;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
-using VSLua.Shared;
+using Microsoft.VisualStudio.LuaLanguageService.Shared;
 
-namespace VSLua.Formatting
+namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 {
     [Export(typeof(IWpfTextViewConnectionListener))]
     [ContentType(Constants.LuaLanguageName)]

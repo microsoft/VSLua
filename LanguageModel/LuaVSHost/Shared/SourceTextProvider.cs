@@ -3,7 +3,7 @@ using LanguageModel;
 using Microsoft.Internal.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
 
-namespace VSLua.Shared
+namespace Microsoft.VisualStudio.LuaLanguageService.Shared
 {
     internal static class SourceTextProvider
     {

@@ -6,11 +6,11 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
-using VSLua.Shared;
+using Microsoft.VisualStudio.LuaLanguageService.Shared;
 
 using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
 
-namespace VSLua.Formatting
+namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 {
     internal sealed class Manager : IMiniCommandFilter, IFormatter
     {

@@ -9,7 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 
-namespace VSLua
+namespace Microsoft.VisualStudio.LuaLanguageService
 {
     /// <para>
     /// The minimum requirement for a class to be considered a valid package for Visual Studio
@@ -26,9 +26,9 @@ namespace VSLua
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
-    [Guid(LuaPackage.PackageGuidString)]
+    [Guid(LuaLanguageServicePackage.PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    public sealed class LuaPackage : Package
+    public sealed class LuaLanguageServicePackage : Package
     {
 
         public const string PackageGuidString = "40c3d121-7e37-4d03-a9f8-f10bca9805f3";
@@ -36,7 +36,7 @@ namespace VSLua
     /// <summary>
     /// Initializes a new instance of the <see cref="Lua.Host"/> class.
     /// </summary>
-    public LuaPackage()
+    public LuaLanguageServicePackage()
         {
             // initiaization stuff before package creation
         }

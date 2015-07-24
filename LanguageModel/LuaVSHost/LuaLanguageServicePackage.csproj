@@ -23,8 +23,8 @@
     <ProjectGuid>{4C4E17B1-4382-460E-8308-A799C1F000C3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VSLua</RootNamespace>
-    <AssemblyName>VSLua</AssemblyName>
+    <RootNamespace>Microsoft.VisualStudio.LuaLanguageService</RootNamespace>
+    <AssemblyName>Microsoft.VisualStudio.LuaLanguageService</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
@@ -57,9 +57,12 @@
     <Compile Include="Formatting\Manager.cs" />
     <Compile Include="Formatting\TextView.cs" />
     <Compile Include="Formatting\WpfTextViewConnectionListener.cs" />
-    <Compile Include="LuaPackage.cs" />
+    <Compile Include="LuaLanguageService.cs" />
+    <Compile Include="LuaLanguageServicePackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shared\ConnectionPointCookie.cs" />
     <Compile Include="Shared\Constants.cs" />
+    <Compile Include="Shared\GlobalEditorOptions.cs" />
     <Compile Include="Shared\SourceTextProvider.cs" />
   </ItemGroup>
   <ItemGroup>
