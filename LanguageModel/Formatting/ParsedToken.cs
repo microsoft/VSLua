@@ -28,7 +28,7 @@ namespace LanguageService.Formatting
 
         internal ParsedToken(Token token, int blockLevel, SyntaxNode node)
         {
-            Validation.Assumes.NotNull(token);
+            Validation.Requires.NotNull(token, nameof(token));
 
             this.Token = token;
             this.BlockLevel = blockLevel;
@@ -39,7 +39,7 @@ namespace LanguageService.Formatting
         //   through all the tokens from the lexer, I'd just walk the parsetree from the start
         internal static List<ParsedToken> GetParsedTokens(List<Token> tokens)
         {
-            Validation.Assumes.NotNull(tokens);
+            Validation.Requires.NotNull(tokens, nameof(tokens));
 
             List<ParsedToken> parsedTokens = new List<ParsedToken>();
 

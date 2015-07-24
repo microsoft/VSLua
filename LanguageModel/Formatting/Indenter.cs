@@ -18,7 +18,7 @@ namespace LanguageService.Formatting
 
         internal static IEnumerable<TextEditInfo> GetIndentations(List<ParsedToken> parsedTokens)
         {
-            Validation.Assumes.NotNull(parsedTokens);
+            Validation.Requires.NotNull(parsedTokens, nameof(parsedTokens));
 
             foreach (ParsedToken parsedToken in parsedTokens)
             {
@@ -54,7 +54,7 @@ namespace LanguageService.Formatting
 
         private static IEnumerable<IndentInfo> GetIndentInformation(ParsedToken parsedToken)
         {
-            Validation.Assumes.NotNull(parsedToken);
+            Validation.Requires.NotNull(parsedToken, nameof(parsedToken));
 
             List<Trivia> leadingTrivia = parsedToken.Token.LeadingTrivia;
 

@@ -8,7 +8,7 @@ namespace LanguageModel
 
         public SourceText(TextReader textReader)
         {
-            Validation.Assumes.NotNull(textReader);
+            Validation.Requires.NotNull(textReader, nameof(textReader));
 
             this.TextReader = textReader;
         }

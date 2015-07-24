@@ -12,7 +12,7 @@ namespace LanguageModel
 
         public static List<Token> Get(SourceText sourceText)
         {
-            Validation.Assumes.NotNull(sourceText);
+            Validation.Requires.NotNull(sourceText, nameof(sourceText));
 
             List<Token> tokens = null;
             if (sources.TryGetValue(sourceText, out tokens))
