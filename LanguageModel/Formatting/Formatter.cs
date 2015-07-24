@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using LanguageModel;
+using LanguageService.Formatting.Options;
 using LanguageService.Formatting.Ruling;
 
 namespace LanguageService.Formatting

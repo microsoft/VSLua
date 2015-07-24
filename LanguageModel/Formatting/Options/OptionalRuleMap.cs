@@ -73,7 +73,10 @@ namespace LanguageService.Formatting.Options
         {
             foreach (Rule rule in ruleGroup)
             {
-                DisabledRules.Remove(rule);
+                if (DisabledRules.Contains(rule))
+                {
+                    DisabledRules.Remove(rule);
+                }
             }
         }
 
