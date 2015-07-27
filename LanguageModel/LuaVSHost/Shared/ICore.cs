@@ -1,4 +1,5 @@
 ﻿using System;
+using LanguageService;
 using Microsoft.VisualStudio.Editor;
 
 namespace Microsoft.VisualStudio.LuaLanguageService.Shared
@@ -8,5 +9,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
         GlobalEditorOptions GlobalEditorOptions { get; }
         IServiceProvider ServiceProvider { get; }
         IVsEditorAdaptersFactoryService EditorAdaptersFactory { get; }
+        SourceTextCache SourceTextProvider { get; }
+        LuaFeatureContainer FeatureContainer { get; }
     }
 }

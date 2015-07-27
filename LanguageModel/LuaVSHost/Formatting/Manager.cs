@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using LanguageModel;
+using LanguageService;
 using LanguageService.Formatting;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
@@ -125,9 +125,9 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
             SnapshotPoint startLinePoint = span.Start.GetContainingLine().Start;
             span = new SnapshotSpan(startLinePoint, span.End);
 
-            SourceText sourceText = SourceTextProvider.Get(this.textBuffer.CurrentSnapshot);
+            SourceText sourceText = core.SourceTextProvider.Get(this.textBuffer.CurrentSnapshot);
 
-            List<TextEditInfo> edits = Formatter.Format(sourceText, null);
+            List<TextEditInfo> edits = core.FeatureContainer.Formatter.Format(sourceText, null);
 
             using (ITextEdit textEdit = this.textBuffer.CreateEdit())
             {

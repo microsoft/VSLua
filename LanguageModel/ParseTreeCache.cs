@@ -3,9 +3,9 @@ using System.Runtime.CompilerServices;
 using LanguageService;
 
 
-namespace LanguageModel
+namespace LanguageService
 {
-    internal class ParseTreeProvider
+    internal class ParseTreeCache
     {
         private readonly ConditionalWeakTable<SourceText, List<Token>> sources = 
             new ConditionalWeakTable<SourceText, List<Token>>();

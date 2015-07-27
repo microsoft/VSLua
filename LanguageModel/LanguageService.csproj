@@ -98,6 +98,7 @@
     <Compile Include="Formatting\TextEditInfo.cs" />
     <Compile Include="Formatting\TokenRange.cs" />
     <Compile Include="LanguageModel\IndentingTextWriter.cs" />
+    <Compile Include="LuaFeatureContainer.cs" />
     <Compile Include="LanguageModel\Lexer.cs" />
     <Compile Include="LanguageModel\NodeClasses.cs">
       <Generator>MSBuild:GenerateCodeFromAttributes</Generator>
@@ -109,7 +110,7 @@
     <Compile Include="LanguageModel\Token.cs" />
     <Compile Include="LanguageModel\TrackableTextReader.cs" />
     <Compile Include="LanguageModel\Trivia.cs" />
-    <Compile Include="ParseTreeProvider.cs" />
+    <Compile Include="ParseTreeCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SourceText.cs" />
   </ItemGroup>

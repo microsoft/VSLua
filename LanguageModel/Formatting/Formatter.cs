@@ -1,28 +1,22 @@
 ﻿using System.Collections.Generic;
-using LanguageModel;
+using LanguageService;
 using LanguageService.Formatting.Options;
 using LanguageService.Formatting.Ruling;
 
 namespace LanguageService.Formatting
 {
-    public static class Formatter
+    public sealed class Formatter
     {
-        private static ParseTreeProvider parseTreeProvider;
-        internal static ParseTreeProvider ParseTreeProvider
+        private ParseTreeCache ParseTreeProvider { get; }
+        private GlobalOptions GlobalOptions { get; set; }
+        private RuleMap RuleMap { get; set; }
+
+        internal Formatter(ParseTreeCache parseTreeProvider)
         {
-            get
-            {
-                if (parseTreeProvider == null)
-                {
-                    parseTreeProvider = new ParseTreeProvider();
-                }
-                return parseTreeProvider;
-            }
+            ParseTreeProvider = parseTreeProvider;
+            GlobalOptions = new GlobalOptions();
+            RuleMap = RuleMap.Create();
         }
-
-        internal static GlobalOptions GlobalOptions { get; set; }
-
-        internal static RuleMap RuleMap { get; set; }
 
         /// <summary>
         /// This is main entry point for the VS side of things. For now, the implementation
@@ -37,23 +31,13 @@ namespace LanguageService.Formatting
         /// indentation text edits from the spacing text edits in the future but for now they are in
         /// the same list.
         /// </returns>
-        public static List<TextEditInfo> Format(SourceText span, NewOptions newOptions)
+        public List<TextEditInfo> Format(SourceText span, NewOptions newOptions)
         {
-
-            // TODO: Temporary stuff.....
-            if (RuleMap == null || GlobalOptions == null)
-            {
-                GlobalOptions = new GlobalOptions();
-                RuleMap = RuleMap.Create();
-            }
-
-            // If newOptions is not null, that means the GlobalOptions need to be updated
             if (newOptions != null)
             {
                 GlobalOptions = new GlobalOptions(newOptions);
                 RuleMap = RuleMap.Create(GlobalOptions.OptionalRuleMap);
             }
-            // End of temp stuff
 
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace LanguageModel
+namespace LanguageService
 {
     public class SourceText
     {

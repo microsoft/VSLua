@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using LanguageService;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
 
@@ -16,6 +17,9 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
 
         [Import]
         private IVsEditorAdaptersFactoryService editorAdaptersFactory;
+
+        private SourceTextCache sourceTextProvider;
+        private LuaFeatureContainer featureContainer;
 
         public GlobalEditorOptions GlobalEditorOptions
         {
@@ -38,6 +42,30 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
             get
             {
                 return this.editorAdaptersFactory;
+            }
+        }
+
+        public SourceTextCache SourceTextProvider
+        {
+            get
+            {
+                if (sourceTextProvider == null)
+                {
+                    sourceTextProvider = new SourceTextCache();
+                }
+                return sourceTextProvider;
+            }
+        }
+
+        public LuaFeatureContainer FeatureContainer
+        {
+            get
+            {
+                if (featureContainer == null)
+                {
+                    featureContainer = new LuaFeatureContainer();
+                }
+                return featureContainer;
             }
         }
     }

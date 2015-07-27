@@ -1,5 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
-using LanguageModel;
+using LanguageService;
 using Microsoft.VisualStudio.Text;
 
 namespace Microsoft.VisualStudio.LuaLanguageService.Shared
@@ -8,9 +8,9 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
     /// This class will be changed to non-static once I merge this branch with the branch that has the Core class that
     /// holds everything.
     /// </summary>
-    internal static class SourceTextProvider
+    internal class SourceTextCache
     {
-        internal static SourceText Get(ITextSnapshot textSnapshot)
+        internal SourceText Get(ITextSnapshot textSnapshot)
         {
             Validation.Requires.NotNull(textSnapshot, nameof(textSnapshot));
 
@@ -26,7 +26,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
             return sourceText;
         }
 
-        private static ConditionalWeakTable<ITextSnapshot, SourceText> sources =
+        private ConditionalWeakTable<ITextSnapshot, SourceText> sources =
             new ConditionalWeakTable<ITextSnapshot, SourceText>();
     }
 }
