@@ -1,6 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
 using LanguageModel;
-using Microsoft.Internal.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
 
 namespace Microsoft.VisualStudio.LuaLanguageService.Shared

@@ -1,15 +1,7 @@
-﻿using Microsoft.VisualStudio.TextManager.Interop;
-using System;
-using System.Runtime.InteropServices;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using Microsoft.VisualStudio;
+﻿using System;
 using System.ComponentModel.Composition;
-using Microsoft.VisualStudio.Utilities;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Microsoft.VisualStudio.LuaLanguageService.Shared
 {

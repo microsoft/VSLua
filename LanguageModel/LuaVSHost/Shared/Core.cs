@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.Editor;
-using Microsoft.VisualStudio.LuaLanguageService.Formatting;
 using Microsoft.VisualStudio.Shell;
 
 namespace Microsoft.VisualStudio.LuaLanguageService.Shared
