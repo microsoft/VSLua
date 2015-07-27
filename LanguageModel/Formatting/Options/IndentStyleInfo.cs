@@ -21,12 +21,14 @@ namespace LanguageService.Formatting.Options
         /// <param name="tableIndentStyle">
         /// This is the indent style for table constructors.
         /// </param>
-        public IndentStyleInfo(IndentStyle genernalIndentStyle, IndentStyle functionIndentStyle, IndentStyle tableIndentStyle)
+        public IndentStyleInfo(IndentStyle generalIndentStyle, IndentStyle functionIndentStyle, IndentStyle tableIndentStyle)
         {
+            this.GeneralIndentStyle = generalIndentStyle;
             this.Function = functionIndentStyle;
             this.Table = tableIndentStyle;
         }
 
+        internal IndentStyle GeneralIndentStyle { get; }
         internal IndentStyle Function { get; }
         internal IndentStyle Table { get; }
     }

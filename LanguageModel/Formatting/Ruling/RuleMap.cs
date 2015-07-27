@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using LanguageService.Formatting.Options;
 
 namespace LanguageService.Formatting.Ruling
 {
@@ -6,12 +8,12 @@ namespace LanguageService.Formatting.Ruling
     internal static class RuleMap
     {
         internal static RuleBucket[,] map;
+        private static int Length { get; }
 
         static RuleMap()
         {
-            int length = Enum.GetNames(typeof(TokenType)).Length;
-            map = new RuleBucket[length, length];
-            Initialize();
+            Length = Enum.GetNames(typeof(TokenType)).Length;
+            ClearRuleMapAndAddEnabledRules(null);
         }
 
         internal static void Add(Rule rule)
@@ -48,26 +50,21 @@ namespace LanguageService.Formatting.Ruling
             return null;
         }
 
-        private static void Initialize()
+        internal static void ClearRuleMapAndAddEnabledRules(OptionalRuleMap optionalRuleMap)
         {
-            Add(Rules.SpaceAfterComma);
-            Add(Rules.SpaceAfterAssignmentOperator);
-            Add(Rules.SpaceAfterBinaryOperator);
-            Add(Rules.SpaceAfterValueBeforeCloseCurlyBrace);
-            Add(Rules.SpaceAfterValueBeforeCloseParenthesis);
-            Add(Rules.SpaceAfterValueBeforeCloseSquareBracket);
-            Add(Rules.SpaceAfterValueBeforeOpenParenthesis);
-            Add(Rules.SpaceBeforeAssignmentOperator);
-            Add(Rules.SpaceBeforeBinaryOperator);
-            Add(Rules.SpaceBeforeValueAfterOpenCurlyBrace);
-            Add(Rules.SpaceBeforeValueAfterOpenParenthesis);
-            Add(Rules.SpaceBeforeValueAfterOpenSquareBracket);
-            Add(Rules.DeleteTrailingWhitespace);
-            Add(Rules.DeleteSpaceBeforeEofToken);
-            Add(Rules.DeleteSpaceAfterValueBeforeColon);
-            Add(Rules.DeleteSpaceAfterValueBeforeDot);
-            Add(Rules.DeleteSpaceBeforeValueAfterDot);
-            Add(Rules.DeleteSpaceBeforeValueAfterColon);
+            if (optionalRuleMap == null)
+            {
+                optionalRuleMap = new OptionalRuleMap(new List<OptionalRuleGroup>());
+            }
+
+            map = new RuleBucket[Length, Length];
+            foreach (Rule rule in Rules.AllRules)
+            {
+                if (!optionalRuleMap.DisabledRules.Contains(rule))
+                {
+                    Add(rule);
+                }
+            }
         }
     }
 }

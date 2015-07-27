@@ -8,59 +8,35 @@ using LanguageService.Formatting.Ruling;
 
 namespace LanguageService.Formatting.Options
 {
-    public static class OptionalRuleMap
+    /// <summary>
+    /// OptionalRuleMap holds all the disabled Rules, and it sent in as a parameter when the Rules
+    /// are changed in "UpdateRuleMap" in Formatter.
+    /// </summary>
+    public class OptionalRuleMap
     {
-        private delegate void AddRemoveFunc(IEnumerable<Rule> ruleGroup);
-
-        internal static HashSet<Rule> DisabledRules = new HashSet<Rule>();
-        internal static HashSet<OptionalRuleGroup> DisabledRuleGroups = new HashSet<OptionalRuleGroup>();
+        internal HashSet<Rule> DisabledRules = new HashSet<Rule>();
+        internal HashSet<OptionalRuleGroup> DisabledRuleGroups = new HashSet<OptionalRuleGroup>();
 
         /// <summary>
         /// Allows Rule disabling.
         /// </summary>
-        /// <param name="optionalRuleGroup">
-        /// The OptionalRuleGroup that is to be disabled/skipped.
+        /// <param name="optionalRuleGroups">
+        /// The OptionalRuleGroups that are to be disabled/skipped.
         /// </param>
-        public static void Disable(OptionalRuleGroup optionalRuleGroup)
+        public OptionalRuleMap(IEnumerable<OptionalRuleGroup> optionalRuleGroups)
         {
-            EnableDisableGeneral(optionalRuleGroup, true);
-        }
+            DisabledRuleGroups.Clear();
+            DisabledRules.Clear();
 
-        /// <summary>
-        /// Allows Rule enabling
-        /// </summary>
-        /// <param name="optionalRuleGroup">
-        /// The OptionRuleGroup that is to be enabled/applied.
-        /// </param>
-        public static void Enable(OptionalRuleGroup optionalRuleGroup)
-        {
-            EnableDisableGeneral(optionalRuleGroup, false);
-        }
-
-        private static void EnableDisableGeneral(OptionalRuleGroup optionalRuleGroup, bool disabling)
-        {
-            AddRemoveFunc addRemoveFunc;
-            bool alreadyDisabled = DisabledRuleGroups.Contains(optionalRuleGroup);
-
-            if (disabling)
+            foreach (OptionalRuleGroup group in optionalRuleGroups)
             {
-                if (alreadyDisabled)
-                {
-                    return;
-                }
-                DisabledRuleGroups.Add(optionalRuleGroup);
-                addRemoveFunc = AddRuleGroup;
-            }
-            else
-            {
-                if (!alreadyDisabled)
-                {
-                    return;
-                }
-                DisabledRuleGroups.Remove(optionalRuleGroup);
-                addRemoveFunc = DeleteRuleGroup;
+                Disable(group);
             }
 
+        }
+
+        private void Disable(OptionalRuleGroup optionalRuleGroup)
+        {
             IEnumerable<Rule> ruleGroup;
 
             switch (optionalRuleGroup)
@@ -97,26 +73,16 @@ namespace LanguageService.Formatting.Options
                     throw new NotImplementedException();
             }
 
-            addRemoveFunc(ruleGroup);
+            AddRuleGroup(ruleGroup);
         }
 
-        private static void AddRuleGroup(IEnumerable<Rule> ruleGroup)
+        private void AddRuleGroup(IEnumerable<Rule> ruleGroup)
         {
             Validation.Requires.NotNull(ruleGroup, nameof(ruleGroup));
 
             foreach (Rule rule in ruleGroup)
             {
                 DisabledRules.Add(rule);
-            }
-        }
-
-        private static void DeleteRuleGroup(IEnumerable<Rule> ruleGroup)
-        {
-            Validation.Requires.NotNull(ruleGroup, nameof(ruleGroup));
-
-            foreach (Rule rule in ruleGroup)
-            {
-                DisabledRules.Remove(rule);
             }
         }
 

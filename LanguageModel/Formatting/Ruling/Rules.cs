@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace LanguageService.Formatting.Ruling
 {
@@ -86,6 +87,27 @@ namespace LanguageService.Formatting.Ruling
                 defaultFilters, RuleAction.Delete);
 
         internal static Rule DeleteTrailingWhitespace = new DeleteTrailingWhitespace();
+
+        internal static ImmutableArray<Rule> AllRules = ImmutableArray.Create(
+            SpaceAfterComma,
+            SpaceAfterAssignmentOperator,
+            SpaceBeforeAssignmentOperator,
+            SpaceAfterBinaryOperator,
+            SpaceBeforeBinaryOperator,
+            SpaceAfterValueBeforeOpenParenthesis,
+            SpaceBeforeValueAfterOpenParenthesis,
+            SpaceBeforeValueAfterOpenSquareBracket,
+            SpaceBeforeValueAfterOpenCurlyBrace,
+            SpaceAfterValueBeforeCloseParenthesis,
+            SpaceAfterValueBeforeCloseSquareBracket,
+            SpaceAfterValueBeforeCloseCurlyBrace,
+            DeleteSpaceBeforeEofToken,
+            DeleteSpaceAfterValueBeforeDot,
+            DeleteSpaceBeforeValueAfterDot,
+            DeleteSpaceAfterValueBeforeColon,
+            DeleteSpaceBeforeValueAfterColon,
+            DeleteTrailingWhitespace
+            );
 
         internal static bool TokensAreOnSameLine(FormattingContext formattingContext)
         {

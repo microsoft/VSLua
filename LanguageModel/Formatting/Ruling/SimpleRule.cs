@@ -48,7 +48,7 @@ namespace LanguageService.Formatting.Ruling
 
         internal override bool AppliesTo(FormattingContext formattingContext)
         {
-            return !OptionalRuleMap.DisabledRules.Contains(this) && ruleOperation.Context.InContext(formattingContext);
+            return ruleOperation.Context.InContext(formattingContext);
         }
 
         internal override IEnumerable<TextEditInfo> Apply(FormattingContext formattingContext)

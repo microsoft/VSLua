@@ -78,10 +78,11 @@
     <Compile Include="Formatting\Options\IndentStyleInfo.cs" />
     <Compile Include="Formatting\Options\OptionalRuleGroup.cs" />
     <Compile Include="Formatting\Options\OptionalRuleMap.cs" />
-    <Compile Include="Formatting\Options\OptionInfo.cs" />
+    <Compile Include="Formatting\Options\GlobalOptions.cs" />
     <Compile Include="Formatting\Formatter.cs" />
     <Compile Include="Formatting\FormattingContext.cs" />
     <Compile Include="Formatting\Indenter.cs" />
+    <Compile Include="Formatting\Options\NewOptions.cs" />
     <Compile Include="Formatting\ParsedToken.cs" />
     <Compile Include="Formatting\Ruling\DeleteSpaceBeforeEofToken.cs" />
     <Compile Include="Formatting\Ruling\DeleteTrailingWhitespace.cs" />

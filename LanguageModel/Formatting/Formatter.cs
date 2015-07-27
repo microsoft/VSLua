@@ -8,6 +8,15 @@ namespace LanguageService.Formatting
     public static class Formatter
     {
         /// <summary>
+        /// Rebuilds the RuleMap only include enabled rules.
+        /// </summary>
+        public static void RebuildRuleMap(IEnumerable<OptionalRuleGroup> optionalRuleGroups)
+        {
+            OptionalRuleMap optionRuleMap = new OptionalRuleMap(optionalRuleGroups);
+            RuleMap.ClearRuleMapAndAddEnabledRules(optionalRuleMap);
+        }
+
+        /// <summary>
         /// This is main entry point for the VS side of things. For now, the implementation
         /// of the function is not final and it just used as a way seeing results in VS.
         /// Ideally, Format will also take in a "formatting option" object that dictates
