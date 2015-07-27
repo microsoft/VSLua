@@ -10,9 +10,9 @@ namespace LanguageService.Formatting.Options
 {
     /// <summary>
     /// OptionalRuleMap holds all the disabled Rules, and it sent in as a parameter when the Rules
-    /// are changed in "UpdateRuleMap" in Formatter.
+    /// are changed in "Update" in GlobalOptions.
     /// </summary>
-    public class OptionalRuleMap
+    internal class OptionalRuleMap
     {
         internal HashSet<Rule> DisabledRules = new HashSet<Rule>();
         internal HashSet<OptionalRuleGroup> DisabledRuleGroups = new HashSet<OptionalRuleGroup>();
@@ -23,11 +23,9 @@ namespace LanguageService.Formatting.Options
         /// <param name="optionalRuleGroups">
         /// The OptionalRuleGroups that are to be disabled/skipped.
         /// </param>
-        public OptionalRuleMap(IEnumerable<OptionalRuleGroup> optionalRuleGroups)
+        internal OptionalRuleMap(IEnumerable<OptionalRuleGroup> optionalRuleGroups)
         {
-            DisabledRuleGroups.Clear();
-            DisabledRules.Clear();
-
+            Validation.Requires.NotNull(optionalRuleGroups, nameof(optionalRuleGroups));
             foreach (OptionalRuleGroup group in optionalRuleGroups)
             {
                 Disable(group);
