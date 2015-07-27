@@ -4,18 +4,6 @@ namespace LanguageService.Formatting
 {
     internal class Indenter
     {
-        private struct IndentInfo
-        {
-            internal IndentInfo(int start, int length)
-            {
-                this.Start = start;
-                this.Length = length;
-            }
-
-            internal int Start { get; }
-            internal int Length { get; }
-        }
-
         internal static IEnumerable<TextEditInfo> GetIndentations(List<ParsedToken> parsedTokens)
         {
             Validation.Requires.NotNull(parsedTokens, nameof(parsedTokens));
@@ -29,6 +17,18 @@ namespace LanguageService.Formatting
                     yield return new TextEditInfo(indentInfo.Start, indentInfo.Length, indentationString);
                 }
             }
+        }
+
+        private struct IndentInfo
+        {
+            internal IndentInfo(int start, int length)
+            {
+                this.Start = start;
+                this.Length = length;
+            }
+
+            internal int Start { get; }
+            internal int Length { get; }
         }
 
         private static string GetIndentationStringFromBlockLevel(int blockLevel, SyntaxNode syntaxNode)

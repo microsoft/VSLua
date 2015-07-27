@@ -59,7 +59,6 @@ namespace VSLua.Formatting
             return textBuffers;
         }
 
-
         public void SubjectBuffersDisconnected(IWpfTextView textView, ConnectionReason reason, Collection<ITextBuffer> subjectBuffers)
         {
             if (textView == null)

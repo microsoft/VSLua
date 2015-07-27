@@ -5,12 +5,6 @@ namespace LanguageService.Formatting.Ruling
 {
     internal class Rules
     {
-        private static readonly List<Func<FormattingContext, bool>> defaultFilters = new List<Func<FormattingContext, bool>>
-        {
-            TokensAreOnSameLine,
-            NoCommentsBetweenTokens
-        };
-
         internal static Rule SpaceAfterComma =
             new SimpleRule(
                 new RuleDescriptor(TokenType.Comma, TokenRange.AnyVisible),
@@ -127,6 +121,12 @@ namespace LanguageService.Formatting.Ruling
         {
             return !formattingContext.ContainsCommentsBetweenTokens();
         }
+
+        private static readonly List<Func<FormattingContext, bool>> defaultFilters = new List<Func<FormattingContext, bool>>
+        {
+            TokensAreOnSameLine,
+            NoCommentsBetweenTokens
+        };
 
     }
 }

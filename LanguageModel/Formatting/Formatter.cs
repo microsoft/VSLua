@@ -6,12 +6,6 @@ namespace LanguageService.Formatting
 {
     public static class Formatter
     {
-        /*
-        public static List<TextEditInfo> Format(string span)
-        {
-            return Format(Tester.)
-        }*/
-
         /// <summary>
         /// This is main entry point for the VS side of things. For now, the implementation
         /// of the function is not final and it just used as a way seeing results in VS.

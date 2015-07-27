@@ -13,8 +13,6 @@ namespace VSLua.Formatting
     {
         private static Dictionary<IWpfTextView, TextView> viewMap = new Dictionary<IWpfTextView, TextView>();
 
-
-
         protected IWpfTextView WpfTextView { get; private set; }
         protected IVsTextView VsTextView { get; set; }
         protected ITextBuffer TextBuffer { get; set; }

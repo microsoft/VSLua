@@ -30,21 +30,6 @@ namespace LanguageService.Formatting.Ruling
             this.ruleOperation = new RuleOperation(new RuleOperationContext(contextFilters), action);
         }
 
-        private string GetTextFromAction()
-        {
-            switch (ruleOperation.Action)
-            {
-                case RuleAction.Delete:
-                    return "";
-                case RuleAction.Newline:
-                    return "\n";
-                case RuleAction.Space:
-                    return " ";
-                default:
-                    return "";
-            }
-        }
-
         internal override bool AppliesTo(FormattingContext formattingContext)
         {
             return ruleOperation.Context.InContext(formattingContext);
@@ -60,6 +45,21 @@ namespace LanguageService.Formatting.Ruling
             string replaceWith = this.GetTextFromAction();
 
             return new List<TextEditInfo> { new TextEditInfo(start, length, replaceWith) };
+        }
+
+        private string GetTextFromAction()
+        {
+            switch (ruleOperation.Action)
+            {
+                case RuleAction.Delete:
+                    return "";
+                case RuleAction.Newline:
+                    return "\n";
+                case RuleAction.Space:
+                    return " ";
+                default:
+                    return "";
+            }
         }
 
     }

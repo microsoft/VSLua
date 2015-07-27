@@ -1,10 +1,7 @@
-﻿using System;
-
-namespace LanguageService.Formatting
+﻿namespace LanguageService.Formatting
 {
     internal struct FormattingContext
     {
-
         internal FormattingContext(ParsedToken currentToken, ParsedToken nextToken)
         {
             Validation.Requires.NotNull(currentToken, nameof(currentToken));
