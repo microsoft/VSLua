@@ -131,43 +131,9 @@ namespace LanguageService.LanguageModel.TreeVisitors
             }
         }
 
-        public void Visit(Token token)
+        internal override void Visit(Token token)
         {
             indentingWriter.WriteLine(token.ToString());
-        }
-
-        public void Visit(MisplacedTokenNode node)
-        {
-            indentingWriter.WriteLine("MisplacedToken");
-            using (indentingWriter.Indent())
-            {
-                Visit(node.Token);
-            }
-        }
-
-        public void Visit(StatementNode node)
-        {
-            //TODO remove after all statements implemented
-            bool isStatement = false;
-            if (node as IfStatementNode != null)
-            {
-                Visit(node as IfStatementNode);
-                isStatement = true;
-            }
-            if (node as MisplacedTokenNode != null)
-            {
-                Visit(node as MisplacedTokenNode);
-                isStatement = true;
-            }
-            if (node as SemiColonStatementNode != null)
-            {
-                Visit(node as SemiColonStatementNode);
-                isStatement = true;
-            }
-            if (!isStatement)
-            {
-                throw new NotImplementedException();
-            }
         }
 
         public void Visit(ElseBlockNode node)
@@ -182,18 +148,24 @@ namespace LanguageService.LanguageModel.TreeVisitors
         #region Not Implemented Visit Methods
         public void Visit(ExpressionNode node)
         {
-            if (node as SimpleExpression != null)
+            if (node is SimpleExpression)
                 Visit(node as SimpleExpression);
-            if (node as BinaryOperatorExpression != null)
+            else if (node is BinaryOperatorExpression)
                 Visit(node as BinaryOperatorExpression);
-            if (node as UnaryOperatorExpression != null)
+            else if (node is UnaryOperatorExpression)
                 Visit(node as UnaryOperatorExpression);
-            if (node as TableConstructorExp != null)
+            else if (node is TableConstructorExp)
                 Visit(node as TableConstructorExp);
-            if (node as FunctionDef != null)
+            else if (node is FunctionDef)
                 Visit(node as FunctionDef);
-            if (node as PrefixExp != null)
-                Visit(node as PrefixExp);
+            else if (node is Var)
+                Visit(node as Var);
+            else if (node is FunctionCallExp)
+                Visit(node as FunctionCallExp);
+            else if (node is ParenPrefixExp)
+                Visit(node as ParenPrefixExp);
+            else
+                throw new ArgumentException();
         }
 
         public void Visit(ExpList node)
@@ -226,7 +198,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
             indentingWriter.WriteLine("SemiColonStatement\t ;");
         }
 
-        public void Visit(SimpleField node)
+        public void Visit(AssignmentField node)
         {
             throw new NotImplementedException();
         }

@@ -49,7 +49,7 @@ namespace LanguageService.Tests
                             new Token(TokenType.ThenKeyword, "then", null, 16, 17),
                             BlockNode.Create(26, 5/*TODO: change once expanded*/, new List<StatementNode>()
                             {
-                                MisplacedTokenNode.Create(26, 4, new Token(TokenType.Identifier, "test", null, 21, 26)),
+                                //TODO MisplacedTokenNode.Create(26, 4, new Token(TokenType.Identifier, "test", null, 21, 26)),
                                 SemiColonStatementNode.Create(30, 1, new Token(TokenType.Semicolon, ";", null, 30, 30))
                             }.ToImmutableList()),
                             null,
@@ -90,7 +90,7 @@ namespace LanguageService.Tests
                             new Token(TokenType.ThenKeyword, "then", null, 16, 17),
                             BlockNode.Create(26, 5/*TODO: change once expanded*/, new List<StatementNode>()
                             {
-                                MisplacedTokenNode.Create(26, 4, new Token(TokenType.Identifier, "test", null, 21, 26)),
+                                //TODO MisplacedTokenNode.Create(26, 4, new Token(TokenType.Identifier, "test", null, 21, 26)),
                                 SemiColonStatementNode.Create(30, 1, new Token(TokenType.Semicolon, ";", null, 30, 30))
                             }.ToImmutableList()),
                             null,

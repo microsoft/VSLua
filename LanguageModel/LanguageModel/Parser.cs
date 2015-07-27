@@ -173,7 +173,8 @@ namespace LanguageService
                     }
                 case TokenType.Identifier: //TODO implement, Misplaced Token node is just a placeholder for now.
                     NextToken();
-                    return MisplacedTokenNode.Create(currentToken.Start, currentToken.Length, currentToken);
+                    throw new NotImplementedException();
+                    //return MisplacedTokenNode.Create(currentToken.Start, currentToken.Length, currentToken);
                 default:
                     //TODO turn into skipped Trivia;
                     NextToken();
@@ -521,21 +522,6 @@ namespace LanguageService
             }
         }
 
-        //public FunctionCallExp ParseFunctionCallExp()
-        //{
-
-        //}
-
-        //public FunctionCall ParseFunctionCall()
-        //{
-
-        //}
-
-        //public Var ParseVar()
-        //{
-            
-        //}
-
         private Args ParseArgs()
         {
             switch (Peek().Type)
@@ -681,7 +667,7 @@ namespace LanguageService
                 case TokenType.Identifier:
                     if (tokenList[positionInTokenList + 2].Type == TokenType.AssignmentOperator)
                     {
-                        var node = SimpleField.CreateBuilder();
+                        var node = AssignmentField.CreateBuilder();
                         node.StartPosition = Peek().Start;
                         node.Name = GetExpectedToken(TokenType.Identifier);
                         node.AssignmentOperator = GetExpectedToken(TokenType.AssignmentOperator);

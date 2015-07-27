@@ -6,273 +6,487 @@ using System.Threading.Tasks;
 
 namespace LanguageService.LanguageModel.TreeVisitors
 {
-    public interface INodeVisitor
+    public abstract class INodeVisitor
     {
-        void Visit(Token token);
-        void Visit(ChunkNode node);
-        void Visit(BlockNode node);
-        void Visit(StatementNode node);
-        void Visit(ExpressionNode node);
-        void Visit(IfStatementNode node);
-        void Visit(SimpleExpression node);
-        void Visit(BinaryOperatorExpression node);
-        void Visit(UnaryOperatorExpression node);
-        void Visit(TableConstructorExp node);
-        void Visit(FunctionDef node);
-        void Visit(ElseIfBlockNode node);
-        void Visit(ElseBlockNode node);
-        void Visit(ReturnStatementNode node);
-        void Visit(FieldNode node);
-        void Visit(FunctionCallExp node);
-        void Visit(ParenPrefixExp node);
-        void Visit(NameVar node);
-        void Visit(SquareBracketVar node);
-        void Visit(DotVar node);
-        void Visit(FieldList node);
-        void Visit(NameList node);
-        void Visit(ExpList node);
-        void Visit(ParList node);
-        void Visit(SemiColonStatementNode node);
-        void Visit(BracketField node);
-        void Visit(SimpleField node);
-        void Visit(ExpField node);
-        void Visit(TableConstructorNode node);
-        void Visit(FuncBodyNode node);
-        void Visit(StringArg stringArg);
-        void Visit(BreakStatementNode breakStatementNode);
-        void Visit(FuncNameNode funcNameNode);
-        void Visit(NameDotPair nameDotPair);
+        public virtual void Visit(ChunkNode node)
+        {
+            Visit(node.ProgramBlock);
+            Visit(node.EndOfFile);
+        }
+
+        internal abstract void Visit(Token token);
+
+        internal virtual void Visit(BlockNode node)
+        {
+            foreach (var child in node.Statements)
+            {
+                Visit(child);
+            }
+
+            if (node.ReturnStatement != null)
+            {
+                Visit(node.ReturnStatement);
+            }
+        }
+
+        internal virtual void Visit(StatementNode node)
+        {
+            if (node is IfStatementNode)
+            {
+                Visit(node as IfStatementNode);
+            }
+            else if (node is SemiColonStatementNode)
+            {
+                Visit(node as SemiColonStatementNode);
+            }
+            else if (node is FunctionCallStatementNode)
+            {
+                Visit(node as FunctionCallStatementNode);
+            }
+            else if (node is LocalAssignmentStatementNode)
+            {
+                Visit(node as LocalAssignmentStatementNode);
+            }
+            else if (node is LabelStatementNode)
+            {
+                Visit(node as LabelStatementNode);
+            }
+            else if (node is BreakStatementNode)
+            {
+                Visit(node as BreakStatementNode);
+            }
+            else if (node is GoToStatementNode)
+            {
+                Visit(node as GoToStatementNode);
+            }
+            else if (node is DoStatementNode)
+            {
+                Visit(node as DoStatementNode);
+            }
+            else if (node is WhileStatementNode)
+            {
+                Visit(node as WhileStatementNode);
+            }
+            else if (node is RepeatStatementNode)
+            {
+                Visit(node as RepeatStatementNode);
+            }
+            else if (node is MultipleArgForStatementNode)
+            {
+                Visit(node as MultipleArgForStatementNode);
+            }
+            else if (node is SimpleForStatementNode)
+            {
+                Visit(node as SimpleForStatementNode);
+            }
+            else if (node is LocalAssignmentStatementNode)
+            {
+                Visit(node as LocalAssignmentStatementNode);
+            }
+            else if (node is LocalFunctionStatementNode)
+            {
+                Visit(node as LocalFunctionStatementNode);
+            }
+            else
+            {
+                //TODO implement more cases
+                throw new NotImplementedException();
+            }
+
+        }
+
+        #region Simple Statement Nodes
+        internal virtual void Visit(SemiColonStatementNode node)
+        {
+            Visit(node.SemiColon);
+        }
+
+        internal virtual void Visit(FunctionCallStatementNode node)
+        {
+            Visit(node.PrefixExp);
+            if (node.Colon != null)
+                Visit(node.Colon);
+            if (node.Name != null)
+                Visit(node.Name);
+            Visit(node.Args);
+        }
+
+        internal virtual void Visit(ReturnStatementNode node)
+        {
+            Visit(node.ReturnExpressions);
+        }
+
+        internal virtual void Visit(BreakStatementNode node)
+        {
+            Visit(node.BreakKeyword);
+        }
+
+        internal virtual void Visit(GoToStatementNode node)
+        {
+            Visit(node.Name);
+        }
+
+        internal virtual void Visit(DoStatementNode node)
+        {
+            Visit(node.Block);
+        }
+
+        internal virtual void Visit(WhileStatementNode node)
+        {
+            Visit(node.Exp);
+            Visit(node.Block);
+        }
+
+        internal virtual void Visit(RepeatStatementNode node)
+        {
+            Visit(node.Block);
+            Visit(node.Exp);
+        }
+
+        internal virtual void Visit(GlobalFunctionStatementNode node)
+        {
+            Visit(node.FuncName);
+            Visit(node.FuncBody);
+        }
+
+        internal virtual void Visit(LocalAssignmentStatementNode node)
+        {
+            Visit(node.LocalKeyword);
+            Visit(node.NameList);
+            Visit(node.ExpList);
+        }
+
+        internal virtual void Visit(LocalFunctionStatementNode node)
+        {
+            Visit(node.LocalKeyword);
+            Visit(node.Name);
+            Visit(node.FuncBody);
+        }
+
+        internal virtual void Visit(SimpleForStatementNode node)
+        {
+            Visit(node.Name);
+            Visit(node.Exp1);
+            Visit(node.Exp2);
+            if (node.OptionalComma != null)
+                Visit(node.OptionalComma);
+            if (node.OptionalExp3 != null)
+                Visit(node.OptionalExp3);
+            Visit(node.Block);
+        }
+
+        internal virtual void Visit(MultipleArgForStatementNode node)
+        {
+            Visit(node.NameList);
+            Visit(node.ExpList);
+            Visit(node.Block);
+        }
+
+        internal virtual void Visit(LabelStatementNode node)
+        {
+            Visit(node.Name);
+        }
+
+        #endregion
+
+        #region If Statement
+        internal virtual void Visit(IfStatementNode node)
+        {
+            Visit(node.Exp);
+            Visit(node.IfBlock);
+
+            if (node.ElseIfList != null)
+            {
+                foreach (var elseIfBlock in node.ElseIfList)
+                {
+                    Visit(elseIfBlock);
+                }
+            }
+
+            if (node.ElseBlock != null)
+            {
+                Visit(node.ElseBlock);
+            }
+        }
+
+        internal virtual void Visit(ElseIfBlockNode node)
+        {
+            Visit(node.Exp);
+            Visit(node.Block);
+        }
+
+        internal virtual void Visit(ElseBlockNode node)
+        {
+            Visit(node.Block);
+        }
+
+        #endregion
+
+        #region Expression Nodes
+        internal virtual void Visit(ExpressionNode node)
+        {
+            if (node is SimpleExpression)
+                Visit(node as SimpleExpression);
+            else if (node is BinaryOperatorExpression)
+                Visit(node as BinaryOperatorExpression);
+            else if (node is UnaryOperatorExpression)
+                Visit(node as UnaryOperatorExpression);
+            else if (node is TableConstructorExp)
+                Visit(node as TableConstructorExp);
+            else if (node is FunctionDef)
+                Visit(node as FunctionDef);
+            else if (node is Var)
+                Visit(node as Var);
+            else if (node is FunctionCallExp)
+                Visit(node as FunctionCallExp);
+            else if (node is ParenPrefixExp)
+                Visit(node as ParenPrefixExp);
+            else
+                throw new ArgumentException();
+        }
+
+        internal void Visit(SimpleExpression node)
+        {
+            Visit(node.ExpressionValue);
+        }
+
+        internal virtual void Visit(BinaryOperatorExpression node)
+        {
+            Visit(node.Exp1);
+            Visit(node.BinaryOperator);
+            Visit(node.Exp2);
+        }
+
+        internal virtual void Visit(UnaryOperatorExpression node)
+        {
+            Visit(node.UnaryOperator);
+            Visit(node.Exp);
+        }
+
+        internal virtual void Visit(TableConstructorExp node)
+        {
+            Visit(node.FieldList);
+        }
+
+        internal virtual void Visit(FunctionDef node)
+        {
+            Visit(node.FunctionBody);
+        }
+
+
+        #region FieldNode Expression
+        internal virtual void Visit(FieldNode node)
+        {
+            if (node is ExpField)
+            {
+                Visit(node as ExpField);
+            }
+            else if (node is BracketField)
+            {
+                Visit(node as BracketField);
+            }
+            else if (node is AssignmentField)
+            {
+                Visit(node as AssignmentField);
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+        }
+
+        internal virtual void Visit(BracketField node)
+        {
+            Visit(node.IdentifierExp);
+            Visit(node.AssignedExp);
+        }
+
+        internal virtual void Visit(AssignmentField node)
+        {
+            Visit(node.Name);
+            Visit(node.Exp);
+        }
+
+        internal virtual void Visit(ExpField node)
+        {
+            Visit(node.Exp);
+        }
+
+        #endregion
+
+        #region PrefixExp Expression
+        internal virtual void Visit(Var node)
+        {
+            if (node is NameVar)
+            {
+                Visit(node as NameVar);
+            }
+            else if (node is SquareBracketVar)
+            {
+                Visit(node as SquareBracketVar);
+            }
+            else if (node is DotVar)
+            {
+                Visit(node as DotVar);
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+        }
+
+        internal virtual void Visit(NameVar node)
+        {
+            Visit(node.Name);
+        }
+
+        internal virtual void Visit(SquareBracketVar node)
+        {
+            Visit(node.PrefixExp);
+            Visit(node.Exp);
+        }
+
+        internal virtual void Visit(DotVar node)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal virtual void Visit(FunctionCallExp node)
+        {
+            Visit(node.PrefixExp);
+            if (node.Colon != null)
+                Visit(node.Colon);
+            if (node.Name != null)
+                Visit(node.Name);
+            Visit(node.Args);
+        }
+
+        internal virtual void Visit(ParenPrefixExp node)
+        {
+            Visit(node.Exp);
+        }
+
+        #endregion
+        #endregion
+
+        #region Args Nodes
+        internal virtual void Visit(Args node)
+        {
+            if (node is TableContructorArg)
+            {
+                Visit(node as TableContructorArg);
+            }
+            else if (node is ParenArg)
+            {
+                Visit(node as ParenArg);
+            }
+            else if (node is StringArg)
+            {
+                Visit(node as StringArg);
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+        }
+
+        internal virtual void Visit(ParenArg node)
+        {
+            Visit(node.ExpList);
+        }
+
+        internal virtual void Visit(TableContructorArg node)
+        {
+            Visit(node.FieldList);
+        }
+
+        internal virtual void Visit(StringArg node)
+        {
+            Visit(node.StringLiteral);
+        }
+
+        #endregion
+
+        #region List Nodes
+        internal virtual void Visit(NameList node)
+        {
+            foreach (var nameAndComma in node.Names)
+            {
+                Visit(nameAndComma.Name);
+            }
+        }
+
+        internal virtual void Visit(FieldList node)
+        {
+            foreach (var fieldAndSep in node.Fields)
+            {
+                Visit(fieldAndSep.Field);
+            }
+        }
+
+        internal virtual void Visit(ExpList node)
+        {
+            foreach (var expAndComma in node.Expressions)
+            {
+                Visit(expAndComma.Expression);
+            }
+        }
+
+        internal virtual void Visit(ParList node)
+        {
+            if (node is VarArgPar)
+            {
+                Visit(node as VarArgPar);
+            }
+            else if (node is NameListPar)
+            {
+                Visit(node as NameListPar);
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+        }
+
+        internal virtual void Visit(VarArgPar node)
+        {
+            Visit(node.VarargOperator);
+        }
+
+        internal virtual void Visit(NameListPar node)
+        {
+            Visit(node.NamesList);
+            if (node.VarArgPar != null)
+            {
+                Visit(node.VarArgPar.VarargOperator);
+            }
+        }
+
+        #endregion
+
+        internal virtual void Visit(TableConstructorNode node)
+        {
+            Visit(node.FieldList);
+        }
+
+        internal virtual void Visit(FuncBodyNode node)
+        {
+            Visit(node.ParameterList);
+            Visit(node.Block);
+        }
+
+        internal virtual void Visit(FuncNameNode node)
+        {
+            foreach (var nameAndDot in node.FuncName)
+            {
+                Visit(nameAndDot.Name);
+            }
+
+            if (node.Colon != null)
+                Visit(node.Colon);
+            if (node.Name != null)
+                Visit(node.Name);
+        }
     }
 }
 
-#region temporary visit implementation boilerplatecode placeholder(to be removed)
-
-//    class ConcreteVisitor : INodeVisitor
-//    {
-
-//        public void Visit(SimpleExpression node)
-//        {
-//            Visit(node.ExpressionValue);
-//        }
-
-//        public void Visit(UnaryOperatorExpression node)
-//        {
-//            Visit(node.UnaryOperator);
-//            Visit(node.Exp);
-//        }
-
-//        public void Visit(ElseIfBlockNode node)
-//        {
-
-//            Visit(node.Exp);
-//            Visit(node.Block);
-//        }
-
-//        public void Visit(TableConstructorExp node)
-//        {
-//            Visit(node.FieldList);
-//        }
-
-//        public void Visit(BinaryOperatorExpression node)
-//        {
-//            Visit(node.Exp1);
-//            Visit(node.BinaryOperator);
-//            Visit(node.Exp2);
-//        }
-
-//        public void Visit(IfStatementNode node)
-//        {
-//            Visit(node.Exp);
-//            Visit(node.IfBlock);
-
-//            if (node.ElseIfList != null)
-//            {
-//                foreach (var block in node.ElseIfList)
-//                {
-//                    if (block != null)
-//                    {
-//                        Visit(block);
-//                    }
-//                    else
-//                    {
-//                        //"null"); //TODO: validate will ever reach here?
-//                    }
-//                }
-//            }
-
-//            if (node.ElseBlock != null)
-//            {
-//                Visit(node.ElseBlock);
-//            }
-//        }
-
-//        public void Visit(BlockNode node)
-//        {
-//            foreach (var child in node.Statements)
-//            {
-//                Visit(child);
-//            }
-
-//            if (node.ReturnStatement != null)
-//            {
-//                Visit(node.ReturnStatement);
-//            }
-//        }
-
-//        public void Visit(ChunkNode node)
-//        {
-//            Visit(node.ProgramBlock);
-//            Visit(node.EndOfFile);
-//        }
-
-//        public void Visit(Token token)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(MisplacedTokenNode node)
-//        {
-//            Visit(node.Token);
-//        }
-
-//        public void Visit(StatementNode node)
-//        {
-//            //TODO remove after all statements implemented
-//            bool isStatement = false;
-//            if (node as IfStatementNode != null)
-//            {
-//                Visit(node as IfStatementNode);
-//                isStatement = true;
-//            }
-//            if (node as MisplacedTokenNode != null)
-//            {
-//                Visit(node as MisplacedTokenNode);
-//                isStatement = true;
-//            }
-//            if (node as SemiColonStatementNode != null)
-//            {
-//                Visit(node as SemiColonStatementNode);
-//                isStatement = true;
-//            }
-//            if (!isStatement)
-//            {
-//                throw new NotImplementedException();
-//            }
-//        }
-
-//        public void Visit(ElseBlockNode node)
-//        {
-//            Visit(node.Block);
-//        }
-
-//        #region Not Implemented Visit Methods
-//        public void Visit(ExpressionNode node)
-//        {
-//            if (node as SimpleExpression != null)
-//                Visit(node as SimpleExpression);
-//            if (node as BinaryOperatorExpression != null)
-//                Visit(node as BinaryOperatorExpression);
-//            if (node as UnaryOperatorExpression != null)
-//                Visit(node as UnaryOperatorExpression);
-//            if (node as TableConstructorExp != null)
-//                Visit(node as TableConstructorExp);
-//            if (node as FunctionDef != null)
-//                Visit(node as FunctionDef);
-//            if (node as PrefixExp != null)
-//                Visit(node as PrefixExp);
-//        }
-
-//        public void Visit(SemiColonStatementNode node)
-//        {
-//            Visit(node.SemiColon);
-//        }
-
-//        public void Visit(ExpList node)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(SimpleField node)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(TableConstructorNode node)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(FuncBodyNode node)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(ExpField node)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(BracketField node)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(ParList node)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(NameList node)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(DotVar node)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(NameVar node)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(FunctionCallExp node)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(ReturnStatementNode node)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(FunctionDef node)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(FieldNode node)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(ParenPrefixExp node)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(SquareBracketVar node)
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public void Visit(FieldList node)
-//        {
-//            throw new NotImplementedException();
-//        }
-//        #endregion
-//    }
-//}
-
-#endregion

@@ -20,33 +20,6 @@ namespace LanguageService
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class StatementNode : SyntaxNode { }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class MisplacedTokenNode : StatementNode
-    {
-        [Required]
-        readonly Token token;
-
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class SemiColonStatementNode : StatementNode
-    {
-        [Required]
-        readonly Token semiColon;
-
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
     public partial class ChunkNode : SyntaxNode
     {
         [Required]
@@ -74,7 +47,252 @@ namespace LanguageService
         }
     }
 
-    #region If Statement Nodes
+    #region Simple Statement Nodes
+    [GenerateImmutable(GenerateBuilder = true)]
+    public abstract partial class StatementNode : SyntaxNode { }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class SemiColonStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token semiColon;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class FunctionCallStatementNode : StatementNode
+    {
+        [Required]
+        readonly PrefixExp prefixExp;
+        readonly Token colon;
+        readonly Token name;
+        [Required]
+        readonly Args args;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class ReturnStatementNode : SyntaxNode
+    {
+        [Required]
+        readonly Token returnKeyword;
+        readonly ExpList returnExpressions;
+        //Token semiColonRetStat; Question: is this really necessary even though defined in the language?
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class BreakStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token breakKeyword;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class GoToStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token goToKeyword;
+        [Required]
+        readonly Token name;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class DoStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token doKeyword;
+        [Required]
+        readonly BlockNode block;
+        [Required]
+        readonly Token endKeyword;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class WhileStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token whileKeyword;
+        [Required]
+        readonly ExpressionNode exp;
+        [Required]
+        readonly Token doKeyword;
+        [Required]
+        readonly BlockNode block;
+        [Required]
+        readonly Token endKeyword;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class RepeatStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token repeatKeyword;
+        [Required]
+        readonly BlockNode block;
+        [Required]
+        readonly Token untilKeyword;
+        [Required]
+        readonly ExpressionNode exp;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class GlobalFunctionStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token functionKeyword;
+        [Required]
+        readonly FuncNameNode funcName;
+        [Required]
+        readonly FuncBodyNode funcBody;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class LocalAssignmentStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token localKeyword;
+        [Required]
+        readonly NameList nameList;
+        readonly Token assignmentOperator;
+        readonly ExpList expList;
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class LocalFunctionStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token localKeyword;
+        [Required]
+        readonly Token functionKeyword;
+        [Required]
+        readonly Token name;
+        [Required]
+        readonly FuncBodyNode funcBody;
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class SimpleForStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token forKeyword;
+        [Required]
+        readonly Token name;
+        [Required]
+        readonly Token assignmentOperator;
+        [Required]
+        readonly ExpressionNode exp1;
+        [Required]
+        readonly Token comma;
+        [Required]
+        readonly ExpressionNode exp2;
+        readonly Token optionalComma;
+        readonly ExpressionNode optionalExp3;
+        [Required]
+        readonly Token doKeyword;
+        [Required]
+        readonly BlockNode block;
+        [Required]
+        readonly Token endKeyword;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class MultipleArgForStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token forKeyword;
+        [Required]
+        readonly NameList nameList;
+        [Required]
+        readonly Token inKeyword;
+        [Required]
+        readonly ExpList expList;
+        [Required]
+        readonly Token doKeyword;
+        [Required]
+        readonly BlockNode block;
+        [Required]
+        readonly Token endKeyword;
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class LabelStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token doubleColon1;
+        [Required]
+        readonly Token name;
+        [Required]
+        readonly Token doubleColon2;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+    #endregion
+
+    #region If Statement
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class IfStatementNode : StatementNode
     {
@@ -132,6 +350,7 @@ namespace LanguageService
     #endregion
 
     #region Expression nodes
+
     [GenerateImmutable(GenerateBuilder = true)]
     public abstract partial class ExpressionNode : SyntaxNode { }
 
@@ -191,9 +410,7 @@ namespace LanguageService
             visitor.Visit(this);
         }
     }
-    #endregion
 
-    #region Other Expression Nodes (out of scope for Code review)
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class TableConstructorExp : ExpressionNode
     {
@@ -222,6 +439,60 @@ namespace LanguageService
         }
     }
 
+    #region FieldNodes
+    [GenerateImmutable(GenerateBuilder = true)]
+    public abstract partial class FieldNode : ExpressionNode { } //TODO: is this inheritance okay?
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class BracketField : FieldNode
+    {
+        [Required]
+        readonly Token openBracket;
+        [Required]
+        readonly ExpressionNode identifierExp;
+        [Required]
+        readonly Token closeBracket;
+        [Required]
+        readonly Token assignmentOperator;
+        [Required]
+        readonly ExpressionNode assignedExp;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class AssignmentField : FieldNode
+    {
+        [Required]
+        readonly Token name;
+        [Required]
+        readonly Token assignmentOperator;
+        [Required]
+        readonly ExpressionNode exp;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class ExpField : FieldNode
+    {
+        [Required]
+        readonly ExpressionNode exp;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+    #endregion
+
+    #region PrefixExp Expression
     [GenerateImmutable(GenerateBuilder = true)]
     public abstract partial class PrefixExp : ExpressionNode { }
 
@@ -288,21 +559,6 @@ namespace LanguageService
             visitor.Visit(this);
         }
     }
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class FunctionCallStatement : StatementNode
-    {
-        [Required]
-        readonly PrefixExp prefixExp;
-        readonly Token colon;
-        readonly Token name;
-        [Required]
-        readonly Args args;
-
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class ParenPrefixExp : PrefixExp
@@ -318,23 +574,9 @@ namespace LanguageService
         {
             visitor.Visit(this);
         }
-
-        //internal override void ToString(TextWriter writer)
-        //{
-        //    var indentingWriter = IndentingTextWriter.Get(writer);
-        //    indentingWriter.WriteLine("ParenPrefixExp");
-        //    using (indentingWriter.Indent())
-        //    {
-        //        if (exp != null)
-        //        {
-        //            exp.ToString(indentingWriter);
-        //        } else
-        //        {
-        //            indentingWriter.WriteLine("null");
-        //        }
-        //    }
-        //}
     }
+    #endregion
+
     #endregion
 
     #region Args Nodes
@@ -451,6 +693,7 @@ namespace LanguageService
         }
     }
 
+    #region List Pairs
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class CommaVarArgPair
     {
@@ -486,81 +729,16 @@ namespace LanguageService
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class FieldNode : ExpressionNode { } //TODO: is this inheritance okay?
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class BracketField : FieldNode
+    public partial class NameDotPair
     {
         [Required]
-        readonly Token openBracket;
-        [Required]
-        readonly ExpressionNode identifierExp;
-        [Required]
-        readonly Token closeBracket;
-        [Required]
-        readonly Token assignmentOperator;
-        [Required]
-        readonly ExpressionNode assignedExp;
-
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class SimpleField : FieldNode
-    {
+        readonly Token dot;
         [Required]
         readonly Token name;
-        [Required]
-        readonly Token assignmentOperator;
-        [Required]
-        readonly ExpressionNode exp;
-
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class ExpField : FieldNode
-    {
-        [Required]
-        readonly ExpressionNode exp;
-
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
     }
     #endregion
 
-    #region Other Nodes
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class ReturnStatementNode : SyntaxNode
-    {
-        [Required]
-        readonly Token returnKeyword;
-        readonly ExpList returnExpressions;
-        //Token semiColonRetStat; Question: is this really necessary even though defined in the language?
-
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-
-        //internal override void ToString(TextWriter writer)
-        //{
-        //    var indentingWriter = IndentingTextWriter.Get(writer);
-        //    indentingWriter.WriteLine("ReturnStat");
-        //    using (indentingWriter.Indent())
-        //    {
-        //        indentingWriter.WriteLine("explist... implement"); //TODO: implement
-        //    }
-        //}
-    }
+    #endregion
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class TableConstructorNode : SyntaxNode
@@ -575,16 +753,6 @@ namespace LanguageService
         {
             visitor.Visit(this);
         }
-
-        //internal override void ToString(TextWriter writer)
-        //{
-        //    var indentingWriter = IndentingTextWriter.Get(writer);
-        //    indentingWriter.WriteLine("TableConstructor");
-        //    using (indentingWriter.Indent())
-        //    {
-        //        FieldList.ToString(indentingWriter);
-        //    }
-        //}
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -608,102 +776,6 @@ namespace LanguageService
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class BreakStatementNode : StatementNode
-    {
-        [Required]
-        readonly Token breakKeyword;
-
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class GoToStatementNode : StatementNode
-    {
-        [Required]
-        readonly Token goToKeyword;
-        [Required]
-        readonly Token name;
-
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class DoStatementNode : StatementNode
-    {
-        [Required]
-        readonly Token doKeyword;
-        [Required]
-        readonly BlockNode block;
-        [Required]
-        readonly Token endKeyword;
-
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class WhileStatementNode : StatementNode
-    {
-        [Required]
-        readonly Token whileKeyword;
-        [Required]
-        readonly ExpressionNode exp;
-        [Required]
-        readonly Token doKeyword;
-        [Required]
-        readonly BlockNode block;
-        [Required]
-        readonly Token endKeyword;
-
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class RepeatStatementNode : StatementNode
-    {
-        [Required]
-        readonly Token repeatKeyword;
-        [Required]
-        readonly BlockNode block;
-        [Required]
-        readonly Token untilKeyword;
-        [Required]
-        readonly ExpressionNode exp;
-
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class GlobalFunctionStatementNode : StatementNode
-    {
-        [Required]
-        readonly Token functionKeyword;
-        [Required]
-        readonly FuncNameNode funcName;
-        [Required]
-        readonly FuncBodyNode funcBody;
-
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
     public partial class FuncNameNode : SyntaxNode
     {
         [Required]
@@ -719,133 +791,4 @@ namespace LanguageService
             visitor.Visit(this);
         }
     }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class NameDotPair
-    {
-        [Required]
-        readonly Token dot;
-        [Required]
-        readonly Token name;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class LocalAssignmentStatementNode : StatementNode
-    {
-        [Required]
-        readonly Token localKeyword;
-        [Required]
-        readonly NameList nameList;
-        readonly Token assignmentOperator;
-        readonly ExpList expList;
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class LocalFunctionStatementNode : StatementNode
-    {
-        [Required]
-        readonly Token localKeyword;
-        [Required]
-        readonly Token functionKeyword;
-        [Required]
-        readonly Token name;
-        [Required]
-        readonly FuncBodyNode funcBody;
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class SimpleForStatementNode : StatementNode
-    {
-        [Required]
-        readonly Token forKeyword;
-        [Required]
-        readonly Token name;
-        [Required]
-        readonly Token assignmentOperator;
-        [Required]
-        readonly ExpressionNode exp1;
-        [Required]
-        readonly Token comma;
-        [Required]
-        readonly ExpressionNode exp2;
-        readonly Token optionalComma;
-        readonly ExpressionNode optionalExp3;
-        [Required]
-        readonly Token doKeyword;
-        [Required]
-        readonly BlockNode block;
-        [Required]
-        readonly Token endKeyword;
-        
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class MultipleArgForStatementNode : StatementNode
-    {
-        [Required]
-        readonly Token forKeyword;
-        [Required]
-        readonly NameList nameList;
-        [Required]
-        readonly Token inKeyword;
-        [Required]
-        readonly ExpList expList;
-        [Required]
-        readonly Token doKeyword;
-        [Required]
-        readonly BlockNode block;
-        [Required]
-        readonly Token endKeyword;
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class LabelStatementNode : StatementNode
-    {
-        [Required]
-        readonly Token doubleColon1;
-        [Required]
-        readonly Token name;
-        [Required]
-        readonly Token doubleColon2;
-
-        public override void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
-
-    //[GenerateImmutable(GenerateBuilder = true)]
-    //public partial class GlobalFunctionStatementNode : StatementNode
-    //{
-    //    [Required]
-    //    readonly Token doubleColon1;
-    //    [Required]
-    //    readonly Token name;
-    //    [Required]
-    //    readonly Token doubleColon2;
-
-    //    public override void Accept(INodeVisitor visitor)
-    //    {
-    //        visitor.Visit(this);
-    //    }
-    //}
-
-    #endregion
-
 }
