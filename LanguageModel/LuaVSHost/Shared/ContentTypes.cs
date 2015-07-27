@@ -11,13 +11,13 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
     internal static class ContentTypes
     {
         [Export]
-        [Name(Constants.LanguageName)]
+        [Name(Constants.Language.Name)]
         [BaseDefinition("code")]
         internal static ContentTypeDefinition ContentType { get; set; }
 
         [Export]
-        [FileExtension(Constants.FileExtension)]
-        [ContentType(Constants.LanguageName)]
+        [FileExtension(Constants.Language.FileExtension)]
+        [ContentType(Constants.Language.Name)]
         internal static FileExtensionToContentTypeDefinition LuaContentTypeExtensionDefinition { get; set; }
     }
 }

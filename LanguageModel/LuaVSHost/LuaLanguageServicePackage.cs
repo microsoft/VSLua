@@ -15,7 +15,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService
 {
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
-    [Guid(Constants.Guids.PackageString)]
+    [Guid(Constants.Package.Guids.String)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     public sealed class LuaLanguageServicePackage : Package
     {

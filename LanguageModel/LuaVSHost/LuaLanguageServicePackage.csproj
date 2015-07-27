@@ -55,6 +55,12 @@
     <Compile Include="Formatting\IFormatter.cs" />
     <Compile Include="Formatting\IMiniCommandFilter.cs" />
     <Compile Include="Formatting\Manager.cs" />
+    <Compile Include="Formatting\OptionPages\BaseDialogPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Formatting\OptionPages\GeneralPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Formatting\TextView.cs" />
     <Compile Include="Formatting\WpfTextViewConnectionListener.cs" />
     <Compile Include="LuaLanguageService.cs" />
