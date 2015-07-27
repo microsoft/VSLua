@@ -27,8 +27,6 @@ namespace LanguageService.Formatting
             {
                 GlobalOptions.Update(newOptions);
             }
-            List<OptionalRuleGroup> optionalRuleGroups = new List<OptionalRuleGroup> { OptionalRuleGroup.SpaceAfterCommas };
-            GlobalOptions.Update(new NewOptions(optionalRuleGroups, GlobalOptions.IndentSize, GlobalOptions.IndentStyleInfo));
 
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
