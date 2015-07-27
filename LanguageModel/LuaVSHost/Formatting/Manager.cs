@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.LuaLanguageService.Shared;
 
 using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
 using System.ComponentModel.Composition;
+using LanguageService.Formatting.Options;
 
 namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 {
@@ -116,7 +117,6 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 
         private bool Format(SnapshotSpan span)
         {
-
             if (span.Snapshot.TextBuffer != this.textBuffer || span.IsEmpty || !this.CanFormatSpan(span))
             {
                 return false;
@@ -127,7 +127,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 
             SourceText sourceText = SourceTextProvider.Get(this.textBuffer.CurrentSnapshot);
 
-            List<TextEditInfo> edits = Formatter.Format(sourceText);
+            List<TextEditInfo> edits = Formatter.Format(sourceText, null);
 
             using (ITextEdit textEdit = this.textBuffer.CreateEdit())
             {
@@ -139,7 +139,6 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
             }
 
             return true;
-
         }
 
 

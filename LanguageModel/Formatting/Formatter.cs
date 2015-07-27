@@ -20,8 +20,16 @@ namespace LanguageService.Formatting
         /// indentation text edits from the spacing text edits in the future but for now they are in
         /// the same list.
         /// </returns>
-        public static List<TextEditInfo> Format(SourceText span)
+        public static List<TextEditInfo> Format(SourceText span, NewOptions newOptions)
         {
+            // If newOptions is not null, that means the GlobalOptions need to be updated
+            if (newOptions != null)
+            {
+                GlobalOptions.Update(newOptions);
+            }
+            List<OptionalRuleGroup> optionalRuleGroups = new List<OptionalRuleGroup> { OptionalRuleGroup.SpaceAfterCommas };
+            GlobalOptions.Update(new NewOptions(optionalRuleGroups, GlobalOptions.IndentSize, GlobalOptions.IndentStyleInfo));
+
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
             List<Token> tokens = ParseTreeProvider.Get(span);

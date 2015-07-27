@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace LanguageService.Formatting.Options
 {
+
+    /// <summary>
+    /// This class might be bypassed later since GlobalOptions.Update just takes three arguements.
+    /// </summary>
     public class NewOptions
     {
         /// <summary>
