@@ -69,11 +69,10 @@ namespace LanguageService.Formatting
 
             foreach (TokenType tokenType in values)
             {
-                if (exclude.Contains(tokenType))
+                if (!exclude.Contains(tokenType))
                 {
-                    continue;
+                    tokenTypes.Add(tokenType);
                 }
-                tokenTypes.Add(tokenType);
             }
 
             return tokenTypes.ToImmutable();

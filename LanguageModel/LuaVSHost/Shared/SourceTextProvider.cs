@@ -5,6 +5,10 @@ using Microsoft.VisualStudio.Text;
 
 namespace VSLua.Shared
 {
+    /// <summary>
+    /// This class will be changed to non-static once I merge this branch with the branch that has the Core class that
+    /// holds everything.
+    /// </summary>
     internal static class SourceTextProvider
     {
         internal static SourceText Get(ITextSnapshot textSnapshot)

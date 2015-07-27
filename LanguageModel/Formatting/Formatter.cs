@@ -6,6 +6,19 @@ namespace LanguageService.Formatting
 {
     public static class Formatter
     {
+        private static ParseTreeProvider parseTreeProvider;
+        private static ParseTreeProvider ParseTreeProvider
+        {
+            get
+            {
+                if (parseTreeProvider == null)
+                {
+                    parseTreeProvider = new ParseTreeProvider();
+                }
+                return parseTreeProvider;
+            }
+        }
+
         /// <summary>
         /// This is main entry point for the VS side of things. For now, the implementation
         /// of the function is not final and it just used as a way seeing results in VS.
@@ -35,12 +48,10 @@ namespace LanguageService.Formatting
 
                 Rule rule = ruleMap.Get(formattingContext);
 
-                if (rule == null)
+                if (rule != null)
                 {
-                    continue;
+                    textEdits.AddRange(rule.Apply(formattingContext));
                 }
-
-                textEdits.AddRange(rule.Apply(formattingContext));
             }
 
             textEdits.AddRange(Indenter.GetIndentations(parsedTokens));

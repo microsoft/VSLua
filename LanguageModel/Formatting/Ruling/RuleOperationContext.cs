@@ -9,11 +9,13 @@ namespace LanguageService.Formatting.Ruling
 
         internal RuleOperationContext(List<Func<FormattingContext, bool>> contextFilters)
         {
+            Validation.Requires.NotNull(contextFilters, nameof(contextFilters));
             this.contextFilters = contextFilters;
         }
 
         internal bool InContext(FormattingContext formattingContext)
         {
+            //Validation.Requires.NotNull(formattingContext, nameof(formattingContext));
             foreach (Func<FormattingContext, bool> contextFilter in contextFilters)
             {
                 if (!contextFilter(formattingContext))
