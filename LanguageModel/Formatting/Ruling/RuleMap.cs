@@ -5,18 +5,31 @@ using LanguageService.Formatting.Options;
 namespace LanguageService.Formatting.Ruling
 {
 
-    internal static class RuleMap
+    internal class RuleMap
     {
-        internal static RuleBucket[,] map;
-        private static int Length { get; }
+        internal RuleBucket[,] map;
+        private int Length { get; }
 
-        static RuleMap()
+        internal static RuleMap Create(OptionalRuleMap optionalRuleMap)
         {
-            Length = Enum.GetNames(typeof(TokenType)).Length;
-            ClearRuleMapAndAddEnabledRules(null);
+            RuleMap ruleMap = new RuleMap();
+            ruleMap.AddEnabledRules(optionalRuleMap);
+            return ruleMap;
         }
 
-        internal static void Add(Rule rule)
+        internal static RuleMap Create()
+        {
+            RuleMap ruleMap = new RuleMap();
+            ruleMap.AddEnabledRules(new OptionalRuleMap(new List<OptionalRuleGroup>()));
+            return ruleMap;
+        }
+
+        private RuleMap()
+        {
+            Length = Enum.GetNames(typeof(TokenType)).Length;
+        }
+
+        internal void Add(Rule rule)
         {
             foreach (TokenType typeLeft in rule.RuleDescriptor.TokenRangeLeft)
             {
@@ -36,7 +49,7 @@ namespace LanguageService.Formatting.Ruling
             }
         }
 
-        internal static Rule Get(FormattingContext formattingContext)
+        internal Rule Get(FormattingContext formattingContext)
         {
             int column = (int)formattingContext.CurrentToken.Token.Type;
             int row = (int)formattingContext.NextToken.Token.Type;
@@ -50,7 +63,7 @@ namespace LanguageService.Formatting.Ruling
             return null;
         }
 
-        internal static void ClearRuleMapAndAddEnabledRules(OptionalRuleMap optionalRuleMap)
+        private void AddEnabledRules(OptionalRuleMap optionalRuleMap)
         {
             if (optionalRuleMap == null)
             {

@@ -4,11 +4,12 @@ using Microsoft.VisualStudio.Text;
 
 namespace Microsoft.VisualStudio.LuaLanguageService.Shared
 {
+    /// <summary>
+    /// This class will be changed to non-static once I merge this branch with the branch that has the Core class that
+    /// holds everything.
+    /// </summary>
     internal static class SourceTextProvider
     {
-        private static ConditionalWeakTable<ITextSnapshot, SourceText> sources =
-            new ConditionalWeakTable<ITextSnapshot, SourceText>();
-
         internal static SourceText Get(ITextSnapshot textSnapshot)
         {
             Validation.Requires.NotNull(textSnapshot, nameof(textSnapshot));
@@ -25,5 +26,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
             return sourceText;
         }
 
+        private static ConditionalWeakTable<ITextSnapshot, SourceText> sources =
+            new ConditionalWeakTable<ITextSnapshot, SourceText>();
     }
 }

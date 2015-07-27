@@ -51,7 +51,6 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
             return textBuffers;
         }
 
-
         public void SubjectBuffersDisconnected(IWpfTextView textView, ConnectionReason reason, Collection<ITextBuffer> subjectBuffers)
         {
             Validation.Requires.NotNull(textView, nameof(textView));

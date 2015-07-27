@@ -5,27 +5,6 @@ namespace LanguageService.Formatting
 {
     internal class ParsedToken
     {
-        internal Token Token { get; }
-        internal int BlockLevel { get; }
-        internal SyntaxNode Node { get; }
-
-        private static readonly ImmutableArray<TokenType> IncreaseIndentAfter = ImmutableArray.Create
-            (
-                TokenType.DoKeyword,
-                TokenType.ThenKeyword,
-                TokenType.ElseKeyword,
-                TokenType.FunctionKeyword,
-                TokenType.OpenCurlyBrace
-            );
-
-        private static readonly ImmutableArray<TokenType> DecreaseIndentOn = ImmutableArray.Create
-            (
-                TokenType.EndKeyword,
-                TokenType.ElseIfKeyword,
-                TokenType.CloseCurlyBrace,
-                TokenType.ElseKeyword
-            );
-
         internal ParsedToken(Token token, int blockLevel, SyntaxNode node)
         {
             Validation.Requires.NotNull(token, nameof(token));
@@ -34,6 +13,10 @@ namespace LanguageService.Formatting
             this.BlockLevel = blockLevel;
             this.Node = node;
         }
+
+        internal Token Token { get; }
+        internal int BlockLevel { get; }
+        internal SyntaxNode Node { get; }
 
         // This function wouldn't exist in the final version since instead of iterating
         //   through all the tokens from the lexer, I'd just walk the parsetree from the start
@@ -66,5 +49,22 @@ namespace LanguageService.Formatting
 
             return parsedTokens;
         }
+
+        private static readonly ImmutableArray<TokenType> IncreaseIndentAfter = ImmutableArray.Create
+            (
+        TokenType.DoKeyword,
+        TokenType.ThenKeyword,
+        TokenType.ElseKeyword,
+        TokenType.FunctionKeyword,
+        TokenType.OpenCurlyBrace
+            );
+
+        private static readonly ImmutableArray<TokenType> DecreaseIndentOn = ImmutableArray.Create
+            (
+                TokenType.EndKeyword,
+                TokenType.ElseIfKeyword,
+                TokenType.CloseCurlyBrace,
+                TokenType.ElseKeyword
+            );
     }
 }

@@ -123,6 +123,5 @@ namespace LanguageService.Formatting.Ruling
         {
             return !formattingContext.ContainsCommentsBetweenTokens();
         }
-
     }
 }

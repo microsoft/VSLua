@@ -1,21 +1,18 @@
-﻿using System;
-
-namespace LanguageService.Formatting
+﻿namespace LanguageService.Formatting
 {
     internal struct FormattingContext
     {
-        internal ParsedToken CurrentToken { get; }
-        internal ParsedToken NextToken { get; }
-
         internal FormattingContext(ParsedToken currentToken, ParsedToken nextToken)
         {
-            if (currentToken == null || nextToken == null)
-            {
-                throw new ArgumentNullException();
-            }
+            Validation.Requires.NotNull(currentToken, nameof(currentToken));
+            Validation.Requires.NotNull(nextToken, nameof(nextToken));
+
             this.CurrentToken = currentToken;
             this.NextToken = nextToken;
         }
+
+        internal ParsedToken CurrentToken { get; }
+        internal ParsedToken NextToken { get; }
 
         internal bool TriviaBetweenTokensContains(Trivia.TriviaType triviaType)
         {
@@ -26,6 +23,7 @@ namespace LanguageService.Formatting
                     return true;
                 }
             }
+
             return false;
         }
 

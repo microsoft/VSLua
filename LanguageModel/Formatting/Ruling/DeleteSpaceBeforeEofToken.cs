@@ -22,6 +22,7 @@ namespace LanguageService.Formatting.Ruling
             {
                 edits.Add(edit);
             }
+
             return edits;
         }
 

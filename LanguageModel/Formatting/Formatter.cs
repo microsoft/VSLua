@@ -7,6 +7,23 @@ namespace LanguageService.Formatting
 {
     public static class Formatter
     {
+        private static ParseTreeProvider parseTreeProvider;
+        internal static ParseTreeProvider ParseTreeProvider
+        {
+            get
+            {
+                if (parseTreeProvider == null)
+                {
+                    parseTreeProvider = new ParseTreeProvider();
+                }
+                return parseTreeProvider;
+            }
+        }
+
+        internal static GlobalOptions GlobalOptions { get; set; }
+
+        internal static RuleMap RuleMap { get; set; }
+
         /// <summary>
         /// This is main entry point for the VS side of things. For now, the implementation
         /// of the function is not final and it just used as a way seeing results in VS.
@@ -22,11 +39,21 @@ namespace LanguageService.Formatting
         /// </returns>
         public static List<TextEditInfo> Format(SourceText span, NewOptions newOptions)
         {
+
+            // TODO: Temporary stuff.....
+            if (RuleMap == null || GlobalOptions == null)
+            {
+                GlobalOptions = new GlobalOptions();
+                RuleMap = RuleMap.Create();
+            }
+
             // If newOptions is not null, that means the GlobalOptions need to be updated
             if (newOptions != null)
             {
-                GlobalOptions.Update(newOptions);
+                GlobalOptions = new GlobalOptions(newOptions);
+                RuleMap = RuleMap.Create(GlobalOptions.OptionalRuleMap);
             }
+            // End of temp stuff
 
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
@@ -41,12 +68,10 @@ namespace LanguageService.Formatting
 
                 Rule rule = RuleMap.Get(formattingContext);
 
-                if (rule == null)
+                if (rule != null)
                 {
-                    continue;
+                    textEdits.AddRange(rule.Apply(formattingContext));
                 }
-
-                textEdits.AddRange(rule.Apply(formattingContext));
             }
 
             textEdits.AddRange(Indenter.GetIndentations(parsedTokens));

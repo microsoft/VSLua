@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LanguageService
 {
-    public class TrackableTextReader
+    internal class TrackableTextReader
     {
         private List<char> lastCharactars = new List<char>();
         private int historyLimit = 10;
@@ -16,25 +16,16 @@ namespace LanguageService
         public int Position { get; private set; }
         private readonly TextReader textReader;
 
-        public TrackableTextReader(TextReader textReader, int start)
+        internal TrackableTextReader(TextReader textReader)
         {
             this.textReader = textReader;
-            this.Position = start;
         }
 
-        public TrackableTextReader(TextReader textReader)
+        internal int Read()
         {
-            this.textReader = textReader;
-            // this.Position = 0;
-        }
-
-        public int Read()
-        {
-            // if the current character is the final character
             if (this.CurrentCharacter != unchecked((char)-1))
             {
                 ++Position;
-                // if the stream reader has not been pushed back at all
                 if (this.pushedDistance == 0)
                 {
                     this.CurrentCharacter = (char)textReader.Read();
@@ -42,6 +33,7 @@ namespace LanguageService
                     if (this.lastCharactars.Count > this.historyLimit)
                     {
                         // limits the number of characters in the list
+                        //   TODO: needs a better way to limit history, however right now it is O(1)
                         this.lastCharactars = this.lastCharactars.GetRange(1, this.historyLimit);
                     }
                     return this.CurrentCharacter;
@@ -58,12 +50,12 @@ namespace LanguageService
             return unchecked((char)-1);
         }
 
-        public bool EndOfStream()
+        internal bool EndOfStream()
         {
             return this.Peek() == unchecked((char)-1);
         }
 
-        public char Peek()
+        internal char Peek()
         {
             if (this.pushedDistance == 0)
             {
@@ -75,15 +67,14 @@ namespace LanguageService
             }
         }
 
-        public char ReadChar()
+        internal char ReadChar()
         {
             return (char)this.Read();
         }
 
-        public void PushBack(int n = 1)
-        // if you just call PushBack(), it'll go back only one position
-        // otherwise you can back up to the history limit
+        internal void PushBack(int n = 1)
         {
+            Validation.Requires.Range(n >= 0, n.ToString(), nameof(n));
             if (this.pushedDistance + n < this.historyLimit && n <= this.Position)
             {
                 this.Position -= n;
@@ -91,7 +82,7 @@ namespace LanguageService
             }
             else
             {
-                // Throw an error or something
+                throw new IndexOutOfRangeException(nameof(n) + " is over history limit");
             }
         }
     }

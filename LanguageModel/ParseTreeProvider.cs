@@ -5,12 +5,12 @@ using LanguageService;
 
 namespace LanguageModel
 {
-    public static class ParseTreeProvider
+    internal class ParseTreeProvider
     {
-        private static readonly ConditionalWeakTable<SourceText, List<Token>> sources = 
+        private readonly ConditionalWeakTable<SourceText, List<Token>> sources = 
             new ConditionalWeakTable<SourceText, List<Token>>();
 
-        public static List<Token> Get(SourceText sourceText)
+        internal List<Token> Get(SourceText sourceText)
         {
             Validation.Requires.NotNull(sourceText, nameof(sourceText));
 
