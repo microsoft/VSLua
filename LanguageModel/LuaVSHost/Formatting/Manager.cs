@@ -125,7 +125,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
             SnapshotPoint startLinePoint = span.Start.GetContainingLine().Start;
             span = new SnapshotSpan(startLinePoint, span.End);
 
-            SourceText sourceText = core.SourceTextProvider.Get(this.textBuffer.CurrentSnapshot);
+            SourceText sourceText = core.SourceTextCache.Get(this.textBuffer.CurrentSnapshot);
 
             List<TextEditInfo> edits = core.FeatureContainer.Formatter.Format(sourceText, null);
 

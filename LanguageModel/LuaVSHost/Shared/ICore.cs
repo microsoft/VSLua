@@ -9,7 +9,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
         GlobalEditorOptions GlobalEditorOptions { get; }
         IServiceProvider ServiceProvider { get; }
         IVsEditorAdaptersFactoryService EditorAdaptersFactory { get; }
-        SourceTextCache SourceTextProvider { get; }
+        SourceTextCache SourceTextCache { get; }
         LuaFeatureContainer FeatureContainer { get; }
     }
 }

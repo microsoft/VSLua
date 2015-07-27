@@ -45,7 +45,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
             }
         }
 
-        public SourceTextCache SourceTextProvider
+        public SourceTextCache SourceTextCache
         {
             get
             {
