@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.LuaLanguageService.Shared;
 
 namespace Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages
 {
+    [Guid(Constants.Formatting.Guids.GeneralPageString)]
     internal class GeneralPage : BaseDialogPage
     {
-
         private int optionInt = 256;
 
         [Category(Constants.Formatting.Category)]
