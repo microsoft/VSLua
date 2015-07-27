@@ -34,7 +34,7 @@ namespace LanguageService.Formatting.Ruling
             {
                 length = leadingTrivia[i].Text.Length;
                 if (this.IsNewLineAfterSpace(i, leadingTrivia) ||
-                    this.IsSpaceBeforeEndOfFile(i, leadingTrivia, isEndOfFile))
+                    (isEndOfFile && this.IsSpaceBeforeEndOfFile(i, leadingTrivia)))
                 {
                     edits.Add(new TextEditInfo(start, length, string.Empty));
                 }
@@ -56,15 +56,14 @@ namespace LanguageService.Formatting.Ruling
                    triviaList[index + 1].Type == Trivia.TriviaType.Newline;
         }
 
-        private bool IsSpaceBeforeEndOfFile(int index, List<Trivia> triviaList, bool isEndOfFile)
+        private bool IsSpaceBeforeEndOfFile(int index, List<Trivia> triviaList)
         {
             if (index >= triviaList.Count)
             {
                 return false;
             }
 
-            return isEndOfFile &&
-                   triviaList[index].Type == Trivia.TriviaType.Whitespace;
+            return triviaList[index].Type == Trivia.TriviaType.Whitespace;
         }
     }
 }
