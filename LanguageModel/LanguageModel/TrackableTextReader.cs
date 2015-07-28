@@ -16,16 +16,10 @@ namespace LanguageService
         public int Position { get; private set; }
         private readonly TextReader textReader;
 
-        public TrackableTextReader(TextReader textReader, int start)
-        {
-            this.textReader = textReader;
-            this.Position = start;
-        }
-
         public TrackableTextReader(TextReader textReader)
         {
+            Validation.Requires.NotNull(textReader, nameof(textReader));
             this.textReader = textReader;
-            // this.Position = 0;
         }
 
         public int Read()
