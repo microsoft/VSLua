@@ -8,7 +8,7 @@ using System.IO;
 namespace LanguageService
 {
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public abstract partial class SyntaxNode
     {
         [Required]
@@ -33,7 +33,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class BlockNode : SyntaxNode
     {
         [Required]
@@ -48,10 +48,10 @@ namespace LanguageService
     }
 
     #region Simple Statement Nodes
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public abstract partial class StatementNode : SyntaxNode { }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class SemiColonStatementNode : StatementNode
     {
         [Required]
@@ -64,7 +64,7 @@ namespace LanguageService
     }
 
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class FunctionCallStatementNode : StatementNode
     {
         [Required]
@@ -80,7 +80,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class ReturnStatementNode : SyntaxNode
     {
         [Required]
@@ -94,7 +94,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class BreakStatementNode : StatementNode
     {
         [Required]
@@ -106,7 +106,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class GoToStatementNode : StatementNode
     {
         [Required]
@@ -120,7 +120,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class DoStatementNode : StatementNode
     {
         [Required]
@@ -136,7 +136,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class WhileStatementNode : StatementNode
     {
         [Required]
@@ -156,7 +156,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class RepeatStatementNode : StatementNode
     {
         [Required]
@@ -174,7 +174,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class GlobalFunctionStatementNode : StatementNode
     {
         [Required]
@@ -190,7 +190,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class LocalAssignmentStatementNode : StatementNode
     {
         [Required]
@@ -205,7 +205,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class LocalFunctionStatementNode : StatementNode
     {
         [Required]
@@ -222,7 +222,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class SimpleForStatementNode : StatementNode
     {
         [Required]
@@ -252,7 +252,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class MultipleArgForStatementNode : StatementNode
     {
         [Required]
@@ -275,7 +275,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class LabelStatementNode : StatementNode
     {
         [Required]
@@ -291,7 +291,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class AssignmentStatementNode : StatementNode
     {
         [Required]
@@ -309,7 +309,7 @@ namespace LanguageService
     #endregion
 
     #region If Statement
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class IfStatementNode : StatementNode
     {
         [Required]
@@ -332,7 +332,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class ElseBlockNode : SyntaxNode
     {
         [Required]
@@ -346,7 +346,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class ElseIfBlockNode : SyntaxNode
     {
         [Required]
@@ -367,10 +367,10 @@ namespace LanguageService
 
     #region Expression nodes
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public abstract partial class ExpressionNode : SyntaxNode { }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class SimpleExpression : ExpressionNode
     {
         [Required]
@@ -397,7 +397,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class BinaryOperatorExpression : ExpressionNode
     {
         [Required]
@@ -413,7 +413,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class UnaryOperatorExpression : ExpressionNode
     {
         [Required]
@@ -427,7 +427,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class TableConstructorExp : ExpressionNode
     {
         [Required]
@@ -441,7 +441,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class FunctionDef : ExpressionNode
     {
         [Required]
@@ -456,10 +456,10 @@ namespace LanguageService
     }
 
     #region FieldNodes
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public abstract partial class FieldNode : ExpressionNode { } //TODO: is this inheritance okay?
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class BracketField : FieldNode
     {
         [Required]
@@ -479,7 +479,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class AssignmentField : FieldNode
     {
         [Required]
@@ -495,7 +495,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class ExpField : FieldNode
     {
         [Required]
@@ -509,13 +509,13 @@ namespace LanguageService
     #endregion
 
     #region PrefixExp Expression
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public abstract partial class PrefixExp : ExpressionNode { }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public abstract partial class Var : PrefixExp { }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class NameVar : Var
     {
         [Required]
@@ -527,7 +527,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class SquareBracketVar : Var
     {
         [Required]
@@ -544,7 +544,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class DotVar : Var
     {
         [Required]
@@ -560,7 +560,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class FunctionCallExp : PrefixExp
     {
         [Required]
@@ -576,7 +576,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class ParenPrefixExp : PrefixExp
     {
         [Required]
@@ -596,10 +596,10 @@ namespace LanguageService
     #endregion
 
     #region Args Nodes
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public abstract partial class Args : SyntaxNode { }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class TableContructorArg : Args
     {
         [Required]
@@ -614,7 +614,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class ParenArg : Args
     {
         [Required]
@@ -630,7 +630,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class StringArg : Args
     {
         [Required]
@@ -644,7 +644,7 @@ namespace LanguageService
     #endregion
 
     #region List nodes
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class NameList : SyntaxNode
     {
         [Required]
@@ -656,7 +656,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class FieldList : SyntaxNode
     {
         [Required]
@@ -668,7 +668,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class ExpList : SyntaxNode
     {
         [Required]
@@ -680,10 +680,10 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public abstract partial class ParList : SyntaxNode { }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class VarArgPar : ParList
     {
         [Required]
@@ -695,7 +695,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class NameListPar : ParList
     {
         [Required]
@@ -709,7 +709,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class VarList : SyntaxNode
     {
         [Required]
@@ -722,7 +722,7 @@ namespace LanguageService
     }
 
     #region List Pairs
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class CommaVarPair
     {
         [Required]
@@ -731,7 +731,7 @@ namespace LanguageService
         readonly Var var;
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class CommaVarArgPair
     {
         [Required]
@@ -740,7 +740,7 @@ namespace LanguageService
         readonly Token varargOperator;
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class NameCommaPair
     {
         [Required]
@@ -749,7 +749,7 @@ namespace LanguageService
         readonly Token name;
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class ExpressionCommaPair
     {
         [Required]
@@ -758,14 +758,14 @@ namespace LanguageService
         readonly ExpressionNode expression;
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class FieldAndSeperatorPair
     {
         readonly FieldNode field;
         readonly Token fieldSeparator;
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class NameDotPair
     {
         [Required]
@@ -777,7 +777,7 @@ namespace LanguageService
 
     #endregion
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class TableConstructorNode : SyntaxNode
     {
         [Required]
@@ -792,7 +792,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class FuncBodyNode : SyntaxNode
     {
         [Required]
@@ -812,7 +812,7 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
+    [GenerateImmutable(GenerateBuilder = true, DefineRootedStruct = true)]
     public partial class FuncNameNode : SyntaxNode
     {
         [Required]
