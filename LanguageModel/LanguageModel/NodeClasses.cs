@@ -290,6 +290,22 @@ namespace LanguageService
             visitor.Visit(this);
         }
     }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class AssignmentStatementNode : StatementNode
+    {
+        [Required]
+        readonly VarList varList;
+        [Required]
+        readonly Token assignmentOperator;
+        [Required]
+        readonly ExpList expList;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
     #endregion
 
     #region If Statement
@@ -693,7 +709,28 @@ namespace LanguageService
         }
     }
 
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class VarList : SyntaxNode
+    {
+        [Required]
+        readonly ImmutableList<CommaVarPair> vars;
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
     #region List Pairs
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class CommaVarPair
+    {
+        [Required]
+        readonly Token comma;
+        [Required]
+        readonly Var var;
+    }
+
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class CommaVarArgPair
     {

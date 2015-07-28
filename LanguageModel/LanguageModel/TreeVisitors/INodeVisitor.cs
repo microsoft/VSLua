@@ -245,7 +245,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
                 throw new ArgumentException();
         }
 
-        internal void Visit(SimpleExpression node)
+        internal virtual void Visit(SimpleExpression node)
         {
             Visit(node.ExpressionValue);
         }
@@ -413,6 +413,14 @@ namespace LanguageService.LanguageModel.TreeVisitors
             foreach (var nameAndComma in node.Names)
             {
                 Visit(nameAndComma.Name);
+            }
+        }
+
+        internal virtual void Visit(VarList node)
+        {
+            foreach (var commaVarPair in node.Vars)
+            {
+                Visit(commaVarPair.Var);
             }
         }
 

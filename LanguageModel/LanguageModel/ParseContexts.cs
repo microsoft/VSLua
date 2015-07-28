@@ -19,5 +19,6 @@ namespace LanguageService
         WhileContext,
         RepeatStatementContext,
         ForStatementContext,
+        VarListContext,
     }
 }

@@ -20,7 +20,6 @@ namespace LanguageService
             positionInTokenList = -1;
         }
 
-        //TODO: remove string filename param and take a StreamReader
         public SyntaxTree CreateSyntaxTree(Stream luaStream)
         {
             tokenList = Lexer.Tokenize(luaStream);
@@ -49,7 +48,6 @@ namespace LanguageService
                     return true;
                 }
             }
-            //TODO: consider parsing parent contexts?
             return false;
         }
 
@@ -64,8 +62,7 @@ namespace LanguageService
                 return Token.CreateMissingToken(currentToken.End);
             }
         }
-
-        //TODO: write Peek(2) and get rid of TokenList[position + 2]
+        
         private Token Peek()
         {
             if (positionInTokenList + 1 < tokenList.Count)
@@ -78,17 +75,15 @@ namespace LanguageService
             }
         }
 
-        private bool PushBack()
+        private Token Peek(int lookaheadAmount)
         {
-            if (positionInTokenList - 1 >= 0)
+            if (positionInTokenList + lookaheadAmount < tokenList.Count)
             {
-                positionInTokenList--;
-                currentToken = tokenList[positionInTokenList];
-                return true;
+                return tokenList[positionInTokenList + lookaheadAmount];
             }
             else
             {
-                return false;
+                return tokenList[tokenList.Count - lookaheadAmount];
             }
         }
         #endregion
@@ -97,7 +92,7 @@ namespace LanguageService
         private ChunkNode ParseChunkNode()
         {
             var node = ChunkNode.CreateBuilder();
-            node.StartPosition = Peek().FullStart; //Question: okay to use peek? It is assumed here that Index is at -1, contract is that token is only consumed when parser is sure what to do with it.
+            node.StartPosition = Peek().FullStart;
             node.ProgramBlock = ParseBlock(Context.ProgramContext)?.ToBuilder();
             node.EndOfFile = GetExpectedToken(TokenType.EndOfFile);
             node.Length = currentToken.End - node.StartPosition;
@@ -106,9 +101,6 @@ namespace LanguageService
 
         private BlockNode ParseBlock(Context parsingContext)
         {
-            //TODO: consider an exit if invalid block beginner token?
-            //TODO: deal with edge case where there is nothing contained within the block
-
             contextStack.Push(parsingContext);
             var node = BlockNode.CreateBuilder();
             node.StartPosition = this.Peek().FullStart;
@@ -151,10 +143,11 @@ namespace LanguageService
                 case TokenType.IfKeyword:
                     return ParseIfStatementNode();
                 case TokenType.ForKeyword:
-                    if (tokenList[positionInTokenList + 2].Type == TokenType.Identifier && tokenList[positionInTokenList + 3].Type == TokenType.AssignmentOperator)
+                    if (Peek(2).Type == TokenType.Identifier && tokenList[positionInTokenList + 3].Type == TokenType.AssignmentOperator)
                     {
                         return ParseSimpleForStatementNode();
-                    } else
+                    }
+                    else
                     {
                         return ParseMultipleArgForStatementNode();
                     }
@@ -163,20 +156,85 @@ namespace LanguageService
                 case TokenType.DoubleColon:
                     return ParseLabelStatementNode();
                 case TokenType.LocalKeyword:
-                    if(tokenList[positionInTokenList + 2].Type == TokenType.FunctionKeyword)
+                    if (Peek(2).Type == TokenType.FunctionKeyword)
                     {
                         return ParseLocalFunctionStatementNode();
-                    } else
+                    }
+                    else
                     {
                         return ParseLocalAssignmentStatementNode();
                     }
-                case TokenType.Identifier: //TODO implement, Misplaced Token node is just a placeholder for now.
-                    NextToken();
-                    throw new NotImplementedException();
-                    //return MisplacedTokenNode.Create(currentToken.Start, currentToken.Length, currentToken);
+                case TokenType.Identifier:
+                    switch (Peek(2).Type)
+                    {
+                        case TokenType.OpenCurlyBrace:
+                        case TokenType.OpenParen:
+                        case TokenType.String:
+                        case TokenType.Colon:
+                            return ParseFunctionCallStatementNode();
+                        default:
+                            return ParseAssignmentStatementNode();
+                    }
                 default:
                     //TODO turn into skipped Trivia;
                     NextToken();
+                    return null;
+            }
+        }
+
+        private AssignmentStatementNode ParseAssignmentStatementNode()
+        {
+            var node = AssignmentStatementNode.CreateBuilder();
+            node.VarList = ParseVarList()?.ToBuilder();
+            node.AssignmentOperator = GetExpectedToken(TokenType.AssignmentOperator);
+            node.ExpList = ParseExpList()?.ToBuilder();
+            return node.ToImmutable();
+        }
+
+        private VarList ParseVarList()
+        {
+            contextStack.Push(Context.VarListContext);
+            var node = VarList.CreateBuilder();
+            node.StartPosition = Peek().Start;
+
+            var vars = new List<CommaVarPair>();
+
+            vars.Add(CommaVarPair.Create(null, ParseVar()));
+
+            while(ParseExpected(TokenType.Comma))
+            {
+                vars.Add(CommaVarPair.Create(currentToken, ParseVar()));
+            }
+
+            node.Vars = vars.ToImmutableList();
+
+            node.Length = currentToken.End - node.StartPosition;
+            contextStack.Pop();
+            return node.ToImmutable();
+        }
+
+        private Var ParseVar()
+        {
+            switch(Peek().Type)
+            {
+                case TokenType.OpenParen:
+                    return ParsePotentialVarWithPrefixExp();
+                case TokenType.Identifier:
+                    switch(Peek(2).Type)
+                    {
+                        case TokenType.OpenBracket:
+                            return ParseSquareBracketVar();
+                        case TokenType.Dot:
+                            return ParseDotVar();
+                        case TokenType.Colon:
+                        case TokenType.OpenCurlyBrace:
+                        case TokenType.OpenParen:
+                        case TokenType.String:
+                            return ParsePotentialVarWithPrefixExp();
+                        default:
+                            return ParseNameVar();
+                    }
+                default:
                     return null;
             }
         }
@@ -206,11 +264,13 @@ namespace LanguageService
             node.Exp1 = ParseExpression()?.ToBuilder();
             node.Comma = GetExpectedToken(TokenType.Comma);
             node.Exp2 = ParseExpression()?.ToBuilder();
-            if(Peek().Type == TokenType.Comma)
+
+            if (Peek().Type == TokenType.Comma)
             {
                 node.OptionalComma = GetExpectedToken(TokenType.Comma);
                 node.OptionalExp3 = ParseExpression()?.ToBuilder();
             }
+
             node.DoKeyword = GetExpectedToken(TokenType.DoKeyword);
             node.Block = ParseBlock(Context.ForStatementContext)?.ToBuilder();
             node.EndKeyword = GetExpectedToken(TokenType.EndKeyword);
@@ -224,11 +284,13 @@ namespace LanguageService
             node.StartPosition = Peek().Start;
             node.LocalKeyword = GetExpectedToken(TokenType.LocalKeyword);
             node.NameList = ParseNamesList()?.ToBuilder();
-            if(Peek().Type == TokenType.AssignmentOperator)
+
+            if (Peek().Type == TokenType.AssignmentOperator)
             {
                 node.AssignmentOperator = GetExpectedToken(TokenType.AssignmentOperator);
                 node.ExpList = ParseExpList()?.ToBuilder();
             }
+
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -273,16 +335,19 @@ namespace LanguageService
             node.StartPosition = Peek().Start;
             node.Name = GetExpectedToken(TokenType.Identifier);
             var names = new List<NameDotPair>();
-            while(ParseExpected(TokenType.Dot))
+
+            while (ParseExpected(TokenType.Dot))
             {
                 if (Peek().Type == TokenType.Identifier)
                 {
                     names.Add(NameDotPair.Create(currentToken, NextToken()));
-                } else
+                }
+                else
                 {
                     names.Add(NameDotPair.Create(currentToken, null));
                 }
             }
+
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -348,7 +413,7 @@ namespace LanguageService
             node.StartPosition = Peek().Start;
             node.IfKeyword = GetExpectedToken(TokenType.IfKeyword);
             node.Exp = ParseExpression()?.ToBuilder();
-            node.ThenKeyword = GetExpectedToken(TokenType.ThenKeyword); //Question @cyrus: do context analysis vs. just returning a missing token?
+            node.ThenKeyword = GetExpectedToken(TokenType.ThenKeyword);
             node.IfBlock = ParseBlock(Context.IfBlockContext)?.ToBuilder();
 
             if (Peek().Type == TokenType.ElseIfKeyword)
@@ -373,8 +438,8 @@ namespace LanguageService
             int start = Peek().Start;
             if (ParseExpected(TokenType.LengthUnop)
                 || ParseExpected(TokenType.NotUnop)
-                || ParseExpected(TokenType.MinusOperator) //TODO: deal with ambiguity of minus operator?
-                || ParseExpected(TokenType.TildeUnOp)) //TODO: deal with ambiguity of tilde operator?
+                || ParseExpected(TokenType.MinusOperator)
+                || ParseExpected(TokenType.TildeUnOp))
             {
                 var node = UnaryOperatorExpression.CreateBuilder();
                 node.StartPosition = currentToken.Start;
@@ -426,7 +491,7 @@ namespace LanguageService
 
         private ElseBlockNode ParseElseBlock()
         {
-            if (!ParseExpected(TokenType.ElseKeyword))
+            if (!ParseExpected(TokenType.ElseKeyword)) //Question @cyrus... should I do this to validate all parse methods... when should a parse method return null?
             {
                 return null;
             }
@@ -475,50 +540,80 @@ namespace LanguageService
                 case TokenType.OpenParen:
                     return ParseParenPrefixExp();
                 case TokenType.Identifier:
-
-                    switch (tokenList[positionInTokenList + 2].Type)
+                    switch (Peek(2).Type)
                     {
                         case TokenType.OpenCurlyBrace:
-                        case TokenType.OpenParen: //TODO: ??? real world scenario of this?
+                        case TokenType.OpenParen:
                         case TokenType.String:
-                            var functionCallBuilder = FunctionCallExp.CreateBuilder();
-                            functionCallBuilder.StartPosition = Peek().Start;
-                            functionCallBuilder.PrefixExp = ParseNameVar()?.ToBuilder();
-                            functionCallBuilder.Args = ParseArgs()?.ToBuilder();
-                            functionCallBuilder.Length = currentToken.End - functionCallBuilder.StartPosition;
-                            return functionCallBuilder.ToImmutable();
-                        case TokenType.Dot:
-                            var dotVarBuilder = DotVar.CreateBuilder();
-                            dotVarBuilder.StartPosition = Peek().Start;
-                            dotVarBuilder.PrefixExp = ParseNameVar()?.ToBuilder();
-                            dotVarBuilder.DotOperator = GetExpectedToken(TokenType.Dot);
-                            dotVarBuilder.NameIdentifier = GetExpectedToken(TokenType.Identifier);
-                            dotVarBuilder.Length = currentToken.End - dotVarBuilder.StartPosition;
-                            return dotVarBuilder.ToImmutable();
-                        case TokenType.OpenBracket:
-                            var bracketVarBuilder = SquareBracketVar.CreateBuilder();
-                            bracketVarBuilder.StartPosition = Peek().Start;
-                            bracketVarBuilder.PrefixExp = ParsePrefixExp()?.ToBuilder();
-                            bracketVarBuilder.OpenBracket = GetExpectedToken(TokenType.OpenBracket);
-                            bracketVarBuilder.Exp = ParseExpression()?.ToBuilder();
-                            bracketVarBuilder.CloseBracket = GetExpectedToken(TokenType.CloseBracket);
-                            bracketVarBuilder.Length = currentToken.End - bracketVarBuilder.StartPosition;
-                            return bracketVarBuilder.ToImmutable();
                         case TokenType.Colon:
-                            var functionCallExpBuilder = FunctionCallExp.CreateBuilder();
-                            functionCallExpBuilder.StartPosition = Peek().Start;
-                            functionCallExpBuilder.PrefixExp = ParseNameVar()?.ToBuilder();
-                            functionCallExpBuilder.Colon = GetExpectedToken(TokenType.Colon);
-                            functionCallExpBuilder.Name = GetExpectedToken(TokenType.Identifier);
-                            functionCallExpBuilder.Args = ParseArgs()?.ToBuilder();
-                            functionCallExpBuilder.Length = currentToken.End - functionCallExpBuilder.StartPosition;
-                            return functionCallExpBuilder.ToImmutable();
+                            return ParseFunctionCallExp();
+                        case TokenType.Dot:
+                            return ParseDotVar();
+                        case TokenType.OpenBracket:
+                            return ParseSquareBracketVar();
                         default:
                             return ParseNameVar();
                     }
                 default:
-                    return null;
+                    return null; //Question @cyrus: correct?
             }
+        }
+
+        private SquareBracketVar ParseSquareBracketVar()
+        {
+            var bracketVarBuilder = SquareBracketVar.CreateBuilder();
+            bracketVarBuilder.StartPosition = Peek().Start;
+            bracketVarBuilder.PrefixExp = ParsePrefixExp()?.ToBuilder();
+            bracketVarBuilder.OpenBracket = GetExpectedToken(TokenType.OpenBracket);
+            bracketVarBuilder.Exp = ParseExpression()?.ToBuilder();
+            bracketVarBuilder.CloseBracket = GetExpectedToken(TokenType.CloseBracket);
+            bracketVarBuilder.Length = currentToken.End - bracketVarBuilder.StartPosition;
+            return bracketVarBuilder.ToImmutable();
+        }
+
+        private DotVar ParseDotVar()
+        {
+            var dotVarBuilder = DotVar.CreateBuilder();
+            dotVarBuilder.StartPosition = Peek().Start;
+            dotVarBuilder.PrefixExp = ParseNameVar()?.ToBuilder();
+            dotVarBuilder.DotOperator = GetExpectedToken(TokenType.Dot);
+            dotVarBuilder.NameIdentifier = GetExpectedToken(TokenType.Identifier);
+            dotVarBuilder.Length = currentToken.End - dotVarBuilder.StartPosition;
+            return dotVarBuilder.ToImmutable();
+        }
+
+        private FunctionCallExp ParseFunctionCallExp()
+        {
+            var node = FunctionCallExp.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            node.PrefixExp = ParseNameVar()?.ToBuilder();
+
+            if(ParseExpected(TokenType.Colon))
+            {
+                node.Colon = currentToken;
+                node.Name = GetExpectedToken(TokenType.Identifier);
+            }
+
+            node.Args = ParseArgs()?.ToBuilder();
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
+        }
+
+        private FunctionCallStatementNode ParseFunctionCallStatementNode()
+        {
+            var node = FunctionCallStatementNode.CreateBuilder();
+            node.StartPosition = Peek().Start;
+            node.PrefixExp = ParseNameVar()?.ToBuilder();
+
+            if (ParseExpected(TokenType.Colon))
+            {
+                node.Colon = currentToken;
+                node.Name = GetExpectedToken(TokenType.Identifier);
+            }
+
+            node.Args = ParseArgs()?.ToBuilder();
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
         }
 
         private Args ParseArgs()
@@ -664,7 +759,7 @@ namespace LanguageService
                 case TokenType.OpenBracket:
                     return ParseBracketField();
                 case TokenType.Identifier:
-                    if (tokenList[positionInTokenList + 2].Type == TokenType.AssignmentOperator)
+                    if (Peek(2).Type == TokenType.AssignmentOperator)
                     {
                         var node = AssignmentField.CreateBuilder();
                         node.StartPosition = Peek().Start;
@@ -880,6 +975,23 @@ namespace LanguageService
                     return true;
                 default:
                     return false;
+            }
+        }
+
+        private Var ParsePotentialVarWithPrefixExp()
+        {
+            int tempPosition = positionInTokenList;
+            ParsePrefixExp(); //Skip to the end of the prefix exp before checking.
+            if (Peek().Type == TokenType.OpenBracket)
+            {
+                positionInTokenList = tempPosition; //Restore tokenList to beginning of node
+                return ParseSquareBracketVar();
+            }
+            else
+            {
+                //This case has arbitrarily chosen DotVar as the default for incomplete Vars starting with prefixexps
+                positionInTokenList = tempPosition; //Restore tokenList to beginning of node
+                return ParseDotVar();
             }
         }
         #endregion

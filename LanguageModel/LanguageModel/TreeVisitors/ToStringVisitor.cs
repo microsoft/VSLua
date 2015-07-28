@@ -16,7 +16,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
             indentingWriter = IndentingTextWriter.Get(new StringWriter());
         }
 
-        public void Visit(SimpleExpression node)
+        internal override void Visit(SimpleExpression node)
         {
             indentingWriter.WriteLine("Expression:");
             using (indentingWriter.Indent())
@@ -25,7 +25,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
             }
         }
 
-        public void Visit(UnaryOperatorExpression node)
+        internal override void Visit(UnaryOperatorExpression node)
         {
             indentingWriter.WriteLine("Expression");
             using (indentingWriter.Indent())
@@ -35,7 +35,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
             }
         }
 
-        public void Visit(ElseIfBlockNode node)
+        internal override void Visit(ElseIfBlockNode node)
         {
             indentingWriter.WriteLine("ElseIfBlock: ");
             using (indentingWriter.Indent())
@@ -45,7 +45,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
             }
         }
 
-        public void Visit(TableConstructorExp node)
+        internal override void Visit(TableConstructorExp node)
         {
             indentingWriter.WriteLine("TableConstructor");
             using (indentingWriter.Indent())
@@ -54,7 +54,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
             }
         }
 
-        public void Visit(BinaryOperatorExpression node)
+        internal override void Visit(BinaryOperatorExpression node)
         {
             indentingWriter.WriteLine("Expression");
             using (indentingWriter.Indent())
@@ -65,7 +65,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
             }
         }
 
-        public void Visit(IfStatementNode node)
+        internal override void Visit(IfStatementNode node)
         {
             indentingWriter.WriteLine("IfNode");
             using (indentingWriter.Indent())
@@ -101,7 +101,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
             }
         }
 
-        public void Visit(BlockNode node)
+        internal override void Visit(BlockNode node)
         {
             indentingWriter.WriteLine("Block");
             foreach (var child in node.Statements)
@@ -121,7 +121,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
             }
         }
 
-        public void Visit(ChunkNode node)
+        public override void Visit(ChunkNode node)
         {
             indentingWriter.WriteLine("ChunkNode");
             using (indentingWriter.Indent())
@@ -136,7 +136,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
             indentingWriter.WriteLine(token.ToString());
         }
 
-        public void Visit(ElseBlockNode node)
+        internal override void Visit(ElseBlockNode node)
         {
             indentingWriter.WriteLine("ElseBlock");
             using (indentingWriter.Indent())
@@ -146,7 +146,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
         }
 
         #region Not Implemented Visit Methods
-        public void Visit(ExpressionNode node)
+        internal override void Visit(ExpressionNode node)
         {
             if (node is SimpleExpression)
                 Visit(node as SimpleExpression);
@@ -168,112 +168,107 @@ namespace LanguageService.LanguageModel.TreeVisitors
                 throw new ArgumentException();
         }
 
-        public void Visit(ExpList node)
+        internal override void Visit(ExpList node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(BreakStatementNode breakStatementNode)
+        internal override void Visit(BreakStatementNode breakStatementNode)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(NameDotPair nameDotPair)
+        internal override void Visit(FuncNameNode funcNameNode)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(FuncNameNode funcNameNode)
+        internal override void Visit(StringArg stringArg)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(StringArg stringArg)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Visit(SemiColonStatementNode node)
+        internal override void Visit(SemiColonStatementNode node)
         {
             indentingWriter.WriteLine("SemiColonStatement\t ;");
         }
 
-        public void Visit(AssignmentField node)
+        internal override void Visit(AssignmentField node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(TableConstructorNode node)
+        internal override void Visit(TableConstructorNode node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(FuncBodyNode node)
+        internal override void Visit(FuncBodyNode node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(ExpField node)
+        internal override void Visit(ExpField node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(BracketField node)
+        internal override void Visit(BracketField node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(ParList node)
+        internal override void Visit(ParList node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(NameList node)
+        internal override void Visit(NameList node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(DotVar node)
+        internal override void Visit(DotVar node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(NameVar node)
+        internal override void Visit(NameVar node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(FunctionCallExp node)
+        internal override void Visit(FunctionCallExp node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(ReturnStatementNode node)
+        internal override void Visit(ReturnStatementNode node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(FunctionDef node)
+        internal override void Visit(FunctionDef node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(FieldNode node)
+        internal override void Visit(FieldNode node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(ParenPrefixExp node)
+        internal override void Visit(ParenPrefixExp node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(SquareBracketVar node)
+        internal override void Visit(SquareBracketVar node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(FieldList node)
+        internal override void Visit(FieldList node)
         {
             throw new NotImplementedException();
         }
