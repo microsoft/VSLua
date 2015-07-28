@@ -12,21 +12,33 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages
     [Guid(Constants.Formatting.Guids.GeneralPageString)]
     internal class GeneralPage : BaseDialogPage
     {
-        private int optionInt = 256;
-
-        [Category(Constants.Formatting.Category)]
-        [DisplayName("My Integer Option")]
-        [Description("My integer option")]
-        public int OptionInteger
-        {
-            get { return optionInt; }
-            set { optionInt = value; }
-        }
-
+        private System.Windows.Forms.CheckBox TestCheckBox;
 
         public override void SaveSettingsToStorage()
         {
             //base.SaveSettingsToStorage();
+        }
+
+        private void InitializeComponent()
+        {
+            this.TestCheckBox = new System.Windows.Forms.CheckBox();
+            // 
+            // TestCheckBox
+            // 
+            this.TestCheckBox.AutoSize = true;
+            this.TestCheckBox.Location = new System.Drawing.Point(0, 0);
+            this.TestCheckBox.Name = "TestCheckBox";
+            this.TestCheckBox.Size = new System.Drawing.Size(104, 24);
+            this.TestCheckBox.TabIndex = 0;
+            this.TestCheckBox.Text = "TestCheckBox";
+            this.TestCheckBox.UseVisualStyleBackColor = true;
+            this.TestCheckBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
