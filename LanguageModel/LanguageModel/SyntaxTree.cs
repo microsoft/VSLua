@@ -16,8 +16,6 @@ namespace LanguageService
             this.ErrorList = errorList;
         }
 
-        //TODO: remove filename and finalize design based on host API
-        public string FileName { get; }
         public ChunkNode Root { get; }
         public ImmutableList<ParseError> ErrorList { get; }
         public SyntaxNode GetNodeAt(int position)
