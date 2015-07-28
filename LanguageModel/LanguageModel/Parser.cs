@@ -21,12 +21,11 @@ namespace LanguageService
         }
 
         //TODO: remove string filename param and take a StreamReader
-        public SyntaxTree CreateSyntaxTree(string filename)
+        public SyntaxTree CreateSyntaxTree(Stream luaStream)
         {
-            Stream luaStream = File.OpenRead(filename);
             tokenList = Lexer.Tokenize(luaStream);
             ChunkNode root = ParseChunkNode();
-            return new SyntaxTree(filename, root, errorList.ToImmutableList());
+            return new SyntaxTree(root, errorList.ToImmutableList());
         }
 
         #region tokenList Accessors 

@@ -10,9 +10,8 @@ namespace LanguageService
 {
     public class SyntaxTree
     {
-        public SyntaxTree(string fileName, ChunkNode root, ImmutableList<ParseError> errorList)
+        public SyntaxTree(ChunkNode root, ImmutableList<ParseError> errorList)
         {
-            this.FileName = fileName;
             this.Root = root;
             this.ErrorList = errorList;
         }
@@ -33,9 +32,10 @@ namespace LanguageService
             return visitor.indentingWriter.ToString();
         }
 
-        public string ToJson()
+        public static SyntaxTree Create(string filename)
         {
-            return JsonConvert.SerializeObject(Root);
+            Stream luaStream = File.OpenRead(filename);
+            return new Parser().CreateSyntaxTree(luaStream);
         }
     }
 }

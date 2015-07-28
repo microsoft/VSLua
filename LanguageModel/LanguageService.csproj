@@ -102,7 +102,6 @@
     <Compile Include="Formatting\TextEditInfo.cs" />
     <Compile Include="Formatting\TokenRange.cs" />
     <Compile Include="LanguageModel\IndentingTextWriter.cs" />
-    <Compile Include="LanguageModel\TreeVisitors\ToJsonVisitor.cs" />
     <Compile Include="LanguageModel\TreeVisitors\INodeVisitor.cs" />
     <Compile Include="LanguageModel\Lexer.cs" />
     <Compile Include="LanguageModel\ParseContexts.cs" />
