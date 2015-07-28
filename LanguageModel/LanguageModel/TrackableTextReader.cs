@@ -91,7 +91,7 @@ namespace LanguageService
             }
             else
             {
-                // Throw an error or something
+                throw new IndexOutOfRangeException();
             }
         }
     }
