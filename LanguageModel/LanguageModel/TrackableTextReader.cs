@@ -11,7 +11,7 @@ namespace LanguageService
     public sealed class TrackableTextReader : IDisposable
     {
         private readonly static int HistoryLimit = 10;
-        private readonly List<char> lastCharactars = new List<char>(HistoryLimit);
+        private readonly List<char> lastCharacters = new List<char>(HistoryLimit);
         private int pushedDistance = 0;
         public int Position { get; private set; }
         private readonly TextReader textReader;
@@ -31,16 +31,16 @@ namespace LanguageService
                 {
                     currentCharacter = (char)textReader.Read();
                     Position++;
-                    this.lastCharactars.Add(currentCharacter);
-                    if (this.lastCharactars.Count > HistoryLimit)
+                    this.lastCharacters.Add(currentCharacter);
+                    if (this.lastCharacters.Count > HistoryLimit)
                     {
-                        this.lastCharactars.RemoveAt(0);
+                        this.lastCharacters.RemoveAt(0);
                     }
                     return currentCharacter;
                 }
                 else
                 {
-                    currentCharacter = this.lastCharactars[this.lastCharactars.Count - this.pushedDistance];
+                    currentCharacter = this.lastCharacters[this.lastCharacters.Count - this.pushedDistance];
                     this.pushedDistance--;
                     Position++;
                     return currentCharacter;
@@ -64,10 +64,10 @@ namespace LanguageService
             }
             else
             {
-                Debug.Assert(this.pushedDistance <= this.lastCharactars.Count,
+                Debug.Assert(this.pushedDistance <= this.lastCharacters.Count,
                     "Pushed distance greater than history count");
 
-                return this.lastCharactars[this.lastCharactars.Count - this.pushedDistance];
+                return this.lastCharacters[this.lastCharacters.Count - this.pushedDistance];
             }
         }
 
