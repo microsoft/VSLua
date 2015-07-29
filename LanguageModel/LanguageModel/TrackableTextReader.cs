@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -7,12 +8,11 @@ using System.Threading.Tasks;
 
 namespace LanguageService
 {
-    public class TrackableTextReader
+    public sealed class TrackableTextReader : IDisposable
     {
-        private List<char> lastCharactars = new List<char>();
-        private int historyLimit = 10;
+        private readonly static int HistoryLimit = 10;
+        private readonly List<char> lastCharactars = new List<char>(HistoryLimit);
         private int pushedDistance = 0;
-        public char CurrentCharacter { get; private set; }
         public int Position { get; private set; }
         private readonly TextReader textReader;
 
@@ -24,27 +24,26 @@ namespace LanguageService
 
         public int Read()
         {
-            // if the current character is the final character
-            if (this.CurrentCharacter != unchecked((char)-1))
+            if (this.Peek() != unchecked((char)-1))
             {
-                ++Position;
-                // if the stream reader has not been pushed back at all
+                char currentCharacter;
                 if (this.pushedDistance == 0)
                 {
-                    this.CurrentCharacter = (char)textReader.Read();
-                    this.lastCharactars.Add(this.CurrentCharacter);
-                    if (this.lastCharactars.Count > this.historyLimit)
+                    currentCharacter = (char)textReader.Read();
+                    Position++;
+                    this.lastCharactars.Add(currentCharacter);
+                    if (this.lastCharactars.Count > HistoryLimit)
                     {
-                        // limits the number of characters in the list
-                        this.lastCharactars = this.lastCharactars.GetRange(1, this.historyLimit);
+                        this.lastCharactars.RemoveAt(0);
                     }
-                    return this.CurrentCharacter;
+                    return currentCharacter;
                 }
                 else
                 {
-                    this.CurrentCharacter = this.lastCharactars[this.lastCharactars.Count - this.pushedDistance];
-                    --this.pushedDistance;
-                    return this.CurrentCharacter;
+                    currentCharacter = this.lastCharactars[this.lastCharactars.Count - this.pushedDistance];
+                    this.pushedDistance--;
+                    Position++;
+                    return currentCharacter;
                 }
 
             }
@@ -65,6 +64,9 @@ namespace LanguageService
             }
             else
             {
+                Debug.Assert(this.pushedDistance <= this.lastCharactars.Count,
+                    "Pushed distance greater than history count");
+
                 return this.lastCharactars[this.lastCharactars.Count - this.pushedDistance];
             }
         }
@@ -74,19 +76,22 @@ namespace LanguageService
             return (char)this.Read();
         }
 
-        public void PushBack(int n = 1)
-        // if you just call PushBack(), it'll go back only one position
-        // otherwise you can back up to the history limit
+        public void Pushback(int amount = 1)
         {
-            if (this.pushedDistance + n < this.historyLimit && n <= this.Position)
+            if (amount >= 0 && this.pushedDistance + amount <= HistoryLimit && amount <= this.Position)
             {
-                this.Position -= n;
-                this.pushedDistance += n;
+                this.Position -= amount;
+                this.pushedDistance += amount;
             }
             else
             {
                 throw new IndexOutOfRangeException();
             }
+        }
+
+        public void Dispose()
+        {
+            textReader.Dispose();
         }
     }
 }
