@@ -13,6 +13,7 @@ namespace LanguageService.Formatting.Ruling
         {
         }
 
+        // formattingContext is a struct, and therefore not nullable.
         internal override IEnumerable<TextEditInfo> Apply(FormattingContext formattingContext)
         {
             List<TextEditInfo> edits = new List<TextEditInfo>();
@@ -28,8 +29,9 @@ namespace LanguageService.Formatting.Ruling
 
         private TextEditInfo GetLastSpaceTriviaInfo(Token token)
         {
+            Validation.Requires.NotNull(token, nameof(token));
             List<Trivia> leadingTrivia = token.LeadingTrivia;
-            if (leadingTrivia.Count == 0 || leadingTrivia == null)
+            if (leadingTrivia == null || leadingTrivia.Count == 0)
             {
                 return null;
             }

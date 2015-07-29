@@ -24,6 +24,7 @@ namespace LanguageService.Formatting.Ruling
 
         private List<TextEditInfo> GetEdits(Token token, bool isEndOfFile)
         {
+            Validation.Requires.NotNull(token, nameof(token));
 
             List<TextEditInfo> edits = new List<TextEditInfo>();
 
@@ -52,13 +53,13 @@ namespace LanguageService.Formatting.Ruling
                 return false;
             }
 
-            return triviaList[index].Type == Trivia.TriviaType.Whitespace &&
-                   triviaList[index + 1].Type == Trivia.TriviaType.Newline;
+            return triviaList[index].Type == Trivia.TriviaType.Whitespace
+                && triviaList[index + 1].Type == Trivia.TriviaType.Newline;
         }
 
         private bool IsSpaceBeforeEndOfFile(int index, List<Trivia> triviaList)
         {
-            if (index >= triviaList.Count)
+            if (triviaList == null || index >= triviaList.Count)
             {
                 return false;
             }

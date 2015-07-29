@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -7,42 +8,42 @@ using System.Threading.Tasks;
 
 namespace LanguageService
 {
-    internal class TrackableTextReader
+    public sealed class TrackableTextReader : IDisposable
     {
-        private List<char> lastCharactars = new List<char>();
-        private int historyLimit = 10;
+        private readonly static int HistoryLimit = 10;
+        private readonly List<char> lastCharacters = new List<char>(HistoryLimit);
         private int pushedDistance = 0;
-        public char CurrentCharacter { get; private set; }
         public int Position { get; private set; }
         private readonly TextReader textReader;
 
-        internal TrackableTextReader(TextReader textReader)
+        public TrackableTextReader(TextReader textReader)
         {
+            Validation.Requires.NotNull(textReader, nameof(textReader));
             this.textReader = textReader;
         }
 
-        internal int Read()
+        public int Read()
         {
-            if (this.CurrentCharacter != unchecked((char)-1))
+            if (this.Peek() != unchecked((char)-1))
             {
-                ++Position;
+                char currentCharacter;
                 if (this.pushedDistance == 0)
                 {
-                    this.CurrentCharacter = (char)textReader.Read();
-                    this.lastCharactars.Add(this.CurrentCharacter);
-                    if (this.lastCharactars.Count > this.historyLimit)
+                    currentCharacter = (char)textReader.Read();
+                    Position++;
+                    this.lastCharacters.Add(currentCharacter);
+                    if (this.lastCharacters.Count > HistoryLimit)
                     {
-                        // limits the number of characters in the list
-                        //   TODO: needs a better way to limit history, however right now it is O(1)
-                        this.lastCharactars = this.lastCharactars.GetRange(1, this.historyLimit);
+                        this.lastCharacters.RemoveAt(0);
                     }
-                    return this.CurrentCharacter;
+                    return currentCharacter;
                 }
                 else
                 {
-                    this.CurrentCharacter = this.lastCharactars[this.lastCharactars.Count - this.pushedDistance];
-                    --this.pushedDistance;
-                    return this.CurrentCharacter;
+                    currentCharacter = this.lastCharacters[this.lastCharacters.Count - this.pushedDistance];
+                    this.pushedDistance--;
+                    Position++;
+                    return currentCharacter;
                 }
 
             }
@@ -63,7 +64,10 @@ namespace LanguageService
             }
             else
             {
-                return this.lastCharactars[this.lastCharactars.Count - this.pushedDistance];
+                Debug.Assert(this.pushedDistance <= this.lastCharacters.Count,
+                    "Pushed distance greater than history count");
+
+                return this.lastCharacters[this.lastCharacters.Count - this.pushedDistance];
             }
         }
 
@@ -72,18 +76,22 @@ namespace LanguageService
             return (char)this.Read();
         }
 
-        internal void PushBack(int n = 1)
+        public void Pushback(int amount = 1)
         {
-            Validation.Requires.Range(n >= 0, n.ToString(), nameof(n));
-            if (this.pushedDistance + n < this.historyLimit && n <= this.Position)
+            if (amount >= 0 && this.pushedDistance + amount <= HistoryLimit && amount <= this.Position)
             {
-                this.Position -= n;
-                this.pushedDistance += n;
+                this.Position -= amount;
+                this.pushedDistance += amount;
             }
             else
             {
-                throw new IndexOutOfRangeException(nameof(n) + " is over history limit");
+                throw new IndexOutOfRangeException();
             }
+        }
+
+        public void Dispose()
+        {
+            textReader.Dispose();
         }
     }
 }

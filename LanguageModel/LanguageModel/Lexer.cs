@@ -179,7 +179,7 @@ namespace LanguageService
                         else
                         {
                             isTrivia = false;
-                            stream.PushBack();
+                            stream.Pushback();
                         }
                         break;
 
