@@ -22,6 +22,7 @@ namespace LanguageService
 
         public SyntaxTree CreateSyntaxTree(Stream luaStream)
         {
+            positionInTokenList = -1;  //Make sure that internal state is at "beginning"
             tokenList = Lexer.Tokenize(luaStream);
             ChunkNode root = ParseChunkNode();
             return new SyntaxTree(root, errorList.ToImmutableList());

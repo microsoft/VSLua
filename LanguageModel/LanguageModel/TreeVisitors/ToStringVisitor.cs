@@ -16,108 +16,47 @@ namespace LanguageService.LanguageModel.TreeVisitors
             indentingWriter = IndentingTextWriter.Get(new StringWriter());
         }
 
-        internal override void Visit(SimpleExpression node)
-        {
-            indentingWriter.WriteLine("Expression:");
-            using (indentingWriter.Indent())
-            {
-                Visit(node.ExpressionValue);
-            }
-        }
+        //internal override void Visit(BlockNode node)
+        //{
+        //    indentingWriter.WriteLine("Block");
+        //    foreach (var child in node.Statements)
+        //    {
+        //        using (indentingWriter.Indent())
+        //        {
+        //            Visit(child);
+        //        }
+        //    }
 
-        internal override void Visit(UnaryOperatorExpression node)
-        {
-            indentingWriter.WriteLine("Expression");
-            using (indentingWriter.Indent())
-            {
-                Visit(node.UnaryOperator);
-                Visit(node.Exp);
-            }
-        }
+        //    if (node.ReturnStatement != null)
+        //    {
+        //        using (indentingWriter.Indent())
+        //        {
+        //            Visit(node.ReturnStatement);
+        //        }
+        //    }
+        //}
 
-        internal override void Visit(ElseIfBlockNode node)
-        {
-            indentingWriter.WriteLine("ElseIfBlock: ");
-            using (indentingWriter.Indent())
-            {
-                Visit(node.Exp);
-                Visit(node.Block);
-            }
-        }
+        //public override void Visit(ChunkNode node)
+        //{
+        //    indentingWriter.WriteLine("ChunkNode");
+        //    using (indentingWriter.Indent())
+        //    {
+        //        Visit(node.ProgramBlock);
+        //        Visit(node.EndOfFile);
+        //    }
+        //}
 
-        internal override void Visit(TableConstructorExp node)
-        {
-            indentingWriter.WriteLine("TableConstructor");
-            using (indentingWriter.Indent())
-            {
-                Visit(node.FieldList);
-            }
-        }
-
-        internal override void Visit(BinaryOperatorExpression node)
-        {
-            indentingWriter.WriteLine("Expression");
-            using (indentingWriter.Indent())
-            {
-                Visit(node.Exp1);
-                Visit(node.BinaryOperator);
-                Visit(node.Exp2);
-            }
-        }
-
-        internal override void Visit(IfStatementNode node)
-        {
-            indentingWriter.WriteLine("IfNode");
-            using (indentingWriter.Indent())
-            {
-                Visit(node.Exp);
-                Visit(node.IfBlock);
-            }
-
-            if (node.ElseIfList != null)
-            {
-                foreach (var block in node.ElseIfList)
-                {
-                    using (indentingWriter.Indent())
-                    {
-                        if (block != null)
-                        {
-                            Visit(block);
-                        }
-                        else
-                        {
-                            indentingWriter.WriteLine("null"); //TODO: validate will ever reach here?
-                        }
-                    }
-                }
-            }
-
-            if (node.ElseBlock != null)
-            {
-                using (indentingWriter.Indent())
-                {
-                    Visit(node.ElseBlock);
-                }
-            }
-        }
+        //internal override void Visit(Token token)
+        //{
+        //    indentingWriter.WriteLine(token.ToString());
+        //}
 
         internal override void Visit(BlockNode node)
         {
             indentingWriter.WriteLine("Block");
-            foreach (var child in node.Statements)
+            using (indentingWriter.Indent())
             {
-                using (indentingWriter.Indent())
-                {
-                    Visit(child);
-                }
-            }
-
-            if (node.ReturnStatement != null)
-            {
-                using (indentingWriter.Indent())
-                {
-                    Visit(node.ReturnStatement);
-                }
+                base.Visit(node);
             }
         }
 
@@ -126,8 +65,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
             indentingWriter.WriteLine("ChunkNode");
             using (indentingWriter.Indent())
             {
-                Visit(node.ProgramBlock);
-                Visit(node.EndOfFile);
+                base.Visit(node);
             }
         }
 
@@ -136,142 +74,337 @@ namespace LanguageService.LanguageModel.TreeVisitors
             indentingWriter.WriteLine(token.ToString());
         }
 
-        internal override void Visit(ElseBlockNode node)
+        #region Statement Node
+        internal override void Visit(SemiColonStatementNode node)
         {
-            indentingWriter.WriteLine("ElseBlock");
+            indentingWriter.WriteLine("Semi Colon Statement");
             using (indentingWriter.Indent())
             {
-                Visit(node.Block);
+                base.Visit(node);
             }
         }
 
-        #region Not Implemented Visit Methods
-        internal override void Visit(ExpressionNode node)
+        internal override void Visit(FunctionCallStatementNode node)
         {
-            if (node is SimpleExpression)
-                Visit(node as SimpleExpression);
-            else if (node is BinaryOperatorExpression)
-                Visit(node as BinaryOperatorExpression);
-            else if (node is UnaryOperatorExpression)
-                Visit(node as UnaryOperatorExpression);
-            else if (node is TableConstructorExp)
-                Visit(node as TableConstructorExp);
-            else if (node is FunctionDef)
-                Visit(node as FunctionDef);
-            else if (node is Var)
-                Visit(node as Var);
-            else if (node is FunctionCallExp)
-                Visit(node as FunctionCallExp);
-            else if (node is ParenPrefixExp)
-                Visit(node as ParenPrefixExp);
-            else
-                throw new ArgumentException();
-        }
-
-        internal override void Visit(ExpList node)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal override void Visit(BreakStatementNode breakStatementNode)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal override void Visit(FuncNameNode funcNameNode)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal override void Visit(StringArg stringArg)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal override void Visit(SemiColonStatementNode node)
-        {
-            indentingWriter.WriteLine("SemiColonStatement\t ;");
-        }
-
-        internal override void Visit(AssignmentField node)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal override void Visit(TableConstructorNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal override void Visit(FuncBodyNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal override void Visit(ExpField node)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal override void Visit(BracketField node)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal override void Visit(ParList node)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal override void Visit(NameList node)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal override void Visit(DotVar node)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal override void Visit(NameVar node)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal override void Visit(FunctionCallExp node)
-        {
-            throw new NotImplementedException();
+            indentingWriter.WriteLine("Function Call Statement");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
         }
 
         internal override void Visit(ReturnStatementNode node)
         {
-            throw new NotImplementedException();
+            indentingWriter.WriteLine("Return Statement");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(BreakStatementNode node)
+        {
+            indentingWriter.WriteLine("Break Statement");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(GoToStatementNode node)
+        {
+            indentingWriter.WriteLine("GoToStatement");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(DoStatementNode node)
+        {
+            indentingWriter.WriteLine("Do Statement");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(WhileStatementNode node)
+        {
+            indentingWriter.WriteLine("While Statement");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(RepeatStatementNode node)
+        {
+            indentingWriter.WriteLine("Repeat Statement");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(GlobalFunctionStatementNode node)
+        {
+            indentingWriter.WriteLine("Function Statement");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(LocalAssignmentStatementNode node)
+        {
+            indentingWriter.WriteLine("Local Asignment");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(LocalFunctionStatementNode node)
+        {
+            indentingWriter.WriteLine("Local Function Statement");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(SimpleForStatementNode node)
+        {
+            indentingWriter.WriteLine("For Statement");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(MultipleArgForStatementNode node)
+        {
+            indentingWriter.WriteLine("For Statement");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(LabelStatementNode node)
+        {
+            indentingWriter.WriteLine("Label Statement");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(AssignmentStatementNode node)
+        {
+            indentingWriter.WriteLine("Assignment Statement");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+        #endregion
+
+        #region IfStatement
+
+        internal override void Visit(IfStatementNode node)
+        {
+            indentingWriter.WriteLine("If Node");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(ElseBlockNode node)
+        {
+            indentingWriter.WriteLine("Else Block");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(ElseIfBlockNode node)
+        {
+            indentingWriter.WriteLine("ElseIf Block: ");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        #endregion
+
+        #region Expression Nodes
+
+        internal override void Visit(SimpleExpression node)
+        {
+            indentingWriter.WriteLine("Expression");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(BinaryOperatorExpression node)
+        {
+            indentingWriter.WriteLine("Expression");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(UnaryOperatorExpression node)
+        {
+            indentingWriter.WriteLine("Expression");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(TableConstructorExp node)
+        {
+            indentingWriter.WriteLine("Expression");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
         }
 
         internal override void Visit(FunctionDef node)
         {
-            throw new NotImplementedException();
+            indentingWriter.WriteLine("FunctionDef");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
         }
 
-        internal override void Visit(FieldNode node)
+        #endregion
+
+        #region Args Nodes
+
+        internal override void Visit(ParenArg node)
         {
-            throw new NotImplementedException();
+            indentingWriter.WriteLine("Args");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
         }
 
-        internal override void Visit(ParenPrefixExp node)
+        internal override void Visit(TableContructorArg node)
         {
-            throw new NotImplementedException();
+            indentingWriter.WriteLine("Args");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
         }
 
-        internal override void Visit(SquareBracketVar node)
+        internal override void Visit(StringArg node)
         {
-            throw new NotImplementedException();
+            indentingWriter.WriteLine("Args");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        #endregion
+
+        #region List Nodes
+
+        internal override void Visit(NameList node)
+        {
+            indentingWriter.WriteLine("Name List");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(VarList node)
+        {
+            indentingWriter.WriteLine("Var List");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
         }
 
         internal override void Visit(FieldList node)
         {
-            throw new NotImplementedException();
+            indentingWriter.WriteLine("Field List");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
         }
+
+        internal override void Visit(ExpList node)
+        {
+            indentingWriter.WriteLine("Expression List");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(VarArgPar node)
+        {
+            indentingWriter.WriteLine("VarArg Parameter");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(NameListPar node)
+        {
+            indentingWriter.WriteLine("Parameter List");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
         #endregion
+
+        internal override void Visit(TableConstructorNode node)
+        {
+            indentingWriter.WriteLine("Table Constructor");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(FuncBodyNode node)
+        {
+            indentingWriter.WriteLine("FuncBody");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
+
+        internal override void Visit(FuncNameNode node)
+        {
+            indentingWriter.WriteLine("FuncName");
+            using (indentingWriter.Indent())
+            {
+                base.Visit(node);
+            }
+        }
     }
 }

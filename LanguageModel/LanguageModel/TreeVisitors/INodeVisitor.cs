@@ -87,10 +87,12 @@ namespace LanguageService.LanguageModel.TreeVisitors
             {
                 Visit(node as LocalFunctionStatementNode);
             }
-            else
+            else if(node is AssignmentStatementNode)
             {
-                //TODO implement more cases
-                throw new NotImplementedException();
+                Visit(node as AssignmentStatementNode);
+            } else
+            {
+                throw new ArgumentException();
             }
 
         }
@@ -185,6 +187,13 @@ namespace LanguageService.LanguageModel.TreeVisitors
         internal virtual void Visit(LabelStatementNode node)
         {
             Visit(node.Name);
+        }
+
+        internal virtual void Visit(AssignmentStatementNode node)
+        {
+            Visit(node.VarList);
+            Visit(node.AssignmentOperator);
+            Visit(node.ExpList);
         }
 
         #endregion
@@ -348,7 +357,9 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal virtual void Visit(DotVar node)
         {
-            throw new NotImplementedException();
+            Visit(node.PrefixExp);
+            Visit(node.DotOperator);
+            Visit(node.NameIdentifier);
         }
 
         internal virtual void Visit(FunctionCallExp node)
