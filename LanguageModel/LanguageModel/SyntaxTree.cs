@@ -23,13 +23,6 @@ namespace LanguageService
             throw new NotImplementedException();
         }
 
-        public override string ToString()
-        {
-            var visitor = new ToStringVisitor();
-            Root.Accept(visitor);
-            return visitor.indentingWriter.ToString();
-        }
-
         public static SyntaxTree Create(string filename)
         {
             Stream luaStream = File.OpenRead(filename);
