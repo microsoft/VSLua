@@ -16,7 +16,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService
 {
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
-    [Guid(Constants.Package.Guids.String)]
+    [Guid(Guids.PackageString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
 
     [ProvideOptionPage(typeof(GeneralPage), Constants.Formatting.Category, Constants.Formatting.Pages.General,
@@ -32,12 +32,12 @@ namespace Microsoft.VisualStudio.LuaLanguageService
 
         protected override void Initialize()
         {
-            var container = this as IServiceContainer;
+            var container = (IServiceContainer)this;
 
             if (container != null)
             {
                 container.AddService(typeof(LuaLanguageService),
-                    (serviceContainer, t) => new LuaLanguageService(serviceContainer), true);
+                    (serviceContainer, t) => new LuaLanguageService(serviceContainer), promote: true);
             }
 
             base.Initialize();

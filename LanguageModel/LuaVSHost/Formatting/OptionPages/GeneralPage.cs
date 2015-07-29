@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.LuaLanguageService.Shared;
 
 namespace Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages
 {
-    [Guid(Constants.Formatting.Guids.GeneralPageString)]
+    [Guid(Guids.GeneralPageString)]
     internal class GeneralPage : BaseDialogPage
     {
         private System.Windows.Forms.CheckBox TestCheckBox;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LanguageService.Formatting.Options
 {
-    public class IndentStyleInfo
+    public sealed class IndentStyleInfo
     {
         /// <summary>
         /// Provides the indent styles for functions and tables

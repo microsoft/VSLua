@@ -20,7 +20,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
             ThreadHelper.ThrowIfNotOnUIThread();
             IVsTextManager2 textManager = (IVsTextManager2)serviceProvider.GetService(typeof(SVsTextManager));
             VIEWPREFERENCES2[] viewPreferences = new VIEWPREFERENCES2[] { new VIEWPREFERENCES2() };
-            LANGPREFERENCES2[] languagePreferences = new LANGPREFERENCES2[] { new LANGPREFERENCES2() { guidLang = Constants.Service.Guids.Guid } };
+            LANGPREFERENCES2[] languagePreferences = new LANGPREFERENCES2[] { new LANGPREFERENCES2() { guidLang = Guids.Service } };
 
             int hresult = textManager.GetUserPreferences2(viewPreferences, pFramePrefs: null, pLangPrefs: languagePreferences, pColorPrefs: null);
             ErrorHandler.ThrowOnFailure(hresult);
@@ -38,7 +38,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
             }
 
             if (languagePreferences != null && languagePreferences.Length > 0 &&
-                Guid.Equals(languagePreferences[0].guidLang, Constants.Service.Guids.Guid))
+                Guid.Equals(languagePreferences[0].guidLang, Guids.Service))
             {
                 this.IndentStyle = languagePreferences[0].IndentStyle;
                 this.TabSize = languagePreferences[0].uTabSize;
@@ -49,11 +49,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
 
         private void FireOnUpdateLanguagePreferences()
         {
-            var handler = this.OnUpdateLanguagePreferences;
-            if (handler != null)
-            {
-                handler(this, EventArgs.Empty);
-            }
+            this.OnUpdateLanguagePreferences?.Invoke(this, EventArgs.Empty);
         }
 
         public int OnRegisterMarkerType(int iMarkerType)

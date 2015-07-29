@@ -12,83 +12,83 @@ namespace LanguageService.Formatting.Ruling
             NoCommentsBetweenTokens
         };
 
-        internal static Rule SpaceAfterComma =
+        internal static readonly Rule SpaceAfterComma =
             new SimpleRule(
                 new RuleDescriptor(TokenType.Comma, TokenRange.AnyVisible),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceAfterAssignmentOperator =
+        internal static readonly Rule SpaceAfterAssignmentOperator =
             new SimpleRule(
                 new RuleDescriptor(TokenType.AssignmentOperator, TokenRange.AnyVisible),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceBeforeAssignmentOperator =
+        internal static readonly Rule SpaceBeforeAssignmentOperator =
             new SimpleRule(
                 new RuleDescriptor(TokenRange.AnyVisible, TokenType.AssignmentOperator),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceAfterBinaryOperator =
+        internal static readonly Rule SpaceAfterBinaryOperator =
             new SimpleRule(
                 new RuleDescriptor(TokenRange.BinaryOperators, TokenRange.AnyVisible),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceBeforeBinaryOperator =
+        internal static readonly Rule SpaceBeforeBinaryOperator =
             new SimpleRule(
                 new RuleDescriptor(TokenRange.AnyVisible, TokenRange.BinaryOperators),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceAfterValueBeforeOpenParenthesis =
+        internal static readonly Rule SpaceAfterValueBeforeOpenParenthesis =
             new SimpleRule(
                 new RuleDescriptor(TokenRange.Value, TokenType.OpenParen),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceBeforeValueAfterOpenParenthesis =
+        internal static readonly Rule SpaceBeforeValueAfterOpenParenthesis =
             new SimpleRule(
                 new RuleDescriptor(TokenType.OpenParen, TokenRange.Value),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceBeforeValueAfterOpenSquareBracket =
+        internal static readonly Rule SpaceBeforeValueAfterOpenSquareBracket =
             new SimpleRule(
                 new RuleDescriptor(TokenType.OpenBracket, TokenRange.Value),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceBeforeValueAfterOpenCurlyBrace =
+        internal static readonly Rule SpaceBeforeValueAfterOpenCurlyBrace =
             new SimpleRule(new RuleDescriptor(TokenType.OpenCurlyBrace, TokenRange.Value),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceAfterValueBeforeCloseParenthesis =
+        internal static readonly Rule SpaceAfterValueBeforeCloseParenthesis =
             new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.CloseParen),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceAfterValueBeforeCloseSquareBracket =
+        internal static readonly Rule SpaceAfterValueBeforeCloseSquareBracket =
             new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.CloseBracket),
                 defaultFilters, RuleAction.Space);
 
-        internal static Rule SpaceAfterValueBeforeCloseCurlyBrace =
+        internal static readonly Rule SpaceAfterValueBeforeCloseCurlyBrace =
             new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.CloseCurlyBrace),
                 defaultFilters, RuleAction.Space);
 
-        internal static DeleteSpaceBeforeEofToken DeleteSpaceBeforeEofToken = new DeleteSpaceBeforeEofToken();
+        internal static readonly DeleteSpaceBeforeEofToken DeleteSpaceBeforeEofToken = new DeleteSpaceBeforeEofToken();
 
-        internal static Rule DeleteSpaceAfterValueBeforeDot =
+        internal static readonly Rule DeleteSpaceAfterValueBeforeDot =
             new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.Dot),
                 defaultFilters, RuleAction.Delete);
 
-        internal static Rule DeleteSpaceBeforeValueAfterDot =
+        internal static readonly Rule DeleteSpaceBeforeValueAfterDot =
             new SimpleRule(new RuleDescriptor(TokenType.Dot, TokenRange.Value),
                 defaultFilters, RuleAction.Delete);
 
-        internal static Rule DeleteSpaceAfterValueBeforeColon =
+        internal static readonly Rule DeleteSpaceAfterValueBeforeColon =
             new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.Colon),
                 defaultFilters, RuleAction.Delete);
 
-        internal static Rule DeleteSpaceBeforeValueAfterColon =
+        internal static readonly Rule DeleteSpaceBeforeValueAfterColon =
             new SimpleRule(new RuleDescriptor(TokenType.Colon, TokenRange.Value),
                 defaultFilters, RuleAction.Delete);
 
-        internal static Rule DeleteTrailingWhitespace = new DeleteTrailingWhitespace();
+        internal static readonly Rule DeleteTrailingWhitespace = new DeleteTrailingWhitespace();
 
-        internal static ImmutableArray<Rule> AllRules = ImmutableArray.Create(
+        internal static readonly ImmutableArray<Rule> AllRules = ImmutableArray.Create(
             SpaceAfterComma,
             SpaceAfterAssignmentOperator,
             SpaceBeforeAssignmentOperator,

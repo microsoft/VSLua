@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using LanguageService.Formatting.Options;
 
 namespace LanguageService.Formatting.Ruling
@@ -8,25 +9,22 @@ namespace LanguageService.Formatting.Ruling
     internal class RuleMap
     {
         internal RuleBucket[,] map;
-        private int Length { get; }
+        private static readonly int Length = Enum.GetNames(typeof(TokenType)).Length;
 
         internal static RuleMap Create(OptionalRuleMap optionalRuleMap)
         {
             RuleMap ruleMap = new RuleMap();
             ruleMap.AddEnabledRules(optionalRuleMap);
+
             return ruleMap;
         }
 
         internal static RuleMap Create()
         {
             RuleMap ruleMap = new RuleMap();
-            ruleMap.AddEnabledRules(new OptionalRuleMap(new List<OptionalRuleGroup>()));
-            return ruleMap;
-        }
+            ruleMap.AddEnabledRules(new OptionalRuleMap(Enumerable.Empty<OptionalRuleGroup>()));
 
-        private RuleMap()
-        {
-            Length = Enum.GetNames(typeof(TokenType)).Length;
+            return ruleMap;
         }
 
         internal void Add(Rule rule)

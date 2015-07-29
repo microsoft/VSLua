@@ -14,8 +14,8 @@ namespace LanguageService.Formatting.Options
     /// </summary>
     internal class OptionalRuleMap
     {
-        internal HashSet<Rule> DisabledRules = new HashSet<Rule>();
-        internal HashSet<OptionalRuleGroup> DisabledRuleGroups = new HashSet<OptionalRuleGroup>();
+        internal readonly HashSet<Rule> DisabledRules = new HashSet<Rule>();
+        internal readonly HashSet<OptionalRuleGroup> DisabledRuleGroups = new HashSet<OptionalRuleGroup>();
 
         /// <summary>
         /// Allows Rule disabling.
@@ -37,38 +37,9 @@ namespace LanguageService.Formatting.Options
         {
             IEnumerable<Rule> ruleGroup;
 
-            switch (optionalRuleGroup)
+            if (!optionalRuleGroups.TryGetValue(optionalRuleGroup, out ruleGroup))
             {
-                case OptionalRuleGroup.SpaceBeforeOpenParenthesis:
-                    ruleGroup = SpaceBeforeOpenParenthesis;
-                    break;
-
-                case OptionalRuleGroup.SpaceOnInsideOfParenthesis:
-                    ruleGroup = SpaceOnInsideOfParenthesis;
-                    break;
-
-                case OptionalRuleGroup.SpaceOnInsideOfCurlyBraces:
-                    ruleGroup = SpaceOnInsideOfCurlyBraces;
-                    break;
-
-                case OptionalRuleGroup.SpaceOnInsideOfSquareBrackets:
-                    ruleGroup = SpaceOnInsideOfSquareBrackets;
-                    break;
-
-                case OptionalRuleGroup.SpaceAfterCommas:
-                    ruleGroup = SpaceAfterCommas;
-                    break;
-
-                case OptionalRuleGroup.SpaceBeforeAndAfterBinaryOperations:
-                    ruleGroup = SpaceBeforeAndAfterBinaryOperations;
-                    break;
-
-                case OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForStatement:
-                    ruleGroup = SpaceBeforeAndAfterAssignment;
-                    break;
-
-                default:
-                    throw new NotImplementedException();
+                throw new NotImplementedException();
             }
 
             AddRuleGroup(ruleGroup);
@@ -77,12 +48,19 @@ namespace LanguageService.Formatting.Options
         private void AddRuleGroup(IEnumerable<Rule> ruleGroup)
         {
             Validation.Requires.NotNull(ruleGroup, nameof(ruleGroup));
-
-            foreach (Rule rule in ruleGroup)
-            {
-                DisabledRules.Add(rule);
-            }
+            DisabledRules.UnionWith(ruleGroup);
         }
+
+        private static Dictionary<OptionalRuleGroup, IEnumerable<Rule>> optionalRuleGroups = new Dictionary<OptionalRuleGroup, IEnumerable<Rule>>
+        {
+            {OptionalRuleGroup.SpaceBeforeOpenParenthesis, SpaceBeforeOpenParenthesis},
+            {OptionalRuleGroup.SpaceOnInsideOfParenthesis, SpaceOnInsideOfParenthesis},
+            {OptionalRuleGroup.SpaceOnInsideOfCurlyBraces, SpaceOnInsideOfCurlyBraces},
+            {OptionalRuleGroup.SpaceOnInsideOfSquareBrackets, SpaceOnInsideOfSquareBrackets},
+            {OptionalRuleGroup.SpaceAfterCommas, SpaceAfterCommas},
+            {OptionalRuleGroup.SpaceBeforeAndAfterBinaryOperations, SpaceBeforeAndAfterBinaryOperations},
+            {OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForStatement, SpaceBeforeAndAfterAssignment}
+        };
 
         private static ImmutableArray<Rule> SpaceBeforeOpenParenthesis = ImmutableArray.Create(
             Rules.SpaceAfterValueBeforeOpenParenthesis

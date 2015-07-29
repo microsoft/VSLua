@@ -18,7 +18,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
         [Import]
         private IVsEditorAdaptersFactoryService editorAdaptersFactory;
 
-        private SourceTextCache sourceTextProvider;
+        private SourceTextCache sourceTextCache;
         private LuaFeatureContainer featureContainer;
 
         public GlobalEditorOptions GlobalEditorOptions
@@ -49,11 +49,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
         {
             get
             {
-                if (sourceTextProvider == null)
-                {
-                    sourceTextProvider = new SourceTextCache();
-                }
-                return sourceTextProvider;
+                return sourceTextCache != null ? sourceTextCache : (sourceTextCache = new SourceTextCache());
             }
         }
 
