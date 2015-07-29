@@ -27,7 +27,7 @@ namespace LanguageService.Tests
         {
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\smallif.lua");
 
-            var visitor = new ToStringVisitor();
+            var visitor = new StringWalker();
             tree.Root.Accept(visitor);
 
             Debug.WriteLine(visitor.SyntaxTreeAsString());

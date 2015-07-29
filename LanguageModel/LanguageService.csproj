@@ -102,7 +102,7 @@
     <Compile Include="Formatting\TextEditInfo.cs" />
     <Compile Include="Formatting\TokenRange.cs" />
     <Compile Include="LanguageModel\IndentingTextWriter.cs" />
-    <Compile Include="LanguageModel\TreeVisitors\INodeVisitor.cs" />
+    <Compile Include="LanguageModel\TreeVisitors\NodeWalker.cs" />
     <Compile Include="LanguageModel\Lexer.cs" />
     <Compile Include="LanguageModel\ParseContexts.cs" />
     <Compile Include="LanguageModel\ParseError.cs" />
@@ -110,7 +110,7 @@
     <Compile Include="LanguageModel\SyntaxTree.cs" />
     <Compile Include="LanguageModel\Token.cs" />
     <Compile Include="LanguageModel\TrackableStreamReader.cs" />
-    <Compile Include="LanguageModel\TreeVisitors\ToStringVisitor.cs" />
+    <Compile Include="LanguageModel\TreeVisitors\StringWalker.cs" />
     <Compile Include="LanguageModel\Trivia.cs" />
     <Compile Include="LanguageModel\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace LanguageService.LanguageModel.TreeVisitors
 {
-    public class ToStringVisitor : INodeVisitor
+    public class StringWalker : NodeWalker
     {
         public IndentingTextWriter IndentingWriter { get; }
 
-        public ToStringVisitor()
+        public StringWalker()
         {
             IndentingWriter = IndentingTextWriter.Get(new StringWriter());
         }
@@ -23,7 +23,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(BlockNode node)
         {
-            IndentingWriter.WriteLine("Block");
+            IndentingWriter.WriteLine("Block:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -32,7 +32,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         public override void Visit(ChunkNode node)
         {
-            IndentingWriter.WriteLine("ChunkNode");
+            IndentingWriter.WriteLine("ChunkNode:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -48,15 +48,11 @@ namespace LanguageService.LanguageModel.TreeVisitors
         internal override void Visit(SemiColonStatementNode node)
         {
             IndentingWriter.WriteLine("Semi Colon Statement");
-            using (IndentingWriter.Indent())
-            {
-                base.Visit(node);
-            }
         }
 
         internal override void Visit(FunctionCallStatementNode node)
         {
-            IndentingWriter.WriteLine("Function Call Statement");
+            IndentingWriter.WriteLine("Function Call Statement:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -65,7 +61,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(ReturnStatementNode node)
         {
-            IndentingWriter.WriteLine("Return Statement");
+            IndentingWriter.WriteLine("Return Statement:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -74,7 +70,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(BreakStatementNode node)
         {
-            IndentingWriter.WriteLine("Break Statement");
+            IndentingWriter.WriteLine("Break Statement:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -83,7 +79,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(GoToStatementNode node)
         {
-            IndentingWriter.WriteLine("GoToStatement");
+            IndentingWriter.WriteLine("GoToStatement:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -92,7 +88,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(DoStatementNode node)
         {
-            IndentingWriter.WriteLine("Do Statement");
+            IndentingWriter.WriteLine("Do Statement:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -101,7 +97,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(WhileStatementNode node)
         {
-            IndentingWriter.WriteLine("While Statement");
+            IndentingWriter.WriteLine("While Statement:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -110,7 +106,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(RepeatStatementNode node)
         {
-            IndentingWriter.WriteLine("Repeat Statement");
+            IndentingWriter.WriteLine("Repeat Statement:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -119,7 +115,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(GlobalFunctionStatementNode node)
         {
-            IndentingWriter.WriteLine("Function Statement");
+            IndentingWriter.WriteLine("Function Statement:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -128,7 +124,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(LocalAssignmentStatementNode node)
         {
-            IndentingWriter.WriteLine("Local Asignment");
+            IndentingWriter.WriteLine("Local Asignment:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -137,7 +133,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(LocalFunctionStatementNode node)
         {
-            IndentingWriter.WriteLine("Local Function Statement");
+            IndentingWriter.WriteLine("Local Function Statement:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -146,7 +142,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(SimpleForStatementNode node)
         {
-            IndentingWriter.WriteLine("For Statement");
+            IndentingWriter.WriteLine("For Statement:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -155,7 +151,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(MultipleArgForStatementNode node)
         {
-            IndentingWriter.WriteLine("For Statement");
+            IndentingWriter.WriteLine("For Statement:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -164,7 +160,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(LabelStatementNode node)
         {
-            IndentingWriter.WriteLine("Label Statement");
+            IndentingWriter.WriteLine("Label Statement:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -173,7 +169,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(AssignmentStatementNode node)
         {
-            IndentingWriter.WriteLine("Assignment Statement");
+            IndentingWriter.WriteLine("Assignment Statement:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -185,7 +181,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(IfStatementNode node)
         {
-            IndentingWriter.WriteLine("If Node");
+            IndentingWriter.WriteLine("If Node:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -194,7 +190,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(ElseBlockNode node)
         {
-            IndentingWriter.WriteLine("Else Block");
+            IndentingWriter.WriteLine("Else Block:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -203,7 +199,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(ElseIfBlockNode node)
         {
-            IndentingWriter.WriteLine("ElseIf Block: ");
+            IndentingWriter.WriteLine("ElseIf Block:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -216,16 +212,12 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(SimpleExpression node)
         {
-            IndentingWriter.WriteLine("Expression");
-            using (IndentingWriter.Indent())
-            {
-                base.Visit(node);
-            }
+            IndentingWriter.WriteLine("Expression:\t" + node.ExpressionValue.ToString());
         }
 
         internal override void Visit(BinaryOperatorExpression node)
         {
-            IndentingWriter.WriteLine("Expression");
+            IndentingWriter.WriteLine("Expression:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -234,7 +226,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(UnaryOperatorExpression node)
         {
-            IndentingWriter.WriteLine("Expression");
+            IndentingWriter.WriteLine("Expression:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -243,7 +235,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(TableConstructorExp node)
         {
-            IndentingWriter.WriteLine("Expression");
+            IndentingWriter.WriteLine("Expression:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -252,7 +244,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(FunctionDef node)
         {
-            IndentingWriter.WriteLine("FunctionDef");
+            IndentingWriter.WriteLine("FunctionDef:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -265,7 +257,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(ParenArg node)
         {
-            IndentingWriter.WriteLine("Args");
+            IndentingWriter.WriteLine("Args:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -274,7 +266,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(TableContructorArg node)
         {
-            IndentingWriter.WriteLine("Args");
+            IndentingWriter.WriteLine("Args:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -283,7 +275,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(StringArg node)
         {
-            IndentingWriter.WriteLine("Args");
+            IndentingWriter.WriteLine("Args:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -296,7 +288,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(NameList node)
         {
-            IndentingWriter.WriteLine("Name List");
+            IndentingWriter.WriteLine("Name List:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -305,7 +297,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(VarList node)
         {
-            IndentingWriter.WriteLine("Var List");
+            IndentingWriter.WriteLine("Var List:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -314,7 +306,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(FieldList node)
         {
-            IndentingWriter.WriteLine("Field List");
+            IndentingWriter.WriteLine("Field List:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -323,16 +315,24 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(ExpList node)
         {
-            IndentingWriter.WriteLine("Expression List");
-            using (IndentingWriter.Indent())
+            if (node.Expressions.Count == 0)
             {
-                base.Visit(node);
+                IndentingWriter.WriteLine("Empty Expression List");
             }
+            else
+            {
+                IndentingWriter.WriteLine("Expression List:");
+                using (IndentingWriter.Indent())
+                {
+                    base.Visit(node);
+                }
+            }
+
         }
 
         internal override void Visit(VarArgPar node)
         {
-            IndentingWriter.WriteLine("VarArg Parameter");
+            IndentingWriter.WriteLine("VarArg Parameter:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -341,7 +341,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(NameListPar node)
         {
-            IndentingWriter.WriteLine("Parameter List");
+            IndentingWriter.WriteLine("Parameter List:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -352,7 +352,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(TableConstructorNode node)
         {
-            IndentingWriter.WriteLine("Table Constructor");
+            IndentingWriter.WriteLine("Table Constructor:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -361,7 +361,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(FuncBodyNode node)
         {
-            IndentingWriter.WriteLine("FuncBody");
+            IndentingWriter.WriteLine("FuncBody:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);
@@ -370,7 +370,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal override void Visit(FuncNameNode node)
         {
-            IndentingWriter.WriteLine("FuncName");
+            IndentingWriter.WriteLine("FuncName:");
             using (IndentingWriter.Indent())
             {
                 base.Visit(node);

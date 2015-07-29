@@ -16,7 +16,7 @@ namespace LanguageService
         [Required]
         readonly int length;
 
-        public abstract void Accept(INodeVisitor visitor);
+        public abstract void Accept(NodeWalker visitor);
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -27,7 +27,7 @@ namespace LanguageService
         [Required]
         readonly Token endOfFile;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -41,7 +41,7 @@ namespace LanguageService
         readonly ImmutableList<StatementNode> statements;
         readonly ReturnStatementNode returnStatement;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -57,7 +57,7 @@ namespace LanguageService
         [Required]
         readonly Token semiColon;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -74,7 +74,7 @@ namespace LanguageService
         [Required]
         readonly Args args;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -88,7 +88,7 @@ namespace LanguageService
         readonly ExpList returnExpressions;
         //Token semiColonRetStat; Question: is this really necessary even though defined in the language?
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -100,7 +100,7 @@ namespace LanguageService
         [Required]
         readonly Token breakKeyword;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -114,7 +114,7 @@ namespace LanguageService
         [Required]
         readonly Token name;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -130,7 +130,7 @@ namespace LanguageService
         [Required]
         readonly Token endKeyword;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -150,7 +150,7 @@ namespace LanguageService
         [Required]
         readonly Token endKeyword;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -168,7 +168,7 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode exp;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -184,7 +184,7 @@ namespace LanguageService
         [Required]
         readonly FuncBodyNode funcBody;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -199,7 +199,7 @@ namespace LanguageService
         readonly NameList nameList;
         readonly Token assignmentOperator;
         readonly ExpList expList;
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -216,7 +216,7 @@ namespace LanguageService
         readonly Token name;
         [Required]
         readonly FuncBodyNode funcBody;
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -246,7 +246,7 @@ namespace LanguageService
         [Required]
         readonly Token endKeyword;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -269,7 +269,7 @@ namespace LanguageService
         readonly BlockNode block;
         [Required]
         readonly Token endKeyword;
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -285,7 +285,7 @@ namespace LanguageService
         [Required]
         readonly Token doubleColon2;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -301,7 +301,7 @@ namespace LanguageService
         [Required]
         readonly ExpList expList;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -326,7 +326,7 @@ namespace LanguageService
         [Required]
         readonly Token endKeyword;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -340,7 +340,7 @@ namespace LanguageService
         [Required]
         readonly BlockNode block;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -358,7 +358,7 @@ namespace LanguageService
         [Required]
         readonly BlockNode block;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -391,7 +391,7 @@ namespace LanguageService
             }
         }
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -407,7 +407,7 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode exp2;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -421,7 +421,7 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode exp;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -435,7 +435,7 @@ namespace LanguageService
         FieldList fieldList;
         [Required]
         readonly Token closeCurly;
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -449,7 +449,7 @@ namespace LanguageService
         [Required]
         readonly FuncBodyNode functionBody;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -473,7 +473,7 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode assignedExp;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -489,7 +489,7 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode exp;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -501,7 +501,7 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode exp;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -521,7 +521,7 @@ namespace LanguageService
         [Required]
         readonly Token name;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -538,7 +538,7 @@ namespace LanguageService
         readonly ExpressionNode exp;
         [Required]
         readonly Token closeBracket;
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -554,7 +554,7 @@ namespace LanguageService
         [Required]
         readonly Token nameIdentifier;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -570,7 +570,7 @@ namespace LanguageService
         [Required]
         readonly Args args;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -586,7 +586,7 @@ namespace LanguageService
         [Required]
         readonly Token closeParen;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -608,7 +608,7 @@ namespace LanguageService
         [Required]
         readonly Token closeCurly;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             throw new NotImplementedException();
         }
@@ -619,12 +619,11 @@ namespace LanguageService
     {
         [Required]
         readonly Token openParen;
-        [Required]
         readonly ExpList expList;
         [Required]
         readonly Token closeParen;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             throw new NotImplementedException();
         }
@@ -636,7 +635,7 @@ namespace LanguageService
         [Required]
         readonly Token stringLiteral;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -650,7 +649,7 @@ namespace LanguageService
         [Required]
         readonly ImmutableList<NameCommaPair> names;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -662,7 +661,7 @@ namespace LanguageService
         [Required]
         readonly ImmutableList<FieldAndSeperatorPair> fields;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -674,7 +673,7 @@ namespace LanguageService
         [Required]
         readonly ImmutableList<ExpressionCommaPair> expressions;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -689,7 +688,7 @@ namespace LanguageService
         [Required]
         readonly Token varargOperator;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -700,10 +699,9 @@ namespace LanguageService
     {
         [Required]
         readonly NameList namesList;
-        [Required]
         readonly CommaVarArgPair varArgPar;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -715,7 +713,7 @@ namespace LanguageService
         [Required]
         readonly ImmutableList<CommaVarPair> vars;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -786,7 +784,7 @@ namespace LanguageService
         [Required]
         readonly Token closeCurly;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -797,7 +795,6 @@ namespace LanguageService
     {
         [Required]
         readonly Token openParen;
-        [Required]
         readonly ParList parameterList;
         [Required]
         readonly Token closeParen;
@@ -806,7 +803,7 @@ namespace LanguageService
         [Required]
         readonly Token endKeyword;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }
@@ -823,7 +820,7 @@ namespace LanguageService
         readonly Token colon;
         readonly Token optionalName;
 
-        public override void Accept(INodeVisitor visitor)
+        public override void Accept(NodeWalker visitor)
         {
             visitor.Visit(this);
         }

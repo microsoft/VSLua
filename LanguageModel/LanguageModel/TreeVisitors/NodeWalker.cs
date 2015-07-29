@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LanguageService.LanguageModel.TreeVisitors
 {
-    public abstract class INodeVisitor
+    public abstract class NodeWalker
     {
         public virtual void Visit(ChunkNode node)
         {
