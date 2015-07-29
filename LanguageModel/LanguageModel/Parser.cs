@@ -903,18 +903,17 @@ namespace LanguageService
             var node = ExpList.CreateBuilder();
             node.StartPosition = Peek().Start;
 
-            ExpressionNode exp = ParseExpression();
-            if (exp == null)
-            {
-                return null;
-            }
-
             List<ExpressionCommaPair> expressions = new List<ExpressionCommaPair>();
-            expressions.Add(ExpressionCommaPair.Create(null, exp));
 
-            while (ParseExpected(TokenType.Comma))
+            ExpressionNode exp = ParseExpression();
+            if (exp != null)
             {
-                expressions.Add(ExpressionCommaPair.Create(currentToken, ParseExpression()));
+                expressions.Add(ExpressionCommaPair.Create(null, exp));
+
+                while (ParseExpected(TokenType.Comma))
+                {
+                    expressions.Add(ExpressionCommaPair.Create(currentToken, ParseExpression()));
+                }
             }
 
             node.Expressions = expressions.ToImmutableList();
