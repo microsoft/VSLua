@@ -23,8 +23,8 @@ namespace LanguageService.Formatting
         internal TextEditInfo(int start, int length, string replaceWith)
         {
             Validation.Requires.NotNull(replaceWith, nameof(replaceWith));
-            Validation.Assumes.True(length >= 0, nameof(length) + " must be non-negative");
-            Validation.Assumes.True(start >= 0, nameof(start) + " must be non-negative");
+            Validation.Requires.Argument(length >= 0, nameof(length), nameof(length) + " must be non-negative");
+            Validation.Requires.Argument(start >= 0, nameof(start), nameof(start) + " must be non-negative");
 
             this.Start = start;
             this.Length = length;

@@ -13,6 +13,7 @@ namespace LanguageService.Formatting
 
         internal Formatter(ParseTreeCache parseTreeProvider)
         {
+            Validation.Requires.NotNull(parseTreeProvider, nameof(parseTreeProvider));
             ParseTreeProvider = parseTreeProvider;
             GlobalOptions = new GlobalOptions();
             RuleMap = RuleMap.Create();
