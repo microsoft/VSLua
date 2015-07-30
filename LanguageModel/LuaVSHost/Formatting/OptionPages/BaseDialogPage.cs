@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.Windows;
 using System.ComponentModel.Composition;
+using Microsoft.VisualStudio.ComponentModelHost;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages
 {
     internal abstract class BaseDialogPage : UIElementDialogPage
     {
-        private List<Binding> Bindings;
-
+        private List<Binding> Bindings; 
 
         protected void Bind(object target, string targetProperty, object sync, string syncProperty)
         {

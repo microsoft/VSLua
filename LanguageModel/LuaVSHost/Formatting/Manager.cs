@@ -38,16 +38,16 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                 switch ((VSConstants.VSStd2KCmdID)commandId)
                 {
                     case VSConstants.VSStd2KCmdID.FORMATDOCUMENT:
-                {
-                    this.FormatDocument();
-                    return true;
-                }
+                        {
+                            this.FormatDocument();
+                            return true;
+                        }
                     case VSConstants.VSStd2KCmdID.FORMATSELECTION:
                         {
                             this.FormatSelection();
                             return true;
                         }
-            }
+                }
             }
             else if (guidCmdGroup == typeof(VSConstants.VSStd97CmdID).GUID)
             {
@@ -99,11 +99,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                 switch ((VSConstants.VSStd2KCmdID)commandId)
                 {
                     case VSConstants.VSStd2KCmdID.FORMATDOCUMENT:
-                    if (this.CanFormatDocument())
-                    {
-                        commandStatus = OLECommandFlags.OLECMDF_ENABLED | OLECommandFlags.OLECMDF_SUPPORTED;
-                        return true;
-                    }
+                        if (this.CanFormatDocument())
+                        {
+                            commandStatus = OLECommandFlags.OLECMDF_ENABLED | OLECommandFlags.OLECMDF_SUPPORTED;
+                            return true;
+                        }
                         break;
 
                     case VSConstants.VSStd2KCmdID.FORMATSELECTION:
@@ -160,11 +160,16 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 
         public void FormatOnEnter()
         {
+            if (UserSettings.MainInstance.FormatOnEnter != true)
+            {
+                return;
+            }
+
             SnapshotPoint caret = this.textView.Caret.Position.BufferPosition;
             int lineNumber = caret.GetContainingLine().LineNumber;
 
             if (lineNumber > 0)
-        {
+            {
                 var snapshotLine = caret.Snapshot.GetLineFromLineNumber(lineNumber - 1);
                 int startPos = snapshotLine.Start.Position;
                 int endPos = caret.Position;
@@ -173,15 +178,20 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             }
         }
 
-        
+
 
         public void FormatOnPaste()
         {
+            if (UserSettings.MainInstance.FormatOnPaste != true)
+            {
+                return;
+            }
+
             SnapshotSpan? newSpan = EditorUtilities.GetPasteSpan(this.prePasteSnapshot, this.textView.TextSnapshot);
             if (newSpan != null)
             {
                 this.Format((SnapshotSpan)newSpan);
-        }
+            }
         }
 
         public void FormatSelection()
