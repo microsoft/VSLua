@@ -14,16 +14,16 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages
     internal class GeneralPage : BaseDialogPage
     {
         private GeneralUserControl generalUserControl;
-        public GeneralPage()
-        {
-            generalUserControl = new GeneralUserControl();
-            generalUserControl.DataContext = UserSettings.MainInstance;
-        }
 
         protected override UIElement Child
         {
             get
             {
+                if (generalUserControl == null)
+                {
+                    generalUserControl = new GeneralUserControl();
+                    generalUserControl.DataContext = UserSettings.MainInstance;
+                }
                 return generalUserControl;
             }
         }
