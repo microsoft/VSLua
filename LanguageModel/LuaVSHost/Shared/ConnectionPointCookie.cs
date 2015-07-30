@@ -128,21 +128,6 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
 #endif
         }
 
-        /// <internalonly/>
-#if DEBUG
-        [SuppressMessage("Microsoft.Performance", "CA1821:RemoveEmptyFinalizers")]
-        ~ConnectionPointCookie()
-        {
-            if (this.cookieStack != null)
-            {
-                // TODO: {AlexGav} Enable after there is support for Host.Shutdown in the language service.
-                // That's where we will dispose of SnippetListManager singleton. For now, we don't have a good
-                // place to dispose of it, which results in this assert firing on VS exit.
-                // Not disconnecting from events shouldn't have adverse events short-term.
-                //// Debug.Fail("Failed to disconnect ConnectionPointCookie:\r\n" + this.cookieStack.ToString());
-            }
-        }
-#endif
         /// <summary>
         /// Disconnect the current connection point.  If the object is not connected,
         /// this method will do nothing.
