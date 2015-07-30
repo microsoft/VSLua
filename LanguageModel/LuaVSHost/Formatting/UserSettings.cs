@@ -11,8 +11,8 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private bool formatOnEnter = true;
-        internal bool FormatOnEnter
+        private bool? formatOnEnter = true;
+        internal bool? FormatOnEnter
         {
             get
             {
@@ -28,8 +28,8 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
             }
         }
 
-        private bool formatOnPaste = true;
-        internal bool FormatOnPaste
+        private bool? formatOnPaste = true;
+        internal bool? FormatOnPaste
         {
             get
             {
@@ -45,8 +45,8 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
             }
         }
 
-        private bool formatOnBlock = true;
-        internal bool FormatOnBlock
+        private bool? formatOnBlock = true;
+        internal bool? FormatOnBlock
         {
             get
             {
