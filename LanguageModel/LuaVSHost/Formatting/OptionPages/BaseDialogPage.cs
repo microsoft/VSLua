@@ -12,13 +12,8 @@ using System.ComponentModel.Composition;
 
 namespace Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages
 {
-    [Export(typeof(BaseDialogPage))]
     internal abstract class BaseDialogPage : UIElementDialogPage
     {
-
-        [Import]
-        private ICore core;
-
         private List<Binding> Bindings;
 
 
@@ -31,11 +26,12 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages
             PropertyInfo targetPropertyInfo = target.GetType().GetProperty(targetProperty);
             PropertyInfo syncPropertyInfo = sync.GetType().GetProperty(syncProperty);
 
+
             Validation.Requires.Argument(targetPropertyInfo != null, targetProperty, "doesn't exist in " + nameof(target));
             Validation.Requires.Argument(syncPropertyInfo != null, syncProperty, "doesn't exist in " + nameof(sync));
 
-            if (targetPropertyInfo.PropertyType.IsAssignableFrom(syncPropertyInfo.PropertyType) &&
-                syncPropertyInfo.PropertyType.IsAssignableFrom(targetPropertyInfo.PropertyType))
+            if (!targetPropertyInfo.PropertyType.IsAssignableFrom(syncPropertyInfo.PropertyType) ||
+                !syncPropertyInfo.PropertyType.IsAssignableFrom(targetPropertyInfo.PropertyType))
             {
                 throw new ArgumentException(targetProperty + " and " + syncProperty + " must be assignable from eachother");
             }
@@ -70,15 +66,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages
         {
             get
             {
-                return this.Core.UserSettings;
-            }
-        }
-
-        internal ICore Core
-        {
-            get
-            {
-                return this.core;
+                return UserSettings.MainInstance;
             }
         }
 

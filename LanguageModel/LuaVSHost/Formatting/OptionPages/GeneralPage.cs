@@ -19,13 +19,13 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages
             generalUserControl = new GeneralUserControl();
 
             this.Bind(generalUserControl.formatOnEnterCheckbox, nameof(generalUserControl.formatOnEnterCheckbox.IsChecked),
-                this.Core.UserSettings, nameof(this.Core.UserSettings.FormatOnEnter));
+                UserSettings.MainInstance, nameof(UserSettings.MainInstance.FormatOnEnter));
 
             this.Bind(generalUserControl.formatOnPasteCheckbox, nameof(generalUserControl.formatOnPasteCheckbox.IsChecked),
-                this.Core.UserSettings, nameof(this.Core.UserSettings.FormatOnPaste));
+                UserSettings.MainInstance, nameof(UserSettings.MainInstance.FormatOnPaste));
 
             this.Bind(generalUserControl.formatOnBlockCheckbox, nameof(generalUserControl.formatOnBlockCheckbox.IsChecked),
-                this.Core.UserSettings, nameof(this.Core.UserSettings.FormatOnBlock));
+                UserSettings.MainInstance, nameof(UserSettings.MainInstance.FormatOnBlock));
         }
 
         protected override UIElement Child

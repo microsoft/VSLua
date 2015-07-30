@@ -9,10 +9,12 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 {
     internal sealed class UserSettings : INotifyPropertyChanged
     {
+        public readonly static UserSettings MainInstance = new UserSettings();
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private bool? formatOnEnter = true;
-        internal bool? FormatOnEnter
+        public bool? FormatOnEnter
         {
             get
             {
@@ -29,7 +31,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
         }
 
         private bool? formatOnPaste = true;
-        internal bool? FormatOnPaste
+        public bool? FormatOnPaste
         {
             get
             {
@@ -46,7 +48,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
         }
 
         private bool? formatOnBlock = true;
-        internal bool? FormatOnBlock
+        public bool? FormatOnBlock
         {
             get
             {
