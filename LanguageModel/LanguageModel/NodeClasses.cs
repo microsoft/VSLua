@@ -97,7 +97,7 @@ namespace LanguageService
         [Required]
         readonly Token returnKeyword;
         readonly ExpList returnExpressions;
-        //Token semiColonRetStat; Question: is this really necessary even though defined in the language?
+        readonly Token semiColonRetStat;
 
         public override void Accept(NodeWalker walker)
         {
@@ -660,7 +660,7 @@ namespace LanguageService
     {
         [Required]
         [NotRecursive]
-        readonly ImmutableList<SeparatedListItem> syntaxList;
+        readonly ImmutableList<SeparatedListElement> syntaxList;
 
         public override void Accept(NodeWalker walker)
         {
@@ -669,13 +669,12 @@ namespace LanguageService
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class SeparatedListItem : SyntaxNode
+    public partial class SeparatedListElement : SyntaxNode
     {
         [Required]
         readonly Token seperator;
         [Required]
-        //TODO: change to syntaxnode or token
-        readonly SyntaxNode item;
+        readonly SyntaxNodeOrToken element;
 
         public override void Accept(NodeWalker walker)
         {

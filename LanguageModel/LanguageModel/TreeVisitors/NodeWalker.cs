@@ -281,8 +281,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
         {
             Visit(node.FunctionBody);
         }
-
-
+        
         #region FieldNode Expression
         internal virtual void Visit(FieldNode node)
         {
@@ -378,6 +377,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
         }
 
         #endregion
+
         #endregion
 
         #region Args Nodes
@@ -428,19 +428,21 @@ namespace LanguageService.LanguageModel.TreeVisitors
             }
         }
 
-        internal virtual void Visit(SeparatedListItem node)
+        internal virtual void Visit(SeparatedListElement node)
         {
-            if(node.Item is Var)
+            if (node.Element is Var)
             {
-                Visit(node.Item as Var);
-                //TODO add back once abstract parent is added.
-            //} else if(node.Item is Token)
-            //{
-            //    Visit(node.Item as Token);
-            } else if(node.Item is ExpressionNode)
+                Visit(node.Element as Var);
+            }
+            else if (node.Element is Token)
             {
-                Visit(node.Item as ExpressionNode);
-            } else
+                Visit(node.Element as Token);
+            }
+            else if (node.Element is ExpressionNode)
+            {
+                Visit(node.Element as ExpressionNode);
+            }
+            else
             {
                 throw new InvalidOperationException();
             }
