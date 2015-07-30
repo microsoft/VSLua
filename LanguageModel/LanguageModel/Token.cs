@@ -3,7 +3,7 @@ using System.Text;
 
 namespace LanguageService
 {
-    public class Token
+    public class Token /*TODO : SyntaxNodeOrToken*/
     {
         public int FullStart { get; private set; }
         public int Start { get; private set; }

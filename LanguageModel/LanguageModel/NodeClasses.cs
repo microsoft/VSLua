@@ -2,6 +2,7 @@
 using ImmutableObjectGraph.CodeGeneration;
 using LanguageService.LanguageModel.TreeVisitors;
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 
@@ -9,7 +10,10 @@ namespace LanguageService
 {
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class SyntaxNode
+    public abstract partial class SyntaxNodeOrToken { }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public abstract partial class SyntaxNode /*TODO : SyntaxNodeOrToken*/
     {
         [Required]
         readonly SyntaxKind kind;
@@ -28,6 +32,15 @@ namespace LanguageService
         readonly BlockNode programBlock;
         [Required]
         readonly Token endOfFile;
+
+        //TODO
+        //public ImmutableList<SyntaxNodeOrToken> children
+        //{
+        //    get
+        //    {
+        //        return new List<SyntaxNodeOrToken>() { programBlock, endOfFile }.ToImmutableList();
+        //    }
+        //}
 
         public override void Accept(NodeWalker walker)
         {
@@ -665,6 +678,7 @@ namespace LanguageService
         [Required]
         readonly Token seperator;
         [Required]
+        //TODO: change to syntaxnode or token
         readonly SyntaxNode item;
 
         public override void Accept(NodeWalker walker)
