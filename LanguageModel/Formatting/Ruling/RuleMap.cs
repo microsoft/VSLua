@@ -39,10 +39,10 @@ namespace LanguageService.Formatting.Ruling
                     RuleBucket bucket = map[column, row];
                     if (bucket == null)
                     {
-                        bucket = new RuleBucket();
+                        map[column, row] = bucket = new RuleBucket();
                     }
                     bucket.Add(rule);
-                    map[column, row] = bucket;
+
                 }
             }
         }

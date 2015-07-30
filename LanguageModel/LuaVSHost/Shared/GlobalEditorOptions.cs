@@ -82,10 +82,5 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
         {
             return VSConstants.S_OK;
         }
-
-        public void Disconnect()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

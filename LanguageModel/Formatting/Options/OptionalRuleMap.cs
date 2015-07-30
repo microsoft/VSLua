@@ -51,17 +51,6 @@ namespace LanguageService.Formatting.Options
             DisabledRules.UnionWith(ruleGroup);
         }
 
-        private static Dictionary<OptionalRuleGroup, IEnumerable<Rule>> optionalRuleGroups = new Dictionary<OptionalRuleGroup, IEnumerable<Rule>>
-        {
-            {OptionalRuleGroup.SpaceBeforeOpenParenthesis, SpaceBeforeOpenParenthesis},
-            {OptionalRuleGroup.SpaceOnInsideOfParenthesis, SpaceOnInsideOfParenthesis},
-            {OptionalRuleGroup.SpaceOnInsideOfCurlyBraces, SpaceOnInsideOfCurlyBraces},
-            {OptionalRuleGroup.SpaceOnInsideOfSquareBrackets, SpaceOnInsideOfSquareBrackets},
-            {OptionalRuleGroup.SpaceAfterCommas, SpaceAfterCommas},
-            {OptionalRuleGroup.SpaceBeforeAndAfterBinaryOperations, SpaceBeforeAndAfterBinaryOperations},
-            {OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForStatement, SpaceBeforeAndAfterAssignment}
-        };
-
         private static ImmutableArray<Rule> SpaceBeforeOpenParenthesis = ImmutableArray.Create(
             Rules.SpaceAfterValueBeforeOpenParenthesis
             );
@@ -96,5 +85,16 @@ namespace LanguageService.Formatting.Options
             Rules.SpaceAfterAssignmentOperator,
             Rules.SpaceBeforeAssignmentOperator
             );
+
+        private static Dictionary<OptionalRuleGroup, IEnumerable<Rule>> optionalRuleGroups = new Dictionary<OptionalRuleGroup, IEnumerable<Rule>>
+        {
+            {OptionalRuleGroup.SpaceBeforeOpenParenthesis, SpaceBeforeOpenParenthesis},
+            {OptionalRuleGroup.SpaceOnInsideOfParenthesis, SpaceOnInsideOfParenthesis},
+            {OptionalRuleGroup.SpaceOnInsideOfCurlyBraces, SpaceOnInsideOfCurlyBraces},
+            {OptionalRuleGroup.SpaceOnInsideOfSquareBrackets, SpaceOnInsideOfSquareBrackets},
+            {OptionalRuleGroup.SpaceAfterCommas, SpaceAfterCommas},
+            {OptionalRuleGroup.SpaceBeforeAndAfterBinaryOperations, SpaceBeforeAndAfterBinaryOperations},
+            {OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForStatement, SpaceBeforeAndAfterAssignment}
+        };
     }
 }
