@@ -866,14 +866,8 @@ namespace LanguageService
                 node.NamesList = ParseNamesList()?.ToBuilder();
                 if (ParseExpected(SyntaxKind.Comma))
                 {
-                    if (Peek().Type == SyntaxKind.VarArgOperator)
-                    {
-                        node.VarArgPar = CommaVarArgPair.Create(currentToken, NextToken())?.ToBuilder();
-                    }
-                    else
-                    {
-                        node.VarArgPar = CommaVarArgPair.Create(currentToken, null)?.ToBuilder();
-                    }
+                    node.Comma = currentToken;
+                    node.Vararg = GetExpectedToken(SyntaxKind.VarArgOperator);
                 }
                 node.Length = currentToken.End - node.StartPosition;
                 return node.ToImmutable();

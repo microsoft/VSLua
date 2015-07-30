@@ -475,9 +475,9 @@ namespace LanguageService.LanguageModel.TreeVisitors
         internal virtual void Visit(NameListPar node)
         {
             Visit(node.NamesList);
-            if (node.VarArgPar != null)
+            if (node.Comma != null)
             {
-                Visit(node.VarArgPar.VarargOperator);
+                Visit(node.Vararg);
             }
         }
 

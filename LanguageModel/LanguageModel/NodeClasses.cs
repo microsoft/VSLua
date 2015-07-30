@@ -701,7 +701,8 @@ namespace LanguageService
     {
         [Required]
         readonly NameList namesList;
-        readonly CommaVarArgPair varArgPar;
+        readonly Token comma;
+        readonly Token vararg;
 
         public override void Accept(NodeWalker visitor)
         {
