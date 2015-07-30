@@ -23,6 +23,10 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 
         internal Manager(ITextBuffer textBuffer, ITextView textView, ICore core)
         {
+            Validation.Requires.NotNull(textBuffer, nameof(textBuffer));
+            Validation.Requires.NotNull(textView, nameof(textView));
+            Validation.Requires.NotNull(core, nameof(core));
+
             this.core = core;
             this.textBuffer = textBuffer;
             this.textView = textView;
