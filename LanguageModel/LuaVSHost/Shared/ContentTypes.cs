@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Utilities;
 
-namespace Microsoft.VisualStudio.LuaLanguageService.Shared
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
     internal static class ContentTypes
     {

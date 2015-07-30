@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Microsoft.VisualStudio.LuaLanguageService.Shared
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
     internal sealed class Guids
     {

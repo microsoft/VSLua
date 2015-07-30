@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.LuaLanguageService.Shared;
+﻿using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Reflection;
 using System.Windows;
 using System.ComponentModel.Composition;
 
-namespace Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages
 {
     internal abstract class BaseDialogPage : UIElementDialogPage
     {

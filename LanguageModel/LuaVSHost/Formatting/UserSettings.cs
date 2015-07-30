@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
     internal sealed class UserSettings : INotifyPropertyChanged
     {

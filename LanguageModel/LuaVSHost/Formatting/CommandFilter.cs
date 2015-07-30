@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 
-namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
     class CommandFilter : IOleCommandTarget
     {

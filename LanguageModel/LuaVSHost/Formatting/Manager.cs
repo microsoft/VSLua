@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using LanguageService;
 using LanguageService.Formatting;
-using Microsoft.VisualStudio;
+using LanguageService.Shared;
+using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.LuaLanguageService.Shared;
-
 using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
-using System.ComponentModel.Composition;
-using LanguageService.Formatting.Options;
 
-namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
     internal sealed class Manager : IMiniCommandFilter, IFormatter
     {
@@ -20,6 +17,8 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
         private ITextView textView;
         private bool isClosed;
         private ICore core;
+
+        private ITextSnapshot prePasteSnapshot;
 
         internal Manager(ITextBuffer textBuffer, ITextView textView, ICore core)
         {
@@ -32,22 +31,63 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
             this.textView = textView;
         }
 
-        public void PostProcessCommand(Guid guidCmdGroup, uint commandId, IntPtr variantIn, bool wasHandled)
-        {
-            // For typing stuff (after semicolin, } or enter and stuff)
-        }
-
         public bool PreProcessCommand(Guid guidCmdGroup, uint commandId, IntPtr variantIn)
         {
             if (guidCmdGroup == VSConstants.VSStd2K)
             {
-                if ((VSConstants.VSStd2KCmdID)commandId == VSConstants.VSStd2KCmdID.FORMATDOCUMENT)
+                switch ((VSConstants.VSStd2KCmdID)commandId)
+                {
+                    case VSConstants.VSStd2KCmdID.FORMATDOCUMENT:
                 {
                     this.FormatDocument();
                     return true;
                 }
+                    case VSConstants.VSStd2KCmdID.FORMATSELECTION:
+                        {
+                            this.FormatSelection();
+                            return true;
+                        }
+            }
+            }
+            else if (guidCmdGroup == typeof(VSConstants.VSStd97CmdID).GUID)
+            {
+                switch ((VSConstants.VSStd97CmdID)commandId)
+                {
+                    case VSConstants.VSStd97CmdID.Paste:
+                        {
+                            this.prePasteSnapshot = this.textView.TextSnapshot;
+                        }
+                        break;
+                }
             }
             return false;
+        }
+
+        public void PostProcessCommand(Guid guidCmdGroup, uint commandId, IntPtr variantIn, bool wasHandled)
+        {
+            if (guidCmdGroup == VSConstants.VSStd2K)
+            {
+                switch ((VSConstants.VSStd2KCmdID)commandId)
+                {
+                    case VSConstants.VSStd2KCmdID.RETURN:
+                        this.FormatOnEnter();
+                        break;
+                }
+            }
+            else if (guidCmdGroup == typeof(VSConstants.VSStd97CmdID).GUID)
+            {
+                switch ((VSConstants.VSStd97CmdID)commandId)
+                {
+                    case VSConstants.VSStd97CmdID.Paste:
+                        {
+                            this.FormatOnPaste();
+                        }
+                        break;
+                }
+            }
+
+
+            // For typing stuff (after semicolin, } or enter and stuff)
         }
 
         public bool QueryCommandStatus(Guid guidCmdGroup, uint commandId, IntPtr commandText, out OLECMDF commandStatus)
@@ -56,13 +96,27 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 
             if (guidCmdGroup == VSConstants.VSStd2K)
             {
-                if ((VSConstants.VSStd2KCmdID)commandId == VSConstants.VSStd2KCmdID.FORMATDOCUMENT)
+                switch ((VSConstants.VSStd2KCmdID)commandId)
                 {
+                    case VSConstants.VSStd2KCmdID.FORMATDOCUMENT:
                     if (this.CanFormatDocument())
                     {
                         commandStatus = OLECommandFlags.OLECMDF_ENABLED | OLECommandFlags.OLECMDF_SUPPORTED;
                         return true;
                     }
+                        break;
+
+                    case VSConstants.VSStd2KCmdID.FORMATSELECTION:
+                        if (this.CanFormatSelection())
+                        {
+                            commandStatus = OLECommandFlags.OLECMDF_SUPPORTED;
+                            if (!this.textView.Selection.IsEmpty)
+                            {
+                                commandStatus |= OLECommandFlags.OLECMDF_ENABLED;
+                            }
+                            return true;
+                        }
+                        break;
                 }
             }
             return false;
@@ -86,6 +140,11 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
             return this.CanFormatSpan(new SnapshotSpan(this.textView.TextSnapshot, Span.FromBounds(0, endPos)));
         }
 
+        private bool CanFormatSelection()
+        {
+            return true;
+        }
+
         private bool CanFormatSpan(SnapshotSpan span)
         {
             return !this.textBuffer.IsReadOnly(span);
@@ -99,25 +158,51 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
             this.Format(span);
         }
 
-        public void FormatOnEnter(SnapshotPoint caret)
+        public void FormatOnEnter()
         {
-            throw new NotImplementedException();
+            SnapshotPoint caret = this.textView.Caret.Position.BufferPosition;
+            int lineNumber = caret.GetContainingLine().LineNumber;
+
+            if (lineNumber > 0)
+        {
+                var snapshotLine = caret.Snapshot.GetLineFromLineNumber(lineNumber - 1);
+                int startPos = snapshotLine.Start.Position;
+                int endPos = caret.Position;
+                SnapshotSpan span = new SnapshotSpan(this.textBuffer.CurrentSnapshot, Span.FromBounds(startPos, endPos));
+                this.Format(span);
+            }
         }
+
+        
 
         public void FormatOnPaste()
         {
-            throw new NotImplementedException();
+            SnapshotSpan? newSpan = EditorUtilities.GetPasteSpan(this.prePasteSnapshot, this.textView.TextSnapshot);
+            if (newSpan != null)
+            {
+                this.Format((SnapshotSpan)newSpan);
+        }
         }
 
         public void FormatSelection()
         {
-            throw new NotImplementedException();
+            SnapshotSpan snapshotSpan = this.GetSelectionSpan();
+            this.Format(snapshotSpan);
         }
 
-        public void FormatStatement()
+        private SnapshotSpan GetSelectionSpan() // TODO: need meaningful format
         {
-            throw new NotImplementedException();
+            int startPos = this.textView.Selection.Start.Position.Position;
+            int endPos = this.textView.Selection.End.Position.Position;
+            Span span = Span.FromBounds(startPos, endPos);
+            SnapshotSpan snapshotSpan = new SnapshotSpan(this.textView.TextSnapshot, span);
+            return snapshotSpan;
         }
+
+        //public void FormatStatement()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         private bool Format(SnapshotSpan span)
         {
@@ -128,10 +213,11 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 
             SnapshotPoint startLinePoint = span.Start.GetContainingLine().Start;
             span = new SnapshotSpan(startLinePoint, span.End);
+            ITextSnapshot textSnapshot = span.Snapshot;
 
             SourceText sourceText = core.SourceTextCache.Get(this.textBuffer.CurrentSnapshot);
-
-            List<TextEditInfo> edits = core.FeatureContainer.Formatter.Format(sourceText, null);
+            Range range = new Range(span.Start.Position, span.End.Position);
+            List<TextEditInfo> edits = core.FeatureContainer.Formatter.Format(sourceText, range, null);
 
             using (ITextEdit textEdit = this.textBuffer.CreateEdit())
             {

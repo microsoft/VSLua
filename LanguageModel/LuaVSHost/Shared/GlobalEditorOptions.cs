@@ -3,7 +3,7 @@ using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TextManager.Interop;
 
-namespace Microsoft.VisualStudio.LuaLanguageService.Shared
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
     [Export(typeof(GlobalEditorOptions))]
     internal sealed class GlobalEditorOptions : IVsTextManagerEvents2

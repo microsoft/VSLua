@@ -3,7 +3,9 @@ using LanguageService.Formatting;
 using Xunit;
 using System.IO;
 using LanguageService;
-using LanguageService;
+using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
+using LanguageService.Shared;
 
 namespace Formatting.Tests
 {
@@ -22,33 +24,54 @@ namespace Formatting.Tests
         internal struct PasteInfo
         {
             internal string PasteString { get; }
-            internal int From { get; }
-            internal int To { get; }
-            internal PasteInfo(string pasteString, int from, int to)
+            internal int Start { get; }
+            internal int Length { get; }
+            internal PasteInfo(string pasteString, int start, int length)
             {
                 this.PasteString = pasteString;
-                this.From = from;
-                this.To = to;
+                this.Start = start;
+                this.Length = length;
             }
         }
 
 
         internal static string FormatOnPaste(string original, PasteInfo pasteInfo)
         {
-
             var factory = new EditorUtils.EditorHostFactory();
             var host = factory.CreateEditorHost();
-            var buffer = host.CreateTextBuffer(original);
-            //Manager.
 
-            return null;
+            var buffer = host.CreateTextBuffer(original);
+            var prePastSnapshot = buffer.CurrentSnapshot;
+            var bufferEdit = buffer.CreateEdit();
+            bufferEdit.Replace(pasteInfo.Start, pasteInfo.Length, pasteInfo.PasteString);
+            var bufferApplied = bufferEdit.Apply();
+            SnapshotSpan? span = EditorUtilities.GetPasteSpan(prePastSnapshot, bufferApplied);
+
+            if (span != null)
+            {
+                SnapshotSpan newSpan = (SnapshotSpan)span;
+                var featureContainer = new LuaFeatureContainer();
+                SourceText sourceText = new SourceText(new StringReader(bufferApplied.GetText()));
+                Range range = new Range(newSpan.Start.Position, newSpan.End.Position);
+                List<TextEditInfo> edits = featureContainer.Formatter.Format(sourceText, range, null);
+                var pastedBufferEdit = buffer.CreateEdit();
+                foreach (TextEditInfo edit in edits)
+                {
+                    pastedBufferEdit.Replace(edit.Start, edit.Length, edit.ReplacingWith);
+                }
+                var pasteApplied = pastedBufferEdit.Apply();
+                return pasteApplied.GetText();
+            }
+
+            return original;
         }
 
 
         internal static string Format(string original)
         {
             LuaFeatureContainer featureContainer = new LuaFeatureContainer();
-            List<TextEditInfo> textEdits = featureContainer.Formatter.Format(new SourceText(new StringReader(original)), null);
+            Range range = new Range(0, original.Length);
+            List<TextEditInfo> textEdits = featureContainer.Formatter.Format(new SourceText(new StringReader(original)), range, null);
 
             var factory = new EditorUtils.EditorHostFactory();
             var host = factory.CreateEditorHost();

@@ -8,11 +8,11 @@ using System;
 using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages;
-using Microsoft.VisualStudio.LuaLanguageService.Shared;
+using Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages;
+using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.Shell;
 
-namespace Microsoft.VisualStudio.LuaLanguageService
+namespace Microsoft.VisualStudio.LanguageServices.Lua
 {
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]

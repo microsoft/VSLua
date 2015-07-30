@@ -1,9 +1,10 @@
 ﻿using System;
 using LanguageService;
 using Microsoft.VisualStudio.Editor;
+using Microsoft.VisualStudio.LanguageServices.Lua.Formatting;
 using Microsoft.VisualStudio.LuaLanguageService.Formatting;
 
-namespace Microsoft.VisualStudio.LuaLanguageService.Shared
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
     internal interface ICore
     {

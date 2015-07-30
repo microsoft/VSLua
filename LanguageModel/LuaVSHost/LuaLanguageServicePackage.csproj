@@ -23,8 +23,8 @@
     <ProjectGuid>{4C4E17B1-4382-460E-8308-A799C1F000C3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.VisualStudio.LuaLanguageService</RootNamespace>
-    <AssemblyName>Microsoft.VisualStudio.LuaLanguageService</AssemblyName>
+    <RootNamespace>Microsoft.VisualStudio.LanguageServices.Lua</RootNamespace>
+    <AssemblyName>Microsoft.VisualStudio.LanguageServices.Lua</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
@@ -78,6 +78,7 @@
     <Compile Include="Shared\Guids.cs" />
     <Compile Include="Shared\ICore.cs" />
     <Compile Include="Shared\SourceTextCache.cs" />
+    <Compile Include="Shared\EditorUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

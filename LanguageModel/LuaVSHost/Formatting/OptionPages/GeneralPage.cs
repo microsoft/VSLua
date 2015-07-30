@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages.UserControls;
-using Microsoft.VisualStudio.LuaLanguageService.Shared;
+using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 
-namespace Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages
 {
     [Guid(Guids.GeneralPageString)]
     internal class GeneralPage : BaseDialogPage

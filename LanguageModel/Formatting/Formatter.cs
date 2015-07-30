@@ -2,6 +2,7 @@
 using LanguageService;
 using LanguageService.Formatting.Options;
 using LanguageService.Formatting.Ruling;
+using LanguageService.Shared;
 
 namespace LanguageService.Formatting
 {
@@ -32,19 +33,19 @@ namespace LanguageService.Formatting
         /// indentation text edits from the spacing text edits in the future but for now they are in
         /// the same list.
         /// </returns>
-        public List<TextEditInfo> Format(SourceText span, NewOptions newOptions)
+        public List<TextEditInfo> Format(SourceText sourceText, Range range, NewOptions newOptions)
         {
             if (newOptions != null)
-            {
+        {
                 GlobalOptions = new GlobalOptions(newOptions);
                 RuleMap = RuleMap.Create(GlobalOptions.OptionalRuleMap);
             }
 
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
-            List<Token> tokens = ParseTreeProvider.Get(span);
+            List<Token> tokens = ParseTreeProvider.Get(sourceText);
 
-            List<ParsedToken> parsedTokens = ParsedToken.GetParsedTokens(tokens);
+            List<ParsedToken> parsedTokens = ParsedToken.GetParsedTokens(tokens, range.Start, range.End);
 
             for (int i = 0; i < parsedTokens.Count - 1; ++i)
             {

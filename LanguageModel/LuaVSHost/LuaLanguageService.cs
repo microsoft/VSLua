@@ -4,10 +4,10 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.LuaLanguageService.Shared;
+using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.ComponentModelHost;
 
-namespace Microsoft.VisualStudio.LuaLanguageService
+namespace Microsoft.VisualStudio.LanguageServices.Lua
 {
     [Guid(Guids.ServiceString)]
     public sealed class LuaLanguageService : IServiceProvider

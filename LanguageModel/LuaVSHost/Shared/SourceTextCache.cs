@@ -2,7 +2,7 @@
 using LanguageService;
 using Microsoft.VisualStudio.Text;
 
-namespace Microsoft.VisualStudio.LuaLanguageService.Shared
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
     /// <summary>
     /// This class will be changed to non-static once I merge this branch with the branch that has the Core class that

@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using IOleConnectionPoint = Microsoft.VisualStudio.OLE.Interop.IConnectionPoint;
 using IOleConnectionPointContainer = Microsoft.VisualStudio.OLE.Interop.IConnectionPointContainer;
 
-namespace Microsoft.VisualStudio.LuaLanguageService.Shared
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
 
     /// <summary>

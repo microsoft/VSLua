@@ -20,7 +20,7 @@ namespace LanguageService.Formatting
 
         // This function wouldn't exist in the final version since instead of iterating
         //   through all the tokens from the lexer, I'd just walk the parsetree from the start
-        internal static List<ParsedToken> GetParsedTokens(List<Token> tokens)
+        internal static List<ParsedToken> GetParsedTokens(List<Token> tokens, int from, int to)
         {
             Validation.Requires.NotNull(tokens, nameof(tokens));
 
@@ -29,13 +29,24 @@ namespace LanguageService.Formatting
             int indent_level = 0;
             foreach (Token token in tokens)
             {
+
+
+                if (token.FullStart > to)
+                {
+                    break;
+                }
+
+
                 if (DecreaseIndentOn.Contains(token.Type))
                 {
                     indent_level--;
                 }
 
                 indent_level = indent_level < 0 ? 0 : indent_level;
-                parsedTokens.Add(new ParsedToken(token, indent_level, null));
+                if (token.Start >= from)
+                {
+                    parsedTokens.Add(new ParsedToken(token, indent_level, null));
+                }
                 if (IncreaseIndentAfter.Contains(token.Type))
                 {
                     indent_level++;
