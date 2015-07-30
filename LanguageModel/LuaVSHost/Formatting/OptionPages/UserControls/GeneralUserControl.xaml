@@ -13,9 +13,18 @@
                     <ColumnDefinition Width="15*"/>
                     <ColumnDefinition Width="137*"/>
                 </Grid.ColumnDefinitions>
-                <CheckBox x:Name="formatOnEnterCheckbox" Content="Auto format on [Enter]" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" ToolTip="Formatting is applied on a line-by-line basis." Grid.ColumnSpan="2"/>
-                <CheckBox x:Name="formatOnPasteCheckbox" Content="Auto format on paste" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" ToolTip="Formatting is applied on pasted text automattically." Grid.ColumnSpan="2"/>
-                <CheckBox x:Name="formatOnBlockCheckbox" Content="Format on block" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" ToolTip="Formatting is applied on a Lua block after [Enter] is hit after the End keyword." Grid.ColumnSpan="2"/>
+                <CheckBox x:Name="formatOnEnterCheckbox" Content="Auto format on [Enter]"
+                          HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
+                          ToolTip="Formatting is applied on a line-by-line basis." Grid.ColumnSpan="2"
+                          IsChecked="{Binding FormatOnEnter}"/>
+                <CheckBox x:Name="formatOnPasteCheckbox" Content="Auto format on paste"
+                          HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"
+                          ToolTip="Formatting is applied on pasted text automattically." Grid.ColumnSpan="2"
+                          IsChecked="{Binding FormatOnPaste}"/>
+                <CheckBox x:Name="formatOnBlockCheckbox" Content="Format on block"
+                          HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top"
+                          ToolTip="Formatting is applied on a Lua block after [Enter] is hit after the End keyword." Grid.ColumnSpan="2"
+                          IsChecked="{Binding FormatOnBlock}"/>
             </Grid>
         </GroupBox>
 

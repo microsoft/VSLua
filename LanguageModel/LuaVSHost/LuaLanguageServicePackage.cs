@@ -8,6 +8,7 @@ using System;
 using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using Microsoft.VisualStudio.LanguageServices.Lua.Formatting;
 using Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.Shell;
