@@ -65,6 +65,74 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             }
         }
 
+        private bool? functionFixedIndentation = true;
+        public bool? FunctionFixedIndentation
+        {
+            get
+            {
+                return functionFixedIndentation;
+            }
+            set
+            {
+                if (functionFixedIndentation != value)
+                {
+                    functionFixedIndentation = value;
+                    RaisePropertyChangedEvent(FunctionFixedIndentation, nameof(FunctionFixedIndentation));
+                }
+            }
+        }
+
+        private bool? functionRelativeIndentation = false;
+        public bool? FunctionRelativeIndentation
+        {
+            get
+            {
+                return functionRelativeIndentation;
+            }
+            set
+            {
+                if (functionRelativeIndentation != value)
+                {
+                    functionRelativeIndentation = value;
+                    RaisePropertyChangedEvent(FunctionRelativeIndentation, nameof(FunctionRelativeIndentation));
+                }
+            }
+        }
+
+        private bool? tableFixedIndentation = true;
+        public bool? TableFixedIndentation
+        {
+            get
+            {
+                return tableFixedIndentation;
+            }
+            set
+            {
+                if (tableFixedIndentation != value)
+                {
+                    tableFixedIndentation = value;
+                    RaisePropertyChangedEvent(TableFixedIndentation, nameof(TableFixedIndentation));
+                }
+            }
+        }
+
+        private bool? tableRelativeIndentation = false;
+        public bool? TableRelativeIndentation
+        {
+            get
+            {
+                return tableRelativeIndentation;
+            }
+            set
+            {
+                if (tableRelativeIndentation != value)
+                {
+                    tableRelativeIndentation = value;
+                    RaisePropertyChangedEvent(TableRelativeIndentation, nameof(TableRelativeIndentation));
+                }
+            }
+        }
+
         private void RaisePropertyChangedEvent(object sender, string name)
         {
             if (PropertyChanged != null)

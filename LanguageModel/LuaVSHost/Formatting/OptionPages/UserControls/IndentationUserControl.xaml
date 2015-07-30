@@ -9,14 +9,22 @@
     <Grid>
         <GroupBox x:Name="groupBox" Header="Functions" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="150" Width="417">
             <Grid HorizontalAlignment="Left" Width="295" Margin="0,0,0,57.667">
-                <RadioButton x:Name="functionFixedIndentationRadio" Content="Fixed" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="radioButton_Checked" IsChecked="True"/>
-                <RadioButton x:Name="functionRelativeIndentationRadio" Content="Relative" HorizontalAlignment="Left" Margin="10,30,0,24"/>
+                <RadioButton x:Name="functionFixedIndentationRadio" Content="Fixed"
+                             HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
+                             IsChecked="{Binding FunctionFixedIndentation}"/>
+                <RadioButton x:Name="functionRelativeIndentationRadio" Content="Relative"
+                             HorizontalAlignment="Left" Margin="10,30,0,24"
+                             IsChecked="{Binding FunctionRelativeIndentation}"/>
             </Grid>
         </GroupBox>
         <GroupBox x:Name="groupBox_Copy" Header="Tables" HorizontalAlignment="Left" Margin="10,160,0,-10" VerticalAlignment="Top" Height="150" Width="417">
             <Grid HorizontalAlignment="Left" Width="295" Margin="0,0,0,57.667">
-                <RadioButton x:Name="tableFixedIndentationRadio" Content="Fixed" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="radioButton_Checked" IsChecked="True"/>
-                <RadioButton x:Name="tableRelativeIndentationRadio" Content="Relative" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
+                <RadioButton x:Name="tableFixedIndentationRadio" Content="Fixed"
+                             HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
+                             IsChecked="{Binding TableFixedIndentation}"/>
+                <RadioButton x:Name="tableRelativeIndentationRadio" Content="Relative"
+                             HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"
+                             IsChecked="{Binding TableRelativeIndentation}"/>
             </Grid>
         </GroupBox>
 
