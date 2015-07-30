@@ -419,6 +419,34 @@ namespace LanguageService.LanguageModel.TreeVisitors
         #endregion
 
         #region List Nodes
+
+        internal virtual void Visit(SeparatedList node)
+        {
+            foreach (var listItem in node.SyntaxList)
+            {
+                Visit(listItem);
+            }
+        }
+
+        internal virtual void Visit(SeparatedListItem node)
+        {
+            if(node.Item is Var)
+            {
+                Visit(node.Item as Var);
+                //TODO add back once abstract parent is added.
+            //} else if(node.Item is Token)
+            //{
+            //    Visit(node.Item as Token);
+            } else if(node.Item is ExpressionNode)
+            {
+                Visit(node.Item as ExpressionNode);
+            } else
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
+        #region Code To Deprecate
         internal virtual void Visit(NameList node)
         {
             foreach (var nameAndComma in node.Names)
@@ -480,7 +508,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
                 Visit(node.Vararg);
             }
         }
-
+        #endregion
         #endregion
 
         internal virtual void Visit(TableConstructorNode node)
