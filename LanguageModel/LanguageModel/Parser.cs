@@ -163,7 +163,7 @@ namespace LanguageService
                     else
                     {
                         return ParseMultipleArgForStatementNode();
-                    //}
+                    }
                 case SyntaxKind.FunctionKeyword:
                     return ParseGlobalFunctionStatementNode();
                 case SyntaxKind.DoubleColon:
