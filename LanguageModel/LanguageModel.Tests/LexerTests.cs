@@ -14,107 +14,107 @@ namespace LanguageService.Tests
         [Fact]
         public void IdentifyCorrectTokenTypes()
         {
-            var expectedTokens = new TokenType[]
+            var expectedTokens = new SyntaxKind[]
             {
-                TokenType.IfKeyword,
-                TokenType.Identifier,
-                TokenType.EqualityOperator,
-                TokenType.String,
-                TokenType.ThenKeyword,
-                TokenType.Identifier,
-                TokenType.AssignmentOperator,
-                TokenType.Identifier,
-                TokenType.PlusOperator,
-                TokenType.Identifier,
-                TokenType.ElseIfKeyword,
-                TokenType.Identifier,
-                TokenType.EqualityOperator,
-                TokenType.String,
-                TokenType.ThenKeyword,
-                TokenType.Identifier,
-                TokenType.AssignmentOperator,
-                TokenType.Identifier,
-                TokenType.MinusOperator,
-                TokenType.Identifier,
-                TokenType.Identifier,
-                TokenType.Colon,
-                TokenType.Identifier,
-                TokenType.OpenParen,
-                TokenType.Identifier,
-                TokenType.CloseParen,
-                TokenType.Semicolon,
-                TokenType.Identifier,
-                TokenType.Dot,
-                TokenType.Identifier,
-                TokenType.Colon,
-                TokenType.Identifier,
-                TokenType.OpenParen,
-                TokenType.Identifier,
-                TokenType.Dot,
-                TokenType.Identifier,
-                TokenType.MinusOperator,
-                TokenType.Number,
-                TokenType.Comma,
-                TokenType.Identifier,
-                TokenType.Dot,
-                TokenType.Identifier,
-                TokenType.CloseParen,
-                TokenType.Colon,
-                TokenType.Identifier,
-                TokenType.OpenParen,
-                TokenType.Identifier,
-                TokenType.CloseParen,
-                TokenType.ElseIfKeyword,
-                TokenType.Identifier,
-                TokenType.EqualityOperator,
-                TokenType.String,
-                TokenType.ThenKeyword,
-                TokenType.Identifier,
-                TokenType.AssignmentOperator,
-                TokenType.Identifier,
-                TokenType.MultiplyOperator,
-                TokenType.Identifier,
-                TokenType.ElseIfKeyword,
-                TokenType.Identifier,
-                TokenType.EqualityOperator,
-                TokenType.String,
-                TokenType.ThenKeyword,
-                TokenType.Identifier,
-                TokenType.Dot,
-                TokenType.Identifier,
-                TokenType.Colon,
-                TokenType.Identifier,
-                TokenType.OpenParen,
-                TokenType.Identifier,
-                TokenType.Dot,
-                TokenType.Identifier,
-                TokenType.MinusOperator,
-                TokenType.Number,
-                TokenType.Comma,
-                TokenType.Identifier,
-                TokenType.Dot,
-                TokenType.Identifier,
-                TokenType.CloseParen,
-                TokenType.Colon,
-                TokenType.Identifier,
-                TokenType.OpenParen,
-                TokenType.Identifier,
-                TokenType.CloseParen,
-                TokenType.Identifier,
-                TokenType.AssignmentOperator,
-                TokenType.Identifier,
-                TokenType.DivideOperator,
-                TokenType.Identifier,
-                TokenType.ElseKeyword,
-                TokenType.Identifier,
-                TokenType.OpenParen,
-                TokenType.String,
-                TokenType.CloseParen,
-                TokenType.EndKeyword,
-                TokenType.Identifier,
-                TokenType.AssignmentOperator,
-                TokenType.Number,
-                TokenType.EndOfFile,
+                SyntaxKind.IfKeyword,
+                SyntaxKind.Identifier,
+                SyntaxKind.EqualityOperator,
+                SyntaxKind.String,
+                SyntaxKind.ThenKeyword,
+                SyntaxKind.Identifier,
+                SyntaxKind.AssignmentOperator,
+                SyntaxKind.Identifier,
+                SyntaxKind.PlusOperator,
+                SyntaxKind.Identifier,
+                SyntaxKind.ElseIfKeyword,
+                SyntaxKind.Identifier,
+                SyntaxKind.EqualityOperator,
+                SyntaxKind.String,
+                SyntaxKind.ThenKeyword,
+                SyntaxKind.Identifier,
+                SyntaxKind.AssignmentOperator,
+                SyntaxKind.Identifier,
+                SyntaxKind.MinusOperator,
+                SyntaxKind.Identifier,
+                SyntaxKind.Identifier,
+                SyntaxKind.Colon,
+                SyntaxKind.Identifier,
+                SyntaxKind.OpenParen,
+                SyntaxKind.Identifier,
+                SyntaxKind.CloseParen,
+                SyntaxKind.Semicolon,
+                SyntaxKind.Identifier,
+                SyntaxKind.Dot,
+                SyntaxKind.Identifier,
+                SyntaxKind.Colon,
+                SyntaxKind.Identifier,
+                SyntaxKind.OpenParen,
+                SyntaxKind.Identifier,
+                SyntaxKind.Dot,
+                SyntaxKind.Identifier,
+                SyntaxKind.MinusOperator,
+                SyntaxKind.Number,
+                SyntaxKind.Comma,
+                SyntaxKind.Identifier,
+                SyntaxKind.Dot,
+                SyntaxKind.Identifier,
+                SyntaxKind.CloseParen,
+                SyntaxKind.Colon,
+                SyntaxKind.Identifier,
+                SyntaxKind.OpenParen,
+                SyntaxKind.Identifier,
+                SyntaxKind.CloseParen,
+                SyntaxKind.ElseIfKeyword,
+                SyntaxKind.Identifier,
+                SyntaxKind.EqualityOperator,
+                SyntaxKind.String,
+                SyntaxKind.ThenKeyword,
+                SyntaxKind.Identifier,
+                SyntaxKind.AssignmentOperator,
+                SyntaxKind.Identifier,
+                SyntaxKind.MultiplyOperator,
+                SyntaxKind.Identifier,
+                SyntaxKind.ElseIfKeyword,
+                SyntaxKind.Identifier,
+                SyntaxKind.EqualityOperator,
+                SyntaxKind.String,
+                SyntaxKind.ThenKeyword,
+                SyntaxKind.Identifier,
+                SyntaxKind.Dot,
+                SyntaxKind.Identifier,
+                SyntaxKind.Colon,
+                SyntaxKind.Identifier,
+                SyntaxKind.OpenParen,
+                SyntaxKind.Identifier,
+                SyntaxKind.Dot,
+                SyntaxKind.Identifier,
+                SyntaxKind.MinusOperator,
+                SyntaxKind.Number,
+                SyntaxKind.Comma,
+                SyntaxKind.Identifier,
+                SyntaxKind.Dot,
+                SyntaxKind.Identifier,
+                SyntaxKind.CloseParen,
+                SyntaxKind.Colon,
+                SyntaxKind.Identifier,
+                SyntaxKind.OpenParen,
+                SyntaxKind.Identifier,
+                SyntaxKind.CloseParen,
+                SyntaxKind.Identifier,
+                SyntaxKind.AssignmentOperator,
+                SyntaxKind.Identifier,
+                SyntaxKind.DivideOperator,
+                SyntaxKind.Identifier,
+                SyntaxKind.ElseKeyword,
+                SyntaxKind.Identifier,
+                SyntaxKind.OpenParen,
+                SyntaxKind.String,
+                SyntaxKind.CloseParen,
+                SyntaxKind.EndKeyword,
+                SyntaxKind.Identifier,
+                SyntaxKind.AssignmentOperator,
+                SyntaxKind.Number,
+                SyntaxKind.EndOfFile,
             };
 
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\if.lua");
@@ -134,31 +134,31 @@ namespace LanguageService.Tests
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\assignment.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             int tokenIndex = 0;
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.AssignmentOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Number, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.EndOfFile, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.Identifier, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.AssignmentOperator, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.Number, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.EndOfFile, tokenList[tokenIndex++].Type);
         }
 
         [Fact]
         public void IdentifyLeveledBlocksTokenTypes()
         {
-            var expectedTokens = new TokenType[]
+            var expectedTokens = new SyntaxKind[]
             {
-                TokenType.Identifier,
-                TokenType.AssignmentOperator,
-                TokenType.String,
-                TokenType.Identifier,
-                TokenType.AssignmentOperator,
-                TokenType.String,
-                TokenType.Identifier,
-                TokenType.AssignmentOperator,
-                TokenType.Unknown,
-                TokenType.Identifier,
-                TokenType.Identifier,
-                TokenType.AssignmentOperator,
-                TokenType.UnterminatedString,
-                TokenType.EndOfFile,
+                SyntaxKind.Identifier,
+                SyntaxKind.AssignmentOperator,
+                SyntaxKind.String,
+                SyntaxKind.Identifier,
+                SyntaxKind.AssignmentOperator,
+                SyntaxKind.String,
+                SyntaxKind.Identifier,
+                SyntaxKind.AssignmentOperator,
+                SyntaxKind.Unknown,
+                SyntaxKind.Identifier,
+                SyntaxKind.Identifier,
+                SyntaxKind.AssignmentOperator,
+                SyntaxKind.UnterminatedString,
+                SyntaxKind.EndOfFile,
             };
 
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\leveled_blocks.lua");
@@ -200,8 +200,8 @@ namespace LanguageService.Tests
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\longcomment.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             int tokenIndex = 0;
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.EndOfFile, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.Identifier, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.EndOfFile, tokenList[tokenIndex++].Type);
         }
 
         [Fact]
@@ -241,7 +241,7 @@ namespace LanguageService.Tests
             foreach (Token tok in tokenList)
             {
                 Debug.WriteLine(tok.ToString());
-                Assert.NotEqual(TokenType.Unknown, tok.Type);
+                Assert.NotEqual(SyntaxKind.Unknown, tok.Type);
             }
         }
 
@@ -253,7 +253,7 @@ namespace LanguageService.Tests
             foreach (Token tok in tokenList)
             {
                 Debug.WriteLine(tok.ToString());
-                Assert.NotEqual(TokenType.Unknown, tok.Type);
+                Assert.NotEqual(SyntaxKind.Unknown, tok.Type);
             }
         }
 
@@ -263,17 +263,17 @@ namespace LanguageService.Tests
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\longs.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             int tokenIndex = 0;
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.Number, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.String, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.Identifier, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.Number, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.String, tokenList[tokenIndex++].Type);
 
             for (int j = 0; j < 62; j++)
             {
-                Assert.Equal(TokenType.CloseBracket, tokenList[tokenIndex++].Type);
+                Assert.Equal(SyntaxKind.CloseBracket, tokenList[tokenIndex++].Type);
             }
 
-            Assert.Equal(TokenType.String, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.EndOfFile, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.String, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.EndOfFile, tokenList[tokenIndex++].Type);
         }
 
         [Fact]
@@ -284,7 +284,7 @@ namespace LanguageService.Tests
 
             Assert.Equal(1, tokenList.Count);
             Assert.Equal("\t\t\t\t\t\t", tokenList[0].LeadingTrivia[0].Text);
-            Assert.Equal(TokenType.EndOfFile, tokenList[0].Type);
+            Assert.Equal(SyntaxKind.EndOfFile, tokenList[0].Type);
         }
 
         [Fact]
@@ -296,7 +296,7 @@ namespace LanguageService.Tests
             {
                 Assert.Equal(Trivia.TriviaType.Newline, tokenList[0].LeadingTrivia[triviaIndex].Type);
             }
-            Assert.Equal(TokenType.EndOfFile, tokenList[0].Type);
+            Assert.Equal(SyntaxKind.EndOfFile, tokenList[0].Type);
         }
 
         public void TestSampleProgram()
@@ -304,13 +304,13 @@ namespace LanguageService.Tests
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\test.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             int tokenIndex = 0;
-            Assert.Equal(TokenType.EndKeyword, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.EndKeyword, tokenList[tokenIndex++].Type);
             int triviaIndex = 0;
             Assert.Equal(Trivia.TriviaType.Newline, tokenList[tokenIndex].LeadingTrivia[triviaIndex++].Type);
             Assert.Equal(Trivia.TriviaType.Newline, tokenList[tokenIndex].LeadingTrivia[triviaIndex++].Type);
             Assert.Equal(Trivia.TriviaType.Comment, tokenList[tokenIndex].LeadingTrivia[triviaIndex++].Type);
-            Assert.Equal(TokenType.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(TokenType.AssignmentOperator, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.Identifier, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.AssignmentOperator, tokenList[tokenIndex++].Type);
         }
     }
 }

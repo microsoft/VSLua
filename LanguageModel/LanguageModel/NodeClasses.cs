@@ -12,6 +12,8 @@ namespace LanguageService
     public abstract partial class SyntaxNode
     {
         [Required]
+        readonly SyntaxKind kind;
+        [Required]
         readonly int startPosition;
         [Required]
         readonly int length;
@@ -375,16 +377,16 @@ namespace LanguageService
     {
         [Required]
         readonly Token expressionValue;
-        public static bool IsValidExpressionNode(TokenType type)
+        public static bool IsValidExpressionNode(SyntaxKind type)
         {
             switch (type)
             {
-                case TokenType.Number:
-                case TokenType.TrueKeyValue:
-                case TokenType.FalseKeyValue:
-                case TokenType.NilKeyValue:
-                case TokenType.VarArgOperator:
-                case TokenType.String:
+                case SyntaxKind.Number:
+                case SyntaxKind.TrueKeyValue:
+                case SyntaxKind.FalseKeyValue:
+                case SyntaxKind.NilKeyValue:
+                case SyntaxKind.VarArgOperator:
+                case SyntaxKind.String:
                     return true;
                 default:
                     return false;

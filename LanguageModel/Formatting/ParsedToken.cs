@@ -24,21 +24,21 @@ namespace LanguageService.Formatting
         {
             List<ParsedToken> parsedTokens = new List<ParsedToken>();
 
-            List<TokenType> IncreaseIndentAfter = new List<TokenType>
+            List<SyntaxKind> IncreaseIndentAfter = new List<SyntaxKind>
             {
-                TokenType.DoKeyword,
-                TokenType.ThenKeyword,
-                TokenType.ElseKeyword,
-                TokenType.FunctionKeyword,
-                TokenType.OpenCurlyBrace
+                SyntaxKind.DoKeyword,
+                SyntaxKind.ThenKeyword,
+                SyntaxKind.ElseKeyword,
+                SyntaxKind.FunctionKeyword,
+                SyntaxKind.OpenCurlyBrace
             };
 
-            List<TokenType> DecreaseIndentOn = new List<TokenType>
+            List<SyntaxKind> DecreaseIndentOn = new List<SyntaxKind>
             {
-                TokenType.EndKeyword,
-                TokenType.ElseIfKeyword,
-                TokenType.CloseCurlyBrace,
-                TokenType.ElseKeyword
+                SyntaxKind.EndKeyword,
+                SyntaxKind.ElseIfKeyword,
+                SyntaxKind.CloseCurlyBrace,
+                SyntaxKind.ElseKeyword
             };
 
             int indent_level = 0;

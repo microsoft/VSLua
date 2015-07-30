@@ -38,7 +38,7 @@ namespace LanguageService
             return currentToken;
         }
 
-        private bool ParseExpected(TokenType type)
+        private bool ParseExpected(SyntaxKind type)
         {
             int tempIndex = positionInTokenList + 1;
             if (tempIndex < tokenList.Count)
@@ -52,7 +52,7 @@ namespace LanguageService
             return false;
         }
 
-        private Token GetExpectedToken(TokenType type)
+        private Token GetExpectedToken(SyntaxKind type)
         {
             if (ParseExpected(type))
             {
@@ -63,7 +63,7 @@ namespace LanguageService
                 return Token.CreateMissingToken(currentToken.End);
             }
         }
-        
+
         private Token Peek()
         {
             if (positionInTokenList + 1 < tokenList.Count)
@@ -93,9 +93,10 @@ namespace LanguageService
         private ChunkNode ParseChunkNode()
         {
             var node = ChunkNode.CreateBuilder();
+            node.Kind = SyntaxKind.ChunkNode;
             node.StartPosition = Peek().FullStart;
             node.ProgramBlock = ParseBlock(Context.ProgramContext)?.ToBuilder();
-            node.EndOfFile = GetExpectedToken(TokenType.EndOfFile);
+            node.EndOfFile = GetExpectedToken(SyntaxKind.EndOfFile);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -104,6 +105,7 @@ namespace LanguageService
         {
             contextStack.Push(parsingContext);
             var node = BlockNode.CreateBuilder();
+            node.Kind = node.Kind = SyntaxKind.BlockNode;
             node.StartPosition = this.Peek().FullStart;
             List<StatementNode> children = new List<StatementNode>();
 
@@ -114,7 +116,7 @@ namespace LanguageService
 
             node.Statements = children.ToImmutableList();
 
-            if (Peek().Type == TokenType.ReturnKeyword)
+            if (Peek().Type == SyntaxKind.ReturnKeyword)
             {
                 node.ReturnStatement = ParseRetStat()?.ToBuilder();
             }
@@ -128,23 +130,23 @@ namespace LanguageService
         {
             switch (Peek().Type)
             {
-                case TokenType.Semicolon:
+                case SyntaxKind.Semicolon:
                     NextToken();
-                    return SemiColonStatementNode.Create(currentToken.Start, currentToken.Length, currentToken); //Question: could just use next token as first param
-                case TokenType.BreakKeyword:
+                    return SemiColonStatementNode.Create(SyntaxKind.SemiColonStatementNode, currentToken.Start, currentToken.Length, currentToken); //Question: could just use next token as first param
+                case SyntaxKind.BreakKeyword:
                     return ParseBreakStatementNode();
-                case TokenType.GotoKeyword:
+                case SyntaxKind.GotoKeyword:
                     return ParseGoToStatementNode();
-                case TokenType.DoKeyword:
+                case SyntaxKind.DoKeyword:
                     return ParseDoStatementNode();
-                case TokenType.WhileKeyword:
+                case SyntaxKind.WhileKeyword:
                     return ParseWhileStatementNode();
-                case TokenType.RepeatKeyword:
+                case SyntaxKind.RepeatKeyword:
                     return ParseRepeatStatementNode();
-                case TokenType.IfKeyword:
+                case SyntaxKind.IfKeyword:
                     return ParseIfStatementNode();
-                case TokenType.ForKeyword:
-                    if (Peek(2).Type == TokenType.Identifier && tokenList[positionInTokenList + 3].Type == TokenType.AssignmentOperator)
+                case SyntaxKind.ForKeyword:
+                    if (Peek(2).Type == SyntaxKind.Identifier && tokenList[positionInTokenList + 3].Type == SyntaxKind.AssignmentOperator)
                     {
                         return ParseSimpleForStatementNode();
                     }
@@ -152,12 +154,12 @@ namespace LanguageService
                     {
                         return ParseMultipleArgForStatementNode();
                     }
-                case TokenType.FunctionKeyword:
+                case SyntaxKind.FunctionKeyword:
                     return ParseGlobalFunctionStatementNode();
-                case TokenType.DoubleColon:
+                case SyntaxKind.DoubleColon:
                     return ParseLabelStatementNode();
-                case TokenType.LocalKeyword:
-                    if (Peek(2).Type == TokenType.FunctionKeyword)
+                case SyntaxKind.LocalKeyword:
+                    if (Peek(2).Type == SyntaxKind.FunctionKeyword)
                     {
                         return ParseLocalFunctionStatementNode();
                     }
@@ -165,13 +167,13 @@ namespace LanguageService
                     {
                         return ParseLocalAssignmentStatementNode();
                     }
-                case TokenType.Identifier:
+                case SyntaxKind.Identifier:
                     switch (Peek(2).Type)
                     {
-                        case TokenType.OpenCurlyBrace:
-                        case TokenType.OpenParen:
-                        case TokenType.String:
-                        case TokenType.Colon:
+                        case SyntaxKind.OpenCurlyBrace:
+                        case SyntaxKind.OpenParen:
+                        case SyntaxKind.String:
+                        case SyntaxKind.Colon:
                             return ParseFunctionCallStatementNode();
                         default:
                             return ParseAssignmentStatementNode();
@@ -186,8 +188,9 @@ namespace LanguageService
         private AssignmentStatementNode ParseAssignmentStatementNode()
         {
             var node = AssignmentStatementNode.CreateBuilder();
+            node.Kind = SyntaxKind.AssignmentStatementNode;
             node.VarList = ParseVarList()?.ToBuilder();
-            node.AssignmentOperator = GetExpectedToken(TokenType.AssignmentOperator);
+            node.AssignmentOperator = GetExpectedToken(SyntaxKind.AssignmentOperator);
             node.ExpList = ParseExpList()?.ToBuilder();
             return node.ToImmutable();
         }
@@ -196,13 +199,14 @@ namespace LanguageService
         {
             contextStack.Push(Context.VarListContext);
             var node = VarList.CreateBuilder();
+            node.Kind = SyntaxKind.VarList;
             node.StartPosition = Peek().Start;
 
             var vars = new List<CommaVarPair>();
 
             vars.Add(CommaVarPair.Create(null, ParseVar()));
 
-            while(ParseExpected(TokenType.Comma))
+            while (ParseExpected(SyntaxKind.Comma))
             {
                 vars.Add(CommaVarPair.Create(currentToken, ParseVar()));
             }
@@ -216,41 +220,42 @@ namespace LanguageService
 
         private Var ParseVar()
         {
-            switch(Peek().Type)
+            switch (Peek().Type)
             {
-                case TokenType.OpenParen:
+                case SyntaxKind.OpenParen:
                     return ParsePotentialVarWithPrefixExp();
-                case TokenType.Identifier:
-                    switch(Peek(2).Type)
+                case SyntaxKind.Identifier:
+                    switch (Peek(2).Type)
                     {
-                        case TokenType.OpenBracket:
+                        case SyntaxKind.OpenBracket:
                             return ParseSquareBracketVar();
-                        case TokenType.Dot:
+                        case SyntaxKind.Dot:
                             return ParseDotVar();
-                        case TokenType.Colon:
-                        case TokenType.OpenCurlyBrace:
-                        case TokenType.OpenParen:
-                        case TokenType.String:
+                        case SyntaxKind.Colon:
+                        case SyntaxKind.OpenCurlyBrace:
+                        case SyntaxKind.OpenParen:
+                        case SyntaxKind.String:
                             return ParsePotentialVarWithPrefixExp();
                         default:
                             return ParseNameVar();
                     }
                 default:
-                    return null;
+                    throw new InvalidOperationException();
             }
         }
 
         private MultipleArgForStatementNode ParseMultipleArgForStatementNode()
         {
             var node = MultipleArgForStatementNode.CreateBuilder();
+            node.Kind = SyntaxKind.MultipleArgForStatementNode;
             node.StartPosition = Peek().Start;
-            node.ForKeyword = GetExpectedToken(TokenType.ForKeyword);
+            node.ForKeyword = GetExpectedToken(SyntaxKind.ForKeyword);
             node.NameList = ParseNamesList()?.ToBuilder();
-            node.InKeyword = GetExpectedToken(TokenType.InKeyword);
+            node.InKeyword = GetExpectedToken(SyntaxKind.InKeyword);
             node.ExpList = ParseExpList()?.ToBuilder();
-            node.DoKeyword = GetExpectedToken(TokenType.DoKeyword);
+            node.DoKeyword = GetExpectedToken(SyntaxKind.DoKeyword);
             node.Block = ParseBlock(Context.ForStatementContext)?.ToBuilder();
-            node.EndKeyword = GetExpectedToken(TokenType.EndKeyword);
+            node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -258,23 +263,24 @@ namespace LanguageService
         private SimpleForStatementNode ParseSimpleForStatementNode()
         {
             var node = SimpleForStatementNode.CreateBuilder();
+            node.Kind = SyntaxKind.SimpleForStatementNode;
             node.StartPosition = Peek().Start;
-            node.ForKeyword = GetExpectedToken(TokenType.ForKeyword);
-            node.Name = GetExpectedToken(TokenType.Identifier);
-            node.AssignmentOperator = GetExpectedToken(TokenType.AssignmentOperator);
+            node.ForKeyword = GetExpectedToken(SyntaxKind.ForKeyword);
+            node.Name = GetExpectedToken(SyntaxKind.Identifier);
+            node.AssignmentOperator = GetExpectedToken(SyntaxKind.AssignmentOperator);
             node.Exp1 = ParseExpression()?.ToBuilder();
-            node.Comma = GetExpectedToken(TokenType.Comma);
+            node.Comma = GetExpectedToken(SyntaxKind.Comma);
             node.Exp2 = ParseExpression()?.ToBuilder();
 
-            if (Peek().Type == TokenType.Comma)
+            if (Peek().Type == SyntaxKind.Comma)
             {
-                node.OptionalComma = GetExpectedToken(TokenType.Comma);
+                node.OptionalComma = GetExpectedToken(SyntaxKind.Comma);
                 node.OptionalExp3 = ParseExpression()?.ToBuilder();
             }
 
-            node.DoKeyword = GetExpectedToken(TokenType.DoKeyword);
+            node.DoKeyword = GetExpectedToken(SyntaxKind.DoKeyword);
             node.Block = ParseBlock(Context.ForStatementContext)?.ToBuilder();
-            node.EndKeyword = GetExpectedToken(TokenType.EndKeyword);
+            node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -282,13 +288,14 @@ namespace LanguageService
         private LocalAssignmentStatementNode ParseLocalAssignmentStatementNode()
         {
             var node = LocalAssignmentStatementNode.CreateBuilder();
+            node.Kind = SyntaxKind.LocalAssignmentStatementNode;
             node.StartPosition = Peek().Start;
-            node.LocalKeyword = GetExpectedToken(TokenType.LocalKeyword);
+            node.LocalKeyword = GetExpectedToken(SyntaxKind.LocalKeyword);
             node.NameList = ParseNamesList()?.ToBuilder();
 
-            if (Peek().Type == TokenType.AssignmentOperator)
+            if (Peek().Type == SyntaxKind.AssignmentOperator)
             {
-                node.AssignmentOperator = GetExpectedToken(TokenType.AssignmentOperator);
+                node.AssignmentOperator = GetExpectedToken(SyntaxKind.AssignmentOperator);
                 node.ExpList = ParseExpList()?.ToBuilder();
             }
 
@@ -299,10 +306,11 @@ namespace LanguageService
         private LocalFunctionStatementNode ParseLocalFunctionStatementNode()
         {
             var node = LocalFunctionStatementNode.CreateBuilder();
+            node.Kind = SyntaxKind.LocalFunctionStatementNode;
             node.StartPosition = Peek().Start;
-            node.LocalKeyword = GetExpectedToken(TokenType.LocalKeyword);
-            node.FunctionKeyword = GetExpectedToken(TokenType.FunctionKeyword);
-            node.Name = GetExpectedToken(TokenType.Identifier);
+            node.LocalKeyword = GetExpectedToken(SyntaxKind.LocalKeyword);
+            node.FunctionKeyword = GetExpectedToken(SyntaxKind.FunctionKeyword);
+            node.Name = GetExpectedToken(SyntaxKind.Identifier);
             node.FuncBody = ParseFunctionBody()?.ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -311,10 +319,11 @@ namespace LanguageService
         private LabelStatementNode ParseLabelStatementNode()
         {
             var node = LabelStatementNode.CreateBuilder();
+            node.Kind = SyntaxKind.LabelStatementNode;
             node.StartPosition = Peek().Start;
-            node.DoubleColon1 = GetExpectedToken(TokenType.DoubleColon);
-            node.Name = GetExpectedToken(TokenType.Identifier);
-            node.DoubleColon2 = GetExpectedToken(TokenType.DoubleColon);
+            node.DoubleColon1 = GetExpectedToken(SyntaxKind.DoubleColon);
+            node.Name = GetExpectedToken(SyntaxKind.Identifier);
+            node.DoubleColon2 = GetExpectedToken(SyntaxKind.DoubleColon);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -322,8 +331,9 @@ namespace LanguageService
         private GlobalFunctionStatementNode ParseGlobalFunctionStatementNode()
         {
             var node = GlobalFunctionStatementNode.CreateBuilder();
+            node.Kind = SyntaxKind.GlobalFunctionStatementNode;
             node.StartPosition = Peek().Start;
-            node.FunctionKeyword = GetExpectedToken(TokenType.FunctionKeyword);
+            node.FunctionKeyword = GetExpectedToken(SyntaxKind.FunctionKeyword);
             node.FuncName = ParseFuncNameNode()?.ToBuilder();
             node.FuncBody = ParseFunctionBody()?.ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
@@ -333,13 +343,14 @@ namespace LanguageService
         private FuncNameNode ParseFuncNameNode()
         {
             var node = FuncNameNode.CreateBuilder();
+            node.Kind = SyntaxKind.FuncNameNode;
             node.StartPosition = Peek().Start;
-            node.Name = GetExpectedToken(TokenType.Identifier);
+            node.Name = GetExpectedToken(SyntaxKind.Identifier);
             var names = new List<NameDotPair>();
 
-            while (ParseExpected(TokenType.Dot))
+            while (ParseExpected(SyntaxKind.Dot))
             {
-                if (Peek().Type == TokenType.Identifier)
+                if (Peek().Type == SyntaxKind.Identifier)
                 {
                     names.Add(NameDotPair.Create(currentToken, NextToken()));
                 }
@@ -356,10 +367,11 @@ namespace LanguageService
         private RepeatStatementNode ParseRepeatStatementNode()
         {
             var node = RepeatStatementNode.CreateBuilder();
+            node.Kind = SyntaxKind.RepeatStatementNode;
             node.StartPosition = Peek().Start;
-            node.RepeatKeyword = GetExpectedToken(TokenType.RepeatKeyword);
+            node.RepeatKeyword = GetExpectedToken(SyntaxKind.RepeatKeyword);
             node.Block = ParseBlock(Context.RepeatStatementContext)?.ToBuilder();
-            node.UntilKeyword = GetExpectedToken(TokenType.UntilKeyword);
+            node.UntilKeyword = GetExpectedToken(SyntaxKind.UntilKeyword);
             node.Exp = ParseExpression()?.ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -368,12 +380,13 @@ namespace LanguageService
         private WhileStatementNode ParseWhileStatementNode()
         {
             var node = WhileStatementNode.CreateBuilder();
+            node.Kind = SyntaxKind.WhileStatementNode;
             node.StartPosition = Peek().Start;
-            node.WhileKeyword = GetExpectedToken(TokenType.WhileKeyword);
+            node.WhileKeyword = GetExpectedToken(SyntaxKind.WhileKeyword);
             node.Exp = ParseExpression()?.ToBuilder();
-            node.DoKeyword = GetExpectedToken(TokenType.DoKeyword);
+            node.DoKeyword = GetExpectedToken(SyntaxKind.DoKeyword);
             node.Block = ParseBlock(Context.WhileContext)?.ToBuilder();
-            node.EndKeyword = GetExpectedToken(TokenType.EndKeyword);
+            node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -381,10 +394,11 @@ namespace LanguageService
         private DoStatementNode ParseDoStatementNode()
         {
             var node = DoStatementNode.CreateBuilder();
+            node.Kind = SyntaxKind.DoStatementNode;
             node.StartPosition = Peek().Start;
-            node.DoKeyword = GetExpectedToken(TokenType.DoKeyword);
+            node.DoKeyword = GetExpectedToken(SyntaxKind.DoKeyword);
             node.Block = ParseBlock(Context.DoStatementContext)?.ToBuilder();
-            node.EndKeyword = GetExpectedToken(TokenType.EndKeyword);
+            node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -392,8 +406,9 @@ namespace LanguageService
         private BreakStatementNode ParseBreakStatementNode()
         {
             var node = BreakStatementNode.CreateBuilder();
+            node.Kind = SyntaxKind.BreakStatementNode;
             node.StartPosition = Peek().Start;
-            node.BreakKeyword = GetExpectedToken(TokenType.BreakKeyword);
+            node.BreakKeyword = GetExpectedToken(SyntaxKind.BreakKeyword);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -401,9 +416,10 @@ namespace LanguageService
         private GoToStatementNode ParseGoToStatementNode()
         {
             var node = GoToStatementNode.CreateBuilder();
+            node.Kind = SyntaxKind.GoToStatementNode;
             node.StartPosition = Peek().Start;
-            node.GoToKeyword = GetExpectedToken(TokenType.GotoKeyword);
-            node.Name = GetExpectedToken(TokenType.Identifier);
+            node.GoToKeyword = GetExpectedToken(SyntaxKind.GotoKeyword);
+            node.Name = GetExpectedToken(SyntaxKind.Identifier);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -411,23 +427,24 @@ namespace LanguageService
         private IfStatementNode ParseIfStatementNode()
         {
             var node = IfStatementNode.CreateBuilder();
+            node.Kind = SyntaxKind.IfStatementNode;
             node.StartPosition = Peek().Start;
-            node.IfKeyword = GetExpectedToken(TokenType.IfKeyword);
+            node.IfKeyword = GetExpectedToken(SyntaxKind.IfKeyword);
             node.Exp = ParseExpression()?.ToBuilder();
-            node.ThenKeyword = GetExpectedToken(TokenType.ThenKeyword);
+            node.ThenKeyword = GetExpectedToken(SyntaxKind.ThenKeyword);
             node.IfBlock = ParseBlock(Context.IfBlockContext)?.ToBuilder();
 
-            if (Peek().Type == TokenType.ElseIfKeyword)
+            if (Peek().Type == SyntaxKind.ElseIfKeyword)
             {
                 node.ElseIfList = ParseElseIfList();
             }
 
-            if (Peek().Type == TokenType.ElseKeyword)
+            if (Peek().Type == SyntaxKind.ElseKeyword)
             {
                 node.ElseBlock = ParseElseBlock()?.ToBuilder();
             }
 
-            node.EndKeyword = GetExpectedToken(TokenType.EndKeyword);
+            node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = currentToken.End - node.StartPosition;
 
             return node.ToImmutable();
@@ -437,10 +454,10 @@ namespace LanguageService
         {
             ExpressionNode exp;
             int start = Peek().Start;
-            if (ParseExpected(TokenType.LengthUnop)
-                || ParseExpected(TokenType.NotUnop)
-                || ParseExpected(TokenType.MinusOperator)
-                || ParseExpected(TokenType.TildeUnOp))
+            if (ParseExpected(SyntaxKind.LengthUnop)
+                || ParseExpected(SyntaxKind.NotUnop)
+                || ParseExpected(SyntaxKind.MinusOperator)
+                || ParseExpected(SyntaxKind.TildeUnOp))
             {
                 var node = UnaryOperatorExpression.CreateBuilder();
                 node.StartPosition = currentToken.Start;
@@ -452,37 +469,36 @@ namespace LanguageService
             {
                 switch (Peek().Type)
                 {
-                    case TokenType.NilKeyValue:
-                    case TokenType.FalseKeyValue:
-                    case TokenType.TrueKeyValue:
-                    case TokenType.Number:
-                    case TokenType.String:
-                    case TokenType.VarArgOperator:
+                    case SyntaxKind.NilKeyValue:
+                    case SyntaxKind.FalseKeyValue:
+                    case SyntaxKind.TrueKeyValue:
+                    case SyntaxKind.Number:
+                    case SyntaxKind.String:
+                    case SyntaxKind.VarArgOperator:
                         NextToken();
-                        exp = SimpleExpression.Create(currentToken.Start, currentToken.Length, currentToken);
+                        exp = SimpleExpression.Create(SyntaxKind.SimpleExpression, currentToken.Start, currentToken.Length, currentToken);
                         break;
-                    case TokenType.FunctionKeyword:
+                    case SyntaxKind.FunctionKeyword:
                         exp = ParseFunctionDef();
                         break;
-                    case TokenType.OpenParen:
+                    case SyntaxKind.OpenParen:
                         exp = ParseParenPrefixExp();
                         break;
-                    case TokenType.OpenCurlyBrace:
+                    case SyntaxKind.OpenCurlyBrace:
                         exp = ParseTableConstructorExp();
                         break;
-                    case TokenType.Identifier:
+                    case SyntaxKind.Identifier:
                         exp = ParsePrefixExp();
                         break;
                     default:
-                        exp = null; //Question @cyrus: correct?
-                        break;
+                        throw new InvalidOperationException();
                 }
             }
 
             if (IsBinop(Peek().Type))
             {
                 var binop = NextToken();
-                return BinaryOperatorExpression.Create(start, binop.End - start, exp, binop, ParseExpression()); //Question... this representation is slightly flawed if "operator precedence" matters... but does it matter? What scenario from a tooling perspective cares about precedence?
+                return BinaryOperatorExpression.Create(SyntaxKind.BinaryOperatorExpression, start, binop.End - start, exp, binop, ParseExpression()); //Question... this representation is slightly flawed if "operator precedence" matters... but does it matter? What scenario from a tooling perspective cares about precedence?
             }
             else
             {
@@ -492,12 +508,8 @@ namespace LanguageService
 
         private ElseBlockNode ParseElseBlock()
         {
-            if (!ParseExpected(TokenType.ElseKeyword)) //Question @cyrus... should I do this to validate all parse methods... when should a parse method return null?
-            {
-                return null;
-            }
-
             var node = ElseBlockNode.CreateBuilder();
+            node.Kind = SyntaxKind.ElseBlockNode;
             node.StartPosition = currentToken.Start;
             node.ElseKeyword = currentToken;
             node.Block = ParseBlock(Context.ElseBlock)?.ToBuilder();
@@ -509,7 +521,7 @@ namespace LanguageService
         {
             var elseIfList = new List<ElseIfBlockNode>();
 
-            while (ParseExpected(TokenType.ElseIfKeyword))
+            while (ParseExpected(SyntaxKind.ElseIfKeyword))
             {
                 elseIfList.Add(ParseElseIfBlock());
             }
@@ -519,18 +531,14 @@ namespace LanguageService
 
         private ElseIfBlockNode ParseElseIfBlock()
         {
-            if (!ParseExpected(TokenType.ElseIfKeyword))
-            {
-                return null;
-            }
             var node = ElseIfBlockNode.CreateBuilder();
+            node.Kind = SyntaxKind.ElseIfBlockNode;
             node.StartPosition = currentToken.Start;
             node.ElseIfKeyword = currentToken;
             node.Exp = ParseExpression()?.ToBuilder();
-            node.ThenKeyword = GetExpectedToken(TokenType.ThenKeyword);
+            node.ThenKeyword = GetExpectedToken(SyntaxKind.ThenKeyword);
             node.Block = ParseBlock(Context.ElseIfBlock)?.ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
-
             return node.ToImmutable();
         }
 
@@ -538,61 +546,64 @@ namespace LanguageService
         {
             switch (Peek().Type)
             {
-                case TokenType.OpenParen:
+                case SyntaxKind.OpenParen:
                     return ParseParenPrefixExp();
-                case TokenType.Identifier:
+                case SyntaxKind.Identifier:
                     switch (Peek(2).Type)
                     {
-                        case TokenType.OpenCurlyBrace:
-                        case TokenType.OpenParen:
-                        case TokenType.String:
-                        case TokenType.Colon:
+                        case SyntaxKind.OpenCurlyBrace:
+                        case SyntaxKind.OpenParen:
+                        case SyntaxKind.String:
+                        case SyntaxKind.Colon:
                             return ParseFunctionCallExp();
-                        case TokenType.Dot:
+                        case SyntaxKind.Dot:
                             return ParseDotVar();
-                        case TokenType.OpenBracket:
+                        case SyntaxKind.OpenBracket:
                             return ParseSquareBracketVar();
                         default:
                             return ParseNameVar();
                     }
                 default:
-                    return null; //Question @cyrus: correct?
+                    throw new InvalidOperationException();
             }
         }
 
         private SquareBracketVar ParseSquareBracketVar()
         {
-            var bracketVarBuilder = SquareBracketVar.CreateBuilder();
-            bracketVarBuilder.StartPosition = Peek().Start;
-            bracketVarBuilder.PrefixExp = ParsePrefixExp()?.ToBuilder();
-            bracketVarBuilder.OpenBracket = GetExpectedToken(TokenType.OpenBracket);
-            bracketVarBuilder.Exp = ParseExpression()?.ToBuilder();
-            bracketVarBuilder.CloseBracket = GetExpectedToken(TokenType.CloseBracket);
-            bracketVarBuilder.Length = currentToken.End - bracketVarBuilder.StartPosition;
-            return bracketVarBuilder.ToImmutable();
+            var node = SquareBracketVar.CreateBuilder();
+            node.Kind = SyntaxKind.SquareBracketVar;
+            node.StartPosition = Peek().Start;
+            node.PrefixExp = ParsePrefixExp()?.ToBuilder();
+            node.OpenBracket = GetExpectedToken(SyntaxKind.OpenBracket);
+            node.Exp = ParseExpression()?.ToBuilder();
+            node.CloseBracket = GetExpectedToken(SyntaxKind.CloseBracket);
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
         }
 
         private DotVar ParseDotVar()
         {
-            var dotVarBuilder = DotVar.CreateBuilder();
-            dotVarBuilder.StartPosition = Peek().Start;
-            dotVarBuilder.PrefixExp = ParseNameVar()?.ToBuilder();
-            dotVarBuilder.DotOperator = GetExpectedToken(TokenType.Dot);
-            dotVarBuilder.NameIdentifier = GetExpectedToken(TokenType.Identifier);
-            dotVarBuilder.Length = currentToken.End - dotVarBuilder.StartPosition;
-            return dotVarBuilder.ToImmutable();
+            var node = DotVar.CreateBuilder();
+            node.Kind = SyntaxKind.DotVar;
+            node.StartPosition = Peek().Start;
+            node.PrefixExp = ParseNameVar()?.ToBuilder();
+            node.DotOperator = GetExpectedToken(SyntaxKind.Dot);
+            node.NameIdentifier = GetExpectedToken(SyntaxKind.Identifier);
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
         }
 
         private FunctionCallExp ParseFunctionCallExp()
         {
             var node = FunctionCallExp.CreateBuilder();
+            node.Kind = SyntaxKind.FunctionCallExp;
             node.StartPosition = Peek().Start;
             node.PrefixExp = ParseNameVar()?.ToBuilder();
 
-            if(ParseExpected(TokenType.Colon))
+            if (ParseExpected(SyntaxKind.Colon))
             {
                 node.Colon = currentToken;
-                node.Name = GetExpectedToken(TokenType.Identifier);
+                node.Name = GetExpectedToken(SyntaxKind.Identifier);
             }
 
             node.Args = ParseArgs()?.ToBuilder();
@@ -603,13 +614,14 @@ namespace LanguageService
         private FunctionCallStatementNode ParseFunctionCallStatementNode()
         {
             var node = FunctionCallStatementNode.CreateBuilder();
+            node.Kind = SyntaxKind.FunctionCallStatementNode;
             node.StartPosition = Peek().Start;
             node.PrefixExp = ParseNameVar()?.ToBuilder();
 
-            if (ParseExpected(TokenType.Colon))
+            if (ParseExpected(SyntaxKind.Colon))
             {
                 node.Colon = currentToken;
-                node.Name = GetExpectedToken(TokenType.Identifier);
+                node.Name = GetExpectedToken(SyntaxKind.Identifier);
             }
 
             node.Args = ParseArgs()?.ToBuilder();
@@ -621,22 +633,23 @@ namespace LanguageService
         {
             switch (Peek().Type)
             {
-                case TokenType.OpenParen:
+                case SyntaxKind.OpenParen:
                     return ParseParenArg();
-                case TokenType.OpenCurlyBrace:
+                case SyntaxKind.OpenCurlyBrace:
                     return ParseTableConstructorArg();
-                case TokenType.String:
+                case SyntaxKind.String:
                     return ParseStringArg();
                 default:
-                    return null;
+                    throw new InvalidOperationException();
             }
         }
 
         private StringArg ParseStringArg()
         {
             var node = StringArg.CreateBuilder();
+            node.Kind = SyntaxKind.StringArg;
             node.StartPosition = currentToken.Start;
-            node.StringLiteral = GetExpectedToken(TokenType.String);
+            node.StringLiteral = GetExpectedToken(SyntaxKind.String);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -644,10 +657,11 @@ namespace LanguageService
         private TableContructorArg ParseTableConstructorArg()
         {
             var node = TableContructorArg.CreateBuilder();
+            node.Kind = SyntaxKind.TableConstructorArg;
             node.StartPosition = currentToken.Start;
-            node.OpenCurly = GetExpectedToken(TokenType.OpenCurlyBrace);
+            node.OpenCurly = GetExpectedToken(SyntaxKind.OpenCurlyBrace);
             node.FieldList = ParseFieldList()?.ToBuilder();
-            node.CloseCurly = GetExpectedToken(TokenType.CloseCurlyBrace);
+            node.CloseCurly = GetExpectedToken(SyntaxKind.CloseCurlyBrace);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -655,38 +669,29 @@ namespace LanguageService
         private ParenArg ParseParenArg()
         {
             var node = ParenArg.CreateBuilder();
+            node.Kind = SyntaxKind.ParenArg;
             node.StartPosition = Peek().Start;
-            node.OpenParen = GetExpectedToken(TokenType.OpenParen);
+            node.OpenParen = GetExpectedToken(SyntaxKind.OpenParen);
             node.ExpList = ParseExpList()?.ToBuilder();
-            node.CloseParen = GetExpectedToken(TokenType.CloseParen);
+            node.CloseParen = GetExpectedToken(SyntaxKind.CloseParen);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
 
         private NameVar ParseNameVar()
         {
-            if (ParseExpected(TokenType.Identifier))
-            {
-                var node = NameVar.CreateBuilder();
-                node.StartPosition = currentToken.Start;
-                node.Name = currentToken;
-                node.Length = currentToken.End - node.StartPosition;
-                return node.ToImmutable();
-            }
-            else
-            {
-                return null;
-            }
+            var node = NameVar.CreateBuilder();
+            node.Kind = SyntaxKind.NameVar;
+            node.StartPosition = currentToken.Start;
+            node.Name = currentToken;
+            node.Length = currentToken.End - node.StartPosition;
+            return node.ToImmutable();
         }
 
         private ReturnStatementNode ParseRetStat()
         {
-            if (ParseExpected(TokenType.ReturnKeyword))
-            {
-                return null;
-            }
-
             var node = ReturnStatementNode.CreateBuilder();
+            node.Kind = SyntaxKind.ReturnStatementNode;
             node.StartPosition = currentToken.Start;
             node.ReturnKeyword = currentToken;
             node.ReturnExpressions = ParseExpList()?.ToBuilder();
@@ -697,10 +702,11 @@ namespace LanguageService
         private TableConstructorNode ParseTableConstructor()
         {
             var node = TableConstructorNode.CreateBuilder();
+            node.Kind = SyntaxKind.TableConstructorNode;
             node.StartPosition = Peek().Start;
-            node.OpenCurly = GetExpectedToken(TokenType.OpenCurlyBrace);
+            node.OpenCurly = GetExpectedToken(SyntaxKind.OpenCurlyBrace);
             node.FieldList = ParseFieldList()?.ToBuilder();
-            node.CloseCurly = GetExpectedToken(TokenType.CloseCurlyBrace);
+            node.CloseCurly = GetExpectedToken(SyntaxKind.CloseCurlyBrace);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -708,10 +714,11 @@ namespace LanguageService
         private TableConstructorExp ParseTableConstructorExp()
         {
             var node = TableConstructorExp.CreateBuilder();
+            node.Kind = SyntaxKind.TableConstructorExp;
             node.StartPosition = Peek().Start;
-            node.OpenCurly = GetExpectedToken(TokenType.OpenCurlyBrace);
+            node.OpenCurly = GetExpectedToken(SyntaxKind.OpenCurlyBrace);
             node.FieldList = ParseFieldList()?.ToBuilder();
-            node.CloseCurly = GetExpectedToken(TokenType.CloseCurlyBrace);
+            node.CloseCurly = GetExpectedToken(SyntaxKind.CloseCurlyBrace);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -719,6 +726,7 @@ namespace LanguageService
         private FieldList ParseFieldList()
         {
             var node = FieldList.CreateBuilder();
+            node.Kind = SyntaxKind.FieldList;
             node.StartPosition = Peek().Start;
             bool parseFields = true;
             var fields = new List<FieldAndSeperatorPair>();
@@ -727,14 +735,14 @@ namespace LanguageService
             {
                 var fieldAndSep = FieldAndSeperatorPair.CreateBuilder();
                 fieldAndSep.Field = ParseField()?.ToBuilder();
-                if (ParseExpected(TokenType.Comma) || ParseExpected(TokenType.Semicolon))
+                if (ParseExpected(SyntaxKind.Comma) || ParseExpected(SyntaxKind.Semicolon))
                 {
                     fieldAndSep.FieldSeparator = currentToken;
                     parseFields = true;
                 }
                 else
                 {
-                    if (Peek().Type == TokenType.CloseCurlyBrace)
+                    if (Peek().Type == SyntaxKind.CloseCurlyBrace)
                     {
                         parseFields = false;
                     }
@@ -757,15 +765,15 @@ namespace LanguageService
         {
             switch (Peek().Type)
             {
-                case TokenType.OpenBracket:
+                case SyntaxKind.OpenBracket:
                     return ParseBracketField();
-                case TokenType.Identifier:
-                    if (Peek(2).Type == TokenType.AssignmentOperator)
+                case SyntaxKind.Identifier:
+                    if (Peek(2).Type == SyntaxKind.AssignmentOperator)
                     {
                         var node = AssignmentField.CreateBuilder();
                         node.StartPosition = Peek().Start;
-                        node.Name = GetExpectedToken(TokenType.Identifier);
-                        node.AssignmentOperator = GetExpectedToken(TokenType.AssignmentOperator);
+                        node.Name = GetExpectedToken(SyntaxKind.Identifier);
+                        node.AssignmentOperator = GetExpectedToken(SyntaxKind.AssignmentOperator);
                         node.Exp = ParseExpression()?.ToBuilder();
                         node.Length = currentToken.End - node.StartPosition;
                         return node.ToImmutable();
@@ -782,10 +790,11 @@ namespace LanguageService
         private BracketField ParseBracketField()
         {
             var node = BracketField.CreateBuilder();
+            node.Kind = SyntaxKind.BracketField;
             node.StartPosition = currentToken.Start;
-            node.OpenBracket = GetExpectedToken(TokenType.OpenBracket);
+            node.OpenBracket = GetExpectedToken(SyntaxKind.OpenBracket);
             node.IdentifierExp = ParseExpression()?.ToBuilder();
-            node.CloseBracket = GetExpectedToken(TokenType.CloseBracket);
+            node.CloseBracket = GetExpectedToken(SyntaxKind.CloseBracket);
             node.AssignedExp = ParseExpression()?.ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -794,6 +803,7 @@ namespace LanguageService
         private ExpField ParseExpField()
         {
             var node = ExpField.CreateBuilder();
+            node.Kind = SyntaxKind.ExpField;
             node.StartPosition = currentToken.End;
             node.Exp = ParseExpression()?.ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
@@ -803,10 +813,11 @@ namespace LanguageService
         private ParenPrefixExp ParseParenPrefixExp()
         {
             var node = ParenPrefixExp.CreateBuilder();
+            node.Kind = SyntaxKind.ParenPrefixExp;
             node.StartPosition = currentToken.Start;
-            node.OpenParen = GetExpectedToken(TokenType.OpenParen);
+            node.OpenParen = GetExpectedToken(SyntaxKind.OpenParen);
             node.Exp = ParseExpression()?.ToBuilder();
-            node.CloseParen = GetExpectedToken(TokenType.CloseParen);
+            node.CloseParen = GetExpectedToken(SyntaxKind.CloseParen);
             node.Length = currentToken.End;
             return node.ToImmutable();
         }
@@ -814,8 +825,9 @@ namespace LanguageService
         private FunctionDef ParseFunctionDef()
         {
             var node = FunctionDef.CreateBuilder();
+            node.Kind = SyntaxKind.FunctionDef;
             node.StartPosition = Peek().Start;
-            node.FunctionKeyword = GetExpectedToken(TokenType.FunctionKeyword);
+            node.FunctionKeyword = GetExpectedToken(SyntaxKind.FunctionKeyword);
             node.FunctionBody = ParseFunctionBody()?.ToBuilder();
             node.Length = Peek().FullStart - node.StartPosition - 1;
             return node.ToImmutable();
@@ -824,34 +836,37 @@ namespace LanguageService
         private FuncBodyNode ParseFunctionBody()
         {
             var node = FuncBodyNode.CreateBuilder();
+            node.Kind = SyntaxKind.FuncBodyNode;
             node.StartPosition = Peek().Start;
-            node.OpenParen = GetExpectedToken(TokenType.OpenParen);
+            node.OpenParen = GetExpectedToken(SyntaxKind.OpenParen);
             node.ParameterList = ParseParList()?.ToBuilder();
-            node.CloseParen = GetExpectedToken(TokenType.CloseParen);
+            node.CloseParen = GetExpectedToken(SyntaxKind.CloseParen);
             node.Block = ParseBlock(Context.FuncBodyContext)?.ToBuilder();
-            node.EndKeyword = GetExpectedToken(TokenType.EndKeyword);
+            node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = Peek().FullStart - node.StartPosition - 1;
             return node.ToImmutable();
         }
 
         private ParList ParseParList()
         {
-            if (Peek().Type == TokenType.VarArgOperator)
+            if (Peek().Type == SyntaxKind.VarArgOperator)
             {
                 var node = VarArgPar.CreateBuilder();
+                node.Kind = SyntaxKind.VarArgPar;
                 node.StartPosition = Peek().Start;
-                node.VarargOperator = GetExpectedToken(TokenType.VarArgOperator);
+                node.VarargOperator = GetExpectedToken(SyntaxKind.VarArgOperator);
                 node.Length = currentToken.End - node.StartPosition;
                 return node.ToImmutable();
             }
             else
             {
                 var node = NameListPar.CreateBuilder();
+                node.Kind = SyntaxKind.NameListPar;
                 node.StartPosition = Peek().Start;
                 node.NamesList = ParseNamesList()?.ToBuilder();
-                if (ParseExpected(TokenType.Comma))
+                if (ParseExpected(SyntaxKind.Comma))
                 {
-                    if (Peek().Type == TokenType.VarArgOperator)
+                    if (Peek().Type == SyntaxKind.VarArgOperator)
                     {
                         node.VarArgPar = CommaVarArgPair.Create(currentToken, NextToken())?.ToBuilder();
                     }
@@ -867,33 +882,27 @@ namespace LanguageService
 
         private NameList ParseNamesList()
         {
-            if (ParseExpected(TokenType.Identifier))
+            contextStack.Push(Context.NameListContext);
+
+            var node = NameList.CreateBuilder();
+            node.Kind = SyntaxKind.NameList;
+            node.StartPosition = Peek().Start;
+
+            List<NameCommaPair> names = new List<NameCommaPair>();
+
+            //Add initial mandatory name with no preceding comma
+            names.Add(NameCommaPair.Create(null, currentToken));
+
+            while (ParseExpected(SyntaxKind.Comma))
             {
-                contextStack.Push(Context.NameListContext);
-
-                var node = NameList.CreateBuilder();
-                node.StartPosition = Peek().Start;
-
-                List<NameCommaPair> names = new List<NameCommaPair>();
-
-                //Add initial mandatory name with no preceding comma
-                names.Add(NameCommaPair.Create(null, currentToken));
-
-                while (ParseExpected(TokenType.Comma))
-                {
-                    names.Add(NameCommaPair.Create(currentToken, GetExpectedToken(TokenType.Identifier)));
-                }
-
-                node.Names = names.ToImmutableList();
-                node.Length = currentToken.End - node.StartPosition;
-
-                contextStack.Pop();
-                return node.ToImmutable();
+                names.Add(NameCommaPair.Create(currentToken, GetExpectedToken(SyntaxKind.Identifier)));
             }
-            else
-            {
-                return null;
-            }
+
+            node.Names = names.ToImmutableList();
+            node.Length = currentToken.End - node.StartPosition;
+
+            contextStack.Pop();
+            return node.ToImmutable();
         }
 
         private ExpList ParseExpList()
@@ -901,6 +910,7 @@ namespace LanguageService
             contextStack.Push(Context.ExpListContext);
 
             var node = ExpList.CreateBuilder();
+            node.Kind = SyntaxKind.ExpField;
             node.StartPosition = Peek().Start;
 
             List<ExpressionCommaPair> expressions = new List<ExpressionCommaPair>();
@@ -910,7 +920,7 @@ namespace LanguageService
             {
                 expressions.Add(ExpressionCommaPair.Create(null, exp));
 
-                while (ParseExpected(TokenType.Comma))
+                while (ParseExpected(SyntaxKind.Comma))
                 {
                     expressions.Add(ExpressionCommaPair.Create(currentToken, ParseExpression()));
                 }
@@ -925,9 +935,9 @@ namespace LanguageService
         #endregion
 
         #region Helper Methods
-        private bool IsContextTerminator(Context parsingContext, TokenType currentTokenType)
+        private bool IsContextTerminator(Context parsingContext, SyntaxKind currentTokenType)
         {
-            if (currentTokenType == TokenType.ReturnKeyword)
+            if (currentTokenType == SyntaxKind.ReturnKeyword)
             {
                 return true;
             }
@@ -935,43 +945,43 @@ namespace LanguageService
             switch (parsingContext)
             {
                 case Context.IfBlockContext:
-                    return (currentTokenType == TokenType.EndKeyword || currentTokenType == TokenType.ElseIfKeyword || currentTokenType == TokenType.ElseKeyword);
+                    return (currentTokenType == SyntaxKind.EndKeyword || currentTokenType == SyntaxKind.ElseIfKeyword || currentTokenType == SyntaxKind.ElseKeyword);
                 case Context.ElseBlock:
-                    return (currentTokenType == TokenType.EndKeyword);
+                    return (currentTokenType == SyntaxKind.EndKeyword);
                 case Context.ElseIfBlock:
-                    return (currentTokenType == TokenType.ElseIfKeyword || currentTokenType == TokenType.EndKeyword);
+                    return (currentTokenType == SyntaxKind.ElseIfKeyword || currentTokenType == SyntaxKind.EndKeyword);
                 case Context.ProgramContext:
-                    return currentTokenType == TokenType.EndOfFile;
+                    return currentTokenType == SyntaxKind.EndOfFile;
                 default:
                     throw new Exception("Unknown Context"); //TODO
             }
         }
 
-        private bool IsBinop(TokenType type)
+        private bool IsBinop(SyntaxKind type)
         {
             switch (type)
             {
-                case TokenType.PlusOperator:
-                case TokenType.MinusOperator:
-                case TokenType.MultiplyOperator:
-                case TokenType.DivideOperator:
-                case TokenType.FloorDivideOperator:
-                case TokenType.ExponentOperator:
-                case TokenType.ModulusOperator:
-                case TokenType.TildeUnOp: //TODO: deal with ambiguity
-                case TokenType.BitwiseAndOperator:
-                case TokenType.BitwiseOrOperator:
-                case TokenType.BitwiseRightOperator:
-                case TokenType.BitwiseLeftOperator:
-                case TokenType.NotEqualsOperator:
-                case TokenType.LessOrEqualOperator:
-                case TokenType.GreaterOrEqualOperator:
-                case TokenType.EqualityOperator:
-                case TokenType.StringConcatOperator:
-                case TokenType.GreaterThanOperator:
-                case TokenType.LessThanOperator:
-                case TokenType.AndBinop:
-                case TokenType.OrBinop:
+                case SyntaxKind.PlusOperator:
+                case SyntaxKind.MinusOperator:
+                case SyntaxKind.MultiplyOperator:
+                case SyntaxKind.DivideOperator:
+                case SyntaxKind.FloorDivideOperator:
+                case SyntaxKind.ExponentOperator:
+                case SyntaxKind.ModulusOperator:
+                case SyntaxKind.TildeUnOp: //TODO: deal with ambiguity
+                case SyntaxKind.BitwiseAndOperator:
+                case SyntaxKind.BitwiseOrOperator:
+                case SyntaxKind.BitwiseRightOperator:
+                case SyntaxKind.BitwiseLeftOperator:
+                case SyntaxKind.NotEqualsOperator:
+                case SyntaxKind.LessOrEqualOperator:
+                case SyntaxKind.GreaterOrEqualOperator:
+                case SyntaxKind.EqualityOperator:
+                case SyntaxKind.StringConcatOperator:
+                case SyntaxKind.GreaterThanOperator:
+                case SyntaxKind.LessThanOperator:
+                case SyntaxKind.AndBinop:
+                case SyntaxKind.OrBinop:
                     return true;
                 default:
                     return false;
@@ -982,7 +992,7 @@ namespace LanguageService
         {
             int tempPosition = positionInTokenList;
             ParsePrefixExp(); //Skip to the end of the prefix exp before checking.
-            if (Peek().Type == TokenType.OpenBracket)
+            if (Peek().Type == SyntaxKind.OpenBracket)
             {
                 positionInTokenList = tempPosition; //Restore tokenList to beginning of node
                 return ParseSquareBracketVar();

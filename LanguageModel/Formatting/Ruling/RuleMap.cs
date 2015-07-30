@@ -18,7 +18,7 @@ namespace LanguageService.Formatting.Ruling
                 map = null;
             }
 
-            int length = Enum.GetNames(typeof(TokenType)).Length;
+            int length = Enum.GetNames(typeof(SyntaxKind)).Length;
 
             this.map = new RuleBucket[length, length];
 
@@ -26,9 +26,9 @@ namespace LanguageService.Formatting.Ruling
 
         internal void AddRule(Rule rule)
         {
-            foreach (TokenType typeLeft in rule.RuleDescriptor.TokenRangeLeft)
+            foreach (SyntaxKind typeLeft in rule.RuleDescriptor.TokenRangeLeft)
             {
-                foreach (TokenType typeRight in rule.RuleDescriptor.TokenRangeRight)
+                foreach (SyntaxKind typeRight in rule.RuleDescriptor.TokenRangeRight)
                 {
                     int column = (int)typeLeft;
                     int row = (int)typeRight;

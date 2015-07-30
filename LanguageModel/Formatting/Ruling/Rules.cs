@@ -17,17 +17,17 @@ namespace LanguageService.Formatting.Ruling
 
         internal static Rule SpaceAfterComma =
             new SimpleRule(
-                new RuleDescriptor(TokenType.Comma, TokenRange.AnyVisible),
+                new RuleDescriptor(SyntaxKind.Comma, TokenRange.AnyVisible),
                 defaultFilters, RuleAction.Space);
 
         internal static Rule SpaceAfterAssignmentOperator =
             new SimpleRule(
-                new RuleDescriptor(TokenType.AssignmentOperator, TokenRange.AnyVisible),
+                new RuleDescriptor(SyntaxKind.AssignmentOperator, TokenRange.AnyVisible),
                 defaultFilters, RuleAction.Space);
 
         internal static Rule SpaceBeforeAssignmentOperator =
             new SimpleRule(
-                new RuleDescriptor(TokenRange.AnyVisible, TokenType.AssignmentOperator),
+                new RuleDescriptor(TokenRange.AnyVisible, SyntaxKind.AssignmentOperator),
                 defaultFilters, RuleAction.Space);
 
         internal static Rule SpaceAfterBinaryOperator =
@@ -42,37 +42,37 @@ namespace LanguageService.Formatting.Ruling
 
         internal static Rule SpaceAfterValueBeforeOpenParenthesis =
             new SimpleRule(
-                new RuleDescriptor(TokenRange.Value, TokenType.OpenParen),
+                new RuleDescriptor(TokenRange.Value, SyntaxKind.OpenParen),
                 defaultFilters, RuleAction.Space);
 
         internal static Rule SpaceBeforeValueAfterOpenParenthesis =
             new SimpleRule(
-                new RuleDescriptor(TokenType.OpenParen, TokenRange.Value),
+                new RuleDescriptor(SyntaxKind.OpenParen, TokenRange.Value),
                 defaultFilters, RuleAction.Space);
 
         internal static Rule SpaceBeforeValueAfterOpenSquareBracket =
             new SimpleRule(
-                new RuleDescriptor(TokenType.OpenBracket, TokenRange.Value),
+                new RuleDescriptor(SyntaxKind.OpenBracket, TokenRange.Value),
                 defaultFilters, RuleAction.Space);
 
         internal static Rule SpaceBeforeValueAfterOpenCurlyBrace =
-            new SimpleRule(new RuleDescriptor(TokenType.OpenCurlyBrace, TokenRange.Value),
+            new SimpleRule(new RuleDescriptor(SyntaxKind.OpenCurlyBrace, TokenRange.Value),
                 defaultFilters, RuleAction.Space);
 
         internal static Rule SpaceAfterValueBeforeCloseParenthesis =
-            new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.CloseParen),
+            new SimpleRule(new RuleDescriptor(TokenRange.Value, SyntaxKind.CloseParen),
                 defaultFilters, RuleAction.Space);
 
         internal static Rule SpaceAfterValueBeforeCloseSquareBracket =
-            new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.CloseBracket),
+            new SimpleRule(new RuleDescriptor(TokenRange.Value, SyntaxKind.CloseBracket),
                 defaultFilters, RuleAction.Space);
 
         internal static Rule SpaceAfterValueBeforeCloseCurlyBrace =
-            new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.CloseCurlyBrace),
+            new SimpleRule(new RuleDescriptor(TokenRange.Value, SyntaxKind.CloseCurlyBrace),
                 defaultFilters, RuleAction.Space);
 
         internal static Rule DeleteSpaceBeforeEofToken =
-            new SimpleRule(new RuleDescriptor(TokenRange.AnyVisible, TokenType.EndOfFile),
+            new SimpleRule(new RuleDescriptor(TokenRange.AnyVisible, SyntaxKind.EndOfFile),
                 defaultFilters, RuleAction.Delete);
 
         internal static Rule DeleteTrailingWhitespace = new DeleteTrailingWhitespaceRule();

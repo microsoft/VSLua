@@ -9,69 +9,69 @@ namespace LanguageService
 {
     public static class Lexer
     {
-        private static readonly IReadOnlyDictionary<string, TokenType> AlphaTokens = new Dictionary<string, TokenType>
+        private static readonly IReadOnlyDictionary<string, SyntaxKind> AlphaTokens = new Dictionary<string, SyntaxKind>
         {
-            { "and", TokenType.AndBinop },
-            { "break", TokenType.BreakKeyword },
-            { "do", TokenType.DoKeyword },
-            { "else", TokenType.ElseKeyword },
-            { "elseif", TokenType.ElseIfKeyword },
-            { "end", TokenType.EndKeyword },
-            { "false", TokenType.FalseKeyValue },
-            { "for", TokenType.ForKeyword },
-            { "function", TokenType.FunctionKeyword },
-            { "goto", TokenType.GotoKeyword },
-            { "if", TokenType.IfKeyword },
-            { "in", TokenType.InKeyword },
-            { "local", TokenType.LocalKeyword },
-            { "nil", TokenType.NilKeyValue },
-            { "not",  TokenType.NotUnop },
-            { "or",  TokenType.OrBinop },
-            { "repeat", TokenType.RepeatKeyword },
-            { "return", TokenType.ReturnKeyword },
-            { "then", TokenType.ThenKeyword },
-            { "true", TokenType.TrueKeyValue },
-            { "until", TokenType.UntilKeyword },
-            { "while", TokenType.WhileKeyword }
+            { "and", SyntaxKind.AndBinop },
+            { "break", SyntaxKind.BreakKeyword },
+            { "do", SyntaxKind.DoKeyword },
+            { "else", SyntaxKind.ElseKeyword },
+            { "elseif", SyntaxKind.ElseIfKeyword },
+            { "end", SyntaxKind.EndKeyword },
+            { "false", SyntaxKind.FalseKeyValue },
+            { "for", SyntaxKind.ForKeyword },
+            { "function", SyntaxKind.FunctionKeyword },
+            { "goto", SyntaxKind.GotoKeyword },
+            { "if", SyntaxKind.IfKeyword },
+            { "in", SyntaxKind.InKeyword },
+            { "local", SyntaxKind.LocalKeyword },
+            { "nil", SyntaxKind.NilKeyValue },
+            { "not",  SyntaxKind.NotUnop },
+            { "or",  SyntaxKind.OrBinop },
+            { "repeat", SyntaxKind.RepeatKeyword },
+            { "return", SyntaxKind.ReturnKeyword },
+            { "then", SyntaxKind.ThenKeyword },
+            { "true", SyntaxKind.TrueKeyValue },
+            { "until", SyntaxKind.UntilKeyword },
+            { "while", SyntaxKind.WhileKeyword }
         };
 
-        private static readonly IReadOnlyDictionary<string, TokenType> Symbols = new Dictionary<string, TokenType>
+        private static readonly IReadOnlyDictionary<string, SyntaxKind> Symbols = new Dictionary<string, SyntaxKind>
         {
             //TODO: include vararg operators
-            { "-", TokenType.MinusOperator }, //TODO: deal with ambiguity
-            { "~", TokenType.TildeUnOp }, //TODO: deal with ambiguity
-            { "#", TokenType.LengthUnop },
-            { "~=", TokenType.NotEqualsOperator },
-            { "<=", TokenType.LessOrEqualOperator },
-            { ">=", TokenType.GreaterOrEqualOperator },
-            { "==", TokenType.EqualityOperator },
-            { "+", TokenType.PlusOperator },
-            { "*", TokenType.MultiplyOperator },
-            { "/", TokenType.DivideOperator },
-            { "//", TokenType.FloorDivideOperator },
-            { "^", TokenType.ExponentOperator },
-            { "%", TokenType.ModulusOperator },
-            { "&", TokenType.BitwiseAndOperator },
-            { "|", TokenType.BitwiseOrOperator },
-            { ">>", TokenType.BitwiseRightOperator },
-            { "<<", TokenType.BitwiseLeftOperator },
-            { "..", TokenType.StringConcatOperator },
-            { ">", TokenType.GreaterThanOperator },
-            { "<", TokenType.LessThanOperator },
-            { "=", TokenType.AssignmentOperator },
+            { "-", SyntaxKind.MinusOperator }, //TODO: deal with ambiguity
+            { "~", SyntaxKind.TildeUnOp }, //TODO: deal with ambiguity
+            { "#", SyntaxKind.LengthUnop },
+            { "~=", SyntaxKind.NotEqualsOperator },
+            { "<=", SyntaxKind.LessOrEqualOperator },
+            { ">=", SyntaxKind.GreaterOrEqualOperator },
+            { "==", SyntaxKind.EqualityOperator },
+            { "+", SyntaxKind.PlusOperator },
+            { "*", SyntaxKind.MultiplyOperator },
+            { "/", SyntaxKind.DivideOperator },
+            { "//", SyntaxKind.FloorDivideOperator },
+            { "^", SyntaxKind.ExponentOperator },
+            { "%", SyntaxKind.ModulusOperator },
+            { "&", SyntaxKind.BitwiseAndOperator },
+            { "|", SyntaxKind.BitwiseOrOperator },
+            { ">>", SyntaxKind.BitwiseRightOperator },
+            { "<<", SyntaxKind.BitwiseLeftOperator },
+            { "..", SyntaxKind.StringConcatOperator },
+            { ">", SyntaxKind.GreaterThanOperator },
+            { "<", SyntaxKind.LessThanOperator },
+            { "=", SyntaxKind.AssignmentOperator },
 
-            { "{", TokenType.OpenCurlyBrace },
-            { "}", TokenType.CloseCurlyBrace },
-            { "(", TokenType.OpenParen },
-            { ")", TokenType.CloseParen },
-            { "[", TokenType.OpenBracket },
-            { "]", TokenType.CloseBracket },
+            { "{", SyntaxKind.OpenCurlyBrace },
+            { "}", SyntaxKind.CloseCurlyBrace },
+            { "(", SyntaxKind.OpenParen },
+            { ")", SyntaxKind.CloseParen },
+            { "[", SyntaxKind.OpenBracket },
+            { "]", SyntaxKind.CloseBracket },
 
-            { ".", TokenType.Dot},
-            { ",", TokenType.Comma},
-            { ";", TokenType.Semicolon},
-            { ":", TokenType.Colon},
-            { "::", TokenType.DoubleColon}
+            { ".", SyntaxKind.Dot},
+            { ",", SyntaxKind.Comma},
+            { ";", SyntaxKind.Semicolon},
+            { ":", SyntaxKind.Colon},
+            { "::", SyntaxKind.DoubleColon}
         };
 
         private const char Eof = unchecked((char)-1);
@@ -94,9 +94,9 @@ namespace LanguageService
                 nextToken = ReadNextToken(stream, trivia, fullStart);
                 tokenList.Add(nextToken);
 
-                if (stream.EndOfStream() && nextToken.Type != TokenType.EndOfFile)
+                if (stream.EndOfStream() && nextToken.Type != SyntaxKind.EndOfFile)
                 {
-                    nextToken = new Token(TokenType.EndOfFile, "", new List<Trivia>(), fullStart, (int)stream.Position);
+                    nextToken = new Token(SyntaxKind.EndOfFile, "", new List<Trivia>(), fullStart, (int)stream.Position);
                     tokenList.Add(nextToken);
                 }
             }
@@ -238,7 +238,7 @@ namespace LanguageService
 
             if (stream.EndOfStream())
             {
-                return new Token(TokenType.EndOfFile, "", trivia, fullStart, (int)stream.Position);
+                return new Token(SyntaxKind.EndOfFile, "", trivia, fullStart, (int)stream.Position);
             }
 
             nextChar = stream.Peek();
@@ -285,7 +285,7 @@ namespace LanguageService
             }
             else
             {
-                return new Token(TokenType.Identifier, value, trivia, fullStart, tokenStartPosition);
+                return new Token(SyntaxKind.Identifier, value, trivia, fullStart, tokenStartPosition);
             }
         }
 
@@ -304,11 +304,11 @@ namespace LanguageService
 
             if (IsValidTerminator(next) || stream.EndOfStream())
             {
-                return new Token(TokenType.Number, number.ToString(), trivia, fullStart, tokenStartPosition);
+                return new Token(SyntaxKind.Number, number.ToString(), trivia, fullStart, tokenStartPosition);
             }
             else
             {
-                return new Token(TokenType.Unknown, number.ToString(), trivia, fullStart, tokenStartPosition); //TODO: Deal with invalid number/identifier: "234kjs"
+                return new Token(SyntaxKind.Unknown, number.ToString(), trivia, fullStart, tokenStartPosition); //TODO: Deal with invalid number/identifier: "234kjs"
             }
         }
 
@@ -316,7 +316,7 @@ namespace LanguageService
         {
             StringBuilder fullString = new StringBuilder();
             int tokenStartPosition = (int)stream.Position;
-            TokenType type = TokenType.String;
+            SyntaxKind type = SyntaxKind.String;
             char nextChar;
 
             switch (stringDelimiter)
@@ -333,7 +333,7 @@ namespace LanguageService
 
                         if (nextChar == '\r' || nextChar == '\n')
                         {
-                            type = TokenType.UnterminatedString;
+                            type = SyntaxKind.UnterminatedString;
                             terminateString = true;
                         }
                     }
@@ -345,7 +345,7 @@ namespace LanguageService
                     }
                     else
                     {
-                        return new Token(TokenType.EndOfFile, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition); //TODO bug... should return a string then a EOF token right?
+                        return new Token(SyntaxKind.EndOfFile, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition); //TODO bug... should return a string then a EOF token right?
                     }
 
                 case '[':
@@ -368,7 +368,7 @@ namespace LanguageService
                                 stream.ReadChar();
                             if (stream.Peek() == '\n')
                                 stream.ReadChar();
-                            type = TokenType.IgnoreNewLineString;
+                            type = SyntaxKind.IgnoreNewLineString;
                         }
 
                         while (!stream.EndOfStream())
@@ -395,18 +395,18 @@ namespace LanguageService
                             nextChar = stream.Peek();
                         }
 
-                        return new Token(TokenType.UnterminatedString, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.UnterminatedString, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
                         if (bracketLevel == 0)
                         {
-                            return new Token(TokenType.OpenBracket, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                            return new Token(SyntaxKind.OpenBracket, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                         }
                         else
                         {
                             // Error, not valid syntax
-                            return new Token(TokenType.Unknown, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                            return new Token(SyntaxKind.Unknown, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                         }
                     }
                 default:
@@ -424,25 +424,25 @@ namespace LanguageService
                 case ':':
                     if (CheckAndConsumeNextToken(nextChar, stream))
                     {
-                        return new Token(TokenType.Colon, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.Colon, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        return new Token(TokenType.DoubleColon, "::", leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.DoubleColon, "::", leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '.':
                     if (CheckAndConsumeNextToken(nextChar, stream))
                     {
-                        return new Token(TokenType.Dot, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.Dot, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        return new Token(TokenType.StringConcatOperator, "..", leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.StringConcatOperator, "..", leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '<':
                     if ((nextChar != stream.Peek()) && (stream.Peek() != '='))
                     {
-                        return new Token(TokenType.LessThanOperator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.LessThanOperator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
@@ -462,29 +462,29 @@ namespace LanguageService
                 case '=':
                     if (CheckAndConsumeNextToken(nextChar, stream))
                     {
-                        return new Token(TokenType.AssignmentOperator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.AssignmentOperator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        return new Token(TokenType.EqualityOperator, "==", leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.EqualityOperator, "==", leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '/':
                     if (CheckAndConsumeNextToken(nextChar, stream))
                     {
-                        return new Token(TokenType.DivideOperator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.DivideOperator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        return new Token(TokenType.FloorDivideOperator, "//", leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.FloorDivideOperator, "//", leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '~':
                     if (CheckAndConsumeNextToken('=', stream))
                     {
-                        return new Token(TokenType.TildeUnOp, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.TildeUnOp, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        return new Token(TokenType.NotEqualsOperator, "~=", leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.NotEqualsOperator, "~=", leadingTrivia, fullStart, tokenStartPosition);
                     }
                 default:
                     // non repeating symbol
@@ -495,7 +495,7 @@ namespace LanguageService
                     }
                     else
                     {
-                        return new Token(TokenType.Unknown, fullSymbol, leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.Unknown, fullSymbol, leadingTrivia, fullStart, tokenStartPosition);
                     }
             }
         }

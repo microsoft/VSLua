@@ -117,6 +117,7 @@
     <Compile Include="LanguageModel\NodeClasses.cs">
       <Generator>MSBuild:GenerateCodeFromAttributes</Generator>
     </Compile>
+    <Compile Include="SyntaxKind.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

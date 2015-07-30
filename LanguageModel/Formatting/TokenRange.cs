@@ -8,69 +8,69 @@ namespace LanguageService.Formatting
 {
     internal static class TokenRange
     {
-        internal static List<TokenType> AnyVisible =
+        internal static List<SyntaxKind> AnyVisible =
             TokenRange.Fill(
-                Enum.GetValues(typeof(TokenType)),
-                new TokenType[] { TokenType.EndOfFile, TokenType.Unknown });
+                Enum.GetValues(typeof(SyntaxKind)),
+                new SyntaxKind[] { SyntaxKind.EndOfFile, SyntaxKind.Unknown });
 
-        internal static List<TokenType> All =
+        internal static List<SyntaxKind> All =
             TokenRange.Fill(
-                Enum.GetValues(typeof(TokenType)),
-                new TokenType[] { }); // Might need to add TokenType.Unknown to skip
+                Enum.GetValues(typeof(SyntaxKind)),
+                new SyntaxKind[] { }); // Might need to add TokenType.Unknown to skip
 
-        internal static List<TokenType> BinaryOperators =
-            new List<TokenType>
+        internal static List<SyntaxKind> BinaryOperators =
+            new List<SyntaxKind>
             {
-                TokenType.AndBinop,
-                TokenType.BitwiseAndOperator,
-                TokenType.BitwiseLeftOperator,
-                TokenType.BitwiseOrOperator,
-                TokenType.BitwiseRightOperator,
-                TokenType.EqualityOperator,
-                TokenType.ExponentOperator,
-                TokenType.FloorDivideOperator,
-                TokenType.DivideOperator,
-                TokenType.GreaterOrEqualOperator,
-                TokenType.GreaterThanOperator,
-                TokenType.LessOrEqualOperator,
-                TokenType.LessThanOperator,
-                TokenType.MinusOperator,
-                TokenType.ModulusOperator,
-                TokenType.MultiplyOperator,
-                TokenType.NotEqualsOperator,
-                TokenType.OrBinop,
-                TokenType.PlusOperator,
-                TokenType.StringConcatOperator,
-                TokenType.TildeUnOp,
-                TokenType.VarArgOperator,
+                SyntaxKind.AndBinop,
+                SyntaxKind.BitwiseAndOperator,
+                SyntaxKind.BitwiseLeftOperator,
+                SyntaxKind.BitwiseOrOperator,
+                SyntaxKind.BitwiseRightOperator,
+                SyntaxKind.EqualityOperator,
+                SyntaxKind.ExponentOperator,
+                SyntaxKind.FloorDivideOperator,
+                SyntaxKind.DivideOperator,
+                SyntaxKind.GreaterOrEqualOperator,
+                SyntaxKind.GreaterThanOperator,
+                SyntaxKind.LessOrEqualOperator,
+                SyntaxKind.LessThanOperator,
+                SyntaxKind.MinusOperator,
+                SyntaxKind.ModulusOperator,
+                SyntaxKind.MultiplyOperator,
+                SyntaxKind.NotEqualsOperator,
+                SyntaxKind.OrBinop,
+                SyntaxKind.PlusOperator,
+                SyntaxKind.StringConcatOperator,
+                SyntaxKind.TildeUnOp,
+                SyntaxKind.VarArgOperator,
             };
 
-        internal static List<TokenType> Brackets = new List<TokenType>
+        internal static List<SyntaxKind> Brackets = new List<SyntaxKind>
         {
-            TokenType.OpenBracket,
-            TokenType.CloseBracket,
-            TokenType.OpenCurlyBrace,
-            TokenType.CloseCurlyBrace,
-            TokenType.OpenParen,
-            TokenType.CloseParen,
+            SyntaxKind.OpenBracket,
+            SyntaxKind.CloseBracket,
+            SyntaxKind.OpenCurlyBrace,
+            SyntaxKind.CloseCurlyBrace,
+            SyntaxKind.OpenParen,
+            SyntaxKind.CloseParen,
         };
 
-        internal static List<TokenType> Value = new List<TokenType>
+        internal static List<SyntaxKind> Value = new List<SyntaxKind>
         {
-            TokenType.Number,
-            TokenType.String,
-            TokenType.FalseKeyValue,
-            TokenType.TrueKeyValue,
-            TokenType.NilKeyValue,
-            TokenType.Identifier,
+            SyntaxKind.Number,
+            SyntaxKind.String,
+            SyntaxKind.FalseKeyValue,
+            SyntaxKind.TrueKeyValue,
+            SyntaxKind.NilKeyValue,
+            SyntaxKind.Identifier,
         };
 
-        private static List<TokenType> Fill(Array values, TokenType[] exclude)
+        private static List<SyntaxKind> Fill(Array values, SyntaxKind[] exclude)
         {
 
-            List<TokenType> tokenTypes = new List<TokenType>();
+            List<SyntaxKind> tokenTypes = new List<SyntaxKind>();
 
-            foreach (TokenType tokenType in values)
+            foreach (SyntaxKind tokenType in values)
             {
                 if (!exclude.Contains(tokenType))
                 {
