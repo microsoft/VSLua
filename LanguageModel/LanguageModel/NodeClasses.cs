@@ -10,10 +10,7 @@ namespace LanguageService
 {
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class SyntaxNodeOrToken { }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class SyntaxNode /*TODO : SyntaxNodeOrToken*/
+    public abstract partial class SyntaxNode : SyntaxNodeOrToken
     {
         [Required]
         readonly SyntaxKind kind;
@@ -33,14 +30,13 @@ namespace LanguageService
         [Required]
         readonly Token endOfFile;
 
-        //TODO
-        //public ImmutableList<SyntaxNodeOrToken> children
-        //{
-        //    get
-        //    {
-        //        return new List<SyntaxNodeOrToken>() { programBlock, endOfFile }.ToImmutableList();
-        //    }
-        //}
+        public ImmutableList<SyntaxNodeOrToken> children
+        {
+            get
+            {
+                return new List<SyntaxNodeOrToken>() { programBlock, endOfFile }.ToImmutableList();
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {

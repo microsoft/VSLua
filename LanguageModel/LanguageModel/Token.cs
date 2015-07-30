@@ -3,7 +3,7 @@ using System.Text;
 
 namespace LanguageService
 {
-    public class Token /*TODO : SyntaxNodeOrToken*/
+    public class Token : SyntaxNodeOrToken
     {
         public int FullStart { get; private set; }
         public int Start { get; private set; }
@@ -27,7 +27,7 @@ namespace LanguageService
             this.LeadingTrivia = trivia;
             this.FullStart = fullStart;
             this.Start = start;
-            this.Length = Text.Length; //TODO: correct?
+            this.Length = Text.Length;
         }
 
         public static Token CreateMissingToken(int position)
