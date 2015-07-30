@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LanguageService
 {
-    public enum Context
+    public enum ParsingContext
     {
         IfBlockContext,
         ProgramContext,

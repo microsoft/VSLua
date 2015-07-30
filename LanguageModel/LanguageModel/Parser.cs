@@ -1,3 +1,4 @@
+using LanguageService.LanguageModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -7,7 +8,7 @@ namespace LanguageService
 {
     public class Parser
     {
-        private Stack<Context> contextStack;
+        private Stack<ParsingContext> contextStack;
         private Token currentToken;
         private List<Token> tokenList;
         private int positionInTokenList;
@@ -15,7 +16,7 @@ namespace LanguageService
 
         public Parser()
         {
-            contextStack = new Stack<Context>();
+            contextStack = new Stack<ParsingContext>();
             errorList = new List<ParseError>();
             positionInTokenList = -1;
         }
@@ -43,7 +44,7 @@ namespace LanguageService
             int tempIndex = positionInTokenList + 1;
             if (tempIndex < tokenList.Count)
             {
-                if (Peek().Type == type)
+                if (Peek().Kind == type)
                 {
                     currentToken = NextToken();
                     return true;
@@ -95,31 +96,40 @@ namespace LanguageService
             var node = ChunkNode.CreateBuilder();
             node.Kind = SyntaxKind.ChunkNode;
             node.StartPosition = Peek().FullStart;
-            node.ProgramBlock = ParseBlock(Context.ProgramContext)?.ToBuilder();
+            node.ProgramBlock = ParseBlock(ParsingContext.ProgramContext)?.ToBuilder();
             node.EndOfFile = GetExpectedToken(SyntaxKind.EndOfFile);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
 
-        private BlockNode ParseBlock(Context parsingContext)
+        private BlockNode ParseBlock(ParsingContext context)
         {
-            contextStack.Push(parsingContext);
+            contextStack.Push(context);
             var node = BlockNode.CreateBuilder();
             node.Kind = node.Kind = SyntaxKind.BlockNode;
             node.StartPosition = this.Peek().FullStart;
+            bool EncounteredReturnStatement = false;
             List<StatementNode> children = new List<StatementNode>();
 
-            while (!IsContextTerminator(parsingContext, Peek().Type))
+            while (!IsListTerminator(context, Peek().Kind))
             {
-                children.Add(ParseStatement());
+                if (IsListElement(context, Peek().Kind))
+                {
+                    if (EncounteredReturnStatement)
+                        ParseErrorAtCurrentPosition(ErrorMessages.StatementAfterReturnStatement);
+
+                    if (Peek().Kind == SyntaxKind.ReturnKeyword)
+                        EncounteredReturnStatement = true;
+
+                    children.Add(ParseStatement());
+                }
+                else
+                {
+                    AbortParsingListOrMoveToNextToken(context);
+                }
             }
 
             node.Statements = children.ToImmutableList();
-
-            if (Peek().Type == SyntaxKind.ReturnKeyword)
-            {
-                node.ReturnStatement = ParseRetStat()?.ToBuilder();
-            }
 
             node.Length = currentToken.End - node.StartPosition;
             contextStack.Pop();
@@ -128,7 +138,7 @@ namespace LanguageService
 
         private StatementNode ParseStatement()
         {
-            switch (Peek().Type)
+            switch (Peek().Kind)
             {
                 case SyntaxKind.Semicolon:
                     NextToken();
@@ -146,20 +156,20 @@ namespace LanguageService
                 case SyntaxKind.IfKeyword:
                     return ParseIfStatementNode();
                 case SyntaxKind.ForKeyword:
-                    if (Peek(2).Type == SyntaxKind.Identifier && tokenList[positionInTokenList + 3].Type == SyntaxKind.AssignmentOperator)
+                    if (Peek(2).Kind == SyntaxKind.Identifier && tokenList[positionInTokenList + 3].Kind == SyntaxKind.AssignmentOperator)
                     {
                         return ParseSimpleForStatementNode();
                     }
                     else
                     {
                         return ParseMultipleArgForStatementNode();
-                    }
+                    //}
                 case SyntaxKind.FunctionKeyword:
                     return ParseGlobalFunctionStatementNode();
                 case SyntaxKind.DoubleColon:
                     return ParseLabelStatementNode();
                 case SyntaxKind.LocalKeyword:
-                    if (Peek(2).Type == SyntaxKind.FunctionKeyword)
+                    if (Peek(2).Kind == SyntaxKind.FunctionKeyword)
                     {
                         return ParseLocalFunctionStatementNode();
                     }
@@ -168,7 +178,7 @@ namespace LanguageService
                         return ParseLocalAssignmentStatementNode();
                     }
                 case SyntaxKind.Identifier:
-                    switch (Peek(2).Type)
+                    switch (Peek(2).Kind)
                     {
                         case SyntaxKind.OpenCurlyBrace:
                         case SyntaxKind.OpenParen:
@@ -179,9 +189,7 @@ namespace LanguageService
                             return ParseAssignmentStatementNode();
                     }
                 default:
-                    //TODO turn into skipped Trivia;
-                    NextToken();
-                    return null;
+                    throw new InvalidOperationException();
             }
         }
 
@@ -207,7 +215,7 @@ namespace LanguageService
             node.InKeyword = GetExpectedToken(SyntaxKind.InKeyword);
             node.ExpList = ParseExpList()?.ToBuilder();
             node.DoKeyword = GetExpectedToken(SyntaxKind.DoKeyword);
-            node.Block = ParseBlock(Context.ForStatementContext)?.ToBuilder();
+            node.Block = ParseBlock(ParsingContext.ForStatementContext)?.ToBuilder();
             node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -225,14 +233,14 @@ namespace LanguageService
             node.Comma = GetExpectedToken(SyntaxKind.Comma);
             node.Exp2 = ParseExpression()?.ToBuilder();
 
-            if (Peek().Type == SyntaxKind.Comma)
+            if (Peek().Kind == SyntaxKind.Comma)
             {
                 node.OptionalComma = GetExpectedToken(SyntaxKind.Comma);
                 node.OptionalExp3 = ParseExpression()?.ToBuilder();
             }
 
             node.DoKeyword = GetExpectedToken(SyntaxKind.DoKeyword);
-            node.Block = ParseBlock(Context.ForStatementContext)?.ToBuilder();
+            node.Block = ParseBlock(ParsingContext.ForStatementContext)?.ToBuilder();
             node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -246,7 +254,7 @@ namespace LanguageService
             node.LocalKeyword = GetExpectedToken(SyntaxKind.LocalKeyword);
             node.NameList = ParseNamesList()?.ToBuilder();
 
-            if (Peek().Type == SyntaxKind.AssignmentOperator)
+            if (Peek().Kind == SyntaxKind.AssignmentOperator)
             {
                 node.AssignmentOperator = GetExpectedToken(SyntaxKind.AssignmentOperator);
                 node.ExpList = ParseExpList()?.ToBuilder();
@@ -299,7 +307,7 @@ namespace LanguageService
             node.Kind = SyntaxKind.RepeatStatementNode;
             node.StartPosition = Peek().Start;
             node.RepeatKeyword = GetExpectedToken(SyntaxKind.RepeatKeyword);
-            node.Block = ParseBlock(Context.RepeatStatementContext)?.ToBuilder();
+            node.Block = ParseBlock(ParsingContext.RepeatStatementContext)?.ToBuilder();
             node.UntilKeyword = GetExpectedToken(SyntaxKind.UntilKeyword);
             node.Exp = ParseExpression()?.ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
@@ -314,7 +322,7 @@ namespace LanguageService
             node.WhileKeyword = GetExpectedToken(SyntaxKind.WhileKeyword);
             node.Exp = ParseExpression()?.ToBuilder();
             node.DoKeyword = GetExpectedToken(SyntaxKind.DoKeyword);
-            node.Block = ParseBlock(Context.WhileContext)?.ToBuilder();
+            node.Block = ParseBlock(ParsingContext.WhileContext)?.ToBuilder();
             node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -326,7 +334,7 @@ namespace LanguageService
             node.Kind = SyntaxKind.DoStatementNode;
             node.StartPosition = Peek().Start;
             node.DoKeyword = GetExpectedToken(SyntaxKind.DoKeyword);
-            node.Block = ParseBlock(Context.DoStatementContext)?.ToBuilder();
+            node.Block = ParseBlock(ParsingContext.DoStatementContext)?.ToBuilder();
             node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -361,14 +369,14 @@ namespace LanguageService
             node.IfKeyword = GetExpectedToken(SyntaxKind.IfKeyword);
             node.Exp = ParseExpression()?.ToBuilder();
             node.ThenKeyword = GetExpectedToken(SyntaxKind.ThenKeyword);
-            node.IfBlock = ParseBlock(Context.IfBlockContext)?.ToBuilder();
+            node.IfBlock = ParseBlock(ParsingContext.IfBlockContext)?.ToBuilder();
 
-            if (Peek().Type == SyntaxKind.ElseIfKeyword)
+            if (Peek().Kind == SyntaxKind.ElseIfKeyword)
             {
                 node.ElseIfList = ParseElseIfList();
             }
 
-            if (Peek().Type == SyntaxKind.ElseKeyword)
+            if (Peek().Kind == SyntaxKind.ElseKeyword)
             {
                 node.ElseBlock = ParseElseBlock()?.ToBuilder();
             }
@@ -418,7 +426,7 @@ namespace LanguageService
             node.Kind = SyntaxKind.ElseBlockNode;
             node.StartPosition = currentToken.Start;
             node.ElseKeyword = currentToken;
-            node.Block = ParseBlock(Context.ElseBlock)?.ToBuilder();
+            node.Block = ParseBlock(ParsingContext.ElseBlock)?.ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -443,7 +451,7 @@ namespace LanguageService
             node.ElseIfKeyword = currentToken;
             node.Exp = ParseExpression()?.ToBuilder();
             node.ThenKeyword = GetExpectedToken(SyntaxKind.ThenKeyword);
-            node.Block = ParseBlock(Context.ElseIfBlock)?.ToBuilder();
+            node.Block = ParseBlock(ParsingContext.ElseIfBlock)?.ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -451,7 +459,7 @@ namespace LanguageService
         #endregion
 
         #region Expression Nodes
-        
+
         private ExpressionNode ParseExpression()
         {
             ExpressionNode exp;
@@ -469,7 +477,7 @@ namespace LanguageService
             }
             else
             {
-                switch (Peek().Type)
+                switch (Peek().Kind)
                 {
                     case SyntaxKind.NilKeyValue:
                     case SyntaxKind.FalseKeyValue:
@@ -497,7 +505,7 @@ namespace LanguageService
                 }
             }
 
-            if (IsBinop(Peek().Type))
+            if (IsBinop(Peek().Kind))
             {
                 var binop = NextToken();
                 return BinaryOperatorExpression.Create(SyntaxKind.BinaryOperatorExpression, start, binop.End - start, exp, binop, ParseExpression()); //Question... this representation is slightly flawed if "operator precedence" matters... but does it matter? What scenario from a tooling perspective cares about precedence?
@@ -559,7 +567,7 @@ namespace LanguageService
                 }
                 else
                 {
-                    if (Peek().Type == SyntaxKind.CloseCurlyBrace)
+                    if (Peek().Kind == SyntaxKind.CloseCurlyBrace)
                     {
                         parseFields = false;
                     }
@@ -580,12 +588,12 @@ namespace LanguageService
 
         private FieldNode ParseField()
         {
-            switch (Peek().Type)
+            switch (Peek().Kind)
             {
                 case SyntaxKind.OpenBracket:
                     return ParseBracketField();
                 case SyntaxKind.Identifier:
-                    if (Peek(2).Type == SyntaxKind.AssignmentOperator)
+                    if (Peek(2).Kind == SyntaxKind.AssignmentOperator)
                     {
                         var node = AssignmentField.CreateBuilder();
                         node.StartPosition = Peek().Start;
@@ -633,12 +641,12 @@ namespace LanguageService
 
         private PrefixExp ParsePrefixExp()
         {
-            switch (Peek().Type)
+            switch (Peek().Kind)
             {
                 case SyntaxKind.OpenParen:
                     return ParseParenPrefixExp();
                 case SyntaxKind.Identifier:
-                    switch (Peek(2).Type)
+                    switch (Peek(2).Kind)
                     {
                         case SyntaxKind.OpenCurlyBrace:
                         case SyntaxKind.OpenParen:
@@ -704,15 +712,15 @@ namespace LanguageService
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
-        
+
         private Var ParseVar()
         {
-            switch (Peek().Type)
+            switch (Peek().Kind)
             {
                 case SyntaxKind.OpenParen:
                     return ParsePotentialVarWithPrefixExp();
                 case SyntaxKind.Identifier:
-                    switch (Peek(2).Type)
+                    switch (Peek(2).Kind)
                     {
                         case SyntaxKind.OpenBracket:
                             return ParseSquareBracketVar();
@@ -749,7 +757,7 @@ namespace LanguageService
 
         private Args ParseArgs()
         {
-            switch (Peek().Type)
+            switch (Peek().Kind)
             {
                 case SyntaxKind.OpenParen:
                     return ParseParenArg();
@@ -800,10 +808,35 @@ namespace LanguageService
 
         #region List Nodes
 
+        private SeparatedList ParseSeperatedList(ParsingContext context)
+        {
+            var listNode = SeparatedList.CreateBuilder();
+            listNode.Kind = GetListKind(context);
+            listNode.StartPosition = Peek().Start;
+
+            throw new NotImplementedException();
+            while (true)
+            {
+                if (IsListElement(context, Peek().Kind))
+                {
+
+                }
+
+                if (IsListTerminator(context, Peek().Kind))
+                {
+
+                }
+
+                {
+                    AbortParsingListOrMoveToNextToken(context);
+                }
+            }
+        }
+
         #region Code To Deprecate
         private VarList ParseVarList()
         {
-            contextStack.Push(Context.VarListContext);
+            contextStack.Push(ParsingContext.VarListContext);
             var node = VarList.CreateBuilder();
             node.Kind = SyntaxKind.VarList;
             node.StartPosition = Peek().Start;
@@ -826,7 +859,7 @@ namespace LanguageService
 
         private ParList ParseParList()
         {
-            if (Peek().Type == SyntaxKind.VarArgOperator)
+            if (Peek().Kind == SyntaxKind.VarArgOperator)
             {
                 var node = VarArgPar.CreateBuilder();
                 node.Kind = SyntaxKind.VarArgPar;
@@ -853,7 +886,7 @@ namespace LanguageService
 
         private NameList ParseNamesList()
         {
-            contextStack.Push(Context.NameListContext);
+            contextStack.Push(ParsingContext.NameListContext);
 
             var node = NameList.CreateBuilder();
             node.Kind = SyntaxKind.NameList;
@@ -878,7 +911,7 @@ namespace LanguageService
 
         private ExpList ParseExpList()
         {
-            contextStack.Push(Context.ExpListContext);
+            contextStack.Push(ParsingContext.ExpListContext);
 
             var node = ExpList.CreateBuilder();
             node.Kind = SyntaxKind.ExpField;
@@ -905,6 +938,7 @@ namespace LanguageService
         }
 
         #endregion
+
         #endregion
 
         private FuncBodyNode ParseFunctionBody()
@@ -915,7 +949,7 @@ namespace LanguageService
             node.OpenParen = GetExpectedToken(SyntaxKind.OpenParen);
             node.ParameterList = ParseParList()?.ToBuilder();
             node.CloseParen = GetExpectedToken(SyntaxKind.CloseParen);
-            node.Block = ParseBlock(Context.FuncBodyContext)?.ToBuilder();
+            node.Block = ParseBlock(ParsingContext.FuncBodyContext)?.ToBuilder();
             node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = Peek().FullStart - node.StartPosition - 1;
             return node.ToImmutable();
@@ -943,7 +977,7 @@ namespace LanguageService
 
             while (ParseExpected(SyntaxKind.Dot))
             {
-                if (Peek().Type == SyntaxKind.Identifier)
+                if (Peek().Kind == SyntaxKind.Identifier)
                 {
                     names.Add(NameDotPair.Create(currentToken, NextToken()));
                 }
@@ -960,26 +994,70 @@ namespace LanguageService
         #endregion
 
         #region Helper Methods
-        private bool IsContextTerminator(Context parsingContext, SyntaxKind currentTokenType)
+        private bool IsListTerminator(ParsingContext context, SyntaxKind tokenType)
         {
-            if (currentTokenType == SyntaxKind.ReturnKeyword)
+            if (tokenType == SyntaxKind.ReturnKeyword)
             {
                 return true;
             }
 
-            switch (parsingContext)
+            switch (context)
             {
-                case Context.IfBlockContext:
-                    return (currentTokenType == SyntaxKind.EndKeyword || currentTokenType == SyntaxKind.ElseIfKeyword || currentTokenType == SyntaxKind.ElseKeyword);
-                case Context.ElseBlock:
-                    return (currentTokenType == SyntaxKind.EndKeyword);
-                case Context.ElseIfBlock:
-                    return (currentTokenType == SyntaxKind.ElseIfKeyword || currentTokenType == SyntaxKind.EndKeyword);
-                case Context.ProgramContext:
-                    return currentTokenType == SyntaxKind.EndOfFile;
+                case ParsingContext.IfBlockContext:
+                    return (tokenType == SyntaxKind.EndKeyword || tokenType == SyntaxKind.ElseIfKeyword || tokenType == SyntaxKind.ElseKeyword);
+                case ParsingContext.ElseBlock:
+                    return (tokenType == SyntaxKind.EndKeyword);
+                case ParsingContext.ElseIfBlock:
+                    return (tokenType == SyntaxKind.ElseIfKeyword || tokenType == SyntaxKind.EndKeyword);
+                case ParsingContext.ProgramContext:
+                    return tokenType == SyntaxKind.EndOfFile;
                 default:
                     throw new Exception("Unknown Context"); //TODO
             }
+        }
+
+        private bool IsListElement(ParsingContext parsingContext, SyntaxKind tokenType)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool AbortParsingListOrMoveToNextToken(ParsingContext context)
+        {
+            ParseErrorAtCurrentToken(GetContextError(context));
+            if (isInSomeParsingContext())
+            {
+                return true;
+            }
+
+            //TODO turn into skipped trivia?
+            throw new NotImplementedException();
+            return false;
+        }
+
+        private bool isInSomeParsingContext()
+        {
+            throw new NotImplementedException();
+        }
+
+        private string GetContextError(ParsingContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ParseErrorAtCurrentToken(string message)
+        {
+            Console.WriteLine(ErrorMessages.test1);
+            throw new NotImplementedException();
+        }
+
+        private void ParseErrorAtCurrentPosition(string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        private SyntaxKind GetListKind(ParsingContext context)
+        {
+            throw new NotImplementedException();
         }
 
         private bool IsBinop(SyntaxKind type)
@@ -1017,7 +1095,7 @@ namespace LanguageService
         {
             int tempPosition = positionInTokenList;
             ParsePrefixExp(); //Skip to the end of the prefix exp before checking.
-            if (Peek().Type == SyntaxKind.OpenBracket)
+            if (Peek().Kind == SyntaxKind.OpenBracket)
             {
                 positionInTokenList = tempPosition; //Restore tokenList to beginning of node
                 return ParseSquareBracketVar();

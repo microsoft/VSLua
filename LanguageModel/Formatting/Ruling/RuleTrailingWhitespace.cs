@@ -21,7 +21,7 @@ namespace LanguageService.Formatting.Ruling
             Token nextToken = formattingContext.NextToken.Token;
 
             // flag for the end of file token where whitespace should be skipped
-            List<TextEditInfo> edits = this.GetEdits(nextToken, nextToken.Type == SyntaxKind.EndOfFile);
+            List<TextEditInfo> edits = this.GetEdits(nextToken, nextToken.Kind == SyntaxKind.EndOfFile);
 
             return edits;
         }

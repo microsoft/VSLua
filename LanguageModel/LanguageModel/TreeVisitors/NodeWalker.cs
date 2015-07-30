@@ -22,11 +22,6 @@ namespace LanguageService.LanguageModel.TreeVisitors
             {
                 Visit(child);
             }
-
-            if (node.ReturnStatement != null)
-            {
-                Visit(node.ReturnStatement);
-            }
         }
 
         internal virtual void Visit(StatementNode node)

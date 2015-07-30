@@ -50,7 +50,7 @@ namespace LanguageService
         [Required]
         [NotRecursive]
         readonly ImmutableList<StatementNode> statements;
-        readonly ReturnStatementNode returnStatement;
+        //readonly ReturnStatementNode returnStatement;
 
         public override void Accept(NodeWalker walker)
         {

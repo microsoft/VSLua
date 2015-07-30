@@ -123,7 +123,7 @@ namespace LanguageService.Tests
 
             for (int i = 0; i < expectedTokens.Length; i++)
             {
-                Assert.Equal(expectedTokens[i], tokenList[tokenIndex++].Type);
+                Assert.Equal(expectedTokens[i], tokenList[tokenIndex++].Kind);
             }
 
         }
@@ -134,10 +134,10 @@ namespace LanguageService.Tests
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\assignment.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             int tokenIndex = 0;
-            Assert.Equal(SyntaxKind.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(SyntaxKind.AssignmentOperator, tokenList[tokenIndex++].Type);
-            Assert.Equal(SyntaxKind.Number, tokenList[tokenIndex++].Type);
-            Assert.Equal(SyntaxKind.EndOfFile, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.Identifier, tokenList[tokenIndex++].Kind);
+            Assert.Equal(SyntaxKind.AssignmentOperator, tokenList[tokenIndex++].Kind);
+            Assert.Equal(SyntaxKind.Number, tokenList[tokenIndex++].Kind);
+            Assert.Equal(SyntaxKind.EndOfFile, tokenList[tokenIndex++].Kind);
         }
 
         [Fact]
@@ -167,7 +167,7 @@ namespace LanguageService.Tests
 
             for (int i = 0; i < expectedTokens.Length; i++)
             {
-                Assert.Equal(expectedTokens[i], tokenList[tokenIndex++].Type);
+                Assert.Equal(expectedTokens[i], tokenList[tokenIndex++].Kind);
             }
         }
 
@@ -200,8 +200,8 @@ namespace LanguageService.Tests
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\longcomment.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             int tokenIndex = 0;
-            Assert.Equal(SyntaxKind.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(SyntaxKind.EndOfFile, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.Identifier, tokenList[tokenIndex++].Kind);
+            Assert.Equal(SyntaxKind.EndOfFile, tokenList[tokenIndex++].Kind);
         }
 
         [Fact]
@@ -241,7 +241,7 @@ namespace LanguageService.Tests
             foreach (Token tok in tokenList)
             {
                 Debug.WriteLine(tok.ToString());
-                Assert.NotEqual(SyntaxKind.Unknown, tok.Type);
+                Assert.NotEqual(SyntaxKind.Unknown, tok.Kind);
             }
         }
 
@@ -253,7 +253,7 @@ namespace LanguageService.Tests
             foreach (Token tok in tokenList)
             {
                 Debug.WriteLine(tok.ToString());
-                Assert.NotEqual(SyntaxKind.Unknown, tok.Type);
+                Assert.NotEqual(SyntaxKind.Unknown, tok.Kind);
             }
         }
 
@@ -263,17 +263,17 @@ namespace LanguageService.Tests
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\longs.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             int tokenIndex = 0;
-            Assert.Equal(SyntaxKind.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(SyntaxKind.Number, tokenList[tokenIndex++].Type);
-            Assert.Equal(SyntaxKind.String, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.Identifier, tokenList[tokenIndex++].Kind);
+            Assert.Equal(SyntaxKind.Number, tokenList[tokenIndex++].Kind);
+            Assert.Equal(SyntaxKind.String, tokenList[tokenIndex++].Kind);
 
             for (int j = 0; j < 62; j++)
             {
-                Assert.Equal(SyntaxKind.CloseBracket, tokenList[tokenIndex++].Type);
+                Assert.Equal(SyntaxKind.CloseBracket, tokenList[tokenIndex++].Kind);
             }
 
-            Assert.Equal(SyntaxKind.String, tokenList[tokenIndex++].Type);
-            Assert.Equal(SyntaxKind.EndOfFile, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.String, tokenList[tokenIndex++].Kind);
+            Assert.Equal(SyntaxKind.EndOfFile, tokenList[tokenIndex++].Kind);
         }
 
         [Fact]
@@ -284,7 +284,7 @@ namespace LanguageService.Tests
 
             Assert.Equal(1, tokenList.Count);
             Assert.Equal("\t\t\t\t\t\t", tokenList[0].LeadingTrivia[0].Text);
-            Assert.Equal(SyntaxKind.EndOfFile, tokenList[0].Type);
+            Assert.Equal(SyntaxKind.EndOfFile, tokenList[0].Kind);
         }
 
         [Fact]
@@ -296,7 +296,7 @@ namespace LanguageService.Tests
             {
                 Assert.Equal(Trivia.TriviaType.Newline, tokenList[0].LeadingTrivia[triviaIndex].Type);
             }
-            Assert.Equal(SyntaxKind.EndOfFile, tokenList[0].Type);
+            Assert.Equal(SyntaxKind.EndOfFile, tokenList[0].Kind);
         }
 
         public void TestSampleProgram()
@@ -304,13 +304,13 @@ namespace LanguageService.Tests
             Stream testProgramStream = File.OpenRead(@"CorrectSampleLuaFiles\test.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
             int tokenIndex = 0;
-            Assert.Equal(SyntaxKind.EndKeyword, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.EndKeyword, tokenList[tokenIndex++].Kind);
             int triviaIndex = 0;
             Assert.Equal(Trivia.TriviaType.Newline, tokenList[tokenIndex].LeadingTrivia[triviaIndex++].Type);
             Assert.Equal(Trivia.TriviaType.Newline, tokenList[tokenIndex].LeadingTrivia[triviaIndex++].Type);
             Assert.Equal(Trivia.TriviaType.Comment, tokenList[tokenIndex].LeadingTrivia[triviaIndex++].Type);
-            Assert.Equal(SyntaxKind.Identifier, tokenList[tokenIndex++].Type);
-            Assert.Equal(SyntaxKind.AssignmentOperator, tokenList[tokenIndex++].Type);
+            Assert.Equal(SyntaxKind.Identifier, tokenList[tokenIndex++].Kind);
+            Assert.Equal(SyntaxKind.AssignmentOperator, tokenList[tokenIndex++].Kind);
         }
     }
 }

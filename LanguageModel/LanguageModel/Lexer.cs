@@ -94,7 +94,7 @@ namespace LanguageService
                 nextToken = ReadNextToken(stream, trivia, fullStart);
                 tokenList.Add(nextToken);
 
-                if (stream.EndOfStream() && nextToken.Type != SyntaxKind.EndOfFile)
+                if (stream.EndOfStream() && nextToken.Kind != SyntaxKind.EndOfFile)
                 {
                     nextToken = new Token(SyntaxKind.EndOfFile, "", new List<Trivia>(), fullStart, (int)stream.Position);
                     tokenList.Add(nextToken);

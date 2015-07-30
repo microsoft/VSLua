@@ -45,7 +45,7 @@ namespace LanguageService.Formatting
 
             foreach (Token token in tokens)
             {
-                if (DecreaseIndentOn.Contains(token.Type))
+                if (DecreaseIndentOn.Contains(token.Kind))
                 {
                     indent_level--;
                 }
@@ -54,7 +54,7 @@ namespace LanguageService.Formatting
 
                 parsedTokens.Add(new ParsedToken(token, indent_level, null));
 
-                if (IncreaseIndentAfter.Contains(token.Type))
+                if (IncreaseIndentAfter.Contains(token.Kind))
                 {
                     indent_level++;
                 }

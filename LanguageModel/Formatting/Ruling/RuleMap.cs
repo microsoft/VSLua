@@ -48,8 +48,8 @@ namespace LanguageService.Formatting.Ruling
 
         internal Rule GetRule(FormattingContext formattingContext)
         {
-            int column = (int)formattingContext.CurrentToken.Token.Type;
-            int row = (int)formattingContext.NextToken.Token.Type;
+            int column = (int)formattingContext.CurrentToken.Token.Kind;
+            int row = (int)formattingContext.NextToken.Token.Kind;
 
             RuleBucket ruleBucket = this.map[column,row];
             

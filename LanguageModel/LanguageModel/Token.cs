@@ -15,14 +15,14 @@ namespace LanguageService
                 return Start + Length - 1;
             }
         }
-        public SyntaxKind Type { get; private set; }
+        public SyntaxKind Kind { get; private set; }
 
         public List<Trivia> LeadingTrivia { get; private set; } //TODO: change to Immutable List
 
 
         public Token(SyntaxKind tokentype, string value, List<Trivia> trivia, int fullStart, int start)
         {
-            this.Type = tokentype;
+            this.Kind = tokentype;
             this.Text = value;
             this.LeadingTrivia = trivia;
             this.FullStart = fullStart;
@@ -39,7 +39,7 @@ namespace LanguageService
         {
 
             StringBuilder sb = new StringBuilder();
-            sb.Append(this.Type.ToString());
+            sb.Append(this.Kind.ToString());
             sb.Append("\t");
             sb.Append(Text);
 
