@@ -1,6 +1,7 @@
 ﻿using System;
 using LanguageService;
 using Microsoft.VisualStudio.Editor;
+using Microsoft.VisualStudio.LuaLanguageService.Formatting;
 
 namespace Microsoft.VisualStudio.LuaLanguageService.Shared
 {
@@ -11,5 +12,6 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
         IVsEditorAdaptersFactoryService EditorAdaptersFactory { get; }
         SourceTextCache SourceTextCache { get; }
         LuaFeatureContainer FeatureContainer { get; }
+        UserSettings UserSettings { get; }
     }
 }

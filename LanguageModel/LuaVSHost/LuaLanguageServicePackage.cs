@@ -19,8 +19,8 @@ namespace Microsoft.VisualStudio.LuaLanguageService
     [Guid(Guids.PackageString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
 
-    [ProvideOptionPage(typeof(GeneralPage), Constants.Formatting.Category, Constants.Formatting.Pages.General,
-        1000, 1002, false, ProfileMigrationType = ProfileMigrationType.PassThrough)]
+    //[ProvideOptionPage(typeof(GeneralPage), Constants.Formatting.Category, Constants.Formatting.Pages.General,
+    //    1000, 1002, false, ProfileMigrationType = ProfileMigrationType.PassThrough)]
     public sealed class LuaLanguageServicePackage : Package
     {
         public LuaLanguageServicePackage()
