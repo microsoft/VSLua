@@ -8,7 +8,7 @@ namespace LanguageService.Formatting.Ruling
 
     internal class RuleMap
     {
-        internal RuleBucket[,] map;
+        internal Dictionary<TokenType, Dictionary<TokenType, RuleBucket>> map;
         private static readonly int Length = Enum.GetNames(typeof(TokenType)).Length;
 
         internal static RuleMap Create(OptionalRuleMap optionalRuleMap)
@@ -33,13 +33,10 @@ namespace LanguageService.Formatting.Ruling
             {
                 foreach (TokenType typeRight in rule.RuleDescriptor.TokenRangeRight)
                 {
-                    int column = (int)typeLeft;
-                    int row = (int)typeRight;
-
-                    RuleBucket bucket = map[column, row];
+                    RuleBucket bucket = map[typeLeft][typeRight];
                     if (bucket == null)
                     {
-                        map[column, row] = bucket = new RuleBucket();
+                        map[typeLeft][typeRight] = bucket = new RuleBucket();
                     }
                     bucket.Add(rule);
 
@@ -49,10 +46,10 @@ namespace LanguageService.Formatting.Ruling
 
         internal Rule Get(FormattingContext formattingContext)
         {
-            int column = (int)formattingContext.CurrentToken.Token.Type;
-            int row = (int)formattingContext.NextToken.Token.Type;
+            TokenType typeLeft = formattingContext.CurrentToken.Token.Type;
+            TokenType typeRight = formattingContext.NextToken.Token.Type;
 
-            RuleBucket ruleBucket = map[column, row];
+            RuleBucket ruleBucket = map[typeLeft][typeRight];
 
             if (ruleBucket != null)
             {
@@ -68,7 +65,7 @@ namespace LanguageService.Formatting.Ruling
                 optionalRuleMap = new OptionalRuleMap(new List<OptionalRuleGroup>());
             }
 
-            map = new RuleBucket[Length, Length];
+            map = new Dictionary<TokenType, Dictionary<TokenType, RuleBucket>>();
             foreach (Rule rule in Rules.AllRules)
             {
                 if (!optionalRuleMap.DisabledRules.Contains(rule))
