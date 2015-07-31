@@ -38,8 +38,8 @@
                 <CheckBox x:Name="addSpacesOnInsideOfSquareBracketsCheckbox" Content="Spaces on inside of square brackets"
                           HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top"
                           IsChecked="{Binding AddSpacesOnInsideOfSquareBrackets}"/>
-                <CheckBox x:Name="forLoopIndexSpacingCheckbpx" Content="remove space between index limits"
-                	HorizontalAlignment="Left" Margin="13,110,0,0" VerticalAlignment="Top"
+                <CheckBox x:Name="forLoopIndexSpacingCheckbpx" Content="Remove space between index limits"
+                	HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top"
                           IsChecked="{Binding ForLoopIndexSpacing}"/>
             </Grid>
         </GroupBox>

@@ -201,7 +201,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             }
         }
 
-        private bool? forLoopAssignmentSpacing = true;
+        private bool? forLoopAssignmentSpacing = false;
         public bool? ForLoopAssignmentSpacing
         {
             get
@@ -218,7 +218,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             }
         }
 
-        private bool? forLoopIndexSpacing = true;
+        private bool? forLoopIndexSpacing = false;
         public bool? ForLoopIndexSpacing
         {
             get
@@ -229,7 +229,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             {
                 if (forLoopIndexSpacing != value)
                 {
-                    forLoopAssignmentSpacing = value;
+                    forLoopIndexSpacing = value;
                     RaisePropertyChangedEvent(ForLoopIndexSpacing, nameof(ForLoopIndexSpacing));
                 }
             }
@@ -252,7 +252,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             }
         }
 
-        private bool? addSpacesOnInsideOfParenthesis = true;
+        private bool? addSpacesOnInsideOfParenthesis = false;
         public bool? AddSpacesOnInsideOfParenthesis
         {
             get
@@ -286,7 +286,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             }
         }
 
-        private bool? addSpacesOnInsideOfSquareBrackets = true;
+        private bool? addSpacesOnInsideOfSquareBrackets = false;
         public bool? AddSpacesOnInsideOfSquareBrackets
         {
             get
