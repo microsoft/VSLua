@@ -20,7 +20,7 @@
                           IsChecked="{Binding WrapSingleLineTableConstructors}"/>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="groupBox1" Header="NewLine"HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" Height="100" Width="280">
+        <GroupBox x:Name="groupBox1" Header="NewLine" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" Height="100" Width="280">
             <Grid HorizontalAlignment="Left" Height="100" Margin="0,0,-2,-23.333" VerticalAlignment="Top" Width="270">
                 <CheckBox x:Name="addNewLinesToMultilineTableConstructorsCheckbox" Content="Add new lines to multiline table constructors"
                           HorizontalAlignment="Left" Margin="10,10,-107,0" VerticalAlignment="Top" Width="264"
