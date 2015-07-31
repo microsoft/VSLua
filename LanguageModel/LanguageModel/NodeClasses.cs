@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
+using System.Linq;
 
 namespace LanguageService
 {
@@ -30,11 +31,11 @@ namespace LanguageService
         [Required]
         readonly Token endOfFile;
 
-        public ImmutableList<SyntaxNodeOrToken> children
+        public ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return new List<SyntaxNodeOrToken>() { programBlock, endOfFile }.ToImmutableList();
+                return ImmutableList.Create<SyntaxNodeOrToken>(programBlock, endOfFile);
             }
         }
 
@@ -50,7 +51,14 @@ namespace LanguageService
         [Required]
         [NotRecursive]
         readonly ImmutableList<StatementNode> statements;
-        //readonly ReturnStatementNode returnStatement;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return statements.Cast<SyntaxNodeOrToken>().ToImmutableList();
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -68,12 +76,19 @@ namespace LanguageService
         [Required]
         readonly Token semiColon;
 
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(semiColon);
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
         }
     }
-
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class FunctionCallStatementNode : StatementNode
@@ -84,6 +99,22 @@ namespace LanguageService
         readonly Token name;
         [Required]
         readonly Args args;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = new List<SyntaxNodeOrToken>();
+                children.Add(prefixExp);
+                if (colon != null)
+                {
+                    children.Add(colon);
+                    children.Add(name);
+                }
+                children.Add(args);
+                return children.ToImmutableList();
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -99,6 +130,17 @@ namespace LanguageService
         readonly ExpList returnExpressions;
         readonly Token semiColonRetStat;
 
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = ImmutableList.Create<SyntaxNodeOrToken>(returnKeyword, returnExpressions);
+                if (semiColonRetStat != null)
+                    children.Add(semiColonRetStat);
+                return children;
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -110,6 +152,14 @@ namespace LanguageService
     {
         [Required]
         readonly Token breakKeyword;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(breakKeyword);
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -124,6 +174,14 @@ namespace LanguageService
         readonly Token goToKeyword;
         [Required]
         readonly Token name;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(goToKeyword, name);
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -140,6 +198,14 @@ namespace LanguageService
         readonly BlockNode block;
         [Required]
         readonly Token endKeyword;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(doKeyword, block, endKeyword);
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -160,6 +226,13 @@ namespace LanguageService
         readonly BlockNode block;
         [Required]
         readonly Token endKeyword;
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(whileKeyword, exp, doKeyword, block, endKeyword);
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -179,6 +252,14 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode exp;
 
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(repeatKeyword, block, untilKeyword, exp);
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -195,6 +276,14 @@ namespace LanguageService
         [Required]
         readonly FuncBodyNode funcBody;
 
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(functionKeyword, funcName, funcBody);
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -210,6 +299,23 @@ namespace LanguageService
         readonly NameList nameList;
         readonly Token assignmentOperator;
         readonly ExpList expList;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = new List<SyntaxNodeOrToken>();
+                children.Add(localKeyword);
+                children.Add(nameList);
+                if (assignmentOperator != null)
+                {
+                    children.Add(assignmentOperator);
+                    children.Add(expList);
+                }
+                return children.ToImmutableList();
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -227,6 +333,15 @@ namespace LanguageService
         readonly Token name;
         [Required]
         readonly FuncBodyNode funcBody;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(localKeyword, functionKeyword, name, funcBody);
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -257,6 +372,23 @@ namespace LanguageService
         [Required]
         readonly Token endKeyword;
 
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = ImmutableList.Create<SyntaxNodeOrToken>(forKeyword, name, assignmentOperator, exp1, comma, exp2);
+                if (optionalComma != null)
+                {
+                    children.Add(optionalComma);
+                    children.Add(OptionalExp3);
+                }
+                children.Add(doKeyword);
+                children.Add(block);
+                children.Add(endKeyword);
+                return children;
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -280,6 +412,15 @@ namespace LanguageService
         readonly BlockNode block;
         [Required]
         readonly Token endKeyword;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(forKeyword, nameList, inKeyword, expList, doKeyword, block, endKeyword);
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -296,6 +437,14 @@ namespace LanguageService
         [Required]
         readonly Token doubleColon2;
 
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(doubleColon1, name, doubleColon2);
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -311,6 +460,14 @@ namespace LanguageService
         readonly Token assignmentOperator;
         [Required]
         readonly ExpList expList;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(varList, assignmentOperator, expList);
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -337,6 +494,21 @@ namespace LanguageService
         [Required]
         readonly Token endKeyword;
 
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = ImmutableList.Create<SyntaxNodeOrToken>(ifKeyword, exp, thenKeyword, ifBlock);
+                foreach (var node in elseIfList)
+                {
+                    children.Add(node);
+                }
+                children.Add(elseBlock);
+                children.Add(endKeyword);
+                return children;
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -350,6 +522,14 @@ namespace LanguageService
         readonly Token elseKeyword;
         [Required]
         readonly BlockNode block;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(elseKeyword, block);
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -369,6 +549,14 @@ namespace LanguageService
         [Required]
         readonly BlockNode block;
 
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(elseIfKeyword, exp, thenKeyword, block);
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -386,19 +574,12 @@ namespace LanguageService
     {
         [Required]
         readonly Token expressionValue;
-        public static bool IsValidExpressionNode(SyntaxKind type)
+
+        public ImmutableList<SyntaxNodeOrToken> Children
         {
-            switch (type)
+            get
             {
-                case SyntaxKind.Number:
-                case SyntaxKind.TrueKeyValue:
-                case SyntaxKind.FalseKeyValue:
-                case SyntaxKind.NilKeyValue:
-                case SyntaxKind.VarArgOperator:
-                case SyntaxKind.String:
-                    return true;
-                default:
-                    return false;
+                return ImmutableList.Create<SyntaxNodeOrToken>(expressionValue);
             }
         }
 
@@ -418,6 +599,14 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode exp2;
 
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(exp1, binaryOperator, exp2);
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -432,6 +621,14 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode exp;
 
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(unaryOperator, exp);
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -443,9 +640,20 @@ namespace LanguageService
     {
         [Required]
         readonly Token openCurly;
+        [Required]
         FieldList fieldList;
         [Required]
         readonly Token closeCurly;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = ImmutableList.Create<SyntaxNodeOrToken>(openCurly, fieldList, closeCurly);
+                return children;
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -459,6 +667,14 @@ namespace LanguageService
         readonly Token functionKeyword;
         [Required]
         readonly FuncBodyNode functionBody;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(functionKeyword, functionBody);
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -484,6 +700,14 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode assignedExp;
 
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(openBracket, identifierExp, closeBracket, assignmentOperator, assignedExp);
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -500,6 +724,14 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode exp;
 
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(name, assignmentOperator, exp);
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -511,6 +743,14 @@ namespace LanguageService
     {
         [Required]
         readonly ExpressionNode exp;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(exp);
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -532,6 +772,14 @@ namespace LanguageService
         [Required]
         readonly Token name;
 
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(name);
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -549,6 +797,15 @@ namespace LanguageService
         readonly ExpressionNode exp;
         [Required]
         readonly Token closeBracket;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(prefixExp, openBracket, exp, closeBracket);
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -564,6 +821,14 @@ namespace LanguageService
         readonly Token dotOperator;
         [Required]
         readonly Token nameIdentifier;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(prefixExp, dotOperator, nameIdentifier);
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -581,6 +846,21 @@ namespace LanguageService
         [Required]
         readonly Args args;
 
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = ImmutableList.Create<SyntaxNodeOrToken>(prefixExp);
+                if (colon != null)
+                {
+                    children.Add(colon);
+                    children.Add(name);
+                }
+                children.Add(args);
+                return children;
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -596,6 +876,14 @@ namespace LanguageService
         readonly ExpressionNode exp;
         [Required]
         readonly Token closeParen;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(openParen, exp, closeParen);
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -615,9 +903,18 @@ namespace LanguageService
     {
         [Required]
         readonly Token openCurly;
+        [Required]
         readonly FieldList fieldList;
         [Required]
         readonly Token closeCurly;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(openCurly, fieldList, closeCurly);
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -630,9 +927,18 @@ namespace LanguageService
     {
         [Required]
         readonly Token openParen;
+        [Required]
         readonly ExpList expList;
         [Required]
         readonly Token closeParen;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(openParen, expList, closeParen);
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -646,6 +952,14 @@ namespace LanguageService
         [Required]
         readonly Token stringLiteral;
 
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(stringLiteral);
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
@@ -658,9 +972,16 @@ namespace LanguageService
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class SeparatedList : SyntaxNode
     {
-        [Required]
-        [NotRecursive]
+        [Required, NotRecursive]
         readonly ImmutableList<SeparatedListElement> syntaxList;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return syntaxList.Cast<SyntaxNodeOrToken>().ToImmutableList();
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -675,6 +996,14 @@ namespace LanguageService
         readonly Token seperator;
         [Required]
         readonly SyntaxNodeOrToken element;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(seperator, element);
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -821,9 +1150,18 @@ namespace LanguageService
     {
         [Required]
         readonly Token openCurly;
+        [Required]
         readonly FieldList fieldList;
         [Required]
         readonly Token closeCurly;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(openCurly, fieldList, closeCurly);
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -836,6 +1174,7 @@ namespace LanguageService
     {
         [Required]
         readonly Token openParen;
+        [Required]
         readonly ParList parameterList;
         [Required]
         readonly Token closeParen;
@@ -843,6 +1182,14 @@ namespace LanguageService
         readonly BlockNode block;
         [Required]
         readonly Token endKeyword;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(openParen, parameterList, closeParen, block, endKeyword);
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -855,11 +1202,24 @@ namespace LanguageService
     {
         [Required]
         readonly Token name;
-        [Required]
-        [NotRecursive]
-        readonly ImmutableList<NameDotPair> funcName;
-        readonly Token colon;
+        [Required, NotRecursive]
+        readonly SeparatedList funcNameList;
+        readonly Token optionalColon;
         readonly Token optionalName;
+
+        public ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = ImmutableList.Create<SyntaxNodeOrToken>(name, funcNameList);
+                if(optionalColon!=null)
+                {
+                    children.Add(optionalColon);
+                    children.Add(optionalName);
+                }
+                return children;
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {

@@ -82,10 +82,11 @@ namespace LanguageService.LanguageModel.TreeVisitors
             {
                 Visit(node as LocalFunctionStatementNode);
             }
-            else if(node is AssignmentStatementNode)
+            else if (node is AssignmentStatementNode)
             {
                 Visit(node as AssignmentStatementNode);
-            } else
+            }
+            else
             {
                 throw new ArgumentException();
             }
@@ -276,7 +277,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
         {
             Visit(node.FunctionBody);
         }
-        
+
         #region FieldNode Expression
         internal virtual void Visit(FieldNode node)
         {
@@ -521,13 +522,14 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal virtual void Visit(FuncNameNode node)
         {
-            foreach (var nameAndDot in node.FuncName)
+            foreach (var seperatedElement in node.FuncNameList.SyntaxList)
             {
-                Visit(nameAndDot.Name);
+                throw new NotImplementedException();
+                //Visit(seperatedElement.Element);
             }
 
-            if (node.Colon != null)
-                Visit(node.Colon);
+            if (node.OptionalColon != null)
+                Visit(node.OptionalColon);
             if (node.Name != null)
                 Visit(node.Name);
         }
