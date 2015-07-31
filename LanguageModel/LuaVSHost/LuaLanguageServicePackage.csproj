@@ -67,7 +67,6 @@
     <Compile Include="Formatting\TextView.cs" />
     <Compile Include="Formatting\UserSettings.cs" />
     <Compile Include="Formatting\WpfTextViewConnectionListener.cs" />
-    <Compile Include="LuaLanguageService.cs" />
     <Compile Include="LuaLanguageServicePackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shared\ConnectionPointCookie.cs" />

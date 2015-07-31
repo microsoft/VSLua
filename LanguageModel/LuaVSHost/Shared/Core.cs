@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.LuaLanguageService.Formatting;
 using Microsoft.VisualStudio.LanguageServices.Lua.Formatting;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
@@ -14,11 +15,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         [Import]
         private GlobalEditorOptions globalEditorOptions;
 
-        [Import(typeof(SVsServiceProvider))]
-        private IServiceProvider serviceProvider;
-
         [Import]
         private IVsEditorAdaptersFactoryService editorAdaptersFactory;
+
+        [Import]
+        private SVsServiceProvider serviceProvider;
 
         private SourceTextCache sourceTextCache;
         private LuaFeatureContainer featureContainer;
@@ -29,14 +30,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
             get
             {
                 return this.globalEditorOptions;
-            }
-        }
-
-        public IServiceProvider ServiceProvider
-        {
-            get
-            {
-                return this.serviceProvider;
             }
         }
 
@@ -74,7 +67,13 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
             {
                 if (userSettings == null)
                 {
-                    userSettings = new UserSettings();
+                    var shell = serviceProvider.GetService(typeof(SVsShell)) as IVsShell;
+                    Assumes.Present(shell);
+                    Guid guid = Guids.Package;
+                    IVsPackage package;
+                    ErrorHandler.ThrowOnFailure(shell.LoadPackage(ref guid, out package));
+                    LuaLanguageServicePackage luaPackage = (LuaLanguageServicePackage)package;
+                    userSettings = luaPackage.FormattingUserSettings;
                 }
                 return userSettings;
             }

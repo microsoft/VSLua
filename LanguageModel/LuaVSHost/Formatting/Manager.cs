@@ -7,7 +7,10 @@ using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
+using Validation;
+
 using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
+
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
@@ -22,9 +25,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 
         internal Manager(ITextBuffer textBuffer, ITextView textView, ICore core)
         {
-            Validation.Requires.NotNull(textBuffer, nameof(textBuffer));
-            Validation.Requires.NotNull(textView, nameof(textView));
-            Validation.Requires.NotNull(core, nameof(core));
+            Requires.NotNull(textBuffer, nameof(textBuffer));
+            Requires.NotNull(textView, nameof(textView));
+            Requires.NotNull(core, nameof(core));
 
             this.core = core;
             this.textBuffer = textBuffer;
@@ -160,7 +163,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 
         public void FormatOnEnter()
         {
-            if (UserSettings.MainInstance.FormatOnEnter != true)
+            if (this.core.UserSettings.FormatOnEnter != true)
             {
                 return;
             }
@@ -182,7 +185,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 
         public void FormatOnPaste()
         {
-            if (UserSettings.MainInstance.FormatOnPaste != true)
+            if (this.core.UserSettings.FormatOnPaste != true)
             {
                 return;
             }
