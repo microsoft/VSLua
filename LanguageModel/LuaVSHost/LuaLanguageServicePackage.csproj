@@ -70,6 +70,9 @@
     <Compile Include="Formatting\OptionPages\UserControls\IndentationUserControl.xaml.cs">
       <DependentUpon>IndentationUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Formatting\OptionPages\UserControls\SpacingUserControl.xaml.cs">
+      <DependentUpon>SpacingUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Formatting\TextView.cs" />
     <Compile Include="Formatting\UserSettings.cs" />
     <Compile Include="Formatting\WpfTextViewConnectionListener.cs" />
@@ -240,6 +243,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Formatting\OptionPages\UserControls\IndentationUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Formatting\OptionPages\UserControls\SpacingUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
