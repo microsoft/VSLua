@@ -15,6 +15,7 @@ namespace LanguageService
         private int pushedDistance = 0;
         public int Position { get; private set; }
         private readonly TextReader textReader;
+        private const char EOF = unchecked((char)-1);
 
         public TrackableTextReader(TextReader textReader)
         {
@@ -24,31 +25,35 @@ namespace LanguageService
 
         public int Read()
         {
-            if (this.Peek() != unchecked((char)-1))
+            if (this.Peek() == EOF)
             {
-                char currentCharacter;
-                if (this.pushedDistance == 0)
-                {
-                    currentCharacter = (char)textReader.Read();
-                    Position++;
-                    this.lastCharacters.Add(currentCharacter);
-                    if (this.lastCharacters.Count > HistoryLimit)
-                    {
-                        this.lastCharacters.RemoveAt(0);
-                    }
-                    return currentCharacter;
-                }
-                else
-                {
-                    currentCharacter = this.lastCharacters[this.lastCharacters.Count - this.pushedDistance];
-                    this.pushedDistance--;
-                    Position++;
-                    return currentCharacter;
-                }
-
+                return EOF;
             }
 
-            return unchecked((char)-1);
+            char currentCharacter;
+            if (this.pushedDistance == 0)
+            {
+                int readChar = (char)textReader.Read();
+                Debug.Assert((readChar & 0xFFFF0000) == 0, "The top 16 bits returned by Read were non-zero, they will be lost when cast to char");
+
+                currentCharacter = (char)readChar;
+                Position++;
+                this.lastCharacters.Add(currentCharacter);
+                if (this.lastCharacters.Count > HistoryLimit)
+                {
+                    this.lastCharacters.RemoveAt(0);
+                }
+                return currentCharacter;
+            }
+            else
+            {
+                currentCharacter = this.lastCharacters[this.lastCharacters.Count - this.pushedDistance];
+                this.pushedDistance--;
+                Position++;
+
+                return currentCharacter;
+            }
+
         }
 
         public bool EndOfStream()
@@ -91,7 +96,10 @@ namespace LanguageService
 
         public void Dispose()
         {
-            textReader.Dispose();
+            if (textReader != null)
+            {
+                textReader.Dispose();
+            }
         }
     }
 }
