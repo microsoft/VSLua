@@ -10,6 +10,9 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
     /// </summary>
     internal class SourceTextCache
     {
+        private ConditionalWeakTable<ITextSnapshot, SourceText> sources =
+            new ConditionalWeakTable<ITextSnapshot, SourceText>();
+
         internal SourceText Get(ITextSnapshot textSnapshot)
         {
             Requires.NotNull(textSnapshot, nameof(textSnapshot));
@@ -25,8 +28,5 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
 
             return sourceText;
         }
-
-        private ConditionalWeakTable<ITextSnapshot, SourceText> sources =
-            new ConditionalWeakTable<ITextSnapshot, SourceText>();
     }
 }
