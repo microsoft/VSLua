@@ -8,17 +8,19 @@ namespace LanguageService
 {
     public enum ParsingContext
     {
-        IfBlockContext,
-        ProgramContext,
+        IfBlock,
+        ChunkNodeBlock,
         ElseBlock,
         ElseIfBlock,
-        ExpListContext,
-        FuncBodyContext,
-        NameListContext,
-        DoStatementContext,
-        WhileContext,
-        RepeatStatementContext,
-        ForStatementContext,
-        VarListContext,
+        DoStatementBlock,
+        WhileBlock,
+        RepeatStatementBlock,
+        ForStatementBlock,
+        FuncBodyBlock,
+        ExpList,
+        NameList,
+        VarList,
+        FieldList,
+        FuncNameDotSeperatedNameList,
     }
 }

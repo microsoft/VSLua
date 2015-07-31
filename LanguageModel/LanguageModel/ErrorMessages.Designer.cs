@@ -61,6 +61,69 @@ namespace LanguageService.LanguageModel {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unexpected token in code block..
+        /// </summary>
+        internal static string BlockParseError {
+            get {
+                return ResourceManager.GetString("BlockParseError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected token in expression list..
+        /// </summary>
+        internal static string ExpListParseError {
+            get {
+                return ResourceManager.GetString("ExpListParseError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected token in field list..
+        /// </summary>
+        internal static string FieldListParseError {
+            get {
+                return ResourceManager.GetString("FieldListParseError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected token found..
+        /// </summary>
+        internal static string FuncNameParseError {
+            get {
+                return ResourceManager.GetString("FuncNameParseError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expected Token: .
+        /// </summary>
+        internal static string MissingToken {
+            get {
+                return ResourceManager.GetString("MissingToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected token found..
+        /// </summary>
+        internal static string NameListParseError {
+            get {
+                return ResourceManager.GetString("NameListParseError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid token found: .
+        /// </summary>
+        internal static string SkippedToken {
+            get {
+                return ResourceManager.GetString("SkippedToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unreachable code detected..
         /// </summary>
         internal static string StatementAfterReturnStatement {
@@ -75,6 +138,15 @@ namespace LanguageService.LanguageModel {
         internal static string test1 {
             get {
                 return ResourceManager.GetString("test1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected token in variable list..
+        /// </summary>
+        internal static string VarListParseError {
+            get {
+                return ResourceManager.GetString("VarListParseError", resourceCulture);
             }
         }
     }

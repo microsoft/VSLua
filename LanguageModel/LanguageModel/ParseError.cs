@@ -8,7 +8,7 @@ namespace LanguageService
 {
     public class ParseError
     {
-        ParseError(string message, int start, int end)
+        public ParseError(string message, int start, int end)
         {
             if(message == null)
             {

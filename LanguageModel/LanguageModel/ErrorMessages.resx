@@ -117,10 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BlockParseError" xml:space="preserve">
+    <value>Unexpected token in code block.</value>
+  </data>
+  <data name="ExpListParseError" xml:space="preserve">
+    <value>Unexpected token in expression list.</value>
+  </data>
+  <data name="FieldListParseError" xml:space="preserve">
+    <value>Unexpected token in field list.</value>
+  </data>
+  <data name="FuncNameParseError" xml:space="preserve">
+    <value>Unexpected token found.</value>
+  </data>
+  <data name="MissingToken" xml:space="preserve">
+    <value>Expected Token: </value>
+  </data>
+  <data name="NameListParseError" xml:space="preserve">
+    <value>Unexpected token found.</value>
+  </data>
+  <data name="SkippedToken" xml:space="preserve">
+    <value>Invalid token found: </value>
+  </data>
   <data name="StatementAfterReturnStatement" xml:space="preserve">
     <value>Unreachable code detected.</value>
   </data>
   <data name="test1" xml:space="preserve">
     <value>test error message</value>
+  </data>
+  <data name="VarListParseError" xml:space="preserve">
+    <value>Unexpected token in variable list.</value>
   </data>
 </root>

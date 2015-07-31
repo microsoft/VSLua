@@ -123,6 +123,8 @@ namespace LanguageService
         VarList,
         TableConstructorNode,
         FuncBodyNode,
-        FuncNameNode
+        FuncNameNode,
+        DotSeparatedNameList,
+        SeparatedListElement
     }
 }

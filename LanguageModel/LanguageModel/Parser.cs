@@ -53,14 +53,15 @@ namespace LanguageService
             return false;
         }
 
-        private Token GetExpectedToken(SyntaxKind type)
+        private Token GetExpectedToken(SyntaxKind kind)
         {
-            if (ParseExpected(type))
+            if (ParseExpected(kind))
             {
                 return currentToken;
             }
             else
             {
+                ParseErrorAtCurrentPosition(ErrorMessages.MissingToken + kind.ToString());
                 return Token.CreateMissingToken(currentToken.End);
             }
         }
@@ -96,7 +97,7 @@ namespace LanguageService
             var node = ChunkNode.CreateBuilder();
             node.Kind = SyntaxKind.ChunkNode;
             node.StartPosition = Peek().FullStart;
-            node.ProgramBlock = ParseBlock(ParsingContext.ProgramContext)?.ToBuilder();
+            node.ProgramBlock = ParseBlock(ParsingContext.ChunkNodeBlock)?.ToBuilder();
             node.EndOfFile = GetExpectedToken(SyntaxKind.EndOfFile);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -113,7 +114,7 @@ namespace LanguageService
 
             while (!IsListTerminator(context, Peek().Kind))
             {
-                if (IsListElement(context, Peek().Kind))
+                if (IsListElementBeginner(context, Peek().Kind))
                 {
                     if (EncounteredReturnStatement)
                         ParseErrorAtCurrentPosition(ErrorMessages.StatementAfterReturnStatement);
@@ -215,7 +216,7 @@ namespace LanguageService
             node.InKeyword = GetExpectedToken(SyntaxKind.InKeyword);
             node.ExpList = ParseExpList()?.ToBuilder();
             node.DoKeyword = GetExpectedToken(SyntaxKind.DoKeyword);
-            node.Block = ParseBlock(ParsingContext.ForStatementContext)?.ToBuilder();
+            node.Block = ParseBlock(ParsingContext.ForStatementBlock)?.ToBuilder();
             node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -240,7 +241,7 @@ namespace LanguageService
             }
 
             node.DoKeyword = GetExpectedToken(SyntaxKind.DoKeyword);
-            node.Block = ParseBlock(ParsingContext.ForStatementContext)?.ToBuilder();
+            node.Block = ParseBlock(ParsingContext.ForStatementBlock)?.ToBuilder();
             node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -307,7 +308,7 @@ namespace LanguageService
             node.Kind = SyntaxKind.RepeatStatementNode;
             node.StartPosition = Peek().Start;
             node.RepeatKeyword = GetExpectedToken(SyntaxKind.RepeatKeyword);
-            node.Block = ParseBlock(ParsingContext.RepeatStatementContext)?.ToBuilder();
+            node.Block = ParseBlock(ParsingContext.RepeatStatementBlock)?.ToBuilder();
             node.UntilKeyword = GetExpectedToken(SyntaxKind.UntilKeyword);
             node.Exp = ParseExpression()?.ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
@@ -322,7 +323,7 @@ namespace LanguageService
             node.WhileKeyword = GetExpectedToken(SyntaxKind.WhileKeyword);
             node.Exp = ParseExpression()?.ToBuilder();
             node.DoKeyword = GetExpectedToken(SyntaxKind.DoKeyword);
-            node.Block = ParseBlock(ParsingContext.WhileContext)?.ToBuilder();
+            node.Block = ParseBlock(ParsingContext.WhileBlock)?.ToBuilder();
             node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -334,7 +335,7 @@ namespace LanguageService
             node.Kind = SyntaxKind.DoStatementNode;
             node.StartPosition = Peek().Start;
             node.DoKeyword = GetExpectedToken(SyntaxKind.DoKeyword);
-            node.Block = ParseBlock(ParsingContext.DoStatementContext)?.ToBuilder();
+            node.Block = ParseBlock(ParsingContext.DoStatementBlock)?.ToBuilder();
             node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -369,7 +370,7 @@ namespace LanguageService
             node.IfKeyword = GetExpectedToken(SyntaxKind.IfKeyword);
             node.Exp = ParseExpression()?.ToBuilder();
             node.ThenKeyword = GetExpectedToken(SyntaxKind.ThenKeyword);
-            node.IfBlock = ParseBlock(ParsingContext.IfBlockContext)?.ToBuilder();
+            node.IfBlock = ParseBlock(ParsingContext.IfBlock)?.ToBuilder();
 
             if (Peek().Kind == SyntaxKind.ElseIfKeyword)
             {
@@ -501,6 +502,7 @@ namespace LanguageService
                         exp = ParsePrefixExp();
                         break;
                     default:
+                        //TODO: @Cyrusskip token?
                         throw new InvalidOperationException();
                 }
             }
@@ -810,33 +812,263 @@ namespace LanguageService
 
         private SeparatedList ParseSeperatedList(ParsingContext context)
         {
+            //TODO: return pre-stored empty list if empty...
+            contextStack.Push(context);
             var listNode = SeparatedList.CreateBuilder();
             listNode.Kind = GetListKind(context);
             listNode.StartPosition = Peek().Start;
+            bool commaFound = false;
 
-            throw new NotImplementedException();
             while (true)
             {
-                if (IsListElement(context, Peek().Kind))
+                if (IsListElementBeginner(context, Peek().Kind))
                 {
+                    var node = SeparatedListElement.CreateBuilder();
+                    node.StartPosition = Peek().Start;
+                    node.Kind = SyntaxKind.SeparatedListElement;
+                    node.Element = ParseListElement(context);
 
+                    if (IsValidSeparator(context, Peek().Kind))
+                    {
+                        node.Seperator = NextToken();
+                        commaFound = true;
+                    }
+
+                    node.Length = currentToken.End - node.StartPosition;
+
+                    listNode.SyntaxList.Add(node.ToImmutable());
+
+                    if (commaFound)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
 
                 if (IsListTerminator(context, Peek().Kind))
-                {
+                    break;
 
-                }
+                if (AbortParsingListOrMoveToNextToken(context))
+                    break;
+            }
 
+            listNode.Length = currentToken.End - listNode.StartPosition;
+            contextStack.Pop();
+
+            return listNode.ToImmutable();
+        }
+
+        private bool IsValidSeparator(ParsingContext context, SyntaxKind seperatorKind)
+        {
+            switch (context)
+            {
+                case ParsingContext.ExpList:
+                case ParsingContext.NameList:
+                case ParsingContext.VarList:
+                    return seperatorKind == SyntaxKind.Comma;
+                case ParsingContext.FieldList:
+                    return (seperatorKind == SyntaxKind.Comma || seperatorKind == SyntaxKind.Semicolon);
+                case ParsingContext.FuncNameDotSeperatedNameList:
+                    return seperatorKind == SyntaxKind.Dot;
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
+        //TODO: @ Cyrus... syntaxnodeortoken seems lose?
+        private SyntaxNodeOrToken ParseListElement(ParsingContext context)
+        {
+            switch (context)
+            {
+                case ParsingContext.ExpList:
+                    return ParseExpression();
+                case ParsingContext.NameList:
+                case ParsingContext.FuncNameDotSeperatedNameList:
+                    if (ParseExpected(SyntaxKind.Identifier))
+                    {
+                        return currentToken;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException();
+                    }
+                case ParsingContext.VarList:
+                    return ParseVar();
+                case ParsingContext.FieldList:
+                    return ParseField();
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
+        private bool IsListTerminator(ParsingContext context, SyntaxKind tokenType)
+        {
+            switch (context)
+            {
+                case ParsingContext.IfBlock:
+                    return (tokenType == SyntaxKind.EndKeyword || tokenType == SyntaxKind.ElseIfKeyword || tokenType == SyntaxKind.ElseKeyword);
+                case ParsingContext.ElseBlock:
+                    return (tokenType == SyntaxKind.EndKeyword);
+                case ParsingContext.ElseIfBlock:
+                    return (tokenType == SyntaxKind.ElseIfKeyword || tokenType == SyntaxKind.EndKeyword);
+                case ParsingContext.ChunkNodeBlock:
+                    return tokenType == SyntaxKind.EndOfFile;
+                case ParsingContext.FuncBodyBlock:
+                case ParsingContext.WhileBlock:
+                case ParsingContext.DoStatementBlock:
+                case ParsingContext.ForStatementBlock:
+                    return tokenType == SyntaxKind.EndKeyword;
+                case ParsingContext.RepeatStatementBlock:
+                    return tokenType == SyntaxKind.UntilKeyword;
+                case ParsingContext.ExpList:
+                case ParsingContext.NameList:
+                case ParsingContext.FuncNameDotSeperatedNameList:
+                    return false; //TODO: Confirm there is no concretely defined terminator...
+                case ParsingContext.VarList:
+                    return tokenType == SyntaxKind.AssignmentOperator;
+                case ParsingContext.FieldList:
+                    return tokenType == SyntaxKind.CloseCurlyBrace;
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
+        private bool IsListElementBeginner(ParsingContext context, SyntaxKind tokenType)
+        {
+            switch (context)
+            {
+                case ParsingContext.IfBlock:
+                case ParsingContext.ChunkNodeBlock:
+                case ParsingContext.ElseBlock:
+                case ParsingContext.ElseIfBlock:
+                case ParsingContext.DoStatementBlock:
+                case ParsingContext.FuncBodyBlock:
+                case ParsingContext.WhileBlock:
+                case ParsingContext.RepeatStatementBlock:
+                case ParsingContext.ForStatementBlock:
+                    switch (tokenType)
+                    {
+                        case SyntaxKind.Identifier:
+                        case SyntaxKind.Semicolon:
+                        case SyntaxKind.OpenParen:
+                        case SyntaxKind.DoubleColon:
+                        case SyntaxKind.BreakKeyword:
+                        case SyntaxKind.GotoKeyword:
+                        case SyntaxKind.DoKeyword:
+                        case SyntaxKind.WhileKeyword:
+                        case SyntaxKind.RepeatKeyword:
+                        case SyntaxKind.IfKeyword:
+                        case SyntaxKind.ForKeyword:
+                        case SyntaxKind.FunctionKeyword:
+                        case SyntaxKind.LocalKeyword:
+                            return true;
+                        default:
+                            return false;
+                    }
+                case ParsingContext.ExpList:
+                    switch (tokenType)
+                    {
+                        case SyntaxKind.NilKeyValue:
+                        case SyntaxKind.FalseKeyValue:
+                        case SyntaxKind.TrueKeyValue:
+                        case SyntaxKind.Number:
+                        case SyntaxKind.String:
+                        case SyntaxKind.VarArgOperator:
+                        case SyntaxKind.FunctionKeyword:
+                        case SyntaxKind.OpenParen:
+                        case SyntaxKind.OpenCurlyBrace:
+                            return true;
+                        default:
+                            return false;
+                    }
+                case ParsingContext.NameList:
+                case ParsingContext.FuncNameDotSeperatedNameList:
+                    if (tokenType == SyntaxKind.Identifier)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case ParsingContext.VarList:
+                    if (tokenType == SyntaxKind.Identifier || tokenType == SyntaxKind.OpenParen)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case ParsingContext.FieldList:
+                    if (tokenType == SyntaxKind.Identifier || tokenType == SyntaxKind.OpenBracket)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
+        private bool AbortParsingListOrMoveToNextToken(ParsingContext context)
+        {
+            ParseErrorAtCurrentToken(GetContextError(context));
+            if (isInSomeParsingContext())
+            {
+                return true;
+            }
+
+            NextToken();
+            ParseErrorAtCurrentToken(ErrorMessages.SkippedToken + '"' + currentToken.Text + '"');
+            return false;
+        }
+
+        private bool isInSomeParsingContext()
+        {
+            Stack<ParsingContext> tempStack = contextStack;
+
+            while (contextStack.Count > 0)
+            {
+                if (IsListElementBeginner(contextStack.Pop(), Peek().Kind))
                 {
-                    AbortParsingListOrMoveToNextToken(context);
+                    return true;
                 }
+            }
+
+            contextStack = tempStack;
+            return false;
+        }
+
+        private SyntaxKind GetListKind(ParsingContext context)
+        {
+            switch (context)
+            {
+                case ParsingContext.ExpList:
+                    return SyntaxKind.ExpList;
+                case ParsingContext.NameList:
+                    return SyntaxKind.NameList;
+                case ParsingContext.VarList:
+                    return SyntaxKind.VarList;
+                case ParsingContext.FieldList:
+                    return SyntaxKind.FieldList;
+                case ParsingContext.FuncNameDotSeperatedNameList:
+                    return SyntaxKind.DotSeparatedNameList;
+                default:
+                    throw new InvalidOperationException();
             }
         }
 
         #region Code To Deprecate
         private VarList ParseVarList()
         {
-            contextStack.Push(ParsingContext.VarListContext);
+            contextStack.Push(ParsingContext.VarList);
             var node = VarList.CreateBuilder();
             node.Kind = SyntaxKind.VarList;
             node.StartPosition = Peek().Start;
@@ -886,7 +1118,7 @@ namespace LanguageService
 
         private NameList ParseNamesList()
         {
-            contextStack.Push(ParsingContext.NameListContext);
+            contextStack.Push(ParsingContext.NameList);
 
             var node = NameList.CreateBuilder();
             node.Kind = SyntaxKind.NameList;
@@ -911,7 +1143,7 @@ namespace LanguageService
 
         private ExpList ParseExpList()
         {
-            contextStack.Push(ParsingContext.ExpListContext);
+            contextStack.Push(ParsingContext.ExpList);
 
             var node = ExpList.CreateBuilder();
             node.Kind = SyntaxKind.ExpField;
@@ -949,7 +1181,7 @@ namespace LanguageService
             node.OpenParen = GetExpectedToken(SyntaxKind.OpenParen);
             node.ParameterList = ParseParList()?.ToBuilder();
             node.CloseParen = GetExpectedToken(SyntaxKind.CloseParen);
-            node.Block = ParseBlock(ParsingContext.FuncBodyContext)?.ToBuilder();
+            node.Block = ParseBlock(ParsingContext.FuncBodyBlock)?.ToBuilder();
             node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = Peek().FullStart - node.StartPosition - 1;
             return node.ToImmutable();
@@ -993,72 +1225,52 @@ namespace LanguageService
 
         #endregion
 
-        #region Helper Methods
-        private bool IsListTerminator(ParsingContext context, SyntaxKind tokenType)
-        {
-            if (tokenType == SyntaxKind.ReturnKeyword)
-            {
-                return true;
-            }
-
-            switch (context)
-            {
-                case ParsingContext.IfBlockContext:
-                    return (tokenType == SyntaxKind.EndKeyword || tokenType == SyntaxKind.ElseIfKeyword || tokenType == SyntaxKind.ElseKeyword);
-                case ParsingContext.ElseBlock:
-                    return (tokenType == SyntaxKind.EndKeyword);
-                case ParsingContext.ElseIfBlock:
-                    return (tokenType == SyntaxKind.ElseIfKeyword || tokenType == SyntaxKind.EndKeyword);
-                case ParsingContext.ProgramContext:
-                    return tokenType == SyntaxKind.EndOfFile;
-                default:
-                    throw new Exception("Unknown Context"); //TODO
-            }
-        }
-
-        private bool IsListElement(ParsingContext parsingContext, SyntaxKind tokenType)
-        {
-            throw new NotImplementedException();
-        }
-
-        private bool AbortParsingListOrMoveToNextToken(ParsingContext context)
-        {
-            ParseErrorAtCurrentToken(GetContextError(context));
-            if (isInSomeParsingContext())
-            {
-                return true;
-            }
-
-            //TODO turn into skipped trivia?
-            throw new NotImplementedException();
-            return false;
-        }
-
-        private bool isInSomeParsingContext()
-        {
-            throw new NotImplementedException();
-        }
+        #region Error Methods
 
         private string GetContextError(ParsingContext context)
         {
-            throw new NotImplementedException();
+            switch (context)
+            {
+                case ParsingContext.IfBlock:
+                case ParsingContext.ChunkNodeBlock:
+                case ParsingContext.ElseBlock:
+                case ParsingContext.ElseIfBlock:
+                case ParsingContext.DoStatementBlock:
+                case ParsingContext.FuncBodyBlock:
+                case ParsingContext.WhileBlock:
+                case ParsingContext.RepeatStatementBlock:
+                case ParsingContext.ForStatementBlock:
+                    return ErrorMessages.BlockParseError;
+                case ParsingContext.VarList:
+                    return ErrorMessages.VarListParseError;
+                case ParsingContext.ExpList:
+                    return ErrorMessages.ExpListParseError;
+                case ParsingContext.NameList:
+                    return ErrorMessages.NameListParseError;
+                case ParsingContext.FieldList:
+                    return ErrorMessages.FieldListParseError;
+                case ParsingContext.FuncNameDotSeperatedNameList:
+                    return ErrorMessages.FuncNameParseError;
+                default:
+                    throw new InvalidOperationException();
+            }
         }
 
         private void ParseErrorAtCurrentToken(string message)
         {
-            Console.WriteLine(ErrorMessages.test1);
-            throw new NotImplementedException();
+            //TODO: test to make sure method is only called after the "error token" is consumed
+            errorList.Add(new ParseError(message, currentToken.Start, currentToken.End));
         }
 
         private void ParseErrorAtCurrentPosition(string message)
         {
-            throw new NotImplementedException();
+            //TODO: test is Peek().FullStart accurate?
+            errorList.Add(new ParseError(message, Peek().FullStart, Peek().FullStart));
         }
 
-        private SyntaxKind GetListKind(ParsingContext context)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
+
+        #region Helper Methods
 
         private bool IsBinop(SyntaxKind type)
         {
@@ -1107,6 +1319,7 @@ namespace LanguageService
                 return ParseDotVar();
             }
         }
+
         #endregion
     }
 }
