@@ -61,6 +61,9 @@
     <Compile Include="Formatting\OptionPages\GeneralPage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Formatting\OptionPages\SpacingPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Formatting\OptionPages\UserControls\GeneralUserControl.xaml.cs">
       <DependentUpon>GeneralUserControl.xaml</DependentUpon>
     </Compile>

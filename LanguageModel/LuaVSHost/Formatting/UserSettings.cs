@@ -133,6 +133,177 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             }
         }
 
+        private bool? spaceAfterCommas = true;
+        public bool? SpaceAfterCommas
+        {
+            get
+            {
+                return spaceAfterCommas;
+            }
+            set
+            {
+                if (spaceAfterCommas != value)
+                {
+                    spaceAfterCommas = value;
+                    RaisePropertyChangedEvent(SpaceAfterCommas, nameof(SpaceAfterCommas));
+                }
+            }
+        }
+
+        private bool? spaceBeforeAndAfterBinaryOperations = true;
+        public bool? SpaceBeforeAndAfterBinaryOperations
+        {
+            get
+            {
+                return spaceBeforeAndAfterBinaryOperations;
+            }
+            set
+            {
+                if (spaceBeforeAndAfterBinaryOperations != value)
+                {
+                    spaceBeforeAndAfterBinaryOperations = value;
+                    RaisePropertyChangedEvent(SpaceBeforeAndAfterBinaryOperations, nameof(SpaceBeforeAndAfterBinaryOperations));
+                }
+            }
+        }
+
+        private bool? spaceBeforeAndAfterAssignmentOperatorOnField = true;
+        public bool? SpaceBeforeAndAfterAssignmentOperatorOnField
+        {
+            get
+            {
+                return spaceBeforeAndAfterAssignmentOperatorOnField;
+            }
+            set
+            {
+                if (spaceBeforeAndAfterAssignmentOperatorOnField != value)
+                {
+                    spaceBeforeAndAfterAssignmentOperatorOnField = value;
+                    RaisePropertyChangedEvent(SpaceBeforeAndAfterAssignmentOperatorOnField, nameof(SpaceBeforeAndAfterAssignmentOperatorOnField));
+                }
+            }
+        }
+
+        private bool? spaceBeforeAndAfterAssignmentInStatement = true;
+        public bool? SpaceBeforeAndAfterAssignmentInStatement
+        {
+            get
+            {
+                return spaceBeforeAndAfterAssignmentInStatement;
+            }
+            set
+            {
+                if (spaceBeforeAndAfterAssignmentInStatement != value)
+                {
+                    spaceBeforeAndAfterAssignmentInStatement = value;
+                    RaisePropertyChangedEvent(SpaceBeforeAndAfterAssignmentInStatement, nameof(SpaceBeforeAndAfterAssignmentInStatement));
+                }
+            }
+        }
+
+        private bool? forLoopAssignmentSpacing = true;
+        public bool? ForLoopAssignmentSpacing
+        {
+            get
+            {
+                return forLoopAssignmentSpacing;
+            }
+            set
+            {
+                if (forLoopAssignmentSpacing != value)
+                {
+                    forLoopAssignmentSpacing = value;
+                    RaisePropertyChangedEvent(ForLoopAssignmentSpacing, nameof(ForLoopAssignmentSpacing));
+                }
+            }
+        }
+
+        private bool? forLoopIndexSpacing = true;
+        public bool? ForLoopIndexSpacing
+        {
+            get
+            {
+                return forLoopIndexSpacing;
+            }
+            set
+            {
+                if (forLoopIndexSpacing != value)
+                {
+                    forLoopAssignmentSpacing = value;
+                    RaisePropertyChangedEvent(ForLoopIndexSpacing, nameof(ForLoopIndexSpacing));
+                }
+            }
+        }
+
+        private bool? spaceBetweenFunctionAndParenthesis = true;
+        public bool? SpaceBetweenFunctionAndParenthesis
+        {
+            get
+            {
+                return spaceBetweenFunctionAndParenthesis;
+            }
+            set
+            {
+                if (spaceBetweenFunctionAndParenthesis != value)
+                {
+                    spaceBetweenFunctionAndParenthesis = value;
+                    RaisePropertyChangedEvent(SpaceBetweenFunctionAndParenthesis, nameof(SpaceBetweenFunctionAndParenthesis));
+                }
+            }
+        }
+
+        private bool? addSpacesOnInsideOfParenthesis = true;
+        public bool? AddSpacesOnInsideOfParenthesis
+        {
+            get
+            {
+                return addSpacesOnInsideOfParenthesis;
+            }
+            set
+            {
+                if (addSpacesOnInsideOfParenthesis != value)
+                {
+                    addSpacesOnInsideOfParenthesis = value;
+                    RaisePropertyChangedEvent(AddSpacesOnInsideOfParenthesis, nameof(AddSpacesOnInsideOfParenthesis));
+                }
+            }
+        }
+
+        private bool? addSpacesOnInsideOfCurlyBraces = true;
+        public bool? AddSpacesOnInsideOfCurlyBraces
+        {
+            get
+            {
+                return addSpacesOnInsideOfCurlyBraces;
+            }
+            set
+            {
+                if (addSpacesOnInsideOfCurlyBraces != value)
+                {
+                    addSpacesOnInsideOfCurlyBraces = value;
+                    RaisePropertyChangedEvent(AddSpacesOnInsideOfCurlyBraces, nameof(AddSpacesOnInsideOfCurlyBraces));
+                }
+            }
+        }
+
+        private bool? addSpacesOnInsideOfSquareBrackets = true;
+        public bool? AddSpacesOnInsideOfSquareBrackets
+        {
+            get
+            {
+                return addSpacesOnInsideOfSquareBrackets;
+            }
+            set
+            {
+                if (addSpacesOnInsideOfSquareBrackets != value)
+                {
+                    addSpacesOnInsideOfSquareBrackets = value;
+                    RaisePropertyChangedEvent(AddSpacesOnInsideOfSquareBrackets, nameof(AddSpacesOnInsideOfSquareBrackets));
+                }
+            }
+        }
+
+
         private void RaisePropertyChangedEvent(object sender, string name)
         {
             if (PropertyChanged != null)

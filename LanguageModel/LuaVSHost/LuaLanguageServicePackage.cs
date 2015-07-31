@@ -26,6 +26,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua
     [ProvideOptionPage(typeof(IndentationPage), Constants.Formatting.Category, Constants.Formatting.Pages.Indentation,
         1000, 1003, false, ProfileMigrationType = ProfileMigrationType.PassThrough)]
 
+    [ProvideOptionPage(typeof(SpacingPage), Constants.Formatting.Category, Constants.Formatting.Pages.Spacing,
+        1000, 1004, false, ProfileMigrationType = ProfileMigrationType.PassThrough)]
+
+
     public sealed class LuaLanguageServicePackage : Package
     {
         public LuaLanguageServicePackage()

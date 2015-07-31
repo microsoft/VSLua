@@ -8,16 +8,39 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Margin="0,0,-226,-212">
         <GroupBox x:Name="groupBox" Header="Spacing" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="229" Width="508">
-            <Grid HorizontalAlignment="Left" Height="279" VerticalAlignment="Top" Width="550" Margin="0,0,-67.333,0">
-                <CheckBox x:Name="spaceAfterCommasCheckbox" Content="Space after commas" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                <CheckBox x:Name="spaceAfterAndBeforeBinaryOperationsCheckbox" Content="Space after and before binary operations" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
-                <CheckBox x:Name="spaceBeforeAndAfterAssignmentOperatorOnField" Content="Space before and after assignment operator for fields" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top"/>
-                <CheckBox x:Name="spaceBeforeAndAfterAssignmentOperatorInStatement" Content="Space before and after assignment operator in statements" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top"/>
-                <CheckBox x:Name="forLoopSpacing" Content="Space before and after assignment in for loop, remove space between index limits" HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top"/>
-                <CheckBox x:Name="spaceBetweenFunctionAndParenthesis" Content="Space between function and parenthesis " HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top"/>
-                <CheckBox x:Name="addSpacesOnInsideOfParenthesis" Content="Space on inside of parenthesis" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Cursor="Space on inside of parenthesis"/>
-                <CheckBox x:Name="addSpacesOnInsideOfCurlyBraces" Content="Spaces on inside of curly braces" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Cursor="Space on inside of curly braces"/>
-                <CheckBox x:Name="addSpacesOnInsideOfSquareBrackets" Content="Spaces on inside of square brackets" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top" Cursor="Spaces on inside of square brackets"/>
+            <Grid HorizontalAlignment="Left" Height="279" VerticalAlignment="Top" Width="550" Margin="0,0,-54,-73">
+                <CheckBox x:Name="spaceAfterCommasCheckbox" Content="Space after commas"
+                          HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
+                          IsChecked="{Binding SpaceAfterCommas}"/>
+                <CheckBox x:Name="spaceBeforeAndAfterBinaryOperationsCheckbox" Content="Space after and before binary operations"
+                          HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"
+                          IsChecked="{Binding SpaceBeforeAndAfterBinaryOperations}"/>
+                <CheckBox x:Name="spaceBeforeAndAfterAssignmentOperatorOnFieldCheckbox" Content="Space before and after assignment operator for fields"
+                          HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top"
+                          IsChecked="{Binding SpaceBeforeAndAfterAssignmentOperatorOnField}"/>
+                
+                <CheckBox x:Name="spaceBeforeAndAfterAssignmentOperatorInStatementCheckbox" Content="Space before and after assignment operator in statements"
+                          HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top"
+                          IsChecked="{Binding SpaceBeforeAndAfterAssignmentInStatement}"/>
+                <CheckBox x:Name="forLoopAssignmentSpacingCheckbox" Content="Space before and after assignment in for loop"
+                          HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top"
+                          IsChecked="{Binding ForLoopAssignmentSpacing}"/>
+                <CheckBox x:Name="spaceBetweenFunctionAndParenthesisCheckbox" Content="Space between function and parenthesis "
+                          HorizontalAlignment="Left" Margin="10,190,0,0" VerticalAlignment="Top"
+                          IsChecked="{Binding SpaceBetweenFunctionAndParenthesis}"/>
+                
+                <CheckBox x:Name="addSpacesOnInsideOfParenthesisCheckbox" Content="Space on inside of parenthesis"
+                          HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top"
+                          IsChecked="{Binding AddSpacesOnInsideOfParenthesis}"/>
+                <CheckBox x:Name="addSpacesOnInsideOfCurlyBracesCheckbox" Content="Spaces on inside of curly braces"
+                          HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top"
+                          IsChecked="{Binding AddSpacesOnInsideOfCurlyBraces}"/>
+                <CheckBox x:Name="addSpacesOnInsideOfSquareBracketsCheckbox" Content="Spaces on inside of square brackets"
+                          HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top"
+                          IsChecked="{Binding AddSpacesOnInsideOfSquareBrackets}"/>
+                <CheckBox x:Name="forLoopIndexSpacingCheckbpx" Content="remove space between index limits"
+                	HorizontalAlignment="Left" Margin="13,110,0,0" VerticalAlignment="Top"
+                          IsChecked="{Binding ForLoopIndexSpacing}"/>
             </Grid>
         </GroupBox>
 
