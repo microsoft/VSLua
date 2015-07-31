@@ -303,6 +303,73 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             }
         }
 
+        private bool? wrapSingleLineFunctions = false;
+        public bool? WrapSingleLineFunctions
+        {
+            get
+            {
+                return wrapSingleLineFunctions;
+            }
+            set
+            {
+                if (wrapSingleLineFunctions != value)
+                {
+                    wrapSingleLineFunctions = value;
+                    RaisePropertyChangedEvent(WrapSingleLineFunctions, nameof(WrapSingleLineFunctions));
+                }
+            }
+        }
+
+        private bool? wrapSingleLineForLoops = false;
+        public bool? WrapSingleLineForLoops
+        {
+            get
+            {
+                return wrapSingleLineForLoops;
+            }
+            set
+            {
+                if (wrapSingleLineForLoops != value)
+                {
+                    wrapSingleLineForLoops = value;
+                    RaisePropertyChangedEvent(WrapSingleLineForLoops, nameof(WrapSingleLineForLoops));
+                }
+            }
+        }
+
+        private bool? wrapSingleLineTableConstructors = false;
+        public bool? WrapSingleLineTableConstructors
+        {
+            get
+            {
+                return wrapSingleLineTableConstructors;
+            }
+            set
+            {
+                if (wrapSingleLineTableConstructors != value)
+                {
+                    wrapSingleLineTableConstructors = value;
+                    RaisePropertyChangedEvent(WrapSingleLineTableConstructors, nameof(WrapSingleLineTableConstructors));
+                }
+            }
+        }
+
+        private bool? addNewLinesToMultilineTableConstructors = false;
+        public bool? AddNewLinesToMultilineTableConstructors
+        {
+            get
+            {
+                return addNewLinesToMultilineTableConstructors;
+            }
+            set
+            {
+                if (addNewLinesToMultilineTableConstructors != value)
+                {
+                    addNewLinesToMultilineTableConstructors = value;
+                    RaisePropertyChangedEvent(AddNewLinesToMultilineTableConstructors, nameof(AddNewLinesToMultilineTableConstructors));
+                }
+            }
+        }
 
         private void RaisePropertyChangedEvent(object sender, string name)
         {
