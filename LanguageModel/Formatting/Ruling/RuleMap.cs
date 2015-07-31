@@ -77,7 +77,7 @@ namespace LanguageService.Formatting.Ruling
         {
             if (optionalRuleMap == null)
             {
-                optionalRuleMap = new OptionalRuleMap(new List<OptionalRuleGroup>());
+                optionalRuleMap = new OptionalRuleMap(Enumerable.Empty<OptionalRuleGroup>());
             }
 
             map = new Dictionary<TokenType, Dictionary<TokenType, RuleBucket>>();
