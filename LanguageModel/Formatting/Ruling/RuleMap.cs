@@ -33,10 +33,21 @@ namespace LanguageService.Formatting.Ruling
             {
                 foreach (TokenType typeRight in rule.RuleDescriptor.TokenRangeRight)
                 {
-                    RuleBucket bucket = map[typeLeft][typeRight];
-                    if (bucket == null)
+                    RuleBucket bucket;
+                    Dictionary<TokenType, RuleBucket> leftTokenMap;
+
+                    if (!map.TryGetValue(typeLeft, out leftTokenMap))
                     {
+                        map[typeLeft] = new Dictionary<TokenType, RuleBucket>();
                         map[typeLeft][typeRight] = bucket = new RuleBucket();
+                    }
+                    else
+                    {
+                        // if this is true, a bucket has been found, and can leave the else safely
+                        if (!leftTokenMap.TryGetValue(typeRight, out bucket))
+                        {
+                            map[typeLeft][typeRight] = bucket = new RuleBucket();
+                        }
                     }
                     bucket.Add(rule);
 
@@ -49,12 +60,17 @@ namespace LanguageService.Formatting.Ruling
             TokenType typeLeft = formattingContext.CurrentToken.Token.Type;
             TokenType typeRight = formattingContext.NextToken.Token.Type;
 
-            RuleBucket ruleBucket = map[typeLeft][typeRight];
+            RuleBucket ruleBucket;
+            Dictionary<TokenType, RuleBucket> leftTokenMap;
 
-            if (ruleBucket != null)
+            if (map.TryGetValue(typeLeft, out leftTokenMap))
             {
-                return ruleBucket.Get(formattingContext);
+                if (leftTokenMap.TryGetValue(typeRight, out ruleBucket))
+                {
+                    return ruleBucket.Get(formattingContext);
+                }
             }
+
             return null;
         }
 
