@@ -285,59 +285,94 @@ namespace LanguageService.LanguageModel.TreeVisitors
         #endregion
 
         #region List Nodes
-
-        internal override void Visit(NameList node)
+        internal override void Visit(SeparatedList node)
         {
-            IndentingWriter.WriteLine("Name List:");
+            IndentingWriter.WriteLine(node.Kind.ToString());
             using (IndentingWriter.Indent())
             {
-                base.Visit(node);
+                foreach (var n in node.SyntaxList)
+                {
+                    Visit(n);
+                }
             }
         }
 
-        internal override void Visit(VarList node)
+        internal override void Visit(SeparatedListElement node)
         {
-            IndentingWriter.WriteLine("Var List:");
-            using (IndentingWriter.Indent())
+            if (node.Element is Var)
             {
-                base.Visit(node);
+                Visit(node.Element as Var);
             }
-        }
-
-        internal override void Visit(FieldList node)
-        {
-            IndentingWriter.WriteLine("Field List:");
-            using (IndentingWriter.Indent())
+            else if (node.Element is Token)
             {
-                base.Visit(node);
+                Visit(node.Element as Token);
             }
-        }
-
-        internal override void Visit(ExpList node)
-        {
-            if (node.Expressions.Count == 0)
+            else if (node.Element is ExpressionNode)
             {
-                IndentingWriter.WriteLine("Empty Expression List");
+                Visit(node.Element as ExpressionNode);
+            }
+            else if (node.Element is FieldNode)
+            {
+                Visit(node.Element as FieldNode);
             }
             else
             {
-                IndentingWriter.WriteLine("Expression List:");
-                using (IndentingWriter.Indent())
-                {
-                    base.Visit(node);
-                }
-            }
-
-        }
-
-        internal override void Visit(VarArgPar node)
-        {
-            IndentingWriter.WriteLine("VarArg Parameter:");
-            using (IndentingWriter.Indent())
-            {
-                base.Visit(node);
+                throw new InvalidOperationException();
             }
         }
+
+        //internal override void Visit(NameList node)
+        //{
+        //    IndentingWriter.WriteLine("Name List:");
+        //    using (IndentingWriter.Indent())
+        //    {
+        //        base.Visit(node);
+        //    }
+        //}
+
+        //internal override void Visit(VarList node)
+        //{
+        //    IndentingWriter.WriteLine("Var List:");
+        //    using (IndentingWriter.Indent())
+        //    {
+        //        base.Visit(node);
+        //    }
+        //}
+
+        //internal override void Visit(FieldList node)
+        //{
+        //    IndentingWriter.WriteLine("Field List:");
+        //    using (IndentingWriter.Indent())
+        //    {
+        //        base.Visit(node);
+        //    }
+        //}
+
+        //internal override void Visit(ExpList node)
+        //{
+        //    if (node.Expressions.Count == 0)
+        //    {
+        //        IndentingWriter.WriteLine("Empty Expression List");
+        //    }
+        //    else
+        //    {
+        //        IndentingWriter.WriteLine("Expression List:");
+        //        using (IndentingWriter.Indent())
+        //        {
+        //            base.Visit(node);
+        //        }
+        //    }
+
+        //}
+
+        //internal override void Visit(VarArgPar node)
+        //{
+        //    IndentingWriter.WriteLine("VarArg Parameter:");
+        //    using (IndentingWriter.Indent())
+        //    {
+        //        base.Visit(node);
+        //    }
+        //}
 
         internal override void Visit(NameListPar node)
         {

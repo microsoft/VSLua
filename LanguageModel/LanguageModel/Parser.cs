@@ -212,7 +212,7 @@ namespace LanguageService
             node.Kind = SyntaxKind.MultipleArgForStatementNode;
             node.StartPosition = Peek().Start;
             node.ForKeyword = GetExpectedToken(SyntaxKind.ForKeyword);
-            node.NameList = ParseNamesList().ToBuilder();
+            node.NameList = ParseNameList().ToBuilder();
             node.InKeyword = GetExpectedToken(SyntaxKind.InKeyword);
             node.ExpList = ParseExpList().ToBuilder();
             node.DoKeyword = GetExpectedToken(SyntaxKind.DoKeyword);
@@ -253,7 +253,7 @@ namespace LanguageService
             node.Kind = SyntaxKind.LocalAssignmentStatementNode;
             node.StartPosition = Peek().Start;
             node.LocalKeyword = GetExpectedToken(SyntaxKind.LocalKeyword);
-            node.NameList = ParseNamesList().ToBuilder();
+            node.NameList = ParseNameList().ToBuilder();
 
             if (Peek().Kind == SyntaxKind.AssignmentOperator)
             {
@@ -394,7 +394,7 @@ namespace LanguageService
             node.Kind = SyntaxKind.ReturnStatementNode;
             node.StartPosition = currentToken.Start;
             node.ReturnKeyword = currentToken;
-            node.ReturnExpressions = ParseExpList().ToBuilder();
+            node.ExpList = ParseExpList().ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -551,42 +551,43 @@ namespace LanguageService
 
         #region Field Nodes
 
-        private FieldList ParseFieldList()
+        private SeparatedList ParseFieldList()
         {
-            var node = FieldList.CreateBuilder();
-            node.Kind = SyntaxKind.FieldList;
-            node.StartPosition = Peek().Start;
-            bool parseFields = true;
-            var fields = new List<FieldAndSeperatorPair>();
+            return ParseSeperatedList(ParsingContext.FieldList);
+            //var node = FieldList.CreateBuilder();
+            //node.Kind = SyntaxKind.FieldList;
+            //node.StartPosition = Peek().Start;
+            //bool parseFields = true;
+            //var fields = new List<FieldAndSeperatorPair>();
 
-            while (parseFields)
-            {
-                var fieldAndSep = FieldAndSeperatorPair.CreateBuilder();
-                fieldAndSep.Field = ParseField().ToBuilder();
-                if (ParseExpected(SyntaxKind.Comma) || ParseExpected(SyntaxKind.Semicolon))
-                {
-                    fieldAndSep.FieldSeparator = currentToken;
-                    parseFields = true;
-                }
-                else
-                {
-                    if (Peek().Kind == SyntaxKind.CloseCurlyBrace)
-                    {
-                        parseFields = false;
-                    }
-                    else
-                    {
-                        fieldAndSep.FieldSeparator = Token.CreateMissingToken(currentToken.End);
-                        parseFields = true;
-                    }
-                    fields.Add(fieldAndSep.ToImmutable());
-                }
-            }
+            //while (parseFields)
+            //{
+            //    var fieldAndSep = FieldAndSeperatorPair.CreateBuilder();
+            //    fieldAndSep.Field = ParseField().ToBuilder();
+            //    if (ParseExpected(SyntaxKind.Comma) || ParseExpected(SyntaxKind.Semicolon))
+            //    {
+            //        fieldAndSep.FieldSeparator = currentToken;
+            //        parseFields = true;
+            //    }
+            //    else
+            //    {
+            //        if (Peek().Kind == SyntaxKind.CloseCurlyBrace)
+            //        {
+            //            parseFields = false;
+            //        }
+            //        else
+            //        {
+            //            fieldAndSep.FieldSeparator = Token.CreateMissingToken(currentToken.End);
+            //            parseFields = true;
+            //        }
+            //        fields.Add(fieldAndSep.ToImmutable());
+            //    }
+            //}
 
-            node.Fields = fields.ToImmutableList();
-            node.Length = currentToken.End - node.StartPosition;
+            //node.Fields = fields.ToImmutableList();
+            //node.Length = currentToken.End - node.StartPosition;
 
-            return node.ToImmutable();
+            //return node.ToImmutable();
         }
 
         private FieldNode ParseField()
@@ -1067,34 +1068,35 @@ namespace LanguageService
         }
 
         #region Code To Deprecate
-        private VarList ParseVarList()
+        private SeparatedList ParseVarList()
         {
-            contextStack.Push(ParsingContext.VarList);
-            var node = VarList.CreateBuilder();
-            node.Kind = SyntaxKind.VarList;
-            node.StartPosition = Peek().Start;
+            return ParseSeperatedList(ParsingContext.VarList);
+            //contextStack.Push(ParsingContext.VarList);
+            //var node = VarList.CreateBuilder();
+            //node.Kind = SyntaxKind.VarList;
+            //node.StartPosition = Peek().Start;
 
-            var vars = new List<CommaVarPair>();
+            //var vars = new List<CommaVarPair>();
 
-            vars.Add(CommaVarPair.Create(null, ParseVar()));
+            //vars.Add(CommaVarPair.Create(null, ParseVar()));
 
-            while (ParseExpected(SyntaxKind.Comma))
-            {
-                vars.Add(CommaVarPair.Create(currentToken, ParseVar()));
-            }
+            //while (ParseExpected(SyntaxKind.Comma))
+            //{
+            //    vars.Add(CommaVarPair.Create(currentToken, ParseVar()));
+            //}
 
-            node.Vars = vars.ToImmutableList();
+            //node.Vars = vars.ToImmutableList();
 
-            node.Length = currentToken.End - node.StartPosition;
-            contextStack.Pop();
-            return node.ToImmutable();
+            //node.Length = currentToken.End - node.StartPosition;
+            //contextStack.Pop();
+            //return node.ToImmutable();
         }
 
         private ParList ParseParList()
         {
             if (Peek().Kind == SyntaxKind.VarArgOperator)
             {
-                var node = VarArgPar.CreateBuilder();
+                var node = VarArgParList.CreateBuilder();
                 node.Kind = SyntaxKind.VarArgPar;
                 node.StartPosition = Peek().Start;
                 node.VarargOperator = GetExpectedToken(SyntaxKind.VarArgOperator);
@@ -1106,7 +1108,7 @@ namespace LanguageService
                 var node = NameListPar.CreateBuilder();
                 node.Kind = SyntaxKind.NameListPar;
                 node.StartPosition = Peek().Start;
-                node.NamesList = ParseNamesList().ToBuilder();
+                node.NamesList = ParseNameList().ToBuilder();
                 if (ParseExpected(SyntaxKind.Comma))
                 {
                     node.Comma = currentToken;
@@ -1117,57 +1119,59 @@ namespace LanguageService
             }
         }
 
-        private NameList ParseNamesList()
+        private SeparatedList ParseNameList()
         {
-            contextStack.Push(ParsingContext.NameList);
+            return ParseSeperatedList(ParsingContext.NameList);
+            //contextStack.Push(ParsingContext.NameList);
 
-            var node = NameList.CreateBuilder();
-            node.Kind = SyntaxKind.NameList;
-            node.StartPosition = Peek().Start;
+            //var node = NameList.CreateBuilder();
+            //node.Kind = SyntaxKind.NameList;
+            //node.StartPosition = Peek().Start;
 
-            List<NameCommaPair> names = new List<NameCommaPair>();
+            //List<NameCommaPair> names = new List<NameCommaPair>();
 
-            //Add initial mandatory name with no preceding comma
-            names.Add(NameCommaPair.Create(null, currentToken));
+            ////Add initial mandatory name with no preceding comma
+            //names.Add(NameCommaPair.Create(null, currentToken));
 
-            while (ParseExpected(SyntaxKind.Comma))
-            {
-                names.Add(NameCommaPair.Create(currentToken, GetExpectedToken(SyntaxKind.Identifier)));
-            }
+            //while (ParseExpected(SyntaxKind.Comma))
+            //{
+            //    names.Add(NameCommaPair.Create(currentToken, GetExpectedToken(SyntaxKind.Identifier)));
+            //}
 
-            node.Names = names.ToImmutableList();
-            node.Length = currentToken.End - node.StartPosition;
+            //node.Names = names.ToImmutableList();
+            //node.Length = currentToken.End - node.StartPosition;
 
-            contextStack.Pop();
-            return node.ToImmutable();
+            //contextStack.Pop();
+            //return node.ToImmutable();
         }
 
-        private ExpList ParseExpList()
+        private SeparatedList ParseExpList()
         {
-            contextStack.Push(ParsingContext.ExpList);
+            return ParseSeperatedList(ParsingContext.ExpList);
+            //contextStack.Push(ParsingContext.ExpList);
 
-            var node = ExpList.CreateBuilder();
-            node.Kind = SyntaxKind.ExpField;
-            node.StartPosition = Peek().Start;
+            //var node = ExpList.CreateBuilder();
+            //node.Kind = SyntaxKind.ExpField;
+            //node.StartPosition = Peek().Start;
 
-            List<ExpressionCommaPair> expressions = new List<ExpressionCommaPair>();
+            //List<ExpressionCommaPair> expressions = new List<ExpressionCommaPair>();
 
-            ExpressionNode exp = ParseExpression();
-            if (exp != null)
-            {
-                expressions.Add(ExpressionCommaPair.Create(null, exp));
+            //ExpressionNode exp = ParseExpression();
+            //if (exp != null)
+            //{
+            //    expressions.Add(ExpressionCommaPair.Create(null, exp));
 
-                while (ParseExpected(SyntaxKind.Comma))
-                {
-                    expressions.Add(ExpressionCommaPair.Create(currentToken, ParseExpression()));
-                }
-            }
+            //    while (ParseExpected(SyntaxKind.Comma))
+            //    {
+            //        expressions.Add(ExpressionCommaPair.Create(currentToken, ParseExpression()));
+            //    }
+            //}
 
-            node.Expressions = expressions.ToImmutableList();
-            node.Length = currentToken.End - node.StartPosition;
+            //node.Expressions = expressions.ToImmutableList();
+            //node.Length = currentToken.End - node.StartPosition;
 
-            contextStack.Pop();
-            return node.ToImmutable();
+            //contextStack.Pop();
+            //return node.ToImmutable();
         }
 
         #endregion
@@ -1206,19 +1210,26 @@ namespace LanguageService
             node.Kind = SyntaxKind.FuncNameNode;
             node.StartPosition = Peek().Start;
             node.Name = GetExpectedToken(SyntaxKind.Identifier);
-            var names = new List<NameDotPair>();
-
-            while (ParseExpected(SyntaxKind.Dot))
+            node.FuncNameList = ParseSeperatedList(ParsingContext.FuncNameDotSeperatedNameList).ToBuilder();
+            if (ParseExpected(SyntaxKind.Colon))
             {
-                if (Peek().Kind == SyntaxKind.Identifier)
-                {
-                    names.Add(NameDotPair.Create(currentToken, NextToken()));
-                }
-                else
-                {
-                    names.Add(NameDotPair.Create(currentToken, null));
-                }
+                node.OptionalColon = currentToken;
+                node.OptionalName = GetExpectedToken(SyntaxKind.Identifier);
             }
+            
+            //var names = new List<NameDotPair>();
+
+            //while (ParseExpected(SyntaxKind.Dot))
+            //{
+            //    if (Peek().Kind == SyntaxKind.Identifier)
+            //    {
+            //        names.Add(NameDotPair.Create(currentToken, NextToken()));
+            //    }
+            //    else
+            //    {
+            //        names.Add(NameDotPair.Create(currentToken, null));
+            //    }
+            //}
 
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();

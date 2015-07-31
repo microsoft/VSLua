@@ -48,8 +48,7 @@ namespace LanguageService
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class BlockNode : SyntaxNode
     {
-        [Required]
-        [NotRecursive]
+        [Required, NotRecursive]
         readonly ImmutableList<StatementNode> statements;
 
         public ImmutableList<SyntaxNodeOrToken> Children
@@ -127,16 +126,17 @@ namespace LanguageService
     {
         [Required]
         readonly Token returnKeyword;
-        readonly ExpList returnExpressions;
-        readonly Token semiColonRetStat;
+        [Required]
+        readonly SeparatedList expList;
+        readonly Token semiColon;
 
         public ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                var children = ImmutableList.Create<SyntaxNodeOrToken>(returnKeyword, returnExpressions);
-                if (semiColonRetStat != null)
-                    children.Add(semiColonRetStat);
+                var children = ImmutableList.Create<SyntaxNodeOrToken>(returnKeyword, expList);
+                if (semiColon != null)
+                    children.Add(semiColon);
                 return children;
             }
         }
@@ -296,9 +296,9 @@ namespace LanguageService
         [Required]
         readonly Token localKeyword;
         [Required]
-        readonly NameList nameList;
+        readonly SeparatedList nameList;
         readonly Token assignmentOperator;
-        readonly ExpList expList;
+        readonly SeparatedList expList;
 
         public ImmutableList<SyntaxNodeOrToken> Children
         {
@@ -401,11 +401,11 @@ namespace LanguageService
         [Required]
         readonly Token forKeyword;
         [Required]
-        readonly NameList nameList;
+        readonly SeparatedList nameList;
         [Required]
         readonly Token inKeyword;
         [Required]
-        readonly ExpList expList;
+        readonly SeparatedList expList;
         [Required]
         readonly Token doKeyword;
         [Required]
@@ -455,11 +455,11 @@ namespace LanguageService
     public partial class AssignmentStatementNode : StatementNode
     {
         [Required]
-        readonly VarList varList;
+        readonly SeparatedList varList;
         [Required]
         readonly Token assignmentOperator;
         [Required]
-        readonly ExpList expList;
+        readonly SeparatedList expList;
 
         public ImmutableList<SyntaxNodeOrToken> Children
         {
@@ -641,7 +641,7 @@ namespace LanguageService
         [Required]
         readonly Token openCurly;
         [Required]
-        FieldList fieldList;
+        readonly SeparatedList fieldList;
         [Required]
         readonly Token closeCurly;
 
@@ -904,7 +904,7 @@ namespace LanguageService
         [Required]
         readonly Token openCurly;
         [Required]
-        readonly FieldList fieldList;
+        readonly SeparatedList fieldList;
         [Required]
         readonly Token closeCurly;
 
@@ -928,7 +928,7 @@ namespace LanguageService
         [Required]
         readonly Token openParen;
         [Required]
-        readonly ExpList expList;
+        readonly SeparatedList expList;
         [Required]
         readonly Token closeParen;
 
@@ -1011,48 +1011,48 @@ namespace LanguageService
         }
     }
 
-    #region Code To Deprecate
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class NameList : SyntaxNode
-    {
-        [Required]
-        readonly ImmutableList<NameCommaPair> names;
+    //#region Code To Deprecate
+    //[GenerateImmutable(GenerateBuilder = true)]
+    //public partial class NameList : SyntaxNode
+    //{
+    //    [Required]
+    //    readonly ImmutableList<NameCommaPair> names;
 
-        public override void Accept(NodeWalker walker)
-        {
-            walker.Visit(this);
-        }
-    }
+    //    public override void Accept(NodeWalker walker)
+    //    {
+    //        walker.Visit(this);
+    //    }
+    //}
 
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class FieldList : SyntaxNode
-    {
-        [Required]
-        readonly ImmutableList<FieldAndSeperatorPair> fields;
+    //[GenerateImmutable(GenerateBuilder = true)]
+    //public partial class FieldList : SyntaxNode
+    //{
+    //    [Required]
+    //    readonly ImmutableList<FieldAndSeperatorPair> fields;
 
-        public override void Accept(NodeWalker walker)
-        {
-            walker.Visit(this);
-        }
-    }
+    //    public override void Accept(NodeWalker walker)
+    //    {
+    //        walker.Visit(this);
+    //    }
+    //}
 
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class ExpList : SyntaxNode
-    {
-        [Required]
-        readonly ImmutableList<ExpressionCommaPair> expressions;
+    //[GenerateImmutable(GenerateBuilder = true)]
+    //public partial class ExpList : SyntaxNode
+    //{
+    //    [Required]
+    //    readonly ImmutableList<ExpressionCommaPair> expressions;
 
-        public override void Accept(NodeWalker walker)
-        {
-            walker.Visit(this);
-        }
-    }
+    //    public override void Accept(NodeWalker walker)
+    //    {
+    //        walker.Visit(this);
+    //    }
+    //}
 
     [GenerateImmutable(GenerateBuilder = true)]
     public abstract partial class ParList : SyntaxNode { }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class VarArgPar : ParList
+    public partial class VarArgParList : ParList
     {
         [Required]
         readonly Token varargOperator;
@@ -1067,7 +1067,7 @@ namespace LanguageService
     public partial class NameListPar : ParList
     {
         [Required]
-        readonly NameList namesList;
+        readonly SeparatedList namesList;
         readonly Token comma;
         readonly Token vararg;
 
@@ -1077,72 +1077,72 @@ namespace LanguageService
         }
     }
 
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class VarList : SyntaxNode
-    {
-        [Required]
-        readonly ImmutableList<CommaVarPair> vars;
+    //[GenerateImmutable(GenerateBuilder = true)]
+    //public partial class VarList : SyntaxNode
+    //{
+    //    [Required]
+    //    readonly ImmutableList<CommaVarPair> vars;
 
-        public override void Accept(NodeWalker walker)
-        {
-            walker.Visit(this);
-        }
-    }
+    //    public override void Accept(NodeWalker walker)
+    //    {
+    //        walker.Visit(this);
+    //    }
+    //}
 
-    #region List Pairs
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class CommaVarPair
-    {
-        [Required]
-        readonly Token comma;
-        [Required]
-        readonly Var var;
-    }
+    //#region List Pairs
+    //[GenerateImmutable(GenerateBuilder = true)]
+    //public partial class CommaVarPair
+    //{
+    //    [Required]
+    //    readonly Token comma;
+    //    [Required]
+    //    readonly Var var;
+    //}
 
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class CommaVarArgPair
-    {
-        [Required]
-        readonly Token comma;
-        [Required]
-        readonly Token varargOperator;
-    }
+    //[GenerateImmutable(GenerateBuilder = true)]
+    //public partial class CommaVarArgPair
+    //{
+    //    [Required]
+    //    readonly Token comma;
+    //    [Required]
+    //    readonly Token varargOperator;
+    //}
 
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class NameCommaPair
-    {
-        [Required]
-        readonly Token comma;
-        [Required]
-        readonly Token name;
-    }
+    //[GenerateImmutable(GenerateBuilder = true)]
+    //public partial class NameCommaPair
+    //{
+    //    [Required]
+    //    readonly Token comma;
+    //    [Required]
+    //    readonly Token name;
+    //}
 
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class ExpressionCommaPair
-    {
-        [Required]
-        readonly Token comma;
-        [Required]
-        readonly ExpressionNode expression;
-    }
+    //[GenerateImmutable(GenerateBuilder = true)]
+    //public partial class ExpressionCommaPair
+    //{
+    //    [Required]
+    //    readonly Token comma;
+    //    [Required]
+    //    readonly ExpressionNode expression;
+    //}
 
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class FieldAndSeperatorPair
-    {
-        readonly FieldNode field;
-        readonly Token fieldSeparator;
-    }
+    //[GenerateImmutable(GenerateBuilder = true)]
+    //public partial class FieldAndSeperatorPair
+    //{
+    //    readonly FieldNode field;
+    //    readonly Token fieldSeparator;
+    //}
 
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class NameDotPair
-    {
-        [Required]
-        readonly Token dot;
-        [Required]
-        readonly Token name;
-    }
-    #endregion
-    #endregion
+    //[GenerateImmutable(GenerateBuilder = true)]
+    //public partial class NameDotPair
+    //{
+    //    [Required]
+    //    readonly Token dot;
+    //    [Required]
+    //    readonly Token name;
+    //}
+    //#endregion
+    //#endregion
     #endregion
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -1151,7 +1151,7 @@ namespace LanguageService
         [Required]
         readonly Token openCurly;
         [Required]
-        readonly FieldList fieldList;
+        readonly SeparatedList fieldList;
         [Required]
         readonly Token closeCurly;
 

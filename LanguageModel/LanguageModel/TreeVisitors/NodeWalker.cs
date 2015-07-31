@@ -111,7 +111,9 @@ namespace LanguageService.LanguageModel.TreeVisitors
 
         internal virtual void Visit(ReturnStatementNode node)
         {
-            Visit(node.ReturnExpressions);
+            Visit(node.ReturnKeyword);
+            Visit(node.ExpList);
+            Visit(node.SemiColon);
         }
 
         internal virtual void Visit(BreakStatementNode node)
@@ -438,50 +440,21 @@ namespace LanguageService.LanguageModel.TreeVisitors
             {
                 Visit(node.Element as ExpressionNode);
             }
+            else if (node.Element is FieldNode)
+            {
+                Visit(node.Element as FieldNode);
+            }
             else
             {
                 throw new InvalidOperationException();
             }
         }
 
-        #region Code To Deprecate
-        internal virtual void Visit(NameList node)
-        {
-            foreach (var nameAndComma in node.Names)
-            {
-                Visit(nameAndComma.Name);
-            }
-        }
-
-        internal virtual void Visit(VarList node)
-        {
-            foreach (var commaVarPair in node.Vars)
-            {
-                Visit(commaVarPair.Var);
-            }
-        }
-
-        internal virtual void Visit(FieldList node)
-        {
-            foreach (var fieldAndSep in node.Fields)
-            {
-                Visit(fieldAndSep.Field);
-            }
-        }
-
-        internal virtual void Visit(ExpList node)
-        {
-            foreach (var expAndComma in node.Expressions)
-            {
-                Visit(expAndComma.Expression);
-            }
-        }
-
         internal virtual void Visit(ParList node)
         {
-            if (node is VarArgPar)
+            if (node is VarArgParList)
             {
-                Visit(node as VarArgPar);
+                Visit(node as VarArgParList);
             }
             else if (node is NameListPar)
             {
@@ -493,7 +466,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
             }
         }
 
-        internal virtual void Visit(VarArgPar node)
+        internal virtual void Visit(VarArgParList node)
         {
             Visit(node.VarargOperator);
         }
@@ -506,7 +479,7 @@ namespace LanguageService.LanguageModel.TreeVisitors
                 Visit(node.Vararg);
             }
         }
-        #endregion
+
         #endregion
 
         internal virtual void Visit(TableConstructorNode node)
