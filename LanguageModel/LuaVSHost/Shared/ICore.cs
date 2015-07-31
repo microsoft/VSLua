@@ -12,6 +12,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         IVsEditorAdaptersFactoryService EditorAdaptersFactory { get; }
         SourceTextCache SourceTextCache { get; }
         LuaFeatureContainer FeatureContainer { get; }
-        UserSettings UserSettings { get; }
+        UserSettings FormattingUserSettings { get; }
     }
 }

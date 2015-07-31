@@ -3,8 +3,7 @@ using System.ComponentModel.Composition;
 using LanguageService;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.LuaLanguageService.Formatting;
-using Microsoft.VisualStudio.LanguageServices.Lua.Formatting;
+using Microsoft.VisualStudio.LanguageServices.Lua;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
@@ -23,7 +22,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 
         private SourceTextCache sourceTextCache;
         private LuaFeatureContainer featureContainer;
-        private UserSettings userSettings;
+        private Formatting.UserSettings userSettings;
 
         public GlobalEditorOptions GlobalEditorOptions
         {
@@ -61,7 +60,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
             }
         }
 
-        public UserSettings UserSettings
+        public Formatting.UserSettings FormattingUserSettings
         {
             get
             {

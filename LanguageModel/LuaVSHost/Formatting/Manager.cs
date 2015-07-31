@@ -163,7 +163,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 
         public void FormatOnEnter()
         {
-            if (this.core.UserSettings.FormatOnEnter != true)
+            if (this.core.FormattingUserSettings.FormatOnEnter != true)
             {
                 return;
             }
@@ -185,7 +185,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 
         public void FormatOnPaste()
         {
-            if (this.core.UserSettings.FormatOnPaste != true)
+            if (this.core.FormattingUserSettings.FormatOnPaste != true)
             {
                 return;
             }
