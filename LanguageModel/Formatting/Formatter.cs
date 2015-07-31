@@ -1,23 +1,24 @@
 ﻿using System.Collections.Generic;
-using LanguageService;
 using LanguageService.Formatting.Options;
 using LanguageService.Formatting.Ruling;
+using Validation;
 
 namespace LanguageService.Formatting
 {
     public sealed class Formatter
     {
-        private ParseTreeCache ParseTreeProvider { get; }
-        private GlobalOptions GlobalOptions { get; set; }
-        private RuleMap RuleMap { get; set; }
-
         internal Formatter(ParseTreeCache parseTreeProvider)
         {
-            Validation.Requires.NotNull(parseTreeProvider, nameof(parseTreeProvider));
-            ParseTreeProvider = parseTreeProvider;
-            GlobalOptions = new GlobalOptions();
-            RuleMap = RuleMap.Create();
+            Requires.NotNull(parseTreeProvider, nameof(parseTreeProvider));
+
+            this.parseTreeProvider = parseTreeProvider;
+            globalOptions = new GlobalOptions();
+            ruleMap = RuleMap.Create();
         }
+
+        private ParseTreeCache parseTreeProvider;
+        private GlobalOptions globalOptions;
+        private RuleMap ruleMap;
 
         /// <summary>
         /// This is main entry point for the VS side of things. For now, the implementation
@@ -36,13 +37,13 @@ namespace LanguageService.Formatting
         {
             if (newOptions != null)
             {
-                GlobalOptions = new GlobalOptions(newOptions);
-                RuleMap = RuleMap.Create(GlobalOptions.OptionalRuleMap);
+                globalOptions = new GlobalOptions(newOptions);
+                ruleMap = RuleMap.Create(globalOptions.OptionalRuleMap);
             }
 
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
-            List<Token> tokens = ParseTreeProvider.Get(span);
+            List<Token> tokens = parseTreeProvider.Get(span);
 
             List<ParsedToken> parsedTokens = ParsedToken.GetParsedTokens(tokens);
 
@@ -51,7 +52,7 @@ namespace LanguageService.Formatting
                 FormattingContext formattingContext =
                     new FormattingContext(parsedTokens[i], parsedTokens[i + 1]);
 
-                Rule rule = RuleMap.Get(formattingContext);
+                Rule rule = ruleMap.Get(formattingContext);
 
                 if (rule != null)
                 {

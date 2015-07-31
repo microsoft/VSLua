@@ -17,6 +17,8 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
         [ImportingConstructor]
         internal GlobalEditorOptions(SVsServiceProvider serviceProvider)
         {
+            Requires.NotNull(serviceProvider, nameof(serviceProvider));
+
             ThreadHelper.ThrowIfNotOnUIThread();
             IVsTextManager2 textManager = (IVsTextManager2)serviceProvider.GetService(typeof(SVsTextManager));
             VIEWPREFERENCES2[] viewPreferences = new VIEWPREFERENCES2[] { new VIEWPREFERENCES2() };

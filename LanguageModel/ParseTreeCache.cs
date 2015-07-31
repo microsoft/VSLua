@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using LanguageService;
-
+using Validation;
 
 namespace LanguageService
 {
@@ -12,9 +11,9 @@ namespace LanguageService
 
         internal List<Token> Get(SourceText sourceText)
         {
-            Validation.Requires.NotNull(sourceText, nameof(sourceText));
+            Requires.NotNull(sourceText, nameof(sourceText));
 
-            List<Token> tokens = null;
+            List<Token> tokens;
             if (sources.TryGetValue(sourceText, out tokens))
             {
                 return tokens;

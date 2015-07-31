@@ -2,31 +2,33 @@
 using System.Collections.Generic;
 using LanguageService;
 using LanguageService.Formatting;
-using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.LuaLanguageService.Shared;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.LuaLanguageService.Shared;
+using Validation;
 
 using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
-using System.ComponentModel.Composition;
-using LanguageService.Formatting.Options;
 
 namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 {
     internal sealed class Manager : IMiniCommandFilter, IFormatter
     {
-        private ITextBuffer textBuffer;
-        private ITextView textView;
-        private bool isClosed;
-        private ICore core;
-
         internal Manager(ITextBuffer textBuffer, ITextView textView, ICore core)
         {
+            Requires.NotNull(textBuffer, nameof(textBuffer));
+            Requires.NotNull(textView, nameof(textView));
+            Requires.NotNull(core, nameof(core));
+
             this.core = core;
             this.textBuffer = textBuffer;
             this.textView = textView;
         }
+
+        private ITextBuffer textBuffer;
+        private ITextView textView;
+        private bool isClosed;
+        private ICore core;
 
         public void PostProcessCommand(Guid guidCmdGroup, uint commandId, IntPtr variantIn, bool wasHandled)
         {

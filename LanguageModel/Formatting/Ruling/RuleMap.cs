@@ -5,7 +5,6 @@ using LanguageService.Formatting.Options;
 
 namespace LanguageService.Formatting.Ruling
 {
-
     internal class RuleMap
     {
         internal Dictionary<TokenType, Dictionary<TokenType, RuleBucket>> map;

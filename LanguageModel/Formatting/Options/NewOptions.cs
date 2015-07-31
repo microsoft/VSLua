@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Validation;
 
 namespace LanguageService.Formatting.Options
 {
@@ -27,6 +24,9 @@ namespace LanguageService.Formatting.Options
             uint indentSize,
             IndentStyleInfo indentStyleInfo)
         {
+            Requires.NotNull(disableRuleGroups, nameof(disableRuleGroups));
+            Requires.NotNull(indentStyleInfo, nameof(indentStyleInfo));
+
             this.RuleGroupsToDisable = disableRuleGroups.ToImmutableArray();
             this.IndentSize = indentSize;
             this.IndentStyleInfo = indentStyleInfo;
