@@ -32,8 +32,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua
     [ProvideOptionPage(typeof(WrappingAndNewLinePage), Constants.Formatting.Category, Constants.Formatting.Pages.WrappingAndNewLines,
         1000, 1005, false, ProfileMigrationType = ProfileMigrationType.PassThrough)]
 
-
-
     public sealed class LuaLanguageServicePackage : Package
     {
         public LuaLanguageServicePackage()
