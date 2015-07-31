@@ -3,7 +3,6 @@ using System.ComponentModel.Composition;
 using LanguageService;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.LanguageServices.Lua;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
