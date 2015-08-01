@@ -34,16 +34,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua
 
         protected override void Initialize()
         {
-            IServiceContainer container = this;
-
-            var componentModel = this.GetService(typeof(SComponentModel)) as IComponentModel;
-            Assumes.Present(componentModel);
-            var core = (Core)componentModel.GetService<ICore>();
-            Assumes.Present(core);
-
-            //container.AddService(typeof(LuaLanguageService),
-            //    (serviceContainer, t) => new LuaLanguageService(serviceContainer, this), promote: true);
-
             base.Initialize();
 
         }
