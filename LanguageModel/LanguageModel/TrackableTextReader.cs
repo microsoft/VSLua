@@ -56,12 +56,12 @@ namespace LanguageService
 
         }
 
-        public bool EndOfStream()
+        internal bool EndOfStream()
         {
             return this.Peek() == unchecked((char)-1);
         }
 
-        public char Peek()
+        internal char Peek()
         {
             if (this.pushedDistance == 0)
             {
@@ -76,7 +76,7 @@ namespace LanguageService
             }
         }
 
-        public char ReadChar()
+        internal char ReadChar()
         {
             return (char)this.Read();
         }

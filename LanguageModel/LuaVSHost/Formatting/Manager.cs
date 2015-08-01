@@ -1,29 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using LanguageModel;
+using LanguageService;
 using LanguageService.Formatting;
-using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.LuaLanguageService.Shared;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
-using VSLua.Shared;
+using Validation;
 
 using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
 
-namespace VSLua.Formatting
+namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 {
     internal sealed class Manager : IMiniCommandFilter, IFormatter
     {
-        private ITextBuffer textBuffer;
-        private ITextView textView;
-        private bool isClosed;
-
-        internal Manager(ITextBuffer textBuffer, ITextView textView)
+        internal Manager(ITextBuffer textBuffer, ITextView textView, ICore core)
         {
-            // setup the undo history here...
+            Requires.NotNull(textBuffer, nameof(textBuffer));
+            Requires.NotNull(textView, nameof(textView));
+            Requires.NotNull(core, nameof(core));
+
+            this.core = core;
             this.textBuffer = textBuffer;
             this.textView = textView;
         }
+
+        private ITextBuffer textBuffer;
+        private ITextView textView;
+        private bool isClosed;
+        private ICore core;
 
         public void PostProcessCommand(Guid guidCmdGroup, uint commandId, IntPtr variantIn, bool wasHandled)
         {
@@ -114,7 +119,6 @@ namespace VSLua.Formatting
 
         private bool Format(SnapshotSpan span)
         {
-
             if (span.Snapshot.TextBuffer != this.textBuffer || span.IsEmpty || !this.CanFormatSpan(span))
             {
                 return false;
@@ -123,21 +127,20 @@ namespace VSLua.Formatting
             SnapshotPoint startLinePoint = span.Start.GetContainingLine().Start;
             span = new SnapshotSpan(startLinePoint, span.End);
 
-            SourceText sourceText = SourceTextProvider.Get(this.textBuffer.CurrentSnapshot);
+            SourceText sourceText = core.SourceTextCache.Get(this.textBuffer.CurrentSnapshot);
 
-            List<TextEditInfo> edits = Formatter.Format(sourceText);
+            List<TextEditInfo> edits = core.FeatureContainer.Formatter.Format(sourceText, null);
 
             using (ITextEdit textEdit = this.textBuffer.CreateEdit())
             {
                 foreach (TextEditInfo edit in edits)
                 {
-                    textEdit.Replace(edit.Start, edit.Length, edit.ReplacingString);
+                    textEdit.Replace(edit.Start, edit.Length, edit.ReplacingWith);
                 }
                 textEdit.Apply();
             }
 
             return true;
-
         }
 
 

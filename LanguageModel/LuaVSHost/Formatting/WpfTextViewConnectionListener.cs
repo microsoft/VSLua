@@ -7,29 +7,21 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Differencing;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
-using VSLua.Shared;
+using Microsoft.VisualStudio.LuaLanguageService.Shared;
 
-namespace VSLua.Formatting
+namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 {
     [Export(typeof(IWpfTextViewConnectionListener))]
-    [ContentType(Constants.LuaLanguageName)]
+    [ContentType(Constants.Language.Name)]
     [TextViewRole(PredefinedTextViewRoles.Interactive)]
     class WpfTextViewConnectionListener : IWpfTextViewConnectionListener
     {
         [Import]
-        internal IVsEditorAdaptersFactoryService EditorAdaptersFactory { get; private set; }
+        private ICore core;
 
         public void SubjectBuffersConnected(IWpfTextView textView, ConnectionReason reason, Collection<ITextBuffer> subjectBuffers)
         {
-            if (textView == null)
-            {
-                throw new ArgumentNullException("textView");
-            }
-
-            if (subjectBuffers == null)
-            {
-                throw new ArgumentNullException("subjectBuffers");
-            }
+            Validation.Requires.NotNull(subjectBuffers, nameof(subjectBuffers));
 
             List<ITextBuffer> textBuffers = IgnoreLeftTextBufferInInlineDiffView(textView, subjectBuffers);
 
@@ -38,7 +30,7 @@ namespace VSLua.Formatting
                 return;
             }
 
-            TextView internalTextView = new TextView(textView, this.EditorAdaptersFactory);
+            TextView internalTextView = new TextView(textView, this.core);
             internalTextView.Connect(textBuffers[0]);
 
         }
@@ -61,15 +53,8 @@ namespace VSLua.Formatting
 
         public void SubjectBuffersDisconnected(IWpfTextView textView, ConnectionReason reason, Collection<ITextBuffer> subjectBuffers)
         {
-            if (textView == null)
-            {
-                throw new ArgumentNullException("textView");
-            }
-
-            if (subjectBuffers == null)
-            {
-                throw new ArgumentNullException("subjectBuffers");
-            }
+            Validation.Requires.NotNull(textView, nameof(textView));
+            Validation.Requires.NotNull(subjectBuffers, nameof(subjectBuffers));
 
             List<ITextBuffer> textBuffers = IgnoreLeftTextBufferInInlineDiffView(textView, subjectBuffers);
 

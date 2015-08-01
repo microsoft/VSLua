@@ -1,12 +1,13 @@
 ﻿using System.IO;
+using Validation;
 
-namespace LanguageModel
+namespace LanguageService
 {
     public class SourceText
     {
         public SourceText(TextReader textReader)
         {
-            Validation.Requires.NotNull(textReader, nameof(textReader));
+            Requires.NotNull(textReader, nameof(textReader));
 
             this.TextReader = textReader;
         }

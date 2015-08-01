@@ -1,20 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using LanguageService;
+using Validation;
 
-
-namespace LanguageModel
+namespace LanguageService
 {
-    internal class ParseTreeProvider
+    internal class ParseTreeCache
     {
         private readonly ConditionalWeakTable<SourceText, List<Token>> sources = 
             new ConditionalWeakTable<SourceText, List<Token>>();
 
         internal List<Token> Get(SourceText sourceText)
         {
-            Validation.Requires.NotNull(sourceText, nameof(sourceText));
+            Requires.NotNull(sourceText, nameof(sourceText));
 
-            List<Token> tokens = null;
+            List<Token> tokens;
             if (sources.TryGetValue(sourceText, out tokens))
             {
                 return tokens;

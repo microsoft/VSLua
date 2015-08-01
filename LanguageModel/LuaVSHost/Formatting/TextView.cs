@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.Editor;
+using Microsoft.VisualStudio.LuaLanguageService.Shared;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Differencing;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
+using Validation;
 
-namespace VSLua.Formatting
+namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 {
     internal class TextView
     {
@@ -20,16 +21,15 @@ namespace VSLua.Formatting
         protected bool IsClosed { get; private set; }
 
         protected IVsEditorAdaptersFactoryService editorAdaptersService;
+        protected ICore core;
 
-        public TextView(IWpfTextView wpfTextView, IVsEditorAdaptersFactoryService editorAdaptersService)
+        public TextView(IWpfTextView wpfTextView, ICore core)
         {
+            Requires.NotNull(wpfTextView, nameof(wpfTextView));
+            Requires.NotNull(core, nameof(core));
 
-            this.editorAdaptersService = editorAdaptersService;
-
-            if (wpfTextView == null)
-            {
-                throw new ArgumentNullException("wpfTextView");
-            }
+            this.core = core;
+            this.editorAdaptersService = core.EditorAdaptersFactory;
 
             this.WpfTextView = wpfTextView;
             this.VsTextView = this.editorAdaptersService.GetViewAdapter(this.WpfTextView);
@@ -40,15 +40,19 @@ namespace VSLua.Formatting
 
         internal void Connect(ITextBuffer textBuffer)
         {
+            Requires.NotNull(textBuffer, nameof(textBuffer));
+
             this.TextBuffer = textBuffer;
             CommandFilter filter = this.CreateCommandFilter(textBuffer);
         }
 
         protected CommandFilter CreateCommandFilter(ITextBuffer textBuffer)
         {
+            Requires.NotNull(textBuffer, nameof(textBuffer));
+
             CommandFilter filter = new CommandFilter();
 
-            Manager formattingManager = new Manager(textBuffer, this.WpfTextView);
+            Manager formattingManager = new Manager(textBuffer, this.WpfTextView, this.core);
             filter.MiniFilters.Add(formattingManager);
 
             IOleCommandTarget nextFilter = null;

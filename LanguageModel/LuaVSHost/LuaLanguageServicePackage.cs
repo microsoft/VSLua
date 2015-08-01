@@ -1,0 +1,48 @@
+﻿//------------------------------------------------------------------------------
+// <copyright file="Lua.Host.cs" company="Company">
+//     Copyright (c) Company.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System;
+using System.ComponentModel.Design;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
+using Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages;
+using Microsoft.VisualStudio.LuaLanguageService.Shared;
+using Microsoft.VisualStudio.Shell;
+
+namespace Microsoft.VisualStudio.LuaLanguageService
+{
+    [PackageRegistration(UseManagedResourcesOnly = true)]
+    [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
+    [Guid(Guids.PackageString)]
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
+
+    [ProvideOptionPage(typeof(GeneralPage), Constants.Formatting.Category, Constants.Formatting.Pages.General,
+        1000, 1002, false, ProfileMigrationType = ProfileMigrationType.PassThrough)]
+    public sealed class LuaLanguageServicePackage : Package
+    {
+        public LuaLanguageServicePackage()
+        {
+            // initiaization stuff before package creation
+        }
+
+        #region Package Members
+
+        protected override void Initialize()
+        {
+            var container = (IServiceContainer)this;
+
+            if (container != null)
+            {
+                container.AddService(typeof(LuaLanguageService),
+                    (serviceContainer, t) => new LuaLanguageService(serviceContainer), promote: true);
+            }
+
+            base.Initialize();
+        }
+
+        #endregion
+    }
+}

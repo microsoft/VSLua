@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="LuaVSHost.Luca Duran.60308f28-7ba0-42fe-b59d-2ad9039db23c" Version="1.0" Language="en-US" Publisher="Luca Duran" />
-    <DisplayName>LuaVSHost</DisplayName>
-    <Description>Empty VSIX Project.</Description>
+    <Identity Id="LuaLanguageService.Luca Duran.60308f28-7ba0-42fe-b59d-2ad9039db23c" Version="0.1" Language="en-US" Publisher="Luca Duran" />
+    <DisplayName>Lua Language Service</DisplayName>
+    <Description xml:space="preserve">The Lua Language Service Package</Description>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />

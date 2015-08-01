@@ -1,19 +1,21 @@
 ﻿using System.Runtime.CompilerServices;
-using LanguageModel;
-using Microsoft.Internal.VisualStudio.Shell;
+using LanguageService;
 using Microsoft.VisualStudio.Text;
 
-namespace VSLua.Shared
+namespace Microsoft.VisualStudio.LuaLanguageService.Shared
 {
     /// <summary>
     /// This class will be changed to non-static once I merge this branch with the branch that has the Core class that
     /// holds everything.
     /// </summary>
-    internal static class SourceTextProvider
+    internal class SourceTextCache
     {
-        internal static SourceText Get(ITextSnapshot textSnapshot)
+        private ConditionalWeakTable<ITextSnapshot, SourceText> sources =
+            new ConditionalWeakTable<ITextSnapshot, SourceText>();
+
+        internal SourceText Get(ITextSnapshot textSnapshot)
         {
-            Validate.IsNotNull(textSnapshot, nameof(textSnapshot));
+            Requires.NotNull(textSnapshot, nameof(textSnapshot));
 
             SourceText sourceText = null;
             if (sources.TryGetValue(textSnapshot, out sourceText))
@@ -26,8 +28,5 @@ namespace VSLua.Shared
 
             return sourceText;
         }
-
-        private static ConditionalWeakTable<ITextSnapshot, SourceText> sources =
-            new ConditionalWeakTable<ITextSnapshot, SourceText>();
     }
 }

@@ -1,16 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LanguageService.Formatting.Options;
 
 namespace LanguageService.Formatting.Ruling
 {
-
     internal class RuleMap
     {
-        internal RuleBucket[,] map;
+        internal Dictionary<TokenType, Dictionary<TokenType, RuleBucket>> map;
+        private static readonly int Length = Enum.GetNames(typeof(TokenType)).Length;
 
-        internal RuleMap()
+        internal static RuleMap Create(OptionalRuleMap optionalRuleMap)
         {
-            int length = Enum.GetNames(typeof(TokenType)).Length;
-            this.map = new RuleBucket[length, length];
+            RuleMap ruleMap = new RuleMap();
+            ruleMap.AddEnabledRules(optionalRuleMap);
+
+            return ruleMap;
+        }
+
+        internal static RuleMap Create()
+        {
+            RuleMap ruleMap = new RuleMap();
+            ruleMap.AddEnabledRules(new OptionalRuleMap(Enumerable.Empty<OptionalRuleGroup>()));
+
+            return ruleMap;
         }
 
         internal void Add(Rule rule)
@@ -19,32 +32,62 @@ namespace LanguageService.Formatting.Ruling
             {
                 foreach (TokenType typeRight in rule.RuleDescriptor.TokenRangeRight)
                 {
-                    int column = (int)typeLeft;
-                    int row = (int)typeRight;
+                    RuleBucket bucket;
+                    Dictionary<TokenType, RuleBucket> leftTokenMap;
 
-                    RuleBucket bucket = this.map[column, row];
-                    if (bucket == null)
+                    if (!map.TryGetValue(typeLeft, out leftTokenMap))
                     {
-                        bucket = new RuleBucket();
+                        map[typeLeft] = new Dictionary<TokenType, RuleBucket>();
+                        map[typeLeft][typeRight] = bucket = new RuleBucket();
+                    }
+                    else
+                    {
+                        // if this is true, a bucket has been found, and can leave the else safely
+                        if (!leftTokenMap.TryGetValue(typeRight, out bucket))
+                        {
+                            map[typeLeft][typeRight] = bucket = new RuleBucket();
+                        }
                     }
                     bucket.Add(rule);
-                    this.map[column, row] = bucket;
+
                 }
             }
         }
 
         internal Rule Get(FormattingContext formattingContext)
         {
-            int column = (int)formattingContext.CurrentToken.Token.Type;
-            int row = (int)formattingContext.NextToken.Token.Type;
+            TokenType typeLeft = formattingContext.CurrentToken.Token.Type;
+            TokenType typeRight = formattingContext.NextToken.Token.Type;
 
-            RuleBucket ruleBucket = this.map[column, row];
+            RuleBucket ruleBucket;
+            Dictionary<TokenType, RuleBucket> leftTokenMap;
 
-            if (ruleBucket != null)
+            if (map.TryGetValue(typeLeft, out leftTokenMap))
             {
-                return ruleBucket.Get(formattingContext);
+                if (leftTokenMap.TryGetValue(typeRight, out ruleBucket))
+                {
+                    return ruleBucket.Get(formattingContext);
+                }
             }
+
             return null;
+        }
+
+        private void AddEnabledRules(OptionalRuleMap optionalRuleMap)
+        {
+            if (optionalRuleMap == null)
+            {
+                optionalRuleMap = new OptionalRuleMap(Enumerable.Empty<OptionalRuleGroup>());
+            }
+
+            map = new Dictionary<TokenType, Dictionary<TokenType, RuleBucket>>();
+            foreach (Rule rule in Rules.AllRules)
+            {
+                if (!optionalRuleMap.DisabledRules.Contains(rule))
+                {
+                    Add(rule);
+                }
+            }
         }
     }
 }

@@ -1,38 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using Validation;
 
 namespace LanguageService.Formatting.Ruling
 {
     internal class SimpleRule : Rule
     {
-        protected readonly RuleDescriptor ruleDescriptor;
-        protected readonly RuleOperation ruleOperation;
-
-        internal override RuleDescriptor RuleDescriptor
-        {
-            get
-            {
-                return ruleDescriptor;
-            }
-        }
-
-        internal override RuleOperation RuleOperationContext
-        {
-            get
-            {
-                return ruleOperation;
-            }
-        }
-
         internal SimpleRule(RuleDescriptor ruleDescriptor, List<Func<FormattingContext, bool>> contextFilters, RuleAction action)
         {
-            this.ruleDescriptor = ruleDescriptor;
-            this.ruleOperation = new RuleOperation(new RuleOperationContext(contextFilters), action);
+            Requires.NotNull(ruleDescriptor, nameof(ruleDescriptor));
+            Requires.NotNull(contextFilters, nameof(contextFilters));
+
+            this.RuleDescriptor = ruleDescriptor;
+            this.RuleOperationContext = new RuleOperation(new RuleOperationContext(contextFilters), action);
         }
+
+        internal override RuleDescriptor RuleDescriptor { get; }
+        internal override RuleOperation RuleOperationContext { get; }
 
         internal override bool AppliesTo(FormattingContext formattingContext)
         {
-            return ruleOperation.Context.InContext(formattingContext);
+            return RuleOperationContext.Context.InContext(formattingContext);
         }
 
         internal override IEnumerable<TextEditInfo> Apply(FormattingContext formattingContext)
@@ -49,16 +37,16 @@ namespace LanguageService.Formatting.Ruling
 
         private string GetTextFromAction()
         {
-            switch (ruleOperation.Action)
+            switch (RuleOperationContext.Action)
             {
                 case RuleAction.Delete:
-                    return "";
+                    return string.Empty;
                 case RuleAction.Newline:
                     return "\n";
                 case RuleAction.Space:
                     return " ";
                 default:
-                    return "";
+                    return string.Empty;
             }
         }
 

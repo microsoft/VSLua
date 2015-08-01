@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 
-namespace VSLua.Formatting
+namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 {
     class CommandFilter : IOleCommandTarget
     {

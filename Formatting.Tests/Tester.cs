@@ -2,7 +2,8 @@
 using LanguageService.Formatting;
 using Xunit;
 using System.IO;
-using LanguageModel;
+using LanguageService;
+using LanguageService;
 
 namespace Formatting.Tests
 {
@@ -46,7 +47,8 @@ namespace Formatting.Tests
 
         internal static string Format(string original)
         {
-            List<TextEditInfo> textEdits = Formatter.Format(new SourceText(new StringReader(original)));
+            LuaFeatureContainer featureContainer = new LuaFeatureContainer();
+            List<TextEditInfo> textEdits = featureContainer.Formatter.Format(new SourceText(new StringReader(original)), null);
 
             var factory = new EditorUtils.EditorHostFactory();
             var host = factory.CreateEditorHost();
@@ -55,7 +57,7 @@ namespace Formatting.Tests
 
             foreach (var textEdit in textEdits)
             {
-                edit.Replace(textEdit.Start, textEdit.Length, textEdit.ReplacingString);
+                edit.Replace(textEdit.Start, textEdit.Length, textEdit.ReplacingWith);
             }
 
             var applied = edit.Apply();

@@ -1,23 +1,24 @@
 ﻿using System.Collections.Generic;
-using LanguageModel;
+using LanguageService.Formatting.Options;
 using LanguageService.Formatting.Ruling;
+using Validation;
 
 namespace LanguageService.Formatting
 {
-    public static class Formatter
+    public sealed class Formatter
     {
-        private static ParseTreeProvider parseTreeProvider;
-        private static ParseTreeProvider ParseTreeProvider
+        internal Formatter(ParseTreeCache parseTreeProvider)
         {
-            get
-            {
-                if (parseTreeProvider == null)
-                {
-                    parseTreeProvider = new ParseTreeProvider();
-                }
-                return parseTreeProvider;
-            }
+            Requires.NotNull(parseTreeProvider, nameof(parseTreeProvider));
+
+            this.parseTreeProvider = parseTreeProvider;
+            globalOptions = new GlobalOptions();
+            ruleMap = RuleMap.Create();
         }
+
+        private ParseTreeCache parseTreeProvider;
+        private GlobalOptions globalOptions;
+        private RuleMap ruleMap;
 
         /// <summary>
         /// This is main entry point for the VS side of things. For now, the implementation
@@ -32,12 +33,17 @@ namespace LanguageService.Formatting
         /// indentation text edits from the spacing text edits in the future but for now they are in
         /// the same list.
         /// </returns>
-        public static List<TextEditInfo> Format(SourceText span)
+        public List<TextEditInfo> Format(SourceText span, NewOptions newOptions)
         {
-            RuleMap ruleMap = Rules.GetRuleMap();
+            if (newOptions != null)
+            {
+                globalOptions = new GlobalOptions(newOptions);
+                ruleMap = RuleMap.Create(globalOptions.OptionalRuleMap);
+            }
+
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
-            List<Token> tokens = ParseTreeProvider.Get(span);
+            List<Token> tokens = parseTreeProvider.Get(span);
 
             List<ParsedToken> parsedTokens = ParsedToken.GetParsedTokens(tokens);
 
