@@ -34,7 +34,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         {
             if (viewPreferences != null && viewPreferences.Length > 0)
             {
-                //this.AutoDelimiterHighlight = Convert.ToBoolean(viewPreferences[0].fAutoDelimiterHighlight);
+                // this.AutoDelimiterHighlight = Convert.ToBoolean(viewPreferences[0].fAutoDelimiterHighlight);
             }
 
             if (languagePreferences != null && languagePreferences.Length > 0 &&
@@ -42,9 +42,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
             {
                 this.IndentStyle = languagePreferences[0].IndentStyle;
                 this.TabSize = languagePreferences[0].uTabSize;
-                FireOnUpdateLanguagePreferences();
+                this.FireOnUpdateLanguagePreferences();
             }
-
         }
 
         private void FireOnUpdateLanguagePreferences()

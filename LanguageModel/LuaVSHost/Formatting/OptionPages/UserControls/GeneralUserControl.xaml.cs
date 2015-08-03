@@ -22,7 +22,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages.UserC
     {
         public GeneralUserControl()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

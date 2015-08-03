@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
-using Microsoft.VisualStudio.Editor;
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Differencing;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
-using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
@@ -32,9 +31,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 
             TextView internalTextView = new TextView(textView, this.core);
             internalTextView.Connect(textBuffers[0]);
-
         }
-
 
         private static List<ITextBuffer> IgnoreLeftTextBufferInInlineDiffView(IWpfTextView textView, Collection<ITextBuffer> subjectBuffers)
         {
@@ -48,6 +45,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                     textBuffers.Add(subjectBuffer);
                 }
             }
+
             return textBuffers;
         }
 

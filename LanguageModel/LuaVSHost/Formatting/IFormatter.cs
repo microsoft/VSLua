@@ -12,14 +12,12 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         /// <summary>
         /// Formats the line based on the caret position.
         /// </summary>
-        /// <param name="caret"> The position of the caret in the text buffer </param>
         void FormatOnEnter();
 
         /// <summary>
         /// Formats the selection made by the user.
         /// </summary>
         void FormatSelection();
-
 
         /// <summary>
         /// Formats the statenent made by the user. A statement as defined in the Formatting Functional Spec.

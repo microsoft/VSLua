@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages.UserControls;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
+using Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages.UserControls;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages
 {
@@ -19,12 +15,13 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages
         {
             get
             {
-                if (generalUserControl == null)
+                if (this.generalUserControl == null)
                 {
-                    generalUserControl = new GeneralUserControl();
-                    generalUserControl.DataContext = UserSettings.MainInstance;
+                    this.generalUserControl = new GeneralUserControl();
+                    this.generalUserControl.DataContext = UserSettings.MainInstance;
                 }
-                return generalUserControl;
+
+                return this.generalUserControl;
             }
         }
     }

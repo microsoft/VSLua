@@ -15,13 +15,13 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
             Validation.Requires.NotNull(textSnapshot, nameof(textSnapshot));
 
             SourceText sourceText = null;
-            if (sources.TryGetValue(textSnapshot, out sourceText))
+            if (this.sources.TryGetValue(textSnapshot, out sourceText))
             {
                 return sourceText;
             }
-    
+
             sourceText = new SourceText(new TextSnapshotToTextReader(textSnapshot));
-            sources.Add(textSnapshot, sourceText);
+            this.sources.Add(textSnapshot, sourceText);
 
             return sourceText;
         }

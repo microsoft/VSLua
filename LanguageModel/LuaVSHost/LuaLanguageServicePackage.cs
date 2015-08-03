@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="Lua.Host.cs" company="Company">
+// <copyright file="LuaLanguageServicePackage.cs" company="Company">
 //     Copyright (c) Company.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -35,14 +35,13 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua
         protected override void Initialize()
         {
             base.Initialize();
-
         }
 
         internal UserSettings FormattingUserSettings
         {
             get
             {
-                return (UserSettings)base.GetAutomationObject($"{Constants.Formatting.Category}.{Constants.Formatting.Pages.General}");
+                return (UserSettings)this.GetAutomationObject($"{Constants.Formatting.Category}.{Constants.Formatting.Pages.General}");
             }
         }
 

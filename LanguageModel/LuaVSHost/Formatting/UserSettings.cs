@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages;
@@ -10,7 +11,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
     internal sealed class UserSettings : INotifyPropertyChanged
     {
-        public readonly static UserSettings MainInstance = new UserSettings();
+        public static readonly UserSettings MainInstance = new UserSettings();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -19,14 +20,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return formatOnEnter;
+                return this.formatOnEnter;
             }
             set
             {
-                if (formatOnEnter != value)
+                if (this.formatOnEnter != value)
                 {
-                    formatOnEnter = value;
-                    RaisePropertyChangedEvent(FormatOnEnter, nameof(FormatOnEnter));
+                    this.formatOnEnter = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -36,14 +37,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return formatOnPaste;
+                return this.formatOnPaste;
             }
             set
             {
-                if (formatOnPaste != value)
+                if (this.formatOnPaste != value)
                 {
-                    formatOnPaste = value;
-                    RaisePropertyChangedEvent(FormatOnPaste, nameof(FormatOnPaste));
+                    this.formatOnPaste = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -53,24 +54,21 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return formatOnBlock;
+                return this.formatOnBlock;
             }
             set
             {
-                if (formatOnBlock != value)
+                if (this.formatOnBlock != value)
                 {
-                    formatOnBlock = value;
-                    RaisePropertyChangedEvent(FormatOnBlock, nameof(FormatOnBlock));
+                    this.formatOnBlock = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
 
-        private void RaisePropertyChangedEvent(object sender, string name)
+        private void RaisePropertyChangedEvent([CallerMemberName] string callingMember = "")
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(sender, new PropertyChangedEventArgs(name));
-            }
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(callingMember));
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         {
             get
             {
-                return sourceTextCache != null ? sourceTextCache : (sourceTextCache = new SourceTextCache());
+                return this.sourceTextCache != null ? this.sourceTextCache : (this.sourceTextCache = new SourceTextCache());
             }
         }
 
@@ -51,11 +51,12 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         {
             get
             {
-                if (featureContainer == null)
+                if (this.featureContainer == null)
                 {
-                    featureContainer = new LuaFeatureContainer();
+                    this.featureContainer = new LuaFeatureContainer();
                 }
-                return featureContainer;
+
+                return this.featureContainer;
             }
         }
 
@@ -63,17 +64,18 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         {
             get
             {
-                if (userSettings == null)
+                if (this.userSettings == null)
                 {
-                    var shell = serviceProvider.GetService(typeof(SVsShell)) as IVsShell;
+                    var shell = this.serviceProvider.GetService(typeof(SVsShell)) as IVsShell;
                     Assumes.Present(shell);
                     Guid guid = Guids.Package;
                     IVsPackage package;
                     ErrorHandler.ThrowOnFailure(shell.LoadPackage(ref guid, out package));
                     LuaLanguageServicePackage luaPackage = (LuaLanguageServicePackage)package;
-                    userSettings = luaPackage.FormattingUserSettings;
+                    this.userSettings = luaPackage.FormattingUserSettings;
                 }
-                return userSettings;
+
+                return this.userSettings;
             }
         }
     }

@@ -11,7 +11,6 @@ using Validation;
 
 using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
 
-
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
     internal sealed class Manager : IMiniCommandFilter, IFormatter
@@ -45,6 +44,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                             this.FormatDocument();
                             return true;
                         }
+
                     case VSConstants.VSStd2KCmdID.FORMATSELECTION:
                         {
                             this.FormatSelection();
@@ -60,9 +60,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                         {
                             this.prePasteSnapshot = this.textView.TextSnapshot;
                         }
+
                         break;
                 }
             }
+
             return false;
         }
 
@@ -85,10 +87,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                         {
                             this.FormatOnPaste();
                         }
+
                         break;
                 }
             }
-
 
             // For typing stuff (after semicolin, } or enter and stuff)
         }
@@ -107,6 +109,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                             commandStatus = OLECommandFlags.OLECMDF_ENABLED | OLECommandFlags.OLECMDF_SUPPORTED;
                             return true;
                         }
+
                         break;
 
                     case VSConstants.VSStd2KCmdID.FORMATSELECTION:
@@ -117,11 +120,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                             {
                                 commandStatus |= OLECommandFlags.OLECMDF_ENABLED;
                             }
+
                             return true;
                         }
+
                         break;
                 }
             }
+
             return false;
         }
 
@@ -153,7 +159,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             return !this.textBuffer.IsReadOnly(span);
         }
 
-
         public void FormatDocument()
         {
             int endPos = this.textBuffer.CurrentSnapshot.Length;
@@ -180,8 +185,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                 this.Format(span);
             }
         }
-
-
 
         public void FormatOnPaste()
         {
@@ -228,9 +231,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             span = new SnapshotSpan(startLinePoint, span.End);
             ITextSnapshot textSnapshot = span.Snapshot;
 
-            SourceText sourceText = core.SourceTextCache.Get(this.textBuffer.CurrentSnapshot);
+            SourceText sourceText = this.core.SourceTextCache.Get(this.textBuffer.CurrentSnapshot);
             Range range = new Range(span.Start.Position, span.End.Position);
-            List<TextEditInfo> edits = core.FeatureContainer.Formatter.Format(sourceText, range, null);
+            List<TextEditInfo> edits = this.core.FeatureContainer.Formatter.Format(sourceText, range, null);
 
             using (ITextEdit textEdit = this.textBuffer.CreateEdit())
             {
@@ -238,12 +241,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                 {
                     textEdit.Replace(edit.Start, edit.Length, edit.ReplacingWith);
                 }
+
                 textEdit.Apply();
             }
 
             return true;
         }
-
-
     }
 }

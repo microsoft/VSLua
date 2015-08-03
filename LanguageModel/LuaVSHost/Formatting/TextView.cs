@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.OLE.Interop;
@@ -15,13 +14,17 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         private static Dictionary<IWpfTextView, TextView> viewMap = new Dictionary<IWpfTextView, TextView>();
 
         protected IWpfTextView WpfTextView { get; private set; }
+
         protected IVsTextView VsTextView { get; set; }
+
         protected ITextBuffer TextBuffer { get; set; }
+
         protected bool IsReadOnly { get; private set; }
+
         protected bool IsClosed { get; private set; }
 
-        protected IVsEditorAdaptersFactoryService editorAdaptersService;
-        protected ICore core;
+        private IVsEditorAdaptersFactoryService editorAdaptersService;
+        private ICore core;
 
         public TextView(IWpfTextView wpfTextView, ICore core)
         {
@@ -56,7 +59,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             filter.Next = nextFilter;
 
             return filter;
-
         }
     }
 }
