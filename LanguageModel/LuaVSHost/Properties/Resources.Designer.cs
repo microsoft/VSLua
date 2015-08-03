@@ -169,6 +169,105 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove spaces between index limits in a for loop.
+        /// </summary>
+        internal static string RemoveSpaceBetweenIndexLimitsCheckBoxContent {
+            get {
+                return ResourceManager.GetString("RemoveSpaceBetweenIndexLimitsCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert spaces after commas.
+        /// </summary>
+        internal static string SpaceAfterCommasCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceAfterCommasCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert a space before and after an assignment operator used for fields in table contructors.
+        /// </summary>
+        internal static string SpaceBeforeAndAfterAssignmentOpsInFieldCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceBeforeAndAfterAssignmentOpsInFieldCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert a space before and after an assignment operator used in for loop header.
+        /// </summary>
+        internal static string SpaceBeforeAndAfterAssignmentOpsInForLoopCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceBeforeAndAfterAssignmentOpsInForLoopCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert a space before and after an assignment operator used for statements.
+        /// </summary>
+        internal static string SpaceBeforeAndAfterAssignmentOpsInStatementsCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceBeforeAndAfterAssignmentOpsInStatementsCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert a space before and after binary operations.
+        /// </summary>
+        internal static string SpaceBeforeAndAfterBinOpsCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceBeforeAndAfterBinOpsCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert a space between a function name/keyword and an open parenthesis..
+        /// </summary>
+        internal static string SpaceBetweenFunctionAndOpenParenCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceBetweenFunctionAndOpenParenCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert spaces on inside of curly braces.
+        /// </summary>
+        internal static string SpaceInsideOfCurlyBracesCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceInsideOfCurlyBracesCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert spaces on the inside of parenthesis.
+        /// </summary>
+        internal static string SpaceInsideOfParenthesisCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceInsideOfParenthesisCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert spaces on inside of square brackets.
+        /// </summary>
+        internal static string SpaceInsideOfSquareBracketsCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceInsideOfSquareBracketsCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spacing.
+        /// </summary>
+        internal static string SpacingGroupBoxHeader {
+            get {
+                return ResourceManager.GetString("SpacingGroupBoxHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tables.
         /// </summary>
         internal static string TableIndentationGroupBoxHeader {

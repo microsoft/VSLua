@@ -153,6 +153,39 @@
   <data name="RelativeTableIndentationRadioContent" xml:space="preserve">
     <value>Relative</value>
   </data>
+  <data name="RemoveSpaceBetweenIndexLimitsCheckBoxContent" xml:space="preserve">
+    <value>Remove spaces between index limits in a for loop</value>
+  </data>
+  <data name="SpaceAfterCommasCheckBoxContent" xml:space="preserve">
+    <value>Insert spaces after commas</value>
+  </data>
+  <data name="SpaceBeforeAndAfterAssignmentOpsInFieldCheckBoxContent" xml:space="preserve">
+    <value>Insert a space before and after an assignment operator used for fields in table contructors</value>
+  </data>
+  <data name="SpaceBeforeAndAfterAssignmentOpsInForLoopCheckBoxContent" xml:space="preserve">
+    <value>Insert a space before and after an assignment operator used in for loop header</value>
+  </data>
+  <data name="SpaceBeforeAndAfterAssignmentOpsInStatementsCheckBoxContent" xml:space="preserve">
+    <value>Insert a space before and after an assignment operator used for statements</value>
+  </data>
+  <data name="SpaceBeforeAndAfterBinOpsCheckBoxContent" xml:space="preserve">
+    <value>Insert a space before and after binary operations</value>
+  </data>
+  <data name="SpaceBetweenFunctionAndOpenParenCheckBoxContent" xml:space="preserve">
+    <value>Insert a space between a function name/keyword and an open parenthesis.</value>
+  </data>
+  <data name="SpaceInsideOfCurlyBracesCheckBoxContent" xml:space="preserve">
+    <value>Insert spaces on inside of curly braces</value>
+  </data>
+  <data name="SpaceInsideOfParenthesisCheckBoxContent" xml:space="preserve">
+    <value>Insert spaces on the inside of parenthesis</value>
+  </data>
+  <data name="SpaceInsideOfSquareBracketsCheckBoxContent" xml:space="preserve">
+    <value>Insert spaces on inside of square brackets</value>
+  </data>
+  <data name="SpacingGroupBoxHeader" xml:space="preserve">
+    <value>Spacing</value>
+  </data>
   <data name="TableIndentationGroupBoxHeader" xml:space="preserve">
     <value>Tables</value>
   </data>
