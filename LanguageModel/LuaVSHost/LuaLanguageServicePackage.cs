@@ -1,11 +1,10 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="Lua.Host.cs" company="Company">
+// <copyright file="LuaLanguageServicePackage.cs" company="Company">
 //     Copyright (c) Company.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
 using System;
-using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.LanguageServices.Lua.Formatting;
@@ -43,15 +42,15 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua
 
         protected override void Initialize()
         {
-            var container = (IServiceContainer)this;
-
-            if (container != null)
-            {
-                container.AddService(typeof(LuaLanguageService),
-                    (serviceContainer, t) => new LuaLanguageService(serviceContainer), promote: true);
-            }
-
             base.Initialize();
+        }
+
+        internal UserSettings FormattingUserSettings
+        {
+            get
+            {
+                return (UserSettings)this.GetAutomationObject($"{Constants.Formatting.Category}.{Constants.Formatting.Pages.General}");
+            }
         }
 
         #endregion

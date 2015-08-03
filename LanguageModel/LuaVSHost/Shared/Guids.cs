@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
@@ -19,6 +15,5 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         internal const string IndentationPageString = "687A4168-DE55-4B30-A8E0-5C3A1517642E";
         internal const string WrappingAndNewLinePageString = "45482116-B8FB-46E7-A51D-518FCE83B626";
         //internal const string NewLinesPageString = "B459B8FE-A9F3-43D5-97F2-2A99914DD3B1";
-
     }
 }

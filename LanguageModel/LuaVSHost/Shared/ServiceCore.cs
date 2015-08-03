@@ -3,40 +3,31 @@ using System.ComponentModel.Composition;
 using LanguageService;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.LuaLanguageService.Formatting;
-using Microsoft.VisualStudio.LanguageServices.Lua.Formatting;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
-    [Export(typeof(ICore))]
-    internal class Core : ICore
+    [Export(typeof(IServiceCore))]
+    internal class ServiceCore : IServiceCore
     {
         [Import]
         private GlobalEditorOptions globalEditorOptions;
 
-        [Import(typeof(SVsServiceProvider))]
-        private IServiceProvider serviceProvider;
-
         [Import]
         private IVsEditorAdaptersFactoryService editorAdaptersFactory;
 
+        [Import]
+        private SVsServiceProvider serviceProvider;
+
         private SourceTextCache sourceTextCache;
         private LuaFeatureContainer featureContainer;
-        private UserSettings userSettings;
+        private Formatting.UserSettings userSettings;
 
         public GlobalEditorOptions GlobalEditorOptions
         {
             get
             {
                 return this.globalEditorOptions;
-            }
-        }
-
-        public IServiceProvider ServiceProvider
-        {
-            get
-            {
-                return this.serviceProvider;
             }
         }
 
@@ -52,7 +43,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         {
             get
             {
-                return sourceTextCache != null ? sourceTextCache : (sourceTextCache = new SourceTextCache());
+                return this.sourceTextCache != null ? this.sourceTextCache : (this.sourceTextCache = new SourceTextCache());
             }
         }
 
@@ -60,23 +51,31 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         {
             get
             {
-                if (featureContainer == null)
+                if (this.featureContainer == null)
                 {
-                    featureContainer = new LuaFeatureContainer();
+                    this.featureContainer = new LuaFeatureContainer();
                 }
-                return featureContainer;
+
+                return this.featureContainer;
             }
         }
 
-        public UserSettings UserSettings
+        public Formatting.UserSettings FormattingUserSettings
         {
             get
             {
-                if (userSettings == null)
+                if (this.userSettings == null)
                 {
-                    userSettings = new UserSettings();
+                    var shell = this.serviceProvider.GetService(typeof(SVsShell)) as IVsShell;
+                    Assumes.Present(shell);
+                    Guid guid = Guids.Package;
+                    IVsPackage package;
+                    ErrorHandler.ThrowOnFailure(shell.LoadPackage(ref guid, out package));
+                    LuaLanguageServicePackage luaPackage = (LuaLanguageServicePackage)package;
+                    this.userSettings = luaPackage.FormattingUserSettings;
                 }
-                return userSettings;
+
+                return this.userSettings;
             }
         }
     }

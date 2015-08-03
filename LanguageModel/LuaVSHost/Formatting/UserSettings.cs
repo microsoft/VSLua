@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
     internal sealed class UserSettings : INotifyPropertyChanged
     {
-        public readonly static UserSettings MainInstance = new UserSettings();
+        public static readonly UserSettings MainInstance = new UserSettings();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -19,14 +14,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return formatOnEnter;
+                return this.formatOnEnter;
             }
             set
             {
-                if (formatOnEnter != value)
+                if (this.formatOnEnter != value)
                 {
-                    formatOnEnter = value;
-                    RaisePropertyChangedEvent(FormatOnEnter, nameof(FormatOnEnter));
+                    this.formatOnEnter = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -36,14 +31,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return formatOnPaste;
+                return this.formatOnPaste;
             }
             set
             {
-                if (formatOnPaste != value)
+                if (this.formatOnPaste != value)
                 {
-                    formatOnPaste = value;
-                    RaisePropertyChangedEvent(FormatOnPaste, nameof(FormatOnPaste));
+                    this.formatOnPaste = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -53,14 +48,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return formatOnBlock;
+                return this.formatOnBlock;
             }
             set
             {
-                if (formatOnBlock != value)
+                if (this.formatOnBlock != value)
                 {
-                    formatOnBlock = value;
-                    RaisePropertyChangedEvent(FormatOnBlock, nameof(FormatOnBlock));
+                    this.formatOnBlock = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -70,14 +65,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return functionFixedIndentation;
+                return this.functionFixedIndentation;
             }
             set
             {
-                if (functionFixedIndentation != value)
+                if (this.functionFixedIndentation != value)
                 {
-                    functionFixedIndentation = value;
-                    RaisePropertyChangedEvent(FunctionFixedIndentation, nameof(FunctionFixedIndentation));
+                    this.functionFixedIndentation = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -87,14 +82,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return functionRelativeIndentation;
+                return this.functionRelativeIndentation;
             }
             set
             {
-                if (functionRelativeIndentation != value)
+                if (this.functionRelativeIndentation != value)
                 {
-                    functionRelativeIndentation = value;
-                    RaisePropertyChangedEvent(FunctionRelativeIndentation, nameof(FunctionRelativeIndentation));
+                    this.functionRelativeIndentation = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -104,14 +99,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return tableFixedIndentation;
+                return this.tableFixedIndentation;
             }
             set
             {
-                if (tableFixedIndentation != value)
+                if (this.tableFixedIndentation != value)
                 {
-                    tableFixedIndentation = value;
-                    RaisePropertyChangedEvent(TableFixedIndentation, nameof(TableFixedIndentation));
+                    this.tableFixedIndentation = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -121,14 +116,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return tableRelativeIndentation;
+                return this.tableRelativeIndentation;
             }
             set
             {
-                if (tableRelativeIndentation != value)
+                if (this.tableRelativeIndentation != value)
                 {
-                    tableRelativeIndentation = value;
-                    RaisePropertyChangedEvent(TableRelativeIndentation, nameof(TableRelativeIndentation));
+                    this.tableRelativeIndentation = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -138,14 +133,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return spaceAfterCommas;
+                return this.spaceAfterCommas;
             }
             set
             {
-                if (spaceAfterCommas != value)
+                if (this.spaceAfterCommas != value)
                 {
-                    spaceAfterCommas = value;
-                    RaisePropertyChangedEvent(SpaceAfterCommas, nameof(SpaceAfterCommas));
+                    this.spaceAfterCommas = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -155,14 +150,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return spaceBeforeAndAfterBinaryOperations;
+                return this.spaceBeforeAndAfterBinaryOperations;
             }
             set
             {
-                if (spaceBeforeAndAfterBinaryOperations != value)
+                if (this.spaceBeforeAndAfterBinaryOperations != value)
                 {
-                    spaceBeforeAndAfterBinaryOperations = value;
-                    RaisePropertyChangedEvent(SpaceBeforeAndAfterBinaryOperations, nameof(SpaceBeforeAndAfterBinaryOperations));
+                    this.spaceBeforeAndAfterBinaryOperations = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -172,14 +167,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return spaceBeforeAndAfterAssignmentOperatorOnField;
+                return this.spaceBeforeAndAfterAssignmentOperatorOnField;
             }
             set
             {
-                if (spaceBeforeAndAfterAssignmentOperatorOnField != value)
+                if (this.spaceBeforeAndAfterAssignmentOperatorOnField != value)
                 {
-                    spaceBeforeAndAfterAssignmentOperatorOnField = value;
-                    RaisePropertyChangedEvent(SpaceBeforeAndAfterAssignmentOperatorOnField, nameof(SpaceBeforeAndAfterAssignmentOperatorOnField));
+                    this.spaceBeforeAndAfterAssignmentOperatorOnField = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -189,14 +184,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return spaceBeforeAndAfterAssignmentInStatement;
+                return this.spaceBeforeAndAfterAssignmentInStatement;
             }
             set
             {
-                if (spaceBeforeAndAfterAssignmentInStatement != value)
+                if (this.spaceBeforeAndAfterAssignmentInStatement != value)
                 {
-                    spaceBeforeAndAfterAssignmentInStatement = value;
-                    RaisePropertyChangedEvent(SpaceBeforeAndAfterAssignmentInStatement, nameof(SpaceBeforeAndAfterAssignmentInStatement));
+                    this.spaceBeforeAndAfterAssignmentInStatement = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -206,14 +201,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return forLoopAssignmentSpacing;
+                return this.forLoopAssignmentSpacing;
             }
             set
             {
-                if (forLoopAssignmentSpacing != value)
+                if (this.forLoopAssignmentSpacing != value)
                 {
-                    forLoopAssignmentSpacing = value;
-                    RaisePropertyChangedEvent(ForLoopAssignmentSpacing, nameof(ForLoopAssignmentSpacing));
+                    this.forLoopAssignmentSpacing = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -223,14 +218,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return forLoopIndexSpacing;
+                return this.forLoopIndexSpacing;
             }
             set
             {
-                if (forLoopIndexSpacing != value)
+                if (this.forLoopIndexSpacing != value)
                 {
-                    forLoopIndexSpacing = value;
-                    RaisePropertyChangedEvent(ForLoopIndexSpacing, nameof(ForLoopIndexSpacing));
+                    this.forLoopIndexSpacing = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -240,14 +235,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return spaceBetweenFunctionAndParenthesis;
+                return this.spaceBetweenFunctionAndParenthesis;
             }
             set
             {
-                if (spaceBetweenFunctionAndParenthesis != value)
+                if (this.spaceBetweenFunctionAndParenthesis != value)
                 {
-                    spaceBetweenFunctionAndParenthesis = value;
-                    RaisePropertyChangedEvent(SpaceBetweenFunctionAndParenthesis, nameof(SpaceBetweenFunctionAndParenthesis));
+                    this.spaceBetweenFunctionAndParenthesis = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -257,14 +252,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return addSpacesOnInsideOfParenthesis;
+                return this.addSpacesOnInsideOfParenthesis;
             }
             set
             {
-                if (addSpacesOnInsideOfParenthesis != value)
+                if (this.addSpacesOnInsideOfParenthesis != value)
                 {
-                    addSpacesOnInsideOfParenthesis = value;
-                    RaisePropertyChangedEvent(AddSpacesOnInsideOfParenthesis, nameof(AddSpacesOnInsideOfParenthesis));
+                    this.addSpacesOnInsideOfParenthesis = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -274,14 +269,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return addSpacesOnInsideOfCurlyBraces;
+                return this.addSpacesOnInsideOfCurlyBraces;
             }
             set
             {
-                if (addSpacesOnInsideOfCurlyBraces != value)
+                if (this.addSpacesOnInsideOfCurlyBraces != value)
                 {
-                    addSpacesOnInsideOfCurlyBraces = value;
-                    RaisePropertyChangedEvent(AddSpacesOnInsideOfCurlyBraces, nameof(AddSpacesOnInsideOfCurlyBraces));
+                    this.addSpacesOnInsideOfCurlyBraces = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -291,14 +286,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return addSpacesOnInsideOfSquareBrackets;
+                return this.addSpacesOnInsideOfSquareBrackets;
             }
             set
             {
-                if (addSpacesOnInsideOfSquareBrackets != value)
+                if (this.addSpacesOnInsideOfSquareBrackets != value)
                 {
-                    addSpacesOnInsideOfSquareBrackets = value;
-                    RaisePropertyChangedEvent(AddSpacesOnInsideOfSquareBrackets, nameof(AddSpacesOnInsideOfSquareBrackets));
+                    this.addSpacesOnInsideOfSquareBrackets = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -308,14 +303,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return wrapSingleLineFunctions;
+                return this.wrapSingleLineFunctions;
             }
             set
             {
-                if (wrapSingleLineFunctions != value)
+                if (this.wrapSingleLineFunctions != value)
                 {
-                    wrapSingleLineFunctions = value;
-                    RaisePropertyChangedEvent(WrapSingleLineFunctions, nameof(WrapSingleLineFunctions));
+                    this.wrapSingleLineFunctions = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -325,14 +320,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return wrapSingleLineForLoops;
+                return this.wrapSingleLineForLoops;
             }
             set
             {
-                if (wrapSingleLineForLoops != value)
+                if (this.wrapSingleLineForLoops != value)
                 {
-                    wrapSingleLineForLoops = value;
-                    RaisePropertyChangedEvent(WrapSingleLineForLoops, nameof(WrapSingleLineForLoops));
+                    this.wrapSingleLineForLoops = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -342,14 +337,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return wrapSingleLineTableConstructors;
+                return this.wrapSingleLineTableConstructors;
             }
             set
             {
-                if (wrapSingleLineTableConstructors != value)
+                if (this.wrapSingleLineTableConstructors != value)
                 {
-                    wrapSingleLineTableConstructors = value;
-                    RaisePropertyChangedEvent(WrapSingleLineTableConstructors, nameof(WrapSingleLineTableConstructors));
+                    this.wrapSingleLineTableConstructors = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
@@ -359,24 +354,21 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             get
             {
-                return addNewLinesToMultilineTableConstructors;
+                return this.addNewLinesToMultilineTableConstructors;
             }
             set
             {
-                if (addNewLinesToMultilineTableConstructors != value)
+                if (this.addNewLinesToMultilineTableConstructors != value)
                 {
-                    addNewLinesToMultilineTableConstructors = value;
-                    RaisePropertyChangedEvent(AddNewLinesToMultilineTableConstructors, nameof(AddNewLinesToMultilineTableConstructors));
+                    this.addNewLinesToMultilineTableConstructors = value;
+                    this.RaisePropertyChangedEvent();
                 }
             }
         }
 
-        private void RaisePropertyChangedEvent(object sender, string name)
+        private void RaisePropertyChangedEvent([CallerMemberName] string callingMember = "")
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(sender, new PropertyChangedEventArgs(name));
-            }
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(callingMember));
         }
     }
 }

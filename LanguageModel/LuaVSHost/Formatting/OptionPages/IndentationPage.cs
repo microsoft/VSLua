@@ -18,12 +18,13 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages
         {
             get
             {
-                if (indentationUserControl == null)
+                if (this.indentationUserControl == null)
                 {
-                    indentationUserControl = new IndentationUserControl();
-                    indentationUserControl.DataContext = UserSettings.MainInstance;
+                    this.indentationUserControl = new IndentationUserControl();
+                    this.indentationUserControl.DataContext = UserSettings.MainInstance;
                 }
-                return indentationUserControl;
+
+                return this.indentationUserControl;
             }
         }
     }

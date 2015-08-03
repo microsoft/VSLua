@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
+﻿namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
     internal sealed class Constants
     {

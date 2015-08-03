@@ -4,29 +4,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages.UserControls"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="498">
-    <Grid>
-        <GroupBox x:Name="generalGroupBox" Header="General" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="96" Width="383">
-            <Grid HorizontalAlignment="Left" Height="86" Margin="0,0,0,-13.333" VerticalAlignment="Top" Width="304">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="15*"/>
-                    <ColumnDefinition Width="137*"/>
-                </Grid.ColumnDefinitions>
-                <CheckBox x:Name="formatOnEnterCheckbox" Content="Auto format on [Enter]"
-                          HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
-                          ToolTip="Formatting is applied on a line-by-line basis." Grid.ColumnSpan="2"
-                          IsChecked="{Binding FormatOnEnter}"/>
-                <CheckBox x:Name="formatOnPasteCheckbox" Content="Auto format on paste"
-                          HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"
-                          ToolTip="Formatting is applied on pasted text automattically." Grid.ColumnSpan="2"
-                          IsChecked="{Binding FormatOnPaste}"/>
-                <CheckBox x:Name="formatOnBlockCheckbox" Content="Format on block"
-                          HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top"
-                          ToolTip="Formatting is applied on a Lua block after [Enter] is hit after the End keyword." Grid.ColumnSpan="2"
-                          IsChecked="{Binding FormatOnBlock}"/>
-            </Grid>
-        </GroupBox>
+             xmlns:properties="clr-namespace:Microsoft.VisualStudio.LanguageServices.Lua.Properties">
+    <DockPanel>
+        <GroupBox x:Name="generalGroupBox" Header="{x:Static properties:Resources.GeneralGroupBoxHeader}" VerticalAlignment="Top"
+                  Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}">
+            <StackPanel DockPanel.Dock="Top" Margin="0,2,0,0" KeyboardNavigation.TabNavigation="Contained">
 
-    </Grid>
+                <CheckBox x:Name="formatOnEnterCheckbox" Content="{x:Static properties:Resources.FormatOnEnterCheckboxContent}"
+                          HorizontalAlignment="Left" Margin="0,0,0,7"
+                          ToolTip="{x:Static properties:Resources.FormatOnEnterCheckboxToolTips}"
+                          IsChecked="{Binding FormatOnEnter}"/>
+
+                <CheckBox x:Name="formatOnPasteCheckbox" Content="{x:Static properties:Resources.FormatOnPasteCheckboxContent}"
+                          HorizontalAlignment="Left" Margin="0,0,0,7"
+                          ToolTip="{x:Static properties:Resources.FormatOnPasteCheckboxToolTips}"
+                          IsChecked="{Binding FormatOnPaste}"/>
+
+                <CheckBox x:Name="formatOnBlockCheckbox" Content="{x:Static properties:Resources.FormatOnBlockCheckboxContent}"
+                          HorizontalAlignment="Left" Margin="0,0,0,0"
+                          ToolTip="{x:Static properties:Resources.FormatOnBlockCheckboxToolTips}"
+                          IsChecked="{Binding FormatOnBlock}"/>
+            </StackPanel>
+        </GroupBox>
+    </DockPanel>
 </UserControl>

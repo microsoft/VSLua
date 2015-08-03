@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
-    class CommandFilter : IOleCommandTarget
+    internal class CommandFilter : IOleCommandTarget
     {
         public CommandFilter()
         {
@@ -30,7 +29,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                 {
                     break;
                 }
-
             }
 
             if (!handled)
@@ -57,6 +55,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             {
                 filter.Close();
             }
+
             this.MiniFilters.Clear();
         }
 
@@ -71,6 +70,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                     return VSConstants.S_OK;
                 }
             }
+
             return this.Next.QueryStatus(pguidCmdGroup, commandsCount, prgCmds, pCmdText);
         }
     }

@@ -18,12 +18,13 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages
         {
             get
             {
-                if (spacingUserControl == null)
+                if (this.spacingUserControl == null)
                 {
-                    spacingUserControl = new SpacingUserControl();
-                    spacingUserControl.DataContext = UserSettings.MainInstance;
+                    this.spacingUserControl = new SpacingUserControl();
+                    this.spacingUserControl.DataContext = UserSettings.MainInstance;
                 }
-                return spacingUserControl;
+
+                return this.spacingUserControl;
             }
         }
     }

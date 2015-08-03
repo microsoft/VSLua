@@ -70,6 +70,7 @@ t1 =
 t1 =
 {
 --[[ comment ]]}";
+            GeneralTest(original, expected, expected);
         }
 
         [Fact]

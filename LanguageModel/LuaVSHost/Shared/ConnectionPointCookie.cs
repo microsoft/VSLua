@@ -11,7 +11,6 @@ using IOleConnectionPointContainer = Microsoft.VisualStudio.OLE.Interop.IConnect
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
-
     /// <summary>
     /// This class manages a connection point to an events interface on a COM classic object,
     /// which will call on a managed code sink that implements that interface.
@@ -96,6 +95,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
                     {
                         this.cookie = 0;
                     }
+
                     if (this.cookie == 0)
                     {
                         this.connectionPoint = null;
@@ -131,6 +131,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         /// <internalonly/>
 #if DEBUG
         [SuppressMessage("Microsoft.Performance", "CA1821:RemoveEmptyFinalizers")]
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1604:ElementDocumentationMustHaveSummary", Justification = "Reviewed.")]
         ~ConnectionPointCookie()
         {
             if (this.cookieStack != null)
@@ -143,6 +144,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
             }
         }
 #endif
+
         /// <summary>
         /// Disconnect the current connection point.  If the object is not connected,
         /// this method will do nothing.
@@ -156,7 +158,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         /// Disconnect the current connection point.  If the object is not connected,
         /// this method will do nothing.
         /// </summary>
-        [SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly")]
+        [SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly", Justification = "Because I said so")]
         public void Disconnect(bool release)
         {
             if (this.connectionPoint != null && this.cookie != 0)
@@ -177,6 +179,4 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 #endif
         }
     }
-
 }
-

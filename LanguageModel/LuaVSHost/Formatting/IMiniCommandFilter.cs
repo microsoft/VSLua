@@ -14,6 +14,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         /// <summary>
         /// Operations that happen before the command has been processed
         /// </summary>
+        /// <returns>Return true if the command succeeded otherwise false</returns>
         bool PreProcessCommand(Guid guidCmdGroup, uint commandId, IntPtr variantIn);
 
         /// <summary>
@@ -24,6 +25,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         /// <summary>
         /// Puts the command status in commandStatus, a wrapper for the QueryStatus in IOleCommandTarget
         /// </summary>
+        /// <returns>Returns true if the query succeeded otherwise false</returns>
         bool QueryCommandStatus(Guid guidCmdGroup, uint commandId, IntPtr commandText, out OLECommandFlags commandStatus);
     }
 }

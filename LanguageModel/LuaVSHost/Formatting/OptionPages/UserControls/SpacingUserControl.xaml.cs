@@ -22,7 +22,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages.Use
     {
         public SpacingUserControl()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }
