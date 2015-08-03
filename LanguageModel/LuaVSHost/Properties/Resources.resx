@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FixedFunctionIndentationRadioContent" xml:space="preserve">
+    <value>Fixed</value>
+  </data>
+  <data name="FixedTableIndentationRadioContent" xml:space="preserve">
+    <value>Fixed</value>
+  </data>
   <data name="FormatOnBlockCheckboxContent" xml:space="preserve">
     <value>Format on block</value>
   </data>
@@ -135,7 +141,19 @@
   <data name="FormatOnPasteCheckboxToolTips" xml:space="preserve">
     <value>Formatting is applied on pasted text automattically.</value>
   </data>
+  <data name="FunctionIndentationGroupBoxHeader" xml:space="preserve">
+    <value>Functions</value>
+  </data>
   <data name="GeneralGroupBoxHeader" xml:space="preserve">
     <value>General</value>
+  </data>
+  <data name="RelativeFunctionIndentationRadioContent" xml:space="preserve">
+    <value>Relative</value>
+  </data>
+  <data name="RelativeTableIndentationRadioContent" xml:space="preserve">
+    <value>Relative</value>
+  </data>
+  <data name="TableIndentationGroupBoxHeader" xml:space="preserve">
+    <value>Tables</value>
   </data>
 </root>

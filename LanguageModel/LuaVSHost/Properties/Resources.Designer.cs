@@ -61,6 +61,24 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fixed.
+        /// </summary>
+        internal static string FixedFunctionIndentationRadioContent {
+            get {
+                return ResourceManager.GetString("FixedFunctionIndentationRadioContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed.
+        /// </summary>
+        internal static string FixedTableIndentationRadioContent {
+            get {
+                return ResourceManager.GetString("FixedTableIndentationRadioContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Format on block.
         /// </summary>
         internal static string FormatOnBlockCheckboxContent {
@@ -115,11 +133,47 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Functions.
+        /// </summary>
+        internal static string FunctionIndentationGroupBoxHeader {
+            get {
+                return ResourceManager.GetString("FunctionIndentationGroupBoxHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
         internal static string GeneralGroupBoxHeader {
             get {
                 return ResourceManager.GetString("GeneralGroupBoxHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Relative.
+        /// </summary>
+        internal static string RelativeFunctionIndentationRadioContent {
+            get {
+                return ResourceManager.GetString("RelativeFunctionIndentationRadioContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Relative.
+        /// </summary>
+        internal static string RelativeTableIndentationRadioContent {
+            get {
+                return ResourceManager.GetString("RelativeTableIndentationRadioContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tables.
+        /// </summary>
+        internal static string TableIndentationGroupBoxHeader {
+            get {
+                return ResourceManager.GetString("TableIndentationGroupBoxHeader", resourceCulture);
             }
         }
     }

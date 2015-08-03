@@ -4,29 +4,38 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages.UserControls"
-             mc:Ignorable="d" 
-             d:DesignHeight="333" d:DesignWidth="436.424">
-    <Grid>
-        <GroupBox x:Name="groupBox" Header="Functions" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="150" Width="417">
-            <Grid HorizontalAlignment="Left" Width="295" Margin="0,0,0,57.667">
-                <RadioButton x:Name="functionFixedIndentationRadio" Content="Fixed"
-                             HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
-                             IsChecked="{Binding FunctionFixedIndentation}"/>
-                <RadioButton x:Name="functionRelativeIndentationRadio" Content="Relative"
-                             HorizontalAlignment="Left" Margin="10,30,0,24"
-                             IsChecked="{Binding FunctionRelativeIndentation}"/>
-            </Grid>
-        </GroupBox>
-        <GroupBox x:Name="groupBox_Copy" Header="Tables" HorizontalAlignment="Left" Margin="10,160,0,-10" VerticalAlignment="Top" Height="150" Width="417">
-            <Grid HorizontalAlignment="Left" Width="295" Margin="0,0,0,57.667">
-                <RadioButton x:Name="tableFixedIndentationRadio" Content="Fixed"
-                             HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
-                             IsChecked="{Binding TableFixedIndentation}"/>
-                <RadioButton x:Name="tableRelativeIndentationRadio" Content="Relative"
-                             HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"
-                             IsChecked="{Binding TableRelativeIndentation}"/>
-            </Grid>
-        </GroupBox>
+             xmlns:properties="clr-namespace:Microsoft.VisualStudio.LanguageServices.Lua.Properties"
+             mc:Ignorable="d">
 
-    </Grid>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top">
+            <GroupBox x:Name="groupBox" Header="{x:Static properties:Resources.FunctionIndentationGroupBoxHeader}"
+                      VerticalAlignment="Top" Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}">
+                <StackPanel DockPanel.Dock="Top" Margin="0,2,0,0">
+                    <RadioButton x:Name="functionFixedIndentationRadio"
+                                 Content="{x:Static properties:Resources.FixedFunctionIndentationRadioContent}"
+                             HorizontalAlignment="Left" Margin="0,0,0,7"
+                             IsChecked="{Binding FunctionFixedIndentation}"/>
+
+                    <RadioButton x:Name="functionRelativeIndentationRadio"
+                                 Content="{x:Static properties:Resources.RelativeFunctionIndentationRadioContent}"
+                             HorizontalAlignment="Left" Margin="0,0,0,0"
+                             IsChecked="{Binding FunctionRelativeIndentation}"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox x:Name="groupBox_Copy" Header="Tables" VerticalAlignment="Top">
+                <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Left" Margin="0,2,0,0">
+                    <RadioButton x:Name="tableFixedIndentationRadio"
+                                 Content="{x:Static properties:Resources.FixedTableIndentationRadioContent}"
+                             HorizontalAlignment="Left" Margin="0,0,0,7"
+                             IsChecked="{Binding TableFixedIndentation}"/>
+                    <RadioButton x:Name="tableRelativeIndentationRadio"
+                                 Content="{x:Static properties:Resources.RelativeTableIndentationRadioContent}"
+                             HorizontalAlignment="Left" Margin="0,0,0,0"
+                             IsChecked="{Binding TableRelativeIndentation}"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </DockPanel>
 </UserControl>
