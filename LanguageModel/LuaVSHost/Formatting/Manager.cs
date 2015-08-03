@@ -18,11 +18,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         private ITextBuffer textBuffer;
         private ITextView textView;
         private bool isClosed;
-        private ICore core;
+        private IServiceCore core;
 
         private ITextSnapshot prePasteSnapshot;
 
-        internal Manager(ITextBuffer textBuffer, ITextView textView, ICore core)
+        internal Manager(ITextBuffer textBuffer, ITextView textView, IServiceCore core)
         {
             Requires.NotNull(textBuffer, nameof(textBuffer));
             Requires.NotNull(textView, nameof(textView));

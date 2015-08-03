@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.LuaLanguageService.Formatting;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
-    internal interface ICore
+    internal interface IServiceCore
     {
         GlobalEditorOptions GlobalEditorOptions { get; }
         IVsEditorAdaptersFactoryService EditorAdaptersFactory { get; }

@@ -24,9 +24,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         protected bool IsClosed { get; private set; }
 
         private IVsEditorAdaptersFactoryService editorAdaptersService;
-        private ICore core;
+        private IServiceCore core;
 
-        public TextView(IWpfTextView wpfTextView, ICore core)
+        public TextView(IWpfTextView wpfTextView, IServiceCore core)
         {
             this.core = core;
             this.editorAdaptersService = core.EditorAdaptersFactory;

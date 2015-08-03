@@ -7,8 +7,8 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
-    [Export(typeof(ICore))]
-    internal class Core : ICore
+    [Export(typeof(IServiceCore))]
+    internal class ServiceCore : IServiceCore
     {
         [Import]
         private GlobalEditorOptions globalEditorOptions;
