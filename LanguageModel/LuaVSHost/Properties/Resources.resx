@@ -117,7 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="FormatOnEnterCheckboxText" xml:space="preserve">
-    <value>Format on [Enter]</value>
+  <data name="FormatOnBlockCheckboxContent" xml:space="preserve">
+    <value>Format on block</value>
+  </data>
+  <data name="FormatOnBlockCheckboxToolTips" xml:space="preserve">
+    <value>Formatting is applied on a Lua block after [Enter] is hit after the End keyword.</value>
+  </data>
+  <data name="FormatOnEnterCheckboxContent" xml:space="preserve">
+    <value>Auto format on [Enter]</value>
+  </data>
+  <data name="FormatOnEnterCheckboxToolTips" xml:space="preserve">
+    <value>Formatting is applied on a line-by-line basis.</value>
+  </data>
+  <data name="FormatOnPasteCheckboxContent" xml:space="preserve">
+    <value>Auto format on paste</value>
+  </data>
+  <data name="FormatOnPasteCheckboxToolTips" xml:space="preserve">
+    <value>Formatting is applied on pasted text automattically.</value>
+  </data>
+  <data name="GeneralGroupBoxHeader" xml:space="preserve">
+    <value>General</value>
   </data>
 </root>

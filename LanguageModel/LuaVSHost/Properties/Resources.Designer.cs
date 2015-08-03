@@ -61,11 +61,65 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Format on [Enter].
+        ///   Looks up a localized string similar to Format on block.
         /// </summary>
-        internal static string FormatOnEnterCheckboxText {
+        internal static string FormatOnBlockCheckboxContent {
             get {
-                return ResourceManager.GetString("FormatOnEnterCheckboxText", resourceCulture);
+                return ResourceManager.GetString("FormatOnBlockCheckboxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Formatting is applied on a Lua block after [Enter] is hit after the End keyword..
+        /// </summary>
+        internal static string FormatOnBlockCheckboxToolTips {
+            get {
+                return ResourceManager.GetString("FormatOnBlockCheckboxToolTips", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto format on [Enter].
+        /// </summary>
+        internal static string FormatOnEnterCheckboxContent {
+            get {
+                return ResourceManager.GetString("FormatOnEnterCheckboxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Formatting is applied on a line-by-line basis..
+        /// </summary>
+        internal static string FormatOnEnterCheckboxToolTips {
+            get {
+                return ResourceManager.GetString("FormatOnEnterCheckboxToolTips", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto format on paste.
+        /// </summary>
+        internal static string FormatOnPasteCheckboxContent {
+            get {
+                return ResourceManager.GetString("FormatOnPasteCheckboxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Formatting is applied on pasted text automattically..
+        /// </summary>
+        internal static string FormatOnPasteCheckboxToolTips {
+            get {
+                return ResourceManager.GetString("FormatOnPasteCheckboxToolTips", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        internal static string GeneralGroupBoxHeader {
+            get {
+                return ResourceManager.GetString("GeneralGroupBoxHeader", resourceCulture);
             }
         }
     }
