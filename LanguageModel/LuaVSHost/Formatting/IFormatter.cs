@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualStudio.Text;
-
-namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
+﻿namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
     internal interface IFormatter
     {

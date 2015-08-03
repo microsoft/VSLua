@@ -7,7 +7,6 @@ using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
-using Validation;
 
 using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
 
