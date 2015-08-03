@@ -22,7 +22,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.VisualStudio.LanguageServices.Lua.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Add new lines to multiline table constructors.
         /// </summary>
-        internal static string AddNewLinesToMultilineTableConstructorsCheckBoxContent {
+        public static string AddNewLinesToMultilineTableConstructorsCheckBoxContent {
             get {
                 return ResourceManager.GetString("AddNewLinesToMultilineTableConstructorsCheckBoxContent", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Fixed.
         /// </summary>
-        internal static string FixedFunctionIndentationRadioContent {
+        public static string FixedFunctionIndentationRadioContent {
             get {
                 return ResourceManager.GetString("FixedFunctionIndentationRadioContent", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Fixed.
         /// </summary>
-        internal static string FixedTableIndentationRadioContent {
+        public static string FixedTableIndentationRadioContent {
             get {
                 return ResourceManager.GetString("FixedTableIndentationRadioContent", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Format on block.
         /// </summary>
-        internal static string FormatOnBlockCheckboxContent {
+        public static string FormatOnBlockCheckboxContent {
             get {
                 return ResourceManager.GetString("FormatOnBlockCheckboxContent", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Formatting is applied on a Lua block after [Enter] is hit after the End keyword..
         /// </summary>
-        internal static string FormatOnBlockCheckboxToolTip {
+        public static string FormatOnBlockCheckboxToolTip {
             get {
                 return ResourceManager.GetString("FormatOnBlockCheckboxToolTip", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Auto format on [Enter].
         /// </summary>
-        internal static string FormatOnEnterCheckboxContent {
+        public static string FormatOnEnterCheckboxContent {
             get {
                 return ResourceManager.GetString("FormatOnEnterCheckboxContent", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Formatting is applied on a line-by-line basis..
         /// </summary>
-        internal static string FormatOnEnterCheckboxToolTip {
+        public static string FormatOnEnterCheckboxToolTip {
             get {
                 return ResourceManager.GetString("FormatOnEnterCheckboxToolTip", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Auto format on paste.
         /// </summary>
-        internal static string FormatOnPasteCheckboxContent {
+        public static string FormatOnPasteCheckboxContent {
             get {
                 return ResourceManager.GetString("FormatOnPasteCheckboxContent", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Formatting is applied on pasted text automattically..
         /// </summary>
-        internal static string FormatOnPasteCheckboxToolTip {
+        public static string FormatOnPasteCheckboxToolTip {
             get {
                 return ResourceManager.GetString("FormatOnPasteCheckboxToolTip", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Functions.
         /// </summary>
-        internal static string FunctionIndentationGroupBoxHeader {
+        public static string FunctionIndentationGroupBoxHeader {
             get {
                 return ResourceManager.GetString("FunctionIndentationGroupBoxHeader", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
-        internal static string GeneralGroupBoxHeader {
+        public static string GeneralGroupBoxHeader {
             get {
                 return ResourceManager.GetString("GeneralGroupBoxHeader", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to New Lines.
         /// </summary>
-        internal static string NewLinesGroupBoxHeader {
+        public static string NewLinesGroupBoxHeader {
             get {
                 return ResourceManager.GetString("NewLinesGroupBoxHeader", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Relative.
         /// </summary>
-        internal static string RelativeFunctionIndentationRadioContent {
+        public static string RelativeFunctionIndentationRadioContent {
             get {
                 return ResourceManager.GetString("RelativeFunctionIndentationRadioContent", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Relative.
         /// </summary>
-        internal static string RelativeTableIndentationRadioContent {
+        public static string RelativeTableIndentationRadioContent {
             get {
                 return ResourceManager.GetString("RelativeTableIndentationRadioContent", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Remove spaces between index limits in a for loop.
         /// </summary>
-        internal static string RemoveSpaceBetweenIndexLimitsCheckBoxContent {
+        public static string RemoveSpaceBetweenIndexLimitsCheckBoxContent {
             get {
                 return ResourceManager.GetString("RemoveSpaceBetweenIndexLimitsCheckBoxContent", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Insert spaces after commas.
         /// </summary>
-        internal static string SpaceAfterCommasCheckBoxContent {
+        public static string SpaceAfterCommasCheckBoxContent {
             get {
                 return ResourceManager.GetString("SpaceAfterCommasCheckBoxContent", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Insert a space before and after an assignment operator used for fields in table contructors.
         /// </summary>
-        internal static string SpaceBeforeAndAfterAssignmentOpsInFieldCheckBoxContent {
+        public static string SpaceBeforeAndAfterAssignmentOpsInFieldCheckBoxContent {
             get {
                 return ResourceManager.GetString("SpaceBeforeAndAfterAssignmentOpsInFieldCheckBoxContent", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Insert a space before and after an assignment operator used in for loop header.
         /// </summary>
-        internal static string SpaceBeforeAndAfterAssignmentOpsInForLoopCheckBoxContent {
+        public static string SpaceBeforeAndAfterAssignmentOpsInForLoopCheckBoxContent {
             get {
                 return ResourceManager.GetString("SpaceBeforeAndAfterAssignmentOpsInForLoopCheckBoxContent", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Insert a space before and after an assignment operator used for statements.
         /// </summary>
-        internal static string SpaceBeforeAndAfterAssignmentOpsInStatementsCheckBoxContent {
+        public static string SpaceBeforeAndAfterAssignmentOpsInStatementsCheckBoxContent {
             get {
                 return ResourceManager.GetString("SpaceBeforeAndAfterAssignmentOpsInStatementsCheckBoxContent", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Insert a space before and after binary operations.
         /// </summary>
-        internal static string SpaceBeforeAndAfterBinOpsCheckBoxContent {
+        public static string SpaceBeforeAndAfterBinOpsCheckBoxContent {
             get {
                 return ResourceManager.GetString("SpaceBeforeAndAfterBinOpsCheckBoxContent", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Insert a space between a function name/keyword and an open parenthesis..
         /// </summary>
-        internal static string SpaceBetweenFunctionAndOpenParenCheckBoxContent {
+        public static string SpaceBetweenFunctionAndOpenParenCheckBoxContent {
             get {
                 return ResourceManager.GetString("SpaceBetweenFunctionAndOpenParenCheckBoxContent", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Insert spaces on inside of curly braces.
         /// </summary>
-        internal static string SpaceInsideOfCurlyBracesCheckBoxContent {
+        public static string SpaceInsideOfCurlyBracesCheckBoxContent {
             get {
                 return ResourceManager.GetString("SpaceInsideOfCurlyBracesCheckBoxContent", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Insert spaces on the inside of parenthesis.
         /// </summary>
-        internal static string SpaceInsideOfParenthesisCheckBoxContent {
+        public static string SpaceInsideOfParenthesisCheckBoxContent {
             get {
                 return ResourceManager.GetString("SpaceInsideOfParenthesisCheckBoxContent", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Insert spaces on inside of square brackets.
         /// </summary>
-        internal static string SpaceInsideOfSquareBracketsCheckBoxContent {
+        public static string SpaceInsideOfSquareBracketsCheckBoxContent {
             get {
                 return ResourceManager.GetString("SpaceInsideOfSquareBracketsCheckBoxContent", resourceCulture);
             }
@@ -279,7 +279,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Spacing.
         /// </summary>
-        internal static string SpacingGroupBoxHeader {
+        public static string SpacingGroupBoxHeader {
             get {
                 return ResourceManager.GetString("SpacingGroupBoxHeader", resourceCulture);
             }
@@ -288,7 +288,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Tables.
         /// </summary>
-        internal static string TableIndentationGroupBoxHeader {
+        public static string TableIndentationGroupBoxHeader {
             get {
                 return ResourceManager.GetString("TableIndentationGroupBoxHeader", resourceCulture);
             }
@@ -297,7 +297,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Wrapping.
         /// </summary>
-        internal static string WrappingGroupBoxHeader {
+        public static string WrappingGroupBoxHeader {
             get {
                 return ResourceManager.GetString("WrappingGroupBoxHeader", resourceCulture);
             }
@@ -306,7 +306,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Wrap all single-line for loops.
         /// </summary>
-        internal static string WrapSingleLineForLoopsCheckBoxContent {
+        public static string WrapSingleLineForLoopsCheckBoxContent {
             get {
                 return ResourceManager.GetString("WrapSingleLineForLoopsCheckBoxContent", resourceCulture);
             }
@@ -315,7 +315,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Wrap all single-line functions.
         /// </summary>
-        internal static string WrapSingleLineFunctionsCheckBoxContent {
+        public static string WrapSingleLineFunctionsCheckBoxContent {
             get {
                 return ResourceManager.GetString("WrapSingleLineFunctionsCheckBoxContent", resourceCulture);
             }
@@ -324,7 +324,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Wrap all single-line table constructors.
         /// </summary>
-        internal static string WrapSingleLineTableConstructorsCheckBoxContent {
+        public static string WrapSingleLineTableConstructorsCheckBoxContent {
             get {
                 return ResourceManager.GetString("WrapSingleLineTableConstructorsCheckBoxContent", resourceCulture);
             }
