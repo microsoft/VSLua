@@ -9,7 +9,7 @@
 
     <DockPanel>
         <StackPanel DockPanel.Dock="Top">
-            <GroupBox x:Name="groupBox" Header="{x:Static properties:Resources.FunctionIndentationGroupBoxHeader}"
+            <GroupBox Header="{x:Static properties:Resources.FunctionIndentationGroupBoxHeader}"
                       VerticalAlignment="Top" Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}">
                 <StackPanel DockPanel.Dock="Top" Margin="0,2,0,0">
                     <RadioButton x:Name="functionFixedIndentationRadio"
@@ -24,7 +24,7 @@
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox x:Name="groupBox_Copy" Header="Tables" VerticalAlignment="Top">
+            <GroupBox Header="Tables" VerticalAlignment="Top">
                 <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Left" Margin="0,2,0,0">
                     <RadioButton x:Name="tableFixedIndentationRadio"
                                  Content="{x:Static properties:Resources.FixedTableIndentationRadioContent}"

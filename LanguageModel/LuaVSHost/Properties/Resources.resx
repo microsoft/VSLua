@@ -129,19 +129,19 @@
   <data name="FormatOnBlockCheckboxContent" xml:space="preserve">
     <value>Format on block</value>
   </data>
-  <data name="FormatOnBlockCheckboxToolTips" xml:space="preserve">
+  <data name="FormatOnBlockCheckboxToolTip" xml:space="preserve">
     <value>Formatting is applied on a Lua block after [Enter] is hit after the End keyword.</value>
   </data>
   <data name="FormatOnEnterCheckboxContent" xml:space="preserve">
     <value>Auto format on [Enter]</value>
   </data>
-  <data name="FormatOnEnterCheckboxToolTips" xml:space="preserve">
+  <data name="FormatOnEnterCheckboxToolTip" xml:space="preserve">
     <value>Formatting is applied on a line-by-line basis.</value>
   </data>
   <data name="FormatOnPasteCheckboxContent" xml:space="preserve">
     <value>Auto format on paste</value>
   </data>
-  <data name="FormatOnPasteCheckboxToolTips" xml:space="preserve">
+  <data name="FormatOnPasteCheckboxToolTip" xml:space="preserve">
     <value>Formatting is applied on pasted text automattically.</value>
   </data>
   <data name="FunctionIndentationGroupBoxHeader" xml:space="preserve">

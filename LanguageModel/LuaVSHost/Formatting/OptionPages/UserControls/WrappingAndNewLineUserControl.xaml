@@ -9,7 +9,7 @@
 
     <DockPanel>
         <StackPanel>
-            <GroupBox x:Name="groupBox" Header="{x:Static properties:Resources.WrappingGroupBoxHeader}" VerticalAlignment="Top"
+            <GroupBox Header="{x:Static properties:Resources.WrappingGroupBoxHeader}" VerticalAlignment="Top"
                   Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}">
                 <StackPanel DockPanel.Dock ="Top" Margin="0,2,0,0" KeyboardNavigation.TabNavigation="Contained">
                     <CheckBox x:Name="wrapSingleLineFunctionsCheckbox"
@@ -26,7 +26,7 @@
                           IsChecked="{Binding WrapSingleLineTableConstructors}"/>
                 </StackPanel>
             </GroupBox>
-            <GroupBox x:Name="groupBox1" Header="{x:Static properties:Resources.NewLinesGroupBoxHeader}"
+            <GroupBox Header="{x:Static properties:Resources.NewLinesGroupBoxHeader}"
                       VerticalAlignment="Top"
                   Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}">
                 <StackPanel DockPanel.Dock="Top" Margin="0,2,0,0" KeyboardNavigation.TabNavigation="Contained">

@@ -99,9 +99,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Formatting is applied on a Lua block after [Enter] is hit after the End keyword..
         /// </summary>
-        internal static string FormatOnBlockCheckboxToolTips {
+        internal static string FormatOnBlockCheckboxToolTip {
             get {
-                return ResourceManager.GetString("FormatOnBlockCheckboxToolTips", resourceCulture);
+                return ResourceManager.GetString("FormatOnBlockCheckboxToolTip", resourceCulture);
             }
         }
         
@@ -117,9 +117,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Formatting is applied on a line-by-line basis..
         /// </summary>
-        internal static string FormatOnEnterCheckboxToolTips {
+        internal static string FormatOnEnterCheckboxToolTip {
             get {
-                return ResourceManager.GetString("FormatOnEnterCheckboxToolTips", resourceCulture);
+                return ResourceManager.GetString("FormatOnEnterCheckboxToolTip", resourceCulture);
             }
         }
         
@@ -135,9 +135,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Formatting is applied on pasted text automattically..
         /// </summary>
-        internal static string FormatOnPasteCheckboxToolTips {
+        internal static string FormatOnPasteCheckboxToolTip {
             get {
-                return ResourceManager.GetString("FormatOnPasteCheckboxToolTips", resourceCulture);
+                return ResourceManager.GetString("FormatOnPasteCheckboxToolTip", resourceCulture);
             }
         }
         
