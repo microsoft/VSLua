@@ -7,6 +7,13 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
     {
         public static readonly UserSettings MainInstance = new UserSettings();
 
+        internal UserSettings()
+        {
+            this.RulesChanged = false;
+        }
+
+        internal bool RulesChanged { get; private set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private bool? formatOnEnter = true;
@@ -369,6 +376,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         private void RaisePropertyChangedEvent([CallerMemberName] string callingMember = "")
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(callingMember));
+            this.RulesChanged = true;
         }
     }
 }
