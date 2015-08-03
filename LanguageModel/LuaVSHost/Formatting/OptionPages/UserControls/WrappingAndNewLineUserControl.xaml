@@ -4,29 +4,38 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages.UserControls"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <GroupBox x:Name="groupBox" Header="Wrapping" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="95" Width="280">
-            <Grid HorizontalAlignment="Left" Height="81" VerticalAlignment="Top" Width="270" Margin="0,0,-2,-9">
-                <CheckBox x:Name="wrapSingleLineFunctionsCheckbox" Content="Wrap all single-line functions"
-                          HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
-                          IsChecked="{Binding WrapSingleLineFunctions}"/>
-                <CheckBox x:Name="wrapSingleLineForLoopsCheckbox" Content="Wrap all single-line for loops"
-                          HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"
-                          IsChecked="{Binding WrapSingleLineForLoops}"/>
-                <CheckBox x:Name="wrapSingleLineTableConstructorsCheckbox" Content="Wrap all single-line table constructors"
-                          HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top"
-                          IsChecked="{Binding WrapSingleLineTableConstructors}"/>
-            </Grid>
-        </GroupBox>
-        <GroupBox x:Name="groupBox1" Header="NewLine" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" Height="100" Width="280">
-            <Grid HorizontalAlignment="Left" Height="100" Margin="0,0,-2,-23.333" VerticalAlignment="Top" Width="270">
-                <CheckBox x:Name="addNewLinesToMultilineTableConstructorsCheckbox" Content="Add new lines to multiline table constructors"
-                          HorizontalAlignment="Left" Margin="10,10,-107,0" VerticalAlignment="Top" Width="264"
-                          IsChecked="{Binding AddNewLinesToMultilineTableConstructors}"/>
-            </Grid>
-        </GroupBox>
+             xmlns:properties="clr-namespace:Microsoft.VisualStudio.LanguageServices.Lua.Properties"
+             mc:Ignorable="d">
 
-    </Grid>
+    <DockPanel>
+        <StackPanel>
+            <GroupBox x:Name="groupBox" Header="{x:Static properties:Resources.WrappingGroupBoxHeader}" VerticalAlignment="Top"
+                  Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}">
+                <StackPanel DockPanel.Dock ="Top" Margin="0,2,0,0" KeyboardNavigation.TabNavigation="Contained">
+                    <CheckBox x:Name="wrapSingleLineFunctionsCheckbox"
+                          Content="{x:Static properties:Resources.WrapSingleLineFunctionsCheckBoxContent}"
+                          HorizontalAlignment="Left" Margin="0,0,0,7"
+                          IsChecked="{Binding WrapSingleLineFunctions}"/>
+                    <CheckBox x:Name="wrapSingleLineForLoopsCheckbox"
+                          Content="{x:Static properties:Resources.WrapSingleLineForLoopsCheckBoxContent}"
+                          HorizontalAlignment="Left" Margin="0,0,0,7"
+                          IsChecked="{Binding WrapSingleLineForLoops}"/>
+                    <CheckBox x:Name="wrapSingleLineTableConstructorsCheckbox"
+                          Content="{x:Static properties:Resources.WrapSingleLineTableConstructorsCheckBoxContent}"
+                          HorizontalAlignment="Left" Margin="0,0,0,0"
+                          IsChecked="{Binding WrapSingleLineTableConstructors}"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox x:Name="groupBox1" Header="{x:Static properties:Resources.NewLinesGroupBoxHeader}"
+                      VerticalAlignment="Top"
+                  Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}">
+                <StackPanel DockPanel.Dock="Top" Margin="0,2,0,0" KeyboardNavigation.TabNavigation="Contained">
+                    <CheckBox x:Name="addNewLinesToMultilineTableConstructorsCheckbox"
+                          Content="{x:Static properties:Resources.AddNewLinesToMultilineTableConstructorsCheckBoxContent}"
+                          HorizontalAlignment="Left" Margin="0,0,0,0"
+                          IsChecked="{Binding AddNewLinesToMultilineTableConstructors}"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </DockPanel>
 </UserControl>

@@ -61,6 +61,15 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add new lines to multiline table constructors.
+        /// </summary>
+        internal static string AddNewLinesToMultilineTableConstructorsCheckBoxContent {
+            get {
+                return ResourceManager.GetString("AddNewLinesToMultilineTableConstructorsCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fixed.
         /// </summary>
         internal static string FixedFunctionIndentationRadioContent {
@@ -147,6 +156,15 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         internal static string GeneralGroupBoxHeader {
             get {
                 return ResourceManager.GetString("GeneralGroupBoxHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Lines.
+        /// </summary>
+        internal static string NewLinesGroupBoxHeader {
+            get {
+                return ResourceManager.GetString("NewLinesGroupBoxHeader", resourceCulture);
             }
         }
         
@@ -273,6 +291,42 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         internal static string TableIndentationGroupBoxHeader {
             get {
                 return ResourceManager.GetString("TableIndentationGroupBoxHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrapping.
+        /// </summary>
+        internal static string WrappingGroupBoxHeader {
+            get {
+                return ResourceManager.GetString("WrappingGroupBoxHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrap all single-line for loops.
+        /// </summary>
+        internal static string WrapSingleLineForLoopsCheckBoxContent {
+            get {
+                return ResourceManager.GetString("WrapSingleLineForLoopsCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrap all single-line functions.
+        /// </summary>
+        internal static string WrapSingleLineFunctionsCheckBoxContent {
+            get {
+                return ResourceManager.GetString("WrapSingleLineFunctionsCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrap all single-line table constructors.
+        /// </summary>
+        internal static string WrapSingleLineTableConstructorsCheckBoxContent {
+            get {
+                return ResourceManager.GetString("WrapSingleLineTableConstructorsCheckBoxContent", resourceCulture);
             }
         }
     }
