@@ -8,9 +8,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
     [Export(typeof(GlobalEditorOptions))]
     internal sealed class GlobalEditorOptions : IVsTextManagerEvents2
     {
-        internal vsIndentStyle IndentStyle { get; private set; }
-        internal uint TabSize { get; private set; }
         private ConnectionPointCookie connectionPoint;
+
+        [Import]
+        private IServiceCore core;
 
         internal event EventHandler<EventArgs> OnUpdateLanguagePreferences;
 
@@ -40,8 +41,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
             if (languagePreferences != null && languagePreferences.Length > 0 &&
                 Guid.Equals(languagePreferences[0].guidLang, Guids.Service))
             {
-                this.IndentStyle = languagePreferences[0].IndentStyle;
-                this.TabSize = languagePreferences[0].uTabSize;
+                this.core.FormattingUserSettings.IndentStyle = languagePreferences[0].IndentStyle;
+                this.core.FormattingUserSettings.TabSize = languagePreferences[0].uTabSize;
                 this.FireOnUpdateLanguagePreferences();
             }
         }

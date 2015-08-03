@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
@@ -15,6 +16,40 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         internal bool RulesChanged { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private uint tabSize = 4;
+        internal uint TabSize
+        {
+            get
+            {
+                return this.tabSize;
+            }
+            set
+            {
+                if (this.tabSize != value)
+                {
+                    this.tabSize = value;
+                    this.RaisePropertyChangedEvent();
+                }
+            }
+        }
+
+        private vsIndentStyle indentStyle = vsIndentStyle.vsIndentStyleDefault;
+        internal vsIndentStyle IndentStyle
+        {
+            get
+            {
+                return this.indentStyle;
+            }
+            set
+            {
+                if (this.indentStyle != value)
+                {
+                    this.indentStyle = value;
+                    this.RaisePropertyChangedEvent();
+                }
+            }
+        }
 
         private bool? formatOnEnter = true;
         public bool? FormatOnEnter
