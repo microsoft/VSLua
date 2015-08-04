@@ -17,7 +17,7 @@ namespace LanguageService.Formatting.Ruling
         {
             Token nextToken = formattingContext.NextToken.Token;
             // flag for the end of file token where whitespace should be deleted
-            List<TextEditInfo> edits = this.GetEdits(nextToken, nextToken.Type == TokenType.EndOfFile);
+            List<TextEditInfo> edits = this.GetEdits(nextToken, nextToken.Kind == SyntaxKind.EndOfFile);
 
             return edits;
         }

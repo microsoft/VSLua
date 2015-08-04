@@ -53,37 +53,37 @@ namespace LanguageService.Formatting.Ruling
                 defaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceBeforeValueAfterOpenCurlyBrace =
-            new SimpleRule(new RuleDescriptor(TokenType.OpenCurlyBrace, TokenRange.Value),
+            new SimpleRule(new RuleDescriptor(SyntaxKind.OpenCurlyBrace, TokenRange.Value),
                 defaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceAfterValueBeforeCloseParenthesis =
-            new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.CloseParen),
+            new SimpleRule(new RuleDescriptor(TokenRange.Value, SyntaxKind.CloseParen),
                 defaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceAfterValueBeforeCloseSquareBracket =
-            new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.CloseBracket),
+            new SimpleRule(new RuleDescriptor(TokenRange.Value, SyntaxKind.CloseBracket),
                 defaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceAfterValueBeforeCloseCurlyBrace =
-            new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.CloseCurlyBrace),
+            new SimpleRule(new RuleDescriptor(TokenRange.Value, SyntaxKind.CloseCurlyBrace),
                 defaultFilters, RuleAction.Space);
 
         internal static readonly DeleteSpaceBeforeEofToken DeleteSpaceBeforeEofToken = new DeleteSpaceBeforeEofToken();
 
         internal static readonly Rule DeleteSpaceAfterValueBeforeDot =
-            new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.Dot),
+            new SimpleRule(new RuleDescriptor(TokenRange.Value, SyntaxKind.Dot),
                 defaultFilters, RuleAction.Delete);
 
         internal static readonly Rule DeleteSpaceBeforeValueAfterDot =
-            new SimpleRule(new RuleDescriptor(TokenType.Dot, TokenRange.Value),
+            new SimpleRule(new RuleDescriptor(SyntaxKind.Dot, TokenRange.Value),
                 defaultFilters, RuleAction.Delete);
 
         internal static readonly Rule DeleteSpaceAfterValueBeforeColon =
-            new SimpleRule(new RuleDescriptor(TokenRange.Value, TokenType.Colon),
+            new SimpleRule(new RuleDescriptor(TokenRange.Value, SyntaxKind.Colon),
                 defaultFilters, RuleAction.Delete);
 
         internal static readonly Rule DeleteSpaceBeforeValueAfterColon =
-            new SimpleRule(new RuleDescriptor(TokenType.Colon, TokenRange.Value),
+            new SimpleRule(new RuleDescriptor(SyntaxKind.Colon, TokenRange.Value),
                 defaultFilters, RuleAction.Delete);
 
         internal static readonly Rule DeleteTrailingWhitespace = new DeleteTrailingWhitespace();

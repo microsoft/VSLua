@@ -22,9 +22,9 @@ namespace LanguageService
             positionInTokenList = -1;
         }
 
-        public SyntaxTree CreateSyntaxTree(Stream luaStream)
+        public SyntaxTree CreateSyntaxTree(TextReader luaStream)
         {
-            TextReader luaStream = File.OpenText(filename);
+            //TextReader luaStream = File.OpenText(luaStream);
             tokenList = Lexer.Tokenize(luaStream);
             ChunkNode root = ParseChunkNode();
             return new SyntaxTree(root, errorList.ToImmutableList());
@@ -964,46 +964,46 @@ namespace LanguageService
             }
         }
 
-        private bool IsListTerminator(ParsingContext context, SyntaxKind tokenType)
+        private bool IsListTerminator(ParsingContext context, SyntaxKind SyntaxKind)
         {
             switch (context)
         {
                 case ParsingContext.IfBlock:
-                    return (tokenType == SyntaxKind.EndKeyword || tokenType == SyntaxKind.ElseIfKeyword || tokenType == SyntaxKind.ElseKeyword);
+                    return (SyntaxKind == SyntaxKind.EndKeyword || SyntaxKind == SyntaxKind.ElseIfKeyword || SyntaxKind == SyntaxKind.ElseKeyword);
                 case ParsingContext.ElseBlock:
-                    return (tokenType == SyntaxKind.EndKeyword);
+                    return (SyntaxKind == SyntaxKind.EndKeyword);
                 case ParsingContext.ElseIfBlock:
-                    return (tokenType == SyntaxKind.ElseIfKeyword || tokenType == SyntaxKind.EndKeyword);
+                    return (SyntaxKind == SyntaxKind.ElseIfKeyword || SyntaxKind == SyntaxKind.EndKeyword);
                 case ParsingContext.ChunkNodeBlock:
-                    return tokenType == SyntaxKind.EndOfFile;
+                    return SyntaxKind == SyntaxKind.EndOfFile;
                 case ParsingContext.FuncBodyBlock:
                 case ParsingContext.WhileBlock:
                 case ParsingContext.DoStatementBlock:
                 case ParsingContext.ForStatementBlock:
-                    return tokenType == SyntaxKind.EndKeyword;
+                    return SyntaxKind == SyntaxKind.EndKeyword;
                 case ParsingContext.RepeatStatementBlock:
-                    return tokenType == SyntaxKind.UntilKeyword;
+                    return SyntaxKind == SyntaxKind.UntilKeyword;
 
                 ////////////////////// UNSURE /////////////////////////////////////
                 case ParsingContext.ExpList:
-                    return tokenType == SyntaxKind.CloseParen || tokenType == SyntaxKind.Semicolon || tokenType == SyntaxKind.DoKeyword; //TODO: whatabout end of assignment statement context?
+                    return SyntaxKind == SyntaxKind.CloseParen || SyntaxKind == SyntaxKind.Semicolon || SyntaxKind == SyntaxKind.DoKeyword; //TODO: whatabout end of assignment statement context?
                 case ParsingContext.NameList:
-                    return tokenType == SyntaxKind.InKeyword || tokenType == SyntaxKind.AssignmentOperator; //TODO: whatabout end of assignment statement context?
+                    return SyntaxKind == SyntaxKind.InKeyword || SyntaxKind == SyntaxKind.AssignmentOperator; //TODO: whatabout end of assignment statement context?
                 case ParsingContext.FuncNameDotSeperatedNameList:
-                    return tokenType == SyntaxKind.Colon || tokenType == SyntaxKind.OpenParen; //TODO: Confirm there is no concretely defined terminator...
+                    return SyntaxKind == SyntaxKind.Colon || SyntaxKind == SyntaxKind.OpenParen; //TODO: Confirm there is no concretely defined terminator...
 
                 ////////////////////// UNSURE /////////////////////////////////////
 
                 case ParsingContext.VarList:
-                    return tokenType == SyntaxKind.AssignmentOperator;
+                    return SyntaxKind == SyntaxKind.AssignmentOperator;
                 case ParsingContext.FieldList:
-                    return tokenType == SyntaxKind.CloseCurlyBrace;
+                    return SyntaxKind == SyntaxKind.CloseCurlyBrace;
                 default:
                     throw new InvalidOperationException();
             }
         }
 
-        private bool IsListElementBeginner(ParsingContext context, SyntaxKind tokenType)
+        private bool IsListElementBeginner(ParsingContext context, SyntaxKind SyntaxKind)
         {
             switch (context)
             {
@@ -1016,7 +1016,7 @@ namespace LanguageService
                 case ParsingContext.WhileBlock:
                 case ParsingContext.RepeatStatementBlock:
                 case ParsingContext.ForStatementBlock:
-                    switch (tokenType)
+                    switch (SyntaxKind)
                     {
                         case SyntaxKind.Identifier:
                         case SyntaxKind.Semicolon:
@@ -1037,7 +1037,7 @@ namespace LanguageService
                     }
                 case ParsingContext.ExpList:
                 case ParsingContext.FieldList:
-                    switch (tokenType)
+                    switch (SyntaxKind)
                     {
                         case SyntaxKind.NilKeyValue:
                         case SyntaxKind.FalseKeyValue:
@@ -1055,7 +1055,7 @@ namespace LanguageService
                     }
                 case ParsingContext.NameList:
                 case ParsingContext.FuncNameDotSeperatedNameList:
-                    if (tokenType == SyntaxKind.Identifier)
+                    if (SyntaxKind == SyntaxKind.Identifier)
                     {
                         return true;
                     }
@@ -1064,7 +1064,7 @@ namespace LanguageService
                         return false;
                     }
                 case ParsingContext.VarList:
-                    if (tokenType == SyntaxKind.Identifier || tokenType == SyntaxKind.OpenParen)
+                    if (SyntaxKind == SyntaxKind.Identifier || SyntaxKind == SyntaxKind.OpenParen)
                     {
                         return true;
                     }
@@ -1073,7 +1073,7 @@ namespace LanguageService
                         return false;
                     }
                 //case ParsingContext.FieldList:
-                //if (tokenType == SyntaxKind.Identifier || tokenType == SyntaxKind.OpenBracket)
+                //if (SyntaxKind == SyntaxKind.Identifier || SyntaxKind == SyntaxKind.OpenBracket)
                 //{
                 //    return true;
                 //}

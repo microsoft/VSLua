@@ -7,8 +7,8 @@ namespace LanguageService.Formatting.Ruling
 {
     internal class RuleMap
     {
-        internal Dictionary<TokenType, Dictionary<TokenType, RuleBucket>> map;
-        private static readonly int Length = Enum.GetNames(typeof(TokenType)).Length;
+        internal Dictionary<SyntaxKind, Dictionary<SyntaxKind, RuleBucket>> map;
+        private static readonly int Length = Enum.GetNames(typeof(SyntaxKind)).Length;
 
         internal static RuleMap Create(OptionalRuleMap optionalRuleMap)
         {
@@ -33,11 +33,11 @@ namespace LanguageService.Formatting.Ruling
                 foreach (SyntaxKind typeRight in rule.RuleDescriptor.TokenRangeRight)
                 {
                     RuleBucket bucket;
-                    Dictionary<TokenType, RuleBucket> leftTokenMap;
+                    Dictionary<SyntaxKind, RuleBucket> leftTokenMap;
 
                     if (!map.TryGetValue(typeLeft, out leftTokenMap))
                     {
-                        map[typeLeft] = new Dictionary<TokenType, RuleBucket>();
+                        map[typeLeft] = new Dictionary<SyntaxKind, RuleBucket>();
                         map[typeLeft][typeRight] = bucket = new RuleBucket();
                     }
                     else
@@ -56,11 +56,11 @@ namespace LanguageService.Formatting.Ruling
 
         internal Rule Get(FormattingContext formattingContext)
         {
-            TokenType typeLeft = formattingContext.CurrentToken.Token.Type;
-            TokenType typeRight = formattingContext.NextToken.Token.Type;
+            SyntaxKind typeLeft = formattingContext.CurrentToken.Token.Kind;
+            SyntaxKind typeRight = formattingContext.NextToken.Token.Kind;
 
             RuleBucket ruleBucket;
-            Dictionary<TokenType, RuleBucket> leftTokenMap;
+            Dictionary<SyntaxKind, RuleBucket> leftTokenMap;
             
             if (map.TryGetValue(typeLeft, out leftTokenMap))
             {
@@ -80,7 +80,7 @@ namespace LanguageService.Formatting.Ruling
                 optionalRuleMap = new OptionalRuleMap(Enumerable.Empty<OptionalRuleGroup>());
         }
 
-            map = new Dictionary<TokenType, Dictionary<TokenType, RuleBucket>>();
+            map = new Dictionary<SyntaxKind, Dictionary<SyntaxKind, RuleBucket>>();
             foreach (Rule rule in Rules.AllRules)
             {
                 if (!optionalRuleMap.DisabledRules.Contains(rule))

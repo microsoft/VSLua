@@ -38,7 +38,7 @@ namespace LanguageService.Formatting
                 }
 
 
-                if (DecreaseIndentOn.Contains(token.Type))
+                if (DecreaseIndentOn.Contains(token.Kind))
                 {
                     indent_level--;
                 }
@@ -48,12 +48,12 @@ namespace LanguageService.Formatting
                 {
                 parsedTokens.Add(new ParsedToken(token, indent_level, null));
                 }
-                if (IncreaseIndentAfter.Contains(token.Type))
+                if (IncreaseIndentAfter.Contains(token.Kind))
                 {
                     indent_level++;
                 }
 
-                if (token.Type == TokenType.ReturnKeyword)
+                if (token.Kind == SyntaxKind.ReturnKeyword)
                 {
                     indent_level--;
                 }
@@ -62,21 +62,21 @@ namespace LanguageService.Formatting
             return parsedTokens;
         }
 
-        private static readonly ImmutableArray<TokenType> IncreaseIndentAfter = ImmutableArray.Create
+        private static readonly ImmutableArray<SyntaxKind> IncreaseIndentAfter = ImmutableArray.Create
             (
-        TokenType.DoKeyword,
-        TokenType.ThenKeyword,
-        TokenType.ElseKeyword,
-        TokenType.FunctionKeyword,
-        TokenType.OpenCurlyBrace
+        SyntaxKind.DoKeyword,
+        SyntaxKind.ThenKeyword,
+        SyntaxKind.ElseKeyword,
+        SyntaxKind.FunctionKeyword,
+        SyntaxKind.OpenCurlyBrace
             );
 
-        private static readonly ImmutableArray<TokenType> DecreaseIndentOn = ImmutableArray.Create
+        private static readonly ImmutableArray<SyntaxKind> DecreaseIndentOn = ImmutableArray.Create
             (
-                TokenType.EndKeyword,
-                TokenType.ElseIfKeyword,
-                TokenType.CloseCurlyBrace,
-                TokenType.ElseKeyword
+                SyntaxKind.EndKeyword,
+                SyntaxKind.ElseIfKeyword,
+                SyntaxKind.CloseCurlyBrace,
+                SyntaxKind.ElseKeyword
             );
     }
 }

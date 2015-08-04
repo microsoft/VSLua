@@ -1,5 +1,4 @@
 ﻿using LanguageService.LanguageModel.TreeVisitors;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -21,7 +20,7 @@ namespace LanguageService
 
         public static SyntaxTree Create(string filename)
         {
-            Stream luaStream = File.OpenRead(filename);
+            TextReader luaStream = File.OpenText(filename);
             return new Parser().CreateSyntaxTree(luaStream);
         }
 

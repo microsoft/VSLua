@@ -7,78 +7,78 @@ namespace LanguageService.Formatting
 {
     internal static class TokenRange
     {
-        internal static readonly ImmutableArray<TokenType> AnyVisible =
+        internal static readonly ImmutableArray<SyntaxKind> AnyVisible =
             TokenRange.Fill(
                 Enum.GetValues(typeof(SyntaxKind)),
                 new SyntaxKind[] { SyntaxKind.EndOfFile, SyntaxKind.Unknown });
 
-        internal static readonly ImmutableArray<TokenType> All =
+        internal static readonly ImmutableArray<SyntaxKind> All =
             TokenRange.Fill(
-                Enum.GetValues(typeof(TokenType)),
-                new TokenType[] { });
+                Enum.GetValues(typeof(SyntaxKind)),
+                new SyntaxKind[] { });
 
-        internal static readonly ImmutableArray<TokenType> BinaryOperators = ImmutableArray.Create
+        internal static readonly ImmutableArray<SyntaxKind> BinaryOperators = ImmutableArray.Create
         (
-            TokenType.AndBinop,
-            TokenType.BitwiseAndOperator,
-            TokenType.BitwiseLeftOperator,
-            TokenType.BitwiseOrOperator,
-            TokenType.BitwiseRightOperator,
-            TokenType.EqualityOperator,
-            TokenType.ExponentOperator,
-            TokenType.FloorDivideOperator,
-            TokenType.DivideOperator,
-            TokenType.GreaterOrEqualOperator,
-            TokenType.GreaterThanOperator,
-            TokenType.LessOrEqualOperator,
-            TokenType.LessThanOperator,
-            TokenType.MinusOperator,
-            TokenType.ModulusOperator,
-            TokenType.MultiplyOperator,
-            TokenType.NotEqualsOperator,
-            TokenType.OrBinop,
-            TokenType.PlusOperator,
-            TokenType.StringConcatOperator,
-            TokenType.TildeUnOp,
-            TokenType.VarArgOperator
+            SyntaxKind.AndBinop,
+            SyntaxKind.BitwiseAndOperator,
+            SyntaxKind.BitwiseLeftOperator,
+            SyntaxKind.BitwiseOrOperator,
+            SyntaxKind.BitwiseRightOperator,
+            SyntaxKind.EqualityOperator,
+            SyntaxKind.ExponentOperator,
+            SyntaxKind.FloorDivideOperator,
+            SyntaxKind.DivideOperator,
+            SyntaxKind.GreaterOrEqualOperator,
+            SyntaxKind.GreaterThanOperator,
+            SyntaxKind.LessOrEqualOperator,
+            SyntaxKind.LessThanOperator,
+            SyntaxKind.MinusOperator,
+            SyntaxKind.ModulusOperator,
+            SyntaxKind.MultiplyOperator,
+            SyntaxKind.NotEqualsOperator,
+            SyntaxKind.OrBinop,
+            SyntaxKind.PlusOperator,
+            SyntaxKind.StringConcatOperator,
+            SyntaxKind.TildeUnOp,
+            SyntaxKind.VarArgOperator
         );
 
-        internal static readonly ImmutableArray<TokenType> Brackets = ImmutableArray.Create
+        internal static readonly ImmutableArray<SyntaxKind> Brackets = ImmutableArray.Create
         (
-            TokenType.OpenBracket,
-            TokenType.CloseBracket,
-            TokenType.OpenCurlyBrace,
-            TokenType.CloseCurlyBrace,
-            TokenType.OpenParen,
-            TokenType.CloseParen
+            SyntaxKind.OpenBracket,
+            SyntaxKind.CloseBracket,
+            SyntaxKind.OpenCurlyBrace,
+            SyntaxKind.CloseCurlyBrace,
+            SyntaxKind.OpenParen,
+            SyntaxKind.CloseParen
         );
 
-        internal static readonly ImmutableArray<TokenType> Value = ImmutableArray.Create(
-            TokenType.Number,
-            TokenType.String,
-            TokenType.FalseKeyValue,
-            TokenType.TrueKeyValue,
-            TokenType.NilKeyValue,
-            TokenType.Identifier,
-            TokenType.FunctionKeyword
+        internal static readonly ImmutableArray<SyntaxKind> Value = ImmutableArray.Create(
+            SyntaxKind.Number,
+            SyntaxKind.String,
+            SyntaxKind.FalseKeyValue,
+            SyntaxKind.TrueKeyValue,
+            SyntaxKind.NilKeyValue,
+            SyntaxKind.Identifier,
+            SyntaxKind.FunctionKeyword
         );
 
-        private static ImmutableArray<TokenType> Fill(Array values, TokenType[] exclude)
+        private static ImmutableArray<SyntaxKind> Fill(Array values, SyntaxKind[] exclude)
         {
             Requires.NotNull(values, nameof(values));
             Requires.NotNull(exclude, nameof(exclude));
 
-            var tokenTypes = ImmutableArray.CreateBuilder<TokenType>(values.Length);
+            var SyntaxKinds = ImmutableArray.CreateBuilder<SyntaxKind>(values.Length);
 
-            foreach (SyntaxKind tokenType in values)
+            foreach (SyntaxKind SyntaxKind in values)
             {
-                if (!exclude.Contains(tokenType))
+                if (!exclude.Contains(SyntaxKind))
                 {
-                    tokenTypes.Add(tokenType);
+                    SyntaxKinds.Add(SyntaxKind);
                 }
             }
 
-            return tokenTypes.ToImmutable();
+            return SyntaxKinds.ToImmutable();
         }
     }
 }

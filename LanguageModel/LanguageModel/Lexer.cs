@@ -1,5 +1,4 @@
-﻿using Microsoft.Internal.VisualStudio.Shell;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -80,7 +79,7 @@ namespace LanguageService
 
         public static List<Token> Tokenize(TextReader textReader) //TODO: Return a bool based on if this is a new copy of the lexer or not
         {
-            Validate.IsNotNull(stream, nameof(stream));
+            Validation.Requires.NotNull(textReader, nameof(textReader));
 
 
             TrackableTextReader trackableTextReader = new TrackableTextReader(textReader);
@@ -97,9 +96,9 @@ namespace LanguageService
                 nextToken = ReadNextToken(trackableTextReader, trivia, fullStart);
                 tokenList.Add(nextToken);
 
-                if (trackableTextReader.EndOfStream() && nextToken.Type != TokenType.EndOfFile)
+                if (trackableTextReader.EndOfStream() && nextToken.Kind != SyntaxKind.EndOfFile)
                 {
-                    nextToken = new Token(TokenType.EndOfFile, "", new List<Trivia>(), fullStart, trackableTextReader.Position);
+                    nextToken = new Token(SyntaxKind.EndOfFile, "", new List<Trivia>(), fullStart, trackableTextReader.Position);
                     tokenList.Add(nextToken);
                 }
             }
@@ -189,7 +188,11 @@ namespace LanguageService
 
         private static Trivia ReadLongComment(TrackableTextReader stream, string commentSoFar, int? level)
         {
-            Validate.IsNotNull(level, nameof(level));
+            // TODO: temp
+            if (level == null)
+            {
+                throw new ArgumentNullException(nameof(level));
+            }
 
             //TODO: re-write without regex
             Regex closeBracketPattern = new Regex(@"\]={" + level.ToString() + @"}\]");
@@ -314,7 +317,7 @@ namespace LanguageService
             }
         }
 
-        private static Token ReadStringToken(TrackableTextReader stream, List<Trivia> leadingTrivia, int fullStart)
+        private static Token ReadStringToken(char stringDelimiter, TrackableTextReader stream, List<Trivia> leadingTrivia, int fullStart)
         {
             StringBuilder fullString = new StringBuilder();
             int tokenStartPosition = (int)stream.Position;
@@ -564,7 +567,7 @@ namespace LanguageService
             }
         }
 
-        public static bool CheckAndConsumeNextToken(char character, Stream stream)
+        public static bool CheckAndConsumeNextToken(char character, TrackableTextReader stream)
         {
             if (character != stream.Peek())
             {
@@ -577,7 +580,7 @@ namespace LanguageService
             }
         }
 
-        public static int CountLevels(bool validateCount, char character, int counter, Stream stream, StringBuilder builder)
+        public static int CountLevels(bool validateCount, char character, int counter, TrackableTextReader stream, StringBuilder builder)
         {
             int levelCount = counter;
             while (character == '=' && !stream.EndOfStream())

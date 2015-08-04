@@ -106,9 +106,6 @@
     <Compile Include="LanguageModel\TreeVisitors\NodeWalker.cs" />
     <Compile Include="LuaFeatureContainer.cs" />
     <Compile Include="LanguageModel\Lexer.cs" />
-    <Compile Include="LanguageModel\NodeClasses.cs">
-      <Generator>MSBuild:GenerateCodeFromAttributes</Generator>
-    </Compile>
     <Compile Include="LanguageModel\ParseContexts.cs" />
     <Compile Include="LanguageModel\ParseError.cs" />
     <Compile Include="LanguageModel\Parser.cs" />
