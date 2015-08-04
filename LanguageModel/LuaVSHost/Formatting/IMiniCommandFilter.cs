@@ -14,7 +14,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         /// <summary>
         /// Operations that happen before the command has been processed
         /// </summary>
-        /// <returns>Return true if the command succeeded otherwise false</returns>
+        /// <returns>
+        /// Return true if the command proceeded in affecting the editor environment, i.e. if it formatted
+        /// the document, or a selection, otherwise returns false if the editor environment
+        /// did not change.
+        /// </returns>
         bool PreProcessCommand(Guid guidCmdGroup, uint commandId, IntPtr variantIn);
 
         /// <summary>

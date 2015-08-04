@@ -1,11 +1,13 @@
-﻿namespace LanguageService.Formatting
+﻿using Validation;
+
+namespace LanguageService.Formatting
 {
     internal struct FormattingContext
     {
         internal FormattingContext(ParsedToken currentToken, ParsedToken nextToken)
         {
-            Validation.Requires.NotNull(currentToken, nameof(currentToken));
-            Validation.Requires.NotNull(nextToken, nameof(nextToken));
+            Requires.NotNull(currentToken, nameof(currentToken));
+            Requires.NotNull(nextToken, nameof(nextToken));
 
             this.CurrentToken = currentToken;
             this.NextToken = nextToken;

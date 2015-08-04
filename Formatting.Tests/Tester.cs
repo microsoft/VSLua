@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using LanguageService.Formatting;
 using Xunit;
 using System.IO;
-using LanguageService;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
+using LanguageService.Formatting;
 using LanguageService.Shared;
+using LanguageService;
 
 namespace Formatting.Tests
 {

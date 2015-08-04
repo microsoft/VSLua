@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Linq;
+using Validation;
 
 namespace LanguageService.Formatting
 {
@@ -65,6 +66,9 @@ namespace LanguageService.Formatting
 
         private static ImmutableArray<TokenType> Fill(Array values, TokenType[] exclude)
         {
+            Requires.NotNull(values, nameof(values));
+            Requires.NotNull(exclude, nameof(exclude));
+
             var tokenTypes = ImmutableArray.CreateBuilder<TokenType>(values.Length);
 
             foreach (TokenType tokenType in values)
