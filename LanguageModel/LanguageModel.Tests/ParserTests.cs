@@ -50,8 +50,17 @@ namespace LanguageService.Tests
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\ComplexTableConstructor.lua");
             var generator = new TestGenerator();
             generator.GenerateTestForFile(@"CorrectSampleLuaFiles\ComplexTableConstructor.lua", "ComplexTableConstructor");
-            //new ComplexTableConstructor_Generated().Test(new Tester(tree));
+            new ComplexTableConstructor_Generated().Test(new Tester(tree));
         }
+
+        //[Fact]
+        //public void ComplexTableConstructorGeneratedTest()
+        //{
+        //    SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\ComplexTableConstructor.lua");
+        //    var generator = new TestGenerator();
+        //    generator.GenerateTestForFile(@"CorrectSampleLuaFiles\ComplexTableConstructor.lua", "ComplexTableConstructor");
+        //    new ComplexTableConstructor_Generated().Test(new Tester(tree));
+        //}
 
         //[Fact]
         //public void AutoGenerateTests()

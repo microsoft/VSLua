@@ -415,8 +415,6 @@ namespace LanguageService
                     switch (Peek(2).Kind)
                     {
                         case SyntaxKind.OpenParen:
-                        //    node.PrefixExp = ParseParenPrefixExp().ToBuilder();
-                        //    break;
                         case SyntaxKind.OpenCurlyBrace:
                         case SyntaxKind.String:
                         case SyntaxKind.Colon:
@@ -566,8 +564,6 @@ namespace LanguageService
                     switch (Peek(2).Kind)
                     {
                         case SyntaxKind.OpenParen:
-                            node.PrefixExp = ParseParenPrefixExp().ToBuilder();
-                            break;
                         case SyntaxKind.OpenCurlyBrace:
                         case SyntaxKind.String:
                         case SyntaxKind.Colon:
@@ -627,6 +623,7 @@ namespace LanguageService
                     if (Peek(2).Kind == SyntaxKind.AssignmentOperator)
                     {
                         var node = AssignmentField.CreateBuilder();
+                        node.Kind = SyntaxKind.AssignmentField;
                         node.StartPosition = Peek().Start;
                         node.Name = GetExpectedToken(SyntaxKind.Identifier);
                         node.AssignmentOperator = GetExpectedToken(SyntaxKind.AssignmentOperator);
@@ -1036,10 +1033,27 @@ namespace LanguageService
                             return false;
                     }
                 case ParsingContext.ExpList:
+                    switch (tokenType)
+                    {
+                        case SyntaxKind.NilKeyValue:
+                        case SyntaxKind.FalseKeyValue:
+                        case SyntaxKind.TrueKeyValue:
+                        case SyntaxKind.Number:
+                        case SyntaxKind.String:
+                        case SyntaxKind.VarArgOperator:
+                        case SyntaxKind.FunctionKeyword:
+                        case SyntaxKind.OpenParen:
+                        case SyntaxKind.OpenCurlyBrace:
+                        case SyntaxKind.Identifier:
+                            return true;
+                        default:
+                            return false;
+                    }
                 case ParsingContext.FieldList:
                     switch (tokenType)
                     {
                         case SyntaxKind.NilKeyValue:
+                        case SyntaxKind.OpenBracket:
                         case SyntaxKind.FalseKeyValue:
                         case SyntaxKind.TrueKeyValue:
                         case SyntaxKind.Number:
