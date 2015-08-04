@@ -158,7 +158,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         /// Disconnect the current connection point.  If the object is not connected,
         /// this method will do nothing.
         /// </summary>
-        [SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly", Justification = "Because I said so")]
         public void Disconnect(bool release)
         {
             if (this.connectionPoint != null && this.cookie != 0)

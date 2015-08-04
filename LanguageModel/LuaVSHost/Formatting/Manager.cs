@@ -14,13 +14,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
     internal sealed class Manager : IMiniCommandFilter, IFormatter
     {
-        private ITextBuffer textBuffer;
-        private ITextView textView;
-        private bool isClosed;
-        private IServiceCore core;
-
-        private ITextSnapshot prePasteSnapshot;
-
         internal Manager(ITextBuffer textBuffer, ITextView textView, IServiceCore core)
         {
             Requires.NotNull(textBuffer, nameof(textBuffer));
@@ -32,6 +25,12 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             this.textView = textView;
         }
 
+        private ITextBuffer textBuffer;
+        private ITextView textView;
+        private bool isClosed;
+        private IServiceCore core;
+        private ITextSnapshot prePasteSnapshot;
+
         public bool PreProcessCommand(Guid guidCmdGroup, uint commandId, IntPtr variantIn)
         {
             if (guidCmdGroup == VSConstants.VSStd2K)
@@ -39,10 +38,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                 switch ((VSConstants.VSStd2KCmdID)commandId)
                 {
                     case VSConstants.VSStd2KCmdID.FORMATDOCUMENT:
-                        {
-                            this.FormatDocument();
-                            return true;
-                        }
+                {
+                    this.FormatDocument();
+                    return true;
+                }
 
                     case VSConstants.VSStd2KCmdID.FORMATSELECTION:
                         {
@@ -61,7 +60,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                         }
 
                         break;
-                }
+            }
             }
 
             return false;
@@ -91,7 +90,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                 }
             }
 
-            // For typing stuff (after semicolin, } or enter and stuff)
+            // For typing stuff (after semicolon, } or enter and stuff)
         }
 
         public bool QueryCommandStatus(Guid guidCmdGroup, uint commandId, IntPtr commandText, out OLECMDF commandStatus)
@@ -103,11 +102,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                 switch ((VSConstants.VSStd2KCmdID)commandId)
                 {
                     case VSConstants.VSStd2KCmdID.FORMATDOCUMENT:
-                        if (this.CanFormatDocument())
-                        {
-                            commandStatus = OLECommandFlags.OLECMDF_ENABLED | OLECommandFlags.OLECMDF_SUPPORTED;
-                            return true;
-                        }
+                    if (this.CanFormatDocument())
+                    {
+                        commandStatus = OLECommandFlags.OLECMDF_ENABLED | OLECommandFlags.OLECMDF_SUPPORTED;
+                        return true;
+                    }
 
                         break;
 
@@ -118,10 +117,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                             if (!this.textView.Selection.IsEmpty)
                             {
                                 commandStatus |= OLECommandFlags.OLECMDF_ENABLED;
-                            }
+                }
 
                             return true;
-                        }
+            }
 
                         break;
                 }
@@ -214,11 +213,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             return snapshotSpan;
         }
 
-        //public void FormatStatement()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
         private bool Format(SnapshotSpan span)
         {
             if (span.Snapshot.TextBuffer != this.textBuffer || span.IsEmpty || !this.CanFormatSpan(span))
@@ -228,9 +222,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 
             SnapshotPoint startLinePoint = span.Start.GetContainingLine().Start;
             span = new SnapshotSpan(startLinePoint, span.End);
-            ITextSnapshot textSnapshot = span.Snapshot;
 
             SourceText sourceText = this.core.SourceTextCache.Get(this.textBuffer.CurrentSnapshot);
+
             Range range = new Range(span.Start.Position, span.End.Position);
             List<TextEditInfo> edits = this.core.FeatureContainer.Formatter.Format(sourceText, range, null);
 

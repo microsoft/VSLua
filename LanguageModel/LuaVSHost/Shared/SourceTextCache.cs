@@ -12,7 +12,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
     {
         internal SourceText Get(ITextSnapshot textSnapshot)
         {
-            Validation.Requires.NotNull(textSnapshot, nameof(textSnapshot));
+            Requires.NotNull(textSnapshot, nameof(textSnapshot));
 
             SourceText sourceText = null;
             if (this.sources.TryGetValue(textSnapshot, out sourceText))
