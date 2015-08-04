@@ -22,7 +22,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.VisualStudio.LanguageServices.Lua.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Format on block.
         /// </summary>
-        internal static string FormatOnBlockCheckboxContent {
+        public static string FormatOnBlockCheckboxContent {
             get {
                 return ResourceManager.GetString("FormatOnBlockCheckboxContent", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Formatting is applied on a Lua block after [Enter] is hit after the End keyword..
         /// </summary>
-        internal static string FormatOnBlockCheckboxToolTip {
+        public static string FormatOnBlockCheckboxToolTip {
             get {
                 return ResourceManager.GetString("FormatOnBlockCheckboxToolTip", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Auto format on [Enter].
         /// </summary>
-        internal static string FormatOnEnterCheckboxContent {
+        public static string FormatOnEnterCheckboxContent {
             get {
                 return ResourceManager.GetString("FormatOnEnterCheckboxContent", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Formatting is applied on a line-by-line basis..
         /// </summary>
-        internal static string FormatOnEnterCheckboxToolTip {
+        public static string FormatOnEnterCheckboxToolTip {
             get {
                 return ResourceManager.GetString("FormatOnEnterCheckboxToolTip", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Auto format on paste.
         /// </summary>
-        internal static string FormatOnPasteCheckboxContent {
+        public static string FormatOnPasteCheckboxContent {
             get {
                 return ResourceManager.GetString("FormatOnPasteCheckboxContent", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Formatting is applied on pasted text automattically..
         /// </summary>
-        internal static string FormatOnPasteCheckboxToolTip {
+        public static string FormatOnPasteCheckboxToolTip {
             get {
                 return ResourceManager.GetString("FormatOnPasteCheckboxToolTip", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
-        internal static string GeneralGroupBoxHeader {
+        public static string GeneralGroupBoxHeader {
             get {
                 return ResourceManager.GetString("GeneralGroupBoxHeader", resourceCulture);
             }
