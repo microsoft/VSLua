@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using Validation;
 
 namespace LanguageService
 {
@@ -79,8 +80,7 @@ namespace LanguageService
 
         public static List<Token> Tokenize(TextReader textReader) //TODO: Return a bool based on if this is a new copy of the lexer or not
         {
-            Validation.Requires.NotNull(textReader, nameof(textReader));
-
+            Requires.NotNull(textReader, nameof(textReader));
 
             TrackableTextReader trackableTextReader = new TrackableTextReader(textReader);
 
@@ -102,6 +102,7 @@ namespace LanguageService
                     tokenList.Add(nextToken);
                 }
             }
+
             return tokenList;
         }
         private static List<Trivia> ConsumeTrivia(TrackableTextReader stream)
