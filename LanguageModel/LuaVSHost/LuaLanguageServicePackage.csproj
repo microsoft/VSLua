@@ -54,7 +54,7 @@
     <Compile Include="Formatting\CommandFilter.cs" />
     <Compile Include="Formatting\IFormatter.cs" />
     <Compile Include="Formatting\IMiniCommandFilter.cs" />
-    <Compile Include="Formatting\Manager.cs" />
+    <Compile Include="Formatting\FormatCommandHandler.cs" />
     <Compile Include="Formatting\OptionPages\BaseDialogPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -92,13 +92,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Shared\ConnectionPointCookie.cs" />
     <Compile Include="Shared\Constants.cs" />
     <Compile Include="Shared\ContentTypes.cs" />
-    <Compile Include="Shared\ServiceCore.cs" />
+    <Compile Include="Shared\Singletons.cs" />
     <Compile Include="Shared\GlobalEditorOptions.cs" />
     <Compile Include="Shared\Guids.cs" />
-    <Compile Include="Shared\IServiceCore.cs" />
+    <Compile Include="Shared\ISingletons.cs" />
     <Compile Include="Shared\SourceTextCache.cs" />
     <Compile Include="Shared\EditorUtilities.cs" />
   </ItemGroup>
@@ -146,10 +145,7 @@
       <HintPath>..\packages\Microsoft.VisualStudio.OLE.Interop.7.10.6070-pre\lib\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.14.0, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.VisualStudio.Shell.14.0.14.0.23020-MVP\lib\Microsoft.VisualStudio.Shell.14.0.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.14.0, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.Shell.Immutable.10.0.10.0.30319-pre\lib\net40\Microsoft.VisualStudio.Shell.Immutable.10.0.dll</HintPath>
       <Private>True</Private>

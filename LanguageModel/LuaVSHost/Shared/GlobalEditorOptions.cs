@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Windows.Forms;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TextManager.Interop;
 
@@ -8,7 +9,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
     [Export(typeof(GlobalEditorOptions))]
     internal sealed class GlobalEditorOptions : IVsTextManagerEvents2
     {
-        private ConnectionPointCookie connectionPoint;
+        internal vsIndentStyle IndentStyle { get; private set; }
+        internal uint TabSize { get; private set; }
+        private AxHost.ConnectionPointCookie connectionPoint;
 
         [Import]
         private IServiceCore core;
@@ -28,7 +31,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 
             this.UpdatePreferences(viewPreferences, languagePreferences);
 
-            this.connectionPoint = new ConnectionPointCookie(textManager, this, typeof(IVsTextManagerEvents2), true);
+            this.connectionPoint = new AxHost.ConnectionPointCookie(textManager, this, typeof(IVsTextManagerEvents2));
         }
 
         private void UpdatePreferences(VIEWPREFERENCES2[] viewPreferences, LANGPREFERENCES2[] languagePreferences)
