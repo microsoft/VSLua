@@ -22,7 +22,7 @@ namespace LanguageModel.Tests
             foreach (string file in Directory.EnumerateFiles(@"C:\\Users\\t-kevimi\\Documents\\Engineering\\Lua Files for Testing", "*.lua"))
             {
                 SyntaxTree tree = SyntaxTree.Create(file);
-                File.WriteAllText("C:\\Users\\t-kevimi\\Documents\\Engineering\\Generated Test Files\\" + fileNumber + "_Generated.cs", @"//" + file + "\n" + GenerateTest(tree));
+                File.WriteAllText("C:\\Users\\t-kevimi\\Documents\\Engineering\\Generated Test Files\\" + fileNumber + "_Generated.cs", @"//" + file + "\n" + GenerateTest(tree, fileNumber.ToString()));
 
                 foreach (var error in tree.ErrorList)
                     Debug.WriteLine(error.Message);
@@ -34,10 +34,10 @@ namespace LanguageModel.Tests
         public void GenerateTestForFile(string filePath, string name)
         {
             SyntaxTree tree = SyntaxTree.Create(filePath);
-            File.WriteAllText("C:\\Users\\t-kevimi\\Documents\\Engineering\\Generated Test Files\\" + name + "_Generated.cs", GenerateTest(tree));
+            File.WriteAllText("C:\\Users\\t-kevimi\\Documents\\Engineering\\Generated Test Files\\" + name + "_Generated.cs", GenerateTest(tree, name + "_Generated"));
         }
 
-        public string GenerateTest(SyntaxTree tree)
+        public string GenerateTest(SyntaxTree tree, string name)
         {
             //ISSUE: bad practice?
             IndentingWriter = IndentingTextWriter.Get(new StringWriter());
@@ -49,7 +49,9 @@ using Xunit;
 
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
-    class SmallIf_Generated
+    class ");
+            SB.Append(name);
+            SB.Append(@"
     {
         [Fact]
         public void Test(Tester t)

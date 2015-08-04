@@ -35,6 +35,24 @@ namespace LanguageService.Tests
             new MultipleTypeAssignment_Generated().Test(new Tester(tree));
         }
 
+        [Fact]
+        public void WhileStatementGeneratedTest()
+        {
+            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\WhileStatement.lua");
+            var generator = new TestGenerator();
+            generator.GenerateTestForFile(@"CorrectSampleLuaFiles\WhileStatement.lua", "WhileStatement");
+            new WhileStatement_Generated().Test(new Tester(tree));
+        }
+
+        [Fact]
+        public void ComplexTableConstructorGeneratedTest()
+        {
+            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\ComplexTableConstructor.lua");
+            var generator = new TestGenerator();
+            generator.GenerateTestForFile(@"CorrectSampleLuaFiles\ComplexTableConstructor.lua", "ComplexTableConstructor");
+            //new ComplexTableConstructor_Generated().Test(new Tester(tree));
+        }
+
         //[Fact]
         //public void AutoGenerateTests()
         //{
