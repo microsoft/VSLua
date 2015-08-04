@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages.UserControls.GeneralUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages.UserControls"
+             xmlns:properties="clr-namespace:Microsoft.VisualStudio.LanguageServices.Lua.Properties">
+    <DockPanel>
+        <GroupBox x:Name="generalGroupBox" Header="{x:Static properties:Resources.GeneralGroupBoxHeader}" VerticalAlignment="Top"
+                  Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}">
+            <StackPanel DockPanel.Dock="Top" Margin="0,2,0,0" KeyboardNavigation.TabNavigation="Contained">
+
+                <CheckBox x:Name="formatOnEnterCheckbox" Content="{x:Static properties:Resources.FormatOnEnterCheckboxContent}"
+                          HorizontalAlignment="Left" Margin="0,0,0,7"
+                          ToolTip="{x:Static properties:Resources.FormatOnEnterCheckboxToolTip}"
+                          IsChecked="{Binding FormatOnEnter}"/>
+
+                <CheckBox x:Name="formatOnPasteCheckbox" Content="{x:Static properties:Resources.FormatOnPasteCheckboxContent}"
+                          HorizontalAlignment="Left" Margin="0,0,0,7"
+                          ToolTip="{x:Static properties:Resources.FormatOnPasteCheckboxToolTip}"
+                          IsChecked="{Binding FormatOnPaste}"/>
+
+                <CheckBox x:Name="formatOnBlockCheckbox" Content="{x:Static properties:Resources.FormatOnBlockCheckboxContent}"
+                          HorizontalAlignment="Left" Margin="0,0,0,0"
+                          ToolTip="{x:Static properties:Resources.FormatOnBlockCheckboxToolTip}"
+                          IsChecked="{Binding FormatOnBlock}"/>
+            </StackPanel>
+        </GroupBox>
+    </DockPanel>
+</UserControl>

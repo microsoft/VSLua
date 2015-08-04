@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.OLE.Interop;
 
-namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
-    class CommandFilter : IOleCommandTarget
+    internal class CommandFilter : IOleCommandTarget
     {
         public CommandFilter()
         {
@@ -29,7 +29,6 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
                 {
                     break;
                 }
-
             }
 
             if (!handled)
@@ -56,6 +55,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
             {
                 filter.Close();
             }
+
             this.MiniFilters.Clear();
         }
 
@@ -70,6 +70,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
                     return VSConstants.S_OK;
                 }
             }
+
             return this.Next.QueryStatus(pguidCmdGroup, commandsCount, prgCmds, pCmdText);
         }
     }

@@ -44,7 +44,7 @@ namespace LanguageService.Formatting.Ruling
                     {
                         // if this is true, a bucket has been found, and can leave the else safely
                         if (!leftTokenMap.TryGetValue(typeRight, out bucket))
-                        {
+                    {
                             map[typeLeft][typeRight] = bucket = new RuleBucket();
                         }
                     }
@@ -65,9 +65,9 @@ namespace LanguageService.Formatting.Ruling
             if (map.TryGetValue(typeLeft, out leftTokenMap))
             {
                 if (leftTokenMap.TryGetValue(typeRight, out ruleBucket))
-                {
-                    return ruleBucket.Get(formattingContext);
-                }
+            {
+                return ruleBucket.Get(formattingContext);
+            }
             }
 
             return null;

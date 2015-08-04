@@ -1,24 +1,23 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Windows.Forms;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TextManager.Interop;
 
-namespace Microsoft.VisualStudio.LuaLanguageService.Shared
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
     [Export(typeof(GlobalEditorOptions))]
     internal sealed class GlobalEditorOptions : IVsTextManagerEvents2
     {
         internal vsIndentStyle IndentStyle { get; private set; }
         internal uint TabSize { get; private set; }
-        private ConnectionPointCookie connectionPoint;
+        private AxHost.ConnectionPointCookie connectionPoint;
 
         internal event EventHandler<EventArgs> OnUpdateLanguagePreferences;
 
         [ImportingConstructor]
         internal GlobalEditorOptions(SVsServiceProvider serviceProvider)
         {
-            Requires.NotNull(serviceProvider, nameof(serviceProvider));
-
             ThreadHelper.ThrowIfNotOnUIThread();
             IVsTextManager2 textManager = (IVsTextManager2)serviceProvider.GetService(typeof(SVsTextManager));
             VIEWPREFERENCES2[] viewPreferences = new VIEWPREFERENCES2[] { new VIEWPREFERENCES2() };
@@ -29,14 +28,14 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
 
             this.UpdatePreferences(viewPreferences, languagePreferences);
 
-            this.connectionPoint = new ConnectionPointCookie(textManager, this, typeof(IVsTextManagerEvents2), true);
+            this.connectionPoint = new AxHost.ConnectionPointCookie(textManager, this, typeof(IVsTextManagerEvents2));
         }
 
         private void UpdatePreferences(VIEWPREFERENCES2[] viewPreferences, LANGPREFERENCES2[] languagePreferences)
         {
             if (viewPreferences != null && viewPreferences.Length > 0)
             {
-                //this.AutoDelimiterHighlight = Convert.ToBoolean(viewPreferences[0].fAutoDelimiterHighlight);
+                // this.AutoDelimiterHighlight = Convert.ToBoolean(viewPreferences[0].fAutoDelimiterHighlight);
             }
 
             if (languagePreferences != null && languagePreferences.Length > 0 &&
@@ -44,9 +43,8 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
             {
                 this.IndentStyle = languagePreferences[0].IndentStyle;
                 this.TabSize = languagePreferences[0].uTabSize;
-                FireOnUpdateLanguagePreferences();
+                this.FireOnUpdateLanguagePreferences();
             }
-
         }
 
         private void FireOnUpdateLanguagePreferences()
@@ -83,6 +81,11 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
         public int OnReplaceAllInFilesEnd()
         {
             return VSConstants.S_OK;
+        }
+
+        public void Disconnect()
+        {
+            throw new NotImplementedException();
         }
     }
 }

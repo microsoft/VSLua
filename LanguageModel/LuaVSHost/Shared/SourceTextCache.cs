@@ -2,7 +2,7 @@
 using LanguageService;
 using Microsoft.VisualStudio.Text;
 
-namespace Microsoft.VisualStudio.LuaLanguageService.Shared
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
     /// <summary>
     /// This class will be changed to non-static once I merge this branch with the branch that has the Core class that
@@ -10,23 +10,23 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
     /// </summary>
     internal class SourceTextCache
     {
-        private ConditionalWeakTable<ITextSnapshot, SourceText> sources =
-            new ConditionalWeakTable<ITextSnapshot, SourceText>();
-
         internal SourceText Get(ITextSnapshot textSnapshot)
         {
             Requires.NotNull(textSnapshot, nameof(textSnapshot));
 
             SourceText sourceText = null;
-            if (sources.TryGetValue(textSnapshot, out sourceText))
+            if (this.sources.TryGetValue(textSnapshot, out sourceText))
             {
                 return sourceText;
             }
-    
+
             sourceText = new SourceText(new TextSnapshotToTextReader(textSnapshot));
-            sources.Add(textSnapshot, sourceText);
+            this.sources.Add(textSnapshot, sourceText);
 
             return sourceText;
         }
+
+        private ConditionalWeakTable<ITextSnapshot, SourceText> sources =
+            new ConditionalWeakTable<ITextSnapshot, SourceText>();
     }
 }

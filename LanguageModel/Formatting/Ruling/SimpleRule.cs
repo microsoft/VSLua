@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Validation;
+using LanguageService.Formatting.Options;
 
 namespace LanguageService.Formatting.Ruling
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.Editor;
-using Microsoft.VisualStudio.LuaLanguageService.Shared;
+using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Differencing;
@@ -8,22 +8,26 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Validation;
 
-namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
     internal class TextView
     {
         private static Dictionary<IWpfTextView, TextView> viewMap = new Dictionary<IWpfTextView, TextView>();
 
         protected IWpfTextView WpfTextView { get; private set; }
+
         protected IVsTextView VsTextView { get; set; }
+
         protected ITextBuffer TextBuffer { get; set; }
+
         protected bool IsReadOnly { get; private set; }
+
         protected bool IsClosed { get; private set; }
 
-        protected IVsEditorAdaptersFactoryService editorAdaptersService;
-        protected ICore core;
+        private IVsEditorAdaptersFactoryService editorAdaptersService;
+        private ISingletons core;
 
-        public TextView(IWpfTextView wpfTextView, ICore core)
+        public TextView(IWpfTextView wpfTextView, ISingletons core)
         {
             Requires.NotNull(wpfTextView, nameof(wpfTextView));
             Requires.NotNull(core, nameof(core));
@@ -52,7 +56,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 
             CommandFilter filter = new CommandFilter();
 
-            Manager formattingManager = new Manager(textBuffer, this.WpfTextView, this.core);
+            FormatCommandHandler formattingManager = new FormatCommandHandler(textBuffer, this.WpfTextView, this.core);
             filter.MiniFilters.Add(formattingManager);
 
             IOleCommandTarget nextFilter = null;
@@ -61,7 +65,6 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
             filter.Next = nextFilter;
 
             return filter;
-
         }
     }
 }

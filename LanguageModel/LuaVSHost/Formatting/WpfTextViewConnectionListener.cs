@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
-using Microsoft.VisualStudio.Editor;
+using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Differencing;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
-using Microsoft.VisualStudio.LuaLanguageService.Shared;
 
-namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
     [Export(typeof(IWpfTextViewConnectionListener))]
     [ContentType(Constants.Language.Name)]
@@ -17,7 +15,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
     class WpfTextViewConnectionListener : IWpfTextViewConnectionListener
     {
         [Import]
-        private ICore core;
+        private ISingletons core;
 
         public void SubjectBuffersConnected(IWpfTextView textView, ConnectionReason reason, Collection<ITextBuffer> subjectBuffers)
         {
@@ -32,9 +30,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
 
             TextView internalTextView = new TextView(textView, this.core);
             internalTextView.Connect(textBuffers[0]);
-
         }
-
 
         private static List<ITextBuffer> IgnoreLeftTextBufferInInlineDiffView(IWpfTextView textView, Collection<ITextBuffer> subjectBuffers)
         {
@@ -48,6 +44,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Formatting
                     textBuffers.Add(subjectBuffer);
                 }
             }
+
             return textBuffers;
         }
 

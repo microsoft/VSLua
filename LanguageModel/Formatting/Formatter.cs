@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using LanguageService;
 using LanguageService.Formatting.Options;
 using LanguageService.Formatting.Ruling;
+using LanguageService.Shared;
 using Validation;
 
 namespace LanguageService.Formatting
@@ -12,8 +14,8 @@ namespace LanguageService.Formatting
             Requires.NotNull(parseTreeProvider, nameof(parseTreeProvider));
 
             this.parseTreeProvider = parseTreeProvider;
-            globalOptions = new GlobalOptions();
-            ruleMap = RuleMap.Create();
+            this.globalOptions = new GlobalOptions();
+            this.ruleMap = RuleMap.Create();
         }
 
         private ParseTreeCache parseTreeProvider;
@@ -33,26 +35,26 @@ namespace LanguageService.Formatting
         /// indentation text edits from the spacing text edits in the future but for now they are in
         /// the same list.
         /// </returns>
-        public List<TextEditInfo> Format(SourceText span, NewOptions newOptions)
+        public List<TextEditInfo> Format(SourceText sourceText, Range range, NewOptions newOptions)
         {
             if (newOptions != null)
-            {
-                globalOptions = new GlobalOptions(newOptions);
-                ruleMap = RuleMap.Create(globalOptions.OptionalRuleMap);
+        {
+                this.globalOptions = new GlobalOptions(newOptions);
+                this.ruleMap = RuleMap.Create(globalOptions.OptionalRuleMap);
             }
 
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
-            List<Token> tokens = parseTreeProvider.Get(span);
+            List<Token> tokens = this.parseTreeProvider.Get(sourceText);
 
-            List<ParsedToken> parsedTokens = ParsedToken.GetParsedTokens(tokens);
+            List<ParsedToken> parsedTokens = ParsedToken.GetParsedTokens(tokens, range.Start, range.End);
 
             for (int i = 0; i < parsedTokens.Count - 1; ++i)
             {
                 FormattingContext formattingContext =
                     new FormattingContext(parsedTokens[i], parsedTokens[i + 1]);
 
-                Rule rule = ruleMap.Get(formattingContext);
+                Rule rule = this.ruleMap.Get(formattingContext);
 
                 if (rule != null)
                 {

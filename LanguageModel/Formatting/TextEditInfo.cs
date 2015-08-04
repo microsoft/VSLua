@@ -22,7 +22,7 @@ namespace LanguageService.Formatting
         public string ReplacingWith { get; }
 
         internal TextEditInfo(int start, int length, string replaceWith)
-        {
+            {
             Requires.NotNull(replaceWith, nameof(replaceWith));
             Requires.Argument(length >= 0, nameof(length), nameof(length) + " must be non-negative");
             Requires.Argument(start >= 0, nameof(start), nameof(start) + " must be non-negative");

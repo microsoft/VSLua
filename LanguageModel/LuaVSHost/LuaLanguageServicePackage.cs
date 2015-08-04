@@ -1,18 +1,18 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="Lua.Host.cs" company="Company">
-//     Copyright (c) Company.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
 
 using System;
-using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.LuaLanguageService.Formatting.OptionPages;
-using Microsoft.VisualStudio.LuaLanguageService.Shared;
+using Microsoft.VisualStudio.LanguageServices.Lua.Formatting;
+using Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages;
+using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.Shell;
 
-namespace Microsoft.VisualStudio.LuaLanguageService
+namespace Microsoft.VisualStudio.LanguageServices.Lua
 {
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
@@ -20,7 +20,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
 
     [ProvideOptionPage(typeof(GeneralPage), Constants.Formatting.Category, Constants.Formatting.Pages.General,
-        1000, 1002, false, ProfileMigrationType = ProfileMigrationType.PassThrough)]
+        1000, 1002, true, ProfileMigrationType = ProfileMigrationType.PassThrough)]
     public sealed class LuaLanguageServicePackage : Package
     {
         public LuaLanguageServicePackage()
@@ -32,15 +32,15 @@ namespace Microsoft.VisualStudio.LuaLanguageService
 
         protected override void Initialize()
         {
-            var container = (IServiceContainer)this;
-
-            if (container != null)
-            {
-                container.AddService(typeof(LuaLanguageService),
-                    (serviceContainer, t) => new LuaLanguageService(serviceContainer), promote: true);
-            }
-
             base.Initialize();
+        }
+
+        internal UserSettings FormattingUserSettings
+        {
+            get
+            {
+                return (UserSettings)this.GetAutomationObject($"{Constants.Formatting.Category}.{Constants.Formatting.Pages.General}");
+            }
         }
 
         #endregion

@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using Validation;
 
+
 namespace LanguageService
 {
     internal class ParseTreeCache
