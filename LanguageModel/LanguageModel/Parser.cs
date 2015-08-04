@@ -819,6 +819,7 @@ namespace LanguageService
             //TODO: return pre-stored empty list if empty...
             contextStack.Push(context);
             var listNode = SeparatedList.CreateBuilder();
+            var syntaxList = new List<SeparatedListElement>();
             listNode.Kind = GetListKind(context);
             listNode.StartPosition = Peek().Start;
             bool commaFound = false;
@@ -828,6 +829,7 @@ namespace LanguageService
                 if (IsListElementBeginner(context, Peek().Kind))
                 {
                     var node = SeparatedListElement.CreateBuilder();
+                    
                     node.StartPosition = Peek().Start;
                     node.Kind = SyntaxKind.SeparatedListElement;
                     node.Element = ParseListElement(context);
@@ -840,7 +842,7 @@ namespace LanguageService
 
                     node.Length = currentToken.End - node.StartPosition;
 
-                    listNode.SyntaxList.Add(node.ToImmutable());
+                    syntaxList.Add(node.ToImmutable());
 
                     if (commaFound)
                     {
@@ -859,10 +861,12 @@ namespace LanguageService
                     break;
             }
 
-            if(listNode.SyntaxList == null)
-            {
-                listNode.SyntaxList = ImmutableList.Create<SeparatedListElement>();
-            }
+            listNode.SyntaxList = syntaxList.ToImmutableList();
+
+            //if(listNode.SyntaxList == null)
+            //{
+            //    listNode.SyntaxList = ImmutableList.Create<SeparatedListElement>();
+            //}
 
             listNode.Length = currentToken.End - listNode.StartPosition;
             contextStack.Pop();

@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 namespace LanguageService
 {
     //TODO: Is this the best place for this?
-    public class SyntaxNodeOrToken
-    {
-    }
+    public class SyntaxNodeOrToken { }
 
     public enum SyntaxKind
     {

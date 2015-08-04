@@ -32,7 +32,7 @@ namespace LanguageService
             get { return this.inner.Encoding; }
         }
 
-        internal static IndentingTextWriter Get(TextWriter writer)
+        public static IndentingTextWriter Get(TextWriter writer)
         {
             if (writer == null)
             {
@@ -57,7 +57,7 @@ namespace LanguageService
             this.inner.Write(value);
         }
 
-        internal CancelIndent Indent()
+        public CancelIndent Indent()
         {
             this.indentationStack.Push(Indentation);
             return new CancelIndent(this);
@@ -68,7 +68,7 @@ namespace LanguageService
             this.indentationStack.Pop();
         }
 
-        internal struct CancelIndent : IDisposable
+        public struct CancelIndent : IDisposable
         {
             private readonly IndentingTextWriter writer;
 

@@ -27,6 +27,12 @@ namespace LanguageService
 
         public IEnumerable<SyntaxNodeOrToken> Next(SyntaxNodeOrToken syntaxNodeOrToken)
         {
+            //TODO remove is-check once Immutable graph object bug is fixed. 
+            if(syntaxNodeOrToken is SyntaxNode && ((SyntaxNode) syntaxNodeOrToken).Kind == SyntaxKind.ChunkNode)
+            {
+                yield return syntaxNodeOrToken;
+            }
+
             if (!IsLeafNode(syntaxNodeOrToken))
             {
                 foreach (var node in ((SyntaxNode)syntaxNodeOrToken).Children)
@@ -46,7 +52,7 @@ namespace LanguageService
             }
         }
 
-        private bool IsLeafNode(SyntaxNodeOrToken node)
+        public static bool IsLeafNode(SyntaxNodeOrToken node)
         {
             if (node is Token)
             {
