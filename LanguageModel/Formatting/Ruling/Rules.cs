@@ -14,17 +14,17 @@ namespace LanguageService.Formatting.Ruling
 
         internal static readonly Rule SpaceAfterComma =
             new SimpleRule(
-                new RuleDescriptor(TokenType.Comma, TokenRange.AnyVisible),
+                new RuleDescriptor(SyntaxKind.Comma, TokenRange.AnyVisible),
                 defaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceAfterAssignmentOperator =
             new SimpleRule(
-                new RuleDescriptor(TokenType.AssignmentOperator, TokenRange.AnyVisible),
+                new RuleDescriptor(SyntaxKind.AssignmentOperator, TokenRange.AnyVisible),
                 defaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceBeforeAssignmentOperator =
             new SimpleRule(
-                new RuleDescriptor(TokenRange.AnyVisible, TokenType.AssignmentOperator),
+                new RuleDescriptor(TokenRange.AnyVisible, SyntaxKind.AssignmentOperator),
                 defaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceAfterBinaryOperator =
@@ -39,17 +39,17 @@ namespace LanguageService.Formatting.Ruling
 
         internal static readonly Rule SpaceAfterValueBeforeOpenParenthesis =
             new SimpleRule(
-                new RuleDescriptor(TokenRange.Value, TokenType.OpenParen),
+                new RuleDescriptor(TokenRange.Value, SyntaxKind.OpenParen),
                 defaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceBeforeValueAfterOpenParenthesis =
             new SimpleRule(
-                new RuleDescriptor(TokenType.OpenParen, TokenRange.Value),
+                new RuleDescriptor(SyntaxKind.OpenParen, TokenRange.Value),
                 defaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceBeforeValueAfterOpenSquareBracket =
             new SimpleRule(
-                new RuleDescriptor(TokenType.OpenBracket, TokenRange.Value),
+                new RuleDescriptor(SyntaxKind.OpenBracket, TokenRange.Value),
                 defaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceBeforeValueAfterOpenCurlyBrace =

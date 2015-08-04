@@ -6,24 +6,22 @@ using System.Threading.Tasks;
 
 namespace LanguageService
 {
-    public enum ErrorType
-    {
-        OutOfContextToken,
-        IncompleteNode
-    }
     public class ParseError
     {
-        ParseError(ErrorType type, string message, int start, int end)
+        public ParseError(string message, int start, int end)
         {
-            this.Type = type;
+            if(message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
             this.Message = message;
             this.Start = start;
             this.End = end;
         }
 
-        public ErrorType Type { get; private set; }
-        public string Message { get; private set; }
-        public int Start { get; private set; }
-        public int End { get; private set; }
+        public string Message { get; }
+        public int Start { get; }
+        public int End { get; }
     }
 }

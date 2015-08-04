@@ -16,7 +16,7 @@ namespace LanguageService.Formatting.Ruling
             ruleMap.AddEnabledRules(optionalRuleMap);
 
             return ruleMap;
-        }
+            }
 
         internal static RuleMap Create()
         {
@@ -28,9 +28,9 @@ namespace LanguageService.Formatting.Ruling
 
         internal void Add(Rule rule)
         {
-            foreach (TokenType typeLeft in rule.RuleDescriptor.TokenRangeLeft)
+            foreach (SyntaxKind typeLeft in rule.RuleDescriptor.TokenRangeLeft)
             {
-                foreach (TokenType typeRight in rule.RuleDescriptor.TokenRangeRight)
+                foreach (SyntaxKind typeRight in rule.RuleDescriptor.TokenRangeRight)
                 {
                     RuleBucket bucket;
                     Dictionary<TokenType, RuleBucket> leftTokenMap;
@@ -61,7 +61,7 @@ namespace LanguageService.Formatting.Ruling
 
             RuleBucket ruleBucket;
             Dictionary<TokenType, RuleBucket> leftTokenMap;
-
+            
             if (map.TryGetValue(typeLeft, out leftTokenMap))
             {
                 if (leftTokenMap.TryGetValue(typeRight, out ruleBucket))
@@ -78,7 +78,7 @@ namespace LanguageService.Formatting.Ruling
             if (optionalRuleMap == null)
             {
                 optionalRuleMap = new OptionalRuleMap(Enumerable.Empty<OptionalRuleGroup>());
-            }
+        }
 
             map = new Dictionary<TokenType, Dictionary<TokenType, RuleBucket>>();
             foreach (Rule rule in Rules.AllRules)

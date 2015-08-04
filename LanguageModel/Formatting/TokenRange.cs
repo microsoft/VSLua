@@ -9,8 +9,8 @@ namespace LanguageService.Formatting
     {
         internal static readonly ImmutableArray<TokenType> AnyVisible =
             TokenRange.Fill(
-                Enum.GetValues(typeof(TokenType)),
-                new TokenType[] { TokenType.EndOfFile, TokenType.Unknown });
+                Enum.GetValues(typeof(SyntaxKind)),
+                new SyntaxKind[] { SyntaxKind.EndOfFile, SyntaxKind.Unknown });
 
         internal static readonly ImmutableArray<TokenType> All =
             TokenRange.Fill(
@@ -70,7 +70,7 @@ namespace LanguageService.Formatting
 
             var tokenTypes = ImmutableArray.CreateBuilder<TokenType>(values.Length);
 
-            foreach (TokenType tokenType in values)
+            foreach (SyntaxKind tokenType in values)
             {
                 if (!exclude.Contains(tokenType))
                 {

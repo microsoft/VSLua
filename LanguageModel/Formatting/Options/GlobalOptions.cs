@@ -17,7 +17,7 @@ namespace LanguageService.Formatting.Options
         internal GlobalOptions()
         {
             IndentSize = 4;
-            IndentStyleInfo = new IndentStyleInfo(IndentStyle.None, IndentStyle.None, IndentStyle.None);
+            IndentStyleInfo = new IndentStyleInfo(IndentStyle.Fixed, IndentStyle.Fixed);
             OptionalRuleMap = new OptionalRuleMap(ImmutableArray.Create<OptionalRuleGroup>());
         }
 

@@ -33,7 +33,7 @@ namespace LanguageService.Formatting
 
 
                 if (token.FullStart > to)
-                {
+            {
                     break;
                 }
 
@@ -46,7 +46,7 @@ namespace LanguageService.Formatting
                 indent_level = indent_level < 0 ? 0 : indent_level;
                 if (token.Start >= from)
                 {
-                    parsedTokens.Add(new ParsedToken(token, indent_level, null));
+                parsedTokens.Add(new ParsedToken(token, indent_level, null));
                 }
                 if (IncreaseIndentAfter.Contains(token.Type))
                 {

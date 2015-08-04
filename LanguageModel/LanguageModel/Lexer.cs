@@ -1,93 +1,87 @@
-﻿using System;
+﻿using Microsoft.Internal.VisualStudio.Shell;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace LanguageService
 {
     public static class Lexer
     {
-        private static readonly Dictionary<string, TokenType> AlphaTokens = new Dictionary<string, TokenType>
+        private static readonly IReadOnlyDictionary<string, SyntaxKind> AlphaTokens = new Dictionary<string, SyntaxKind>
         {
-            { "and", TokenType.AndBinop },
-            { "break", TokenType.BreakKeyword },
-            { "do", TokenType.DoKeyword },
-            { "else", TokenType.ElseKeyword },
-            { "elseif", TokenType.ElseIfKeyword },
-            { "end", TokenType.EndKeyword },
-            { "false", TokenType.FalseKeyValue },
-            { "for", TokenType.ForKeyword },
-            { "function", TokenType.FunctionKeyword },
-            { "goto", TokenType.GotoKeyword },
-            { "if", TokenType.IfKeyword },
-            { "in", TokenType.InKeyword },
-            { "local", TokenType.LocalKeyword },
-            { "nil", TokenType.NilKeyValue },
-            { "not",  TokenType.NotUnop },
-            { "or",  TokenType.OrBinop },
-            { "repeat", TokenType.RepeatKeyword },
-            { "return", TokenType.ReturnKeyword },
-            { "then", TokenType.ThenKeyword },
-            { "true", TokenType.TrueKeyValue },
-            { "until", TokenType.UntilKeyword },
-            { "while", TokenType.WhileKeyword }
+            { "and", SyntaxKind.AndBinop },
+            { "break", SyntaxKind.BreakKeyword },
+            { "do", SyntaxKind.DoKeyword },
+            { "else", SyntaxKind.ElseKeyword },
+            { "elseif", SyntaxKind.ElseIfKeyword },
+            { "end", SyntaxKind.EndKeyword },
+            { "false", SyntaxKind.FalseKeyValue },
+            { "for", SyntaxKind.ForKeyword },
+            { "function", SyntaxKind.FunctionKeyword },
+            { "goto", SyntaxKind.GotoKeyword },
+            { "if", SyntaxKind.IfKeyword },
+            { "in", SyntaxKind.InKeyword },
+            { "local", SyntaxKind.LocalKeyword },
+            { "nil", SyntaxKind.NilKeyValue },
+            { "not",  SyntaxKind.NotUnop },
+            { "or",  SyntaxKind.OrBinop },
+            { "repeat", SyntaxKind.RepeatKeyword },
+            { "return", SyntaxKind.ReturnKeyword },
+            { "then", SyntaxKind.ThenKeyword },
+            { "true", SyntaxKind.TrueKeyValue },
+            { "until", SyntaxKind.UntilKeyword },
+            { "while", SyntaxKind.WhileKeyword }
         };
 
-        private static readonly Dictionary<string, TokenType> Symbols = new Dictionary<string, TokenType>
+        private static readonly IReadOnlyDictionary<string, SyntaxKind> Symbols = new Dictionary<string, SyntaxKind>
         {
             //TODO: include vararg operators
-            { "-", TokenType.MinusOperator }, //TODO: deal with ambiguity
-            { "~", TokenType.TildeUnOp }, //TODO: deal with ambiguity
-            { "#", TokenType.LengthUnop },
-            {"~=", TokenType.NotEqualsOperator },
-            {"<=", TokenType.LessOrEqualOperator },
-            {">=", TokenType.GreaterOrEqualOperator },
-            {"==", TokenType.EqualityOperator },
-            {"+", TokenType.PlusOperator },
-            {"*", TokenType.MultiplyOperator },
-            {"/", TokenType.DivideOperator },
-            {"//", TokenType.FloorDivideOperator },
-            {"^", TokenType.ExponentOperator },
-            {"%", TokenType.ModulusOperator },
-            {"&", TokenType.BitwiseAndOperator },
-            {"|", TokenType.BitwiseOrOperator },
-            {">>", TokenType.BitwiseRightOperator },
-            {"<<", TokenType.BitwiseLeftOperator },
-            {"..", TokenType.StringConcatOperator },
-            {">", TokenType.GreaterThanOperator },
-            {"<", TokenType.LessThanOperator },
-            {"=", TokenType.AssignmentOperator },
+            { "-", SyntaxKind.MinusOperator }, //TODO: deal with ambiguity
+            { "~", SyntaxKind.TildeUnOp }, //TODO: deal with ambiguity
+            { "#", SyntaxKind.LengthUnop },
+            { "~=", SyntaxKind.NotEqualsOperator },
+            { "<=", SyntaxKind.LessOrEqualOperator },
+            { ">=", SyntaxKind.GreaterOrEqualOperator },
+            { "==", SyntaxKind.EqualityOperator },
+            { "+", SyntaxKind.PlusOperator },
+            { "*", SyntaxKind.MultiplyOperator },
+            { "/", SyntaxKind.DivideOperator },
+            { "//", SyntaxKind.FloorDivideOperator },
+            { "^", SyntaxKind.ExponentOperator },
+            { "%", SyntaxKind.ModulusOperator },
+            { "&", SyntaxKind.BitwiseAndOperator },
+            { "|", SyntaxKind.BitwiseOrOperator },
+            { ">>", SyntaxKind.BitwiseRightOperator },
+            { "<<", SyntaxKind.BitwiseLeftOperator },
+            { "..", SyntaxKind.StringConcatOperator },
+            { ">", SyntaxKind.GreaterThanOperator },
+            { "<", SyntaxKind.LessThanOperator },
+            { "=", SyntaxKind.AssignmentOperator },
 
-            {"{", TokenType.OpenCurlyBrace },
-            {"}", TokenType.CloseCurlyBrace },
-            {"(", TokenType.OpenParen },
-            {")", TokenType.CloseParen },
-            {"[", TokenType.OpenBracket },
-            {"]", TokenType.CloseBracket },
+            { "{", SyntaxKind.OpenCurlyBrace },
+            { "}", SyntaxKind.CloseCurlyBrace },
+            { "(", SyntaxKind.OpenParen },
+            { ")", SyntaxKind.CloseParen },
+            { "[", SyntaxKind.OpenBracket },
+            { "]", SyntaxKind.CloseBracket },
 
-            {".", TokenType.Dot},
-            {",", TokenType.Comma},
-            {";", TokenType.SemiColon},
-            {":", TokenType.Colon},
-            {"::", TokenType.DoubleColon}
+            { ".", SyntaxKind.Dot},
+            { ",", SyntaxKind.Comma},
+            { ";", SyntaxKind.Semicolon},
+            { ":", SyntaxKind.Colon},
+            { "::", SyntaxKind.DoubleColon}
         };
 
         private const char Eof = unchecked((char)-1);
         private static readonly char[] longCommentID1 = { '-', '[', '[' };
         private static readonly char[] longCommentID2 = { '-', '[', '=' }; //TODO: flawed approach? what if --[=asdfadf]?
 
-        public static Dictionary<string, TokenType> Symbols1
-        {
-            get
-            {
-                return Symbols;
-            }
-        }
-
         public static List<Token> Tokenize(TextReader textReader) //TODO: Return a bool based on if this is a new copy of the lexer or not
         {
+            Validate.IsNotNull(stream, nameof(stream));
+
 
             TrackableTextReader trackableTextReader = new TrackableTextReader(textReader);
 
@@ -169,7 +163,7 @@ namespace LanguageService
 
                             if (level != null)
                             {
-                                triviaList.Add(ReadLongComment(stream, "--"+commentSoFar, level));
+                                triviaList.Add(ReadLongComment(stream, "--" + commentSoFar, level));
                             }
                             else
                             {
@@ -195,12 +189,10 @@ namespace LanguageService
 
         private static Trivia ReadLongComment(TrackableTextReader stream, string commentSoFar, int? level)
         {
-            if (level == null)
-            {
-                // throw some error
-            }
+            Validate.IsNotNull(level, nameof(level));
 
-            Regex closeBracketPattern = new Regex(@"\]={"+ level.ToString() + @"}\]");
+            //TODO: re-write without regex
+            Regex closeBracketPattern = new Regex(@"\]={" + level.ToString() + @"}\]");
 
             while (!closeBracketPattern.IsMatch(commentSoFar))
             {
@@ -233,7 +225,10 @@ namespace LanguageService
                     {
                         return commentSoFar.Length - 2;
                     }
-                    continue;
+                    else
+                    {
+                        return null;
+                    }
                 }
                 return null;
             }
@@ -246,7 +241,7 @@ namespace LanguageService
 
             if (stream.EndOfStream())
             {
-                return new Token(TokenType.EndOfFile, "", trivia, fullStart, (int)stream.Position);
+                return new Token(SyntaxKind.EndOfFile, "", trivia, fullStart, (int)stream.Position);
             }
 
             nextChar = stream.Peek();
@@ -264,7 +259,7 @@ namespace LanguageService
             // String
             else if (IsQuote(nextChar))
             {
-                return ReadStringToken(stream, trivia, fullStart);
+                return ReadStringToken(nextChar, stream, trivia, fullStart);
             }
             // Punctuation Bracket Operator
             else
@@ -292,7 +287,7 @@ namespace LanguageService
             }
             else
             {
-                return new Token(TokenType.Identifier, value, trivia, fullStart, tokenStartPosition);
+                return new Token(SyntaxKind.Identifier, value, trivia, fullStart, tokenStartPosition);
             }
         }
 
@@ -311,11 +306,11 @@ namespace LanguageService
 
             if (IsValidTerminator(next) || stream.EndOfStream())
             {
-                return new Token(TokenType.Number, number.ToString(), trivia, fullStart, tokenStartPosition);
+                return new Token(SyntaxKind.Number, number.ToString(), trivia, fullStart, tokenStartPosition);
             }
             else
             {
-                return new Token(TokenType.Unknown, number.ToString(), trivia, fullStart, tokenStartPosition); //TODO: Deal with invalid number/identifier: "234kjs"
+                return new Token(SyntaxKind.Unknown, number.ToString(), trivia, fullStart, tokenStartPosition); //TODO: Deal with invalid number/identifier: "234kjs"
             }
         }
 
@@ -323,132 +318,76 @@ namespace LanguageService
         {
             StringBuilder fullString = new StringBuilder();
             int tokenStartPosition = (int)stream.Position;
-            char nextChar = stream.Peek();
+            SyntaxKind type = SyntaxKind.String;
+            char nextChar;
 
-            switch (nextChar)
+            switch (stringDelimiter)
             {
                 case '"':
-                    do
-                    {
-                        fullString.Append(stream.ReadChar());
-                        nextChar = stream.Peek();
-
-                    } while ((nextChar != '"') && !stream.EndOfStream());
-
-                    if (nextChar == '"')
-                    {
-                        fullString.Append(stream.ReadChar());
-                        return new Token(TokenType.String, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
-                    }
-                    else
-                    {
-                        if (stream.EndOfStream())
-                        {
-                            return new Token(TokenType.EndOfFile, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
-                        }
-                        else
-                        {
-                            return new Token(TokenType.Unknown, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
-                        }
-
-                    }
                 case '\'':
-                    do
+                        fullString.Append(stream.ReadChar());
+                        nextChar = stream.Peek();
+                    bool terminateString = false;
+                    while ((nextChar != stringDelimiter) && !stream.EndOfStream() && !terminateString)
                     {
                         fullString.Append(stream.ReadChar());
                         nextChar = stream.Peek();
 
-                    } while ((nextChar != '\'') && (!stream.EndOfStream()));
-
-                    if (nextChar == '\'')
+                        if (nextChar == '\r' || nextChar == '\n')
                     {
-                        fullString.Append(stream.ReadChar());
-                        return new Token(TokenType.String, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                            type = SyntaxKind.UnterminatedString;
+                            terminateString = true;
                     }
-                    else
-                    {
-                        if (stream.EndOfStream())
-                        {
-                            return new Token(TokenType.EndOfFile, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                         }
-                        else
-                        {
-                            return new Token(TokenType.Unknown, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
-                        }
-                    }
-                default:
-                    fullString.Append(stream.ReadChar());
-                    bool terminated = false;
-                    switch (stream.Peek())
-                    {
-                        case '[':
-                            fullString.Append(stream.ReadChar());
 
-                            nextChar = stream.Peek();
-
-                            while (!terminated && !stream.EndOfStream())
+                    if (nextChar == stringDelimiter || terminateString)
                             {
-                                if (nextChar == ']')
-                                {
                                     fullString.Append(stream.ReadChar());
-                                    nextChar = stream.Peek();
-                                    if (nextChar == ']')
-                                    {
-                                        fullString.Append(stream.ReadChar());
-                                        terminated = true;
+                        return new Token(type, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                                     }
                                     else
                                     {
-                                        fullString.Append(stream.ReadChar());
-                                        nextChar = stream.Peek();
+                        return new Token(SyntaxKind.EndOfFile, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition); //TODO bug... should return a string then a EOF token right?
                                     }
 
-                                }
-                                else
-                                {
+                case '[':
                                     fullString.Append(stream.ReadChar());
+                    int bracketLevel = 0;
                                     nextChar = stream.Peek();
-                                }
-                            }
-                            return new Token(TokenType.String, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
-                        case '=':
-                            fullString.Append(stream.ReadChar());
-                            int level = 1;
 
+                    bracketLevel = CountLevels(false, nextChar, 0, stream, fullString);
                             nextChar = stream.Peek();
 
-                            // Get levels (=) 
-                            while (nextChar == '=')
-                            {
-                                fullString.Append(stream.ReadChar());
-                                level++;
-                                nextChar = stream.Peek();
-                            }
-
-                            if (nextChar == '[')
+                    if (nextChar == '[')
                             {
                                 fullString.Append(stream.ReadChar());
                                 nextChar = stream.Peek();
 
-                                while (!terminated && !stream.EndOfStream())
+                        //Lua ignores a new line directly after the opening delimiter of a string.
+                        if (nextChar == '\r' || nextChar == '\n')
+                            {
+                            if (nextChar == '\r')
+                                stream.ReadChar();
+                            if (stream.Peek() == '\n')
+                                stream.ReadChar();
+                            type = SyntaxKind.IgnoreNewLineString;
+                        }
+
+                        while (!stream.EndOfStream())
                                 {
                                     if (nextChar == ']')
                                     {
                                         fullString.Append(stream.ReadChar());
                                         nextChar = stream.Peek();
-                                        int currentLevel = level;
+                                int currentLevel = bracketLevel;
 
-                                        while (nextChar == '=')
-                                        {
-                                            fullString.Append(stream.ReadChar());
-                                            level--;
+                                currentLevel = CountLevels(true, nextChar, currentLevel, stream, fullString);
                                             nextChar = stream.Peek();
-                                        }
 
-                                        if ((nextChar == ']') && (level == 0))
+                                if ((nextChar == ']') && (currentLevel == 0))
                                         {
                                             fullString.Append(stream.ReadChar());
-                                            return new Token(TokenType.String, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                                    return new Token(type, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                                         }
                                     }
                                     else
@@ -458,17 +397,22 @@ namespace LanguageService
                                     nextChar = stream.Peek();
                                 }
 
-                                return new Token(TokenType.String, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
-
+                        return new Token(SyntaxKind.UnterminatedString, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                             }
                             else
                             {
+                        if (bracketLevel == 0)
+                        {
+                            return new Token(SyntaxKind.OpenBracket, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        }
+                        else
+                        {
                                 // Error, not valid syntax
-                                return new Token(TokenType.Unknown, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                            return new Token(SyntaxKind.Unknown, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                             }
-                        default:
-                            return new Token(TokenType.OpenBracket, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
+                        default:
+                    throw new ArgumentOutOfRangeException(nameof(stringDelimiter), "Unrecognized String delimiter");
             }
         }
 
@@ -480,66 +424,80 @@ namespace LanguageService
             switch (nextChar)
             {
                 case ':':
-                case '.':
-                    // here use dictionary for minux, plus etc
-                    if (nextChar != stream.Peek())
+                    if (CheckAndConsumeNextToken(nextChar, stream))
                     {
-                        return new Token(Symbols[nextChar.ToString()], nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.Colon, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        char[] symbol = { nextChar, stream.ReadChar() };
-                        string symbolKey = new string(symbol);
-                        return new Token(Symbols[symbolKey], symbolKey, leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.DoubleColon, "::", leadingTrivia, fullStart, tokenStartPosition);
+                    }
+                case '.':
+                    if (CheckAndConsumeNextToken(nextChar, stream))
+                    {
+                        return new Token(SyntaxKind.Dot, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                    }
+                    else
+                    {
+                        return new Token(SyntaxKind.StringConcatOperator, "..", leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '<':
+                    if ((nextChar != stream.Peek()) && (stream.Peek() != '='))
+                    {
+                        return new Token(SyntaxKind.LessThanOperator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                    }
+                    else
+                    {
+                        string symbol = nextChar.ToString() + stream.ReadChar();
+                        return new Token(Symbols[symbol], symbol, leadingTrivia, fullStart, tokenStartPosition);
+                    }
                 case '>':
-                    // could be doubles or eq sign
                     if ((nextChar != stream.Peek()) && (stream.Peek() != '='))
                     {
                         return new Token(Symbols[nextChar.ToString()], nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        char secondOperatorChar = stream.ReadChar();
-                        char[] symbol = { nextChar, secondOperatorChar };
-                        string symbolKey = new string(symbol);
-                        return new Token(Symbols[symbolKey], symbolKey, leadingTrivia, fullStart, tokenStartPosition);
+                        string symbol = nextChar.ToString() + stream.ReadChar();
+                        return new Token(Symbols[symbol], symbol, leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '=':
-                case '/':
-                    if (nextChar != stream.Peek())
+                    if (CheckAndConsumeNextToken(nextChar, stream))
                     {
-                        return new Token(Symbols[nextChar.ToString()], nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.AssignmentOperator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        stream.ReadChar();
-                        char[] symbol = { nextChar, nextChar };
-                        string symbolKey = new string(symbol);
-                        return new Token(Symbols[symbolKey], symbolKey, leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.EqualityOperator, "==", leadingTrivia, fullStart, tokenStartPosition);
+                    }
+                case '/':
+                    if (CheckAndConsumeNextToken(nextChar, stream))
+                    {
+                        return new Token(SyntaxKind.DivideOperator, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                    }
+                    else
+                    {
+                        return new Token(SyntaxKind.FloorDivideOperator, "//", leadingTrivia, fullStart, tokenStartPosition);
                     }
                 case '~':
-                    if (stream.Peek() != '=')
+                    if (CheckAndConsumeNextToken('=', stream))
                     {
-                        return new Token(Symbols[nextChar.ToString()], nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.TildeUnOp, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        char[] symbol = { nextChar, '=' };
-                        string symbolKey = new string(symbol);
-                        return new Token(Symbols[symbolKey], symbolKey, leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.NotEqualsOperator, "~=", leadingTrivia, fullStart, tokenStartPosition);
                     }
                 default:
                     // non repeating symbol
                     string fullSymbol = nextChar.ToString();
-                    if (Symbols1.ContainsKey(fullSymbol))
+                    if (Symbols.ContainsKey(fullSymbol))
                     {
-                        return new Token(Symbols1[fullSymbol], fullSymbol, leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(Symbols[fullSymbol], fullSymbol, leadingTrivia, fullStart, tokenStartPosition);
                     }
                     else
                     {
-                        return new Token(TokenType.Unknown, fullSymbol, leadingTrivia, fullStart, tokenStartPosition);
+                        return new Token(SyntaxKind.Unknown, fullSymbol, leadingTrivia, fullStart, tokenStartPosition);
                     }
             }
         }
@@ -606,5 +564,37 @@ namespace LanguageService
             }
         }
 
+        public static bool CheckAndConsumeNextToken(char character, Stream stream)
+        {
+            if (character != stream.Peek())
+            {
+                return true;
+            }
+            else
+            {
+                stream.ReadChar();
+                return false;
+            }
+        }
+
+        public static int CountLevels(bool validateCount, char character, int counter, Stream stream, StringBuilder builder)
+        {
+            int levelCount = counter;
+            while (character == '=' && !stream.EndOfStream())
+            {
+                builder.Append(stream.ReadChar());
+                if (validateCount)
+                {
+                    levelCount--;
+                }
+                else
+                {
+                    levelCount++;
+        }
+
+                character = stream.Peek();
+            }
+            return levelCount;
+        }
     }
 }

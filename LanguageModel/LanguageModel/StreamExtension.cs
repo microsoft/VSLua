@@ -7,7 +7,7 @@ using System.IO;
 
 namespace LanguageService
 {
-    public static class StreamExtension //TODO: change to streamreader so as to auto deal with encoding issues....
+    internal static class StreamExtension //TODO: change to streamreader so as to auto deal with encoding issues....
     {
         public static char Peek(this Stream stream)
 		{

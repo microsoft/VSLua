@@ -1,399 +1,908 @@
-﻿namespace LanguageService
+﻿using ImmutableObjectGraph;
+using ImmutableObjectGraph.CodeGeneration;
+using LanguageService.LanguageModel.TreeVisitors;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.IO;
+using System.Linq;
+
+namespace LanguageService
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Immutable;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using ImmutableObjectGraph.CodeGeneration;
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class SyntaxNode
+    public abstract partial class SyntaxNode : SyntaxNodeOrToken
     {
         [Required]
-        int startPosition;
+        readonly SyntaxKind kind;
         [Required]
-        int length;
+        readonly int startPosition;
+        [Required]
+        readonly int length;
 
-        internal virtual void ToString(TextWriter writer)
-        {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("Syntax Node");
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class MissingNode : SyntaxNode
-    {
-        //TODO: add missing type
-        internal override void ToString(TextWriter writer)
-        {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("Missing Node");
-        }
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class MisplacedToken : SyntaxNode
-    {
-        Token token;
-
-        internal override void ToString(TextWriter writer)
-        {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("Missing Token: " + token.ToString());
-        }
+        public abstract ImmutableList<SyntaxNodeOrToken> Children { get; }
+        public abstract void Accept(NodeWalker walker);
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class ChunkNode : SyntaxNode
     {
         [Required]
-        readonly Block programBlock;
+        readonly BlockNode programBlock;
         [Required]
         readonly Token endOfFile;
 
-        internal override void ToString(TextWriter writer)
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("ChunkNode");
-            using (indentingWriter.Indent())
+            get
             {
-                programBlock.ToString(indentingWriter);
+                return ImmutableList.Create<SyntaxNodeOrToken>(programBlock, endOfFile);
             }
-            
-            using (indentingWriter.Indent())
-            {
-                indentingWriter.WriteLine(endOfFile.ToString());
-            }
+        }
 
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
         }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class Block : SyntaxNode
+    public partial class BlockNode : SyntaxNode
+    {
+        [Required, NotRecursive]
+        readonly ImmutableList<StatementNode> statements;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return statements.Cast<SyntaxNodeOrToken>().ToImmutableList();
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    #region Simple Statement Nodes
+    [GenerateImmutable(GenerateBuilder = true)]
+    public abstract partial class StatementNode : SyntaxNode { }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class SemiColonStatementNode : StatementNode
     {
         [Required]
-        ImmutableList<SyntaxNode> children;
-        RetStat returnStatement;
+        readonly Token semiColon;
 
-        internal override void ToString(TextWriter writer)
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("Block");
-            foreach (var child in this.children)
+            get
             {
-                using (indentingWriter.Indent())
-                {
-                    child.ToString(indentingWriter);
-                }
+                return ImmutableList.Create<SyntaxNodeOrToken>(semiColon);
             }
+        }
 
-            if(returnStatement != null)
-            {
-                using (indentingWriter.Indent())
-                {
-                    returnStatement.ToString(indentingWriter);
-                }
-            }            
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
         }
     }
 
-    #region If Statement Nodes
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class IfNode : SyntaxNode
+    public partial class FunctionCallStatementNode : StatementNode
+    {
+        [Required]
+        readonly PrefixExp prefixExp;
+        readonly Token colon;
+        readonly Token name;
+        [Required]
+        readonly Args args;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = new List<SyntaxNodeOrToken>();
+                children.Add(prefixExp);
+                if (colon != null)
+                {
+                    children.Add(colon);
+                    children.Add(name);
+                }
+                children.Add(args);
+                return children.ToImmutableList();
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class ReturnStatementNode : SyntaxNode
+    {
+        [Required]
+        readonly Token returnKeyword;
+        [Required]
+        readonly SeparatedList expList;
+        readonly Token semiColon;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = ImmutableList.Create<SyntaxNodeOrToken>(returnKeyword, expList);
+                if (semiColon != null)
+                    children.Add(semiColon);
+                return children;
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class BreakStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token breakKeyword;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(breakKeyword);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class GoToStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token goToKeyword;
+        [Required]
+        readonly Token name;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(goToKeyword, name);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class DoStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token doKeyword;
+        [Required]
+        readonly BlockNode block;
+        [Required]
+        readonly Token endKeyword;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(doKeyword, block, endKeyword);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class WhileStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token whileKeyword;
+        [Required]
+        readonly ExpressionNode exp;
+        [Required]
+        readonly Token doKeyword;
+        [Required]
+        readonly BlockNode block;
+        [Required]
+        readonly Token endKeyword;
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(whileKeyword, exp, doKeyword, block, endKeyword);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class RepeatStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token repeatKeyword;
+        [Required]
+        readonly BlockNode block;
+        [Required]
+        readonly Token untilKeyword;
+        [Required]
+        readonly ExpressionNode exp;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(repeatKeyword, block, untilKeyword, exp);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class GlobalFunctionStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token functionKeyword;
+        [Required]
+        readonly FuncNameNode funcName;
+        [Required]
+        readonly FuncBodyNode funcBody;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(functionKeyword, funcName, funcBody);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class LocalAssignmentStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token localKeyword;
+        [Required]
+        readonly SeparatedList nameList;
+        readonly Token assignmentOperator;
+        readonly SeparatedList expList;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = new List<SyntaxNodeOrToken>();
+                children.Add(localKeyword);
+                children.Add(nameList);
+                if (assignmentOperator != null)
+                {
+                    children.Add(assignmentOperator);
+                    children.Add(expList);
+                }
+                return children.ToImmutableList();
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class LocalFunctionStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token localKeyword;
+        [Required]
+        readonly Token functionKeyword;
+        [Required]
+        readonly Token name;
+        [Required]
+        readonly FuncBodyNode funcBody;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(localKeyword, functionKeyword, name, funcBody);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class SimpleForStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token forKeyword;
+        [Required]
+        readonly Token name;
+        [Required]
+        readonly Token assignmentOperator;
+        [Required]
+        readonly ExpressionNode exp1;
+        [Required]
+        readonly Token comma;
+        [Required]
+        readonly ExpressionNode exp2;
+        readonly Token optionalComma;
+        readonly ExpressionNode optionalExp3;
+        [Required]
+        readonly Token doKeyword;
+        [Required]
+        readonly BlockNode block;
+        [Required]
+        readonly Token endKeyword;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = ImmutableList.Create<SyntaxNodeOrToken>(forKeyword, name, assignmentOperator, exp1, comma, exp2);
+                if (optionalComma != null)
+                {
+                    children.Add(optionalComma);
+                    children.Add(OptionalExp3);
+                }
+                children.Add(doKeyword);
+                children.Add(block);
+                children.Add(endKeyword);
+                return children;
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class MultipleArgForStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token forKeyword;
+        [Required]
+        readonly SeparatedList nameList;
+        [Required]
+        readonly Token inKeyword;
+        [Required]
+        readonly SeparatedList expList;
+        [Required]
+        readonly Token doKeyword;
+        [Required]
+        readonly BlockNode block;
+        [Required]
+        readonly Token endKeyword;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(forKeyword, nameList, inKeyword, expList, doKeyword, block, endKeyword);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class LabelStatementNode : StatementNode
+    {
+        [Required]
+        readonly Token doubleColon1;
+        [Required]
+        readonly Token name;
+        [Required]
+        readonly Token doubleColon2;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(doubleColon1, name, doubleColon2);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class AssignmentStatementNode : StatementNode
+    {
+        [Required]
+        readonly SeparatedList varList;
+        [Required]
+        readonly Token assignmentOperator;
+        [Required]
+        readonly SeparatedList expList;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(varList, assignmentOperator, expList);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+    #endregion
+
+    #region If Statement
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class IfStatementNode : StatementNode
     {
         [Required]
         readonly Token ifKeyword;
         [Required]
-        readonly Expression exp;
+        readonly ExpressionNode exp;
         [Required]
         readonly Token thenKeyword;
         [Required]
-        readonly Block ifBlock;
-        readonly ImmutableList<ElseIfBlock> elseIfList;
-        readonly ElseBlock elseBlock;
+        readonly BlockNode ifBlock;
+        [Required, NotRecursive]
+        readonly ImmutableList<ElseIfBlockNode> elseIfList;
+        readonly ElseBlockNode elseBlock;
         [Required]
         readonly Token endKeyword;
 
-        internal override void ToString(TextWriter writer)
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("IfNode");
-            using (indentingWriter.Indent())
+            get
             {
-                exp.ToString(indentingWriter);
-            }
+                var children = new List<SyntaxNodeOrToken> { ifKeyword, exp, thenKeyword, ifBlock };
 
-            using (indentingWriter.Indent())
-            {
-                ifBlock.ToString(indentingWriter);
-            }
-
-            if (elseIfList != null)
-            {
-                foreach (var block in elseIfList)
+                //TODO remove temporary code:
+                if (elseIfList != null)
                 {
-                    using (indentingWriter.Indent())
+                    foreach (var node in elseIfList)
                     {
-                        if (block != null)
-                        {
-                            block.ToString(indentingWriter);
-                        }
-                        else
-                        {
-                            indentingWriter.WriteLine("null");
-                      }
+                        children.Add(node);
                     }
                 }
-            }
 
-            if (elseBlock != null)
-            {
-                using (indentingWriter.Indent())
+                if (elseBlock != null)
                 {
-                    elseBlock.ToString(indentingWriter);
+                    children.Add(elseBlock);
                 }
+
+                children.Add(endKeyword); //Why doesnt this do anything??!?!!
+                return children.ToImmutableList();
             }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
         }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class ElseBlock : SyntaxNode
+    public partial class ElseBlockNode : SyntaxNode
     {
         [Required]
         readonly Token elseKeyword;
         [Required]
-        readonly Block block;
+        readonly BlockNode block;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(elseKeyword, block);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class ElseIfBlock
-    { //TODO: inherit from syntax node once ImmutableGraphObject is bug is fixed
-        [Required]
-        readonly int startPosition;
-        [Required]
-        readonly int length;
+    public partial class ElseIfBlockNode : SyntaxNode
+    {
         [Required]
         readonly Token elseIfKeyword;
         [Required]
-        readonly Expression exp;
+        readonly ExpressionNode exp;
         [Required]
         readonly Token thenKeyword;
         [Required]
-        readonly Block block;
+        readonly BlockNode block;
 
-        internal void ToString(TextWriter writer)
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("ElseIfBlock: ");
-            using (indentingWriter.Indent())
+            get
             {
-                exp.ToString(indentingWriter);
+                return ImmutableList.Create<SyntaxNodeOrToken>(elseIfKeyword, exp, thenKeyword, block);
             }
+        }
 
-            using (indentingWriter.Indent())
-            {
-                block.ToString(indentingWriter);
-            }
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
         }
     }
     #endregion
 
     #region Expression nodes
-    [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class Expression : SyntaxNode
-    {
-    }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class SimpleExpression : Expression
+    public abstract partial class ExpressionNode : SyntaxNode { }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class SimpleExpression : ExpressionNode
     {
         [Required]
-        Token expressionValue;
-        public static bool IsValidExpressionNode(TokenType type)
+        readonly Token expressionValue;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
-            switch (type)
+            get
             {
-                case TokenType.Number:
-                case TokenType.TrueKeyValue:
-                case TokenType.FalseKeyValue:
-                case TokenType.NilKeyValue:
-                case TokenType.VarArgOperator:
-                case TokenType.String:
-                    return true;
-                default:
-                    return false;
+                return ImmutableList.Create<SyntaxNodeOrToken>(expressionValue);
             }
         }
 
-        internal override void ToString(TextWriter writer)
+        public override void Accept(NodeWalker walker)
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("Expression:\t" + expressionValue.ToString());
-        }
-
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class BinopExpression : Expression
-    {
-        [Required]
-        Expression exp1;
-        [Required]
-        Token binop;
-        [Required]
-        Expression exp2;
-
-        internal override void ToString(TextWriter writer)
-        {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("Expression");
-            using (indentingWriter.Indent())
-            {
-                exp1.ToString(indentingWriter);
-            }
-            using (indentingWriter.Indent())
-            {
-                indentingWriter.WriteLine(binop.ToString());
-            }
-            using (indentingWriter.Indent())
-            {
-                exp2.ToString(indentingWriter);
-            }
+            walker.Visit(this);
         }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class UnopExpression : Expression
+    public partial class BinaryOperatorExpression : ExpressionNode
     {
         [Required]
-        Token unop;
+        readonly ExpressionNode exp1;
         [Required]
-        Expression exp;
+        readonly Token binaryOperator;
+        [Required]
+        readonly ExpressionNode exp2;
 
-        internal override void ToString(TextWriter writer)
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("Expression");
-            using (indentingWriter.Indent())
+            get
             {
-                indentingWriter.WriteLine(unop.ToString());
+                return ImmutableList.Create<SyntaxNodeOrToken>(exp1, binaryOperator, exp2);
             }
-            using (indentingWriter.Indent())
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class UnaryOperatorExpression : ExpressionNode
+    {
+        [Required]
+        readonly Token unaryOperator;
+        [Required]
+        readonly ExpressionNode exp;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
             {
-                exp.ToString(indentingWriter);
+                return ImmutableList.Create<SyntaxNodeOrToken>(unaryOperator, exp);
             }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class TableConstructorExp : ExpressionNode
+    {
+        [Required]
+        readonly Token openCurly;
+        [Required]
+        readonly SeparatedList fieldList;
+        [Required]
+        readonly Token closeCurly;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = ImmutableList.Create<SyntaxNodeOrToken>(openCurly, fieldList, closeCurly);
+                return children;
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class FunctionDef : ExpressionNode
+    {
+        [Required]
+        readonly Token functionKeyword;
+        [Required]
+        readonly FuncBodyNode functionBody;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(functionKeyword, functionBody);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    #region FieldNodes
+    [GenerateImmutable(GenerateBuilder = true)]
+    public abstract partial class FieldNode : ExpressionNode { } //TODO: is this inheritance okay?
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class BracketField : FieldNode
+    {
+        [Required]
+        readonly Token openBracket;
+        [Required]
+        readonly ExpressionNode identifierExp;
+        [Required]
+        readonly Token closeBracket;
+        [Required]
+        readonly Token assignmentOperator;
+        [Required]
+        readonly ExpressionNode assignedExp;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(openBracket, identifierExp, closeBracket, assignmentOperator, assignedExp);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class AssignmentField : FieldNode
+    {
+        [Required]
+        readonly Token name;
+        [Required]
+        readonly Token assignmentOperator;
+        [Required]
+        readonly ExpressionNode exp;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(name, assignmentOperator, exp);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class ExpField : FieldNode
+    {
+        [Required]
+        readonly ExpressionNode exp;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(exp);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
         }
     }
     #endregion
 
-    #region Other Expression Nodes (out of scope for Code review)
+    #region PrefixExp Expression
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class TableConstructorExp : Expression
-    {
-        [Required]
-        Token openCurly;
-        FieldList fieldList;
-        [Required]
-        Token closeCurly;
-        internal override void ToString(TextWriter writer)
-        {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("TableConstructor");
-            using (indentingWriter.Indent())
-            {
-                FieldList.ToString(indentingWriter);
-            }
-        }
-    }
+    public abstract partial class PrefixExp : ExpressionNode { }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class FunctionDef : Expression
-    {
-        [Required]
-        Token functionKeyword;
-        [Required]
-        FuncBody functionBody;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class PrefixExp : Expression { }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class Var : PrefixExp { }
+    public abstract partial class Var : PrefixExp { }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class NameVar : Var
     {
         [Required]
-        Token identifier;
+        readonly Token name;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(name);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class SquareBracketVar : Var
     {
         [Required]
-        PrefixExp prefixExp;
+        readonly PrefixExp prefixExp;
         [Required]
-        Token openBracket;
+        readonly Token openBracket;
         [Required]
-        Expression exp;
+        readonly ExpressionNode exp;
         [Required]
-        Token closeBracket;
+        readonly Token closeBracket;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(prefixExp, openBracket, exp, closeBracket);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class DotVar : Var
     {
         [Required]
-        PrefixExp prefixExp;
+        readonly PrefixExp prefixExp;
         [Required]
-        Token dotOperator;
+        readonly Token dotOperator;
         [Required]
-        Token nameIdentifier;
+        readonly Token nameIdentifier;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(prefixExp, dotOperator, nameIdentifier);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class FunctionCall : PrefixExp //TODO: is this inheritance okay? Could be used as a statement, and not a prefixexp... does that matter?
+    public partial class FunctionCallExp : PrefixExp
     {
         [Required]
-        PrefixExp prefixExp;
-        Token colon;
-        Token name;
+        readonly PrefixExp prefixExp;
+        readonly Token colon;
+        readonly Token name;
         [Required]
-        Args args;
+        readonly Args args;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = ImmutableList.Create<SyntaxNodeOrToken>(prefixExp);
+                if (colon != null)
+                {
+                    children.Add(colon);
+                    children.Add(name);
+                }
+                children.Add(args);
+                return children;
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class ParenPrefixExp : PrefixExp
     {
         [Required]
-        Token openParen;
+        readonly Token openParen;
         [Required]
-        Expression exp;
+        readonly ExpressionNode exp;
         [Required]
-        Token closeParen;
+        readonly Token closeParen;
 
-        internal override void ToString(TextWriter writer)
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("ParenPrefixExp");
-            using (indentingWriter.Indent())
+            get
             {
-                if (exp != null)
-                {
-                    exp.ToString(indentingWriter);
-                } else
-                {
-                    indentingWriter.WriteLine("null");
-                }
+                return ImmutableList.Create<SyntaxNodeOrToken>(openParen, exp, closeParen);
             }
         }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
     }
+    #endregion
+
     #endregion
 
     #region Args Nodes
@@ -401,218 +910,257 @@
     public abstract partial class Args : SyntaxNode { }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class TableContructorArg : Args
+    public partial class TableContructorArg : Args
     {
         [Required]
-        Token openCurly;
-        FieldList fieldList;
+        readonly Token openCurly;
         [Required]
-        Token closeCurly;
-    }
+        readonly SeparatedList fieldList;
+        [Required]
+        readonly Token closeCurly;
 
-    [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class ParenArg : Args
-    {
-        [Required]
-        Token openParen;
-        [Required]
-        ExpList expList;
-        [Required]
-        Token closeParen;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class StringArg : Args
-    {
-        [Required]
-        Token stringLiteral;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class SemiColonStatement : SyntaxNode
-    {
-        Token token;
-
-        internal override void ToString(TextWriter writer)
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine(token.ToString());
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(openCurly, fieldList, closeCurly);
+            }
         }
-    }
 
-    #endregion
-
-    #region List nodes
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class NameList : SyntaxNode
-    {
-        [Required]
-        ImmutableList<NameCommaPair> names;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class FieldList : SyntaxNode
-    {
-        [Required]
-        ImmutableList<FieldAndSeperatorPair> fields;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class ExpList : SyntaxNode
-    {
-        [Required]
-        ImmutableList<ExpressionCommaPair> expressions;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class ParList : SyntaxNode { }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class VarArgPar : ParList
-    {
-        [Required]
-        Token varargOperator;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class NameListPar : ParList
-    {
-        [Required]
-        NameList namesList;
-        [Required]
-        CommaVarArgPair varArgPar;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class CommaVarArgPair
-    {
-        [Required]
-        Token comma;
-        [Required]
-        Token varargOperator;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class NameCommaPair
-    {
-        [Required]
-        Token name;
-        [Required]
-        Token comma;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class ExpressionCommaPair
-    {
-        [Required]
-        Token comma;
-        [Required]
-        Expression expression;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class FieldAndSeperatorPair
-    {
-        Field field;
-        Token fieldSeparator;
-    }
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public abstract partial class Field : Expression { } //TODO: is this inheritance okay?
-
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class BracketField : Field
-    {
-        [Required]
-        Token openBracket;
-        [Required]
-        Expression identifierExp;
-        [Required]
-        Token closeBracket;
-        [Required]
-        Token assignmentOperator;
-        [Required]
-        Expression assignedExp;
-
-        internal override void ToString(TextWriter indentingWriter)
+        public override void Accept(NodeWalker walker)
         {
             throw new NotImplementedException();
         }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class SimpleField : Field
+    public partial class ParenArg : Args
     {
         [Required]
-        Token name;
+        readonly Token openParen;
         [Required]
-        Token assignmentOperator;
+        readonly SeparatedList expList;
         [Required]
-        Expression exp;
-    }
+        readonly Token closeParen;
 
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class ExpField : Field
-    {
-        [Required]
-        Expression exp;
-    }
-    #endregion
-
-    #region Other Nodes
-    [GenerateImmutable(GenerateBuilder = true)]
-    public partial class RetStat : SyntaxNode
-    {
-        [Required]
-        Token returnKeyword;
-        ExpList returnExpressions;
-        //Token semiColonRetStat; Question: is this really necessary even though defined in the language?
-
-        internal override void ToString(TextWriter writer)
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("RetStat");
-            using (indentingWriter.Indent())
+            get
             {
-                indentingWriter.WriteLine("explist... implement"); //TODO: implement
+                return ImmutableList.Create<SyntaxNodeOrToken>(openParen, expList, closeParen);
             }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            throw new NotImplementedException();
         }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class TableConstructor : SyntaxNode
+    public partial class StringArg : Args
     {
         [Required]
-        Token openCurly;
-        FieldList fieldList;
-        [Required]
-        Token closeCurly;
+        readonly Token stringLiteral;
 
-        internal override void ToString(TextWriter writer)
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
-            var indentingWriter = IndentingTextWriter.Get(writer);
-            indentingWriter.WriteLine("TableConstructor");
-            using (indentingWriter.Indent())
+            get
             {
-                FieldList.ToString(indentingWriter);
+                return ImmutableList.Create<SyntaxNodeOrToken>(stringLiteral);
             }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+    #endregion
+
+    #region List nodes
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class SeparatedList : SyntaxNode
+    {
+        [Required, NotRecursive]
+        readonly ImmutableList<SeparatedListElement> syntaxList;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return SyntaxList.Cast<SyntaxNodeOrToken>().ToImmutableList();
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
         }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class FuncBody : SyntaxNode
+    public partial class SeparatedListElement : SyntaxNode
     {
         [Required]
-        Token openParen;
+        readonly Token seperator;
         [Required]
-        ParList parameterList;
-        [Required]
-        Token closeParen;
-        [Required]
-        Block block;
-        [Required]
-        Token endKeyword;
+        readonly SyntaxNodeOrToken element;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                if (seperator != null)
+                {
+                    return ImmutableList.Create<SyntaxNodeOrToken>(seperator, element);
+                }
+                else
+                {
+                    return ImmutableList.Create<SyntaxNodeOrToken>(element);
+                }
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
     }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public abstract partial class ParList : SyntaxNode { }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class VarArgParList : ParList
+    {
+        [Required]
+        readonly Token varargOperator;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(varargOperator);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class NameListPar : ParList
+    {
+        [Required]
+        readonly SeparatedList namesList;
+        readonly Token comma;
+        readonly Token vararg;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = ImmutableList.Create<SyntaxNodeOrToken>(namesList);
+                if (comma != null)
+                {
+                    children.Add(comma);
+                    children.Add(vararg);
+                }
+                return children;
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
     #endregion
 
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class TableConstructorNode : SyntaxNode
+    {
+        [Required]
+        readonly Token openCurly;
+        [Required]
+        readonly SeparatedList fieldList;
+        [Required]
+        readonly Token closeCurly;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(openCurly, fieldList, closeCurly);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class FuncBodyNode : SyntaxNode
+    {
+        [Required]
+        readonly Token openParen;
+        [Required]
+        readonly ParList parameterList;
+        [Required]
+        readonly Token closeParen;
+        [Required]
+        readonly BlockNode block;
+        [Required]
+        readonly Token endKeyword;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(openParen, parameterList, closeParen, block, endKeyword);
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
+
+    [GenerateImmutable(GenerateBuilder = true)]
+    public partial class FuncNameNode : SyntaxNode
+    {
+        [Required]
+        readonly Token name;
+        [Required, NotRecursive]
+        readonly SeparatedList funcNameList;
+        readonly Token optionalColon;
+        readonly Token optionalName;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = ImmutableList.Create<SyntaxNodeOrToken>(name, funcNameList);
+                if (optionalColon != null)
+                {
+                    children.Add(optionalColon);
+                    children.Add(optionalName);
+                }
+                return children;
+            }
+        }
+
+        public override void Accept(NodeWalker walker)
+        {
+            walker.Visit(this);
+        }
+    }
 }

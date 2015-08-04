@@ -11,7 +11,7 @@ using System.Text;
 
 namespace LanguageService
 {
-    internal class IndentingTextWriter : TextWriter
+    public class IndentingTextWriter : TextWriter
     {
         private const string Indentation = "    ";
         private readonly TextWriter inner;
@@ -21,7 +21,7 @@ namespace LanguageService
         {
             if (inner == null)
             {
-                throw new ArgumentNullException("inner textwriter");
+                throw new ArgumentNullException(nameof(inner));
             }
 
             this.inner = inner;
@@ -32,11 +32,11 @@ namespace LanguageService
             get { return this.inner.Encoding; }
         }
 
-        internal static IndentingTextWriter Get(TextWriter writer)
+        public static IndentingTextWriter Get(TextWriter writer)
         {
             if (writer == null)
             {
-                throw new ArgumentNullException("writter textwriter");
+                throw new ArgumentNullException(nameof(writer));
             }
 
             return writer as IndentingTextWriter ?? new IndentingTextWriter(writer);
@@ -57,7 +57,7 @@ namespace LanguageService
             this.inner.Write(value);
         }
 
-        internal CancelIndent Indent()
+        public CancelIndent Indent()
         {
             this.indentationStack.Push(Indentation);
             return new CancelIndent(this);
@@ -68,7 +68,7 @@ namespace LanguageService
             this.indentationStack.Pop();
         }
 
-        internal struct CancelIndent : IDisposable
+        public struct CancelIndent : IDisposable
         {
             private readonly IndentingTextWriter writer;
 
@@ -76,7 +76,7 @@ namespace LanguageService
             {
                 if (writer == null)
                 {
-                    throw new ArgumentNullException("writter textwriter");
+                    throw new ArgumentNullException("writer");
                 }
 
                 this.writer = writer;
@@ -89,6 +89,11 @@ namespace LanguageService
                     this.writer.Unindent();
                 }
             }
+        }
+
+        public override string ToString()
+        {
+            return inner.ToString();
         }
     }
 }
