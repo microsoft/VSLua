@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Validation;
 
 namespace LanguageService
 {
@@ -6,7 +7,7 @@ namespace LanguageService
     {
         public SourceText(TextReader textReader)
         {
-            Validation.Requires.NotNull(textReader, nameof(textReader));
+            Requires.NotNull(textReader, nameof(textReader));
 
             this.TextReader = textReader;
         }

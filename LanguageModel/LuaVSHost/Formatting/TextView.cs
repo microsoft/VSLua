@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Differencing;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
+using Validation;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
@@ -28,10 +29,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 
         public TextView(IWpfTextView wpfTextView, IServiceCore core)
         {
+            Requires.NotNull(wpfTextView, nameof(wpfTextView));
+            Requires.NotNull(core, nameof(core));
+
             this.core = core;
             this.editorAdaptersService = core.EditorAdaptersFactory;
-
-            Validation.Requires.NotNull(wpfTextView, nameof(wpfTextView));
 
             this.WpfTextView = wpfTextView;
             this.VsTextView = this.editorAdaptersService.GetViewAdapter(this.WpfTextView);
@@ -42,12 +44,16 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 
         internal void Connect(ITextBuffer textBuffer)
         {
+            Requires.NotNull(textBuffer, nameof(textBuffer));
+
             this.TextBuffer = textBuffer;
             CommandFilter filter = this.CreateCommandFilter(textBuffer);
         }
 
         protected CommandFilter CreateCommandFilter(ITextBuffer textBuffer)
         {
+            Requires.NotNull(textBuffer, nameof(textBuffer));
+
             CommandFilter filter = new CommandFilter();
 
             Manager formattingManager = new Manager(textBuffer, this.WpfTextView, this.core);

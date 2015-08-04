@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LanguageService.Formatting.Options
+﻿namespace LanguageService.Formatting.Options
 {
     public sealed class IndentStyleInfo
     {
@@ -28,8 +22,8 @@ namespace LanguageService.Formatting.Options
             this.Table = tableIndentStyle;
         }
 
-        internal IndentStyle GeneralIndentStyle { get; }
-        internal IndentStyle Function { get; }
-        internal IndentStyle Table { get; }
+        public IndentStyle GeneralIndentStyle { get; }
+        public IndentStyle Function { get; }
+        public IndentStyle Table { get; }
     }
 }

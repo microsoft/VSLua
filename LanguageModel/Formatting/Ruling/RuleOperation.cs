@@ -1,4 +1,6 @@
-﻿namespace LanguageService.Formatting.Ruling
+﻿using Validation;
+
+namespace LanguageService.Formatting.Ruling
 {
     internal class RuleOperation
     {
@@ -7,6 +9,8 @@
 
         internal RuleOperation(RuleOperationContext context, RuleAction action)
         {
+            Requires.NotNull(context, nameof(context));
+
             this.Action = action;
             this.Context = context;
         }
