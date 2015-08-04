@@ -12,17 +12,17 @@
 
                 <CheckBox x:Name="formatOnEnterCheckbox" Content="{x:Static properties:Resources.FormatOnEnterCheckboxContent}"
                           HorizontalAlignment="Left" Margin="0,0,0,7"
-                          ToolTip="{x:Static properties:Resources.FormatOnEnterCheckboxToolTips}"
+                          ToolTip="{x:Static properties:Resources.FormatOnEnterCheckboxToolTip}"
                           IsChecked="{Binding FormatOnEnter}"/>
 
                 <CheckBox x:Name="formatOnPasteCheckbox" Content="{x:Static properties:Resources.FormatOnPasteCheckboxContent}"
                           HorizontalAlignment="Left" Margin="0,0,0,7"
-                          ToolTip="{x:Static properties:Resources.FormatOnPasteCheckboxToolTips}"
+                          ToolTip="{x:Static properties:Resources.FormatOnPasteCheckboxToolTip}"
                           IsChecked="{Binding FormatOnPaste}"/>
 
                 <CheckBox x:Name="formatOnBlockCheckbox" Content="{x:Static properties:Resources.FormatOnBlockCheckboxContent}"
                           HorizontalAlignment="Left" Margin="0,0,0,0"
-                          ToolTip="{x:Static properties:Resources.FormatOnBlockCheckboxToolTips}"
+                          ToolTip="{x:Static properties:Resources.FormatOnBlockCheckboxToolTip}"
                           IsChecked="{Binding FormatOnBlock}"/>
             </StackPanel>
         </GroupBox>

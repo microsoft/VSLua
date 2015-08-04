@@ -91,7 +91,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                 }
             }
 
-            // For typing stuff (after semicolin, } or enter and stuff)
+            // For typing stuff (after semicolon, } or enter and stuff)
         }
 
         public bool QueryCommandStatus(Guid guidCmdGroup, uint commandId, IntPtr commandText, out OLECMDF commandStatus)
@@ -213,11 +213,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             SnapshotSpan snapshotSpan = new SnapshotSpan(this.textView.TextSnapshot, span);
             return snapshotSpan;
         }
-
-        //public void FormatStatement()
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         private bool Format(SnapshotSpan span)
         {

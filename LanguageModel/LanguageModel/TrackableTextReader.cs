@@ -58,7 +58,7 @@ namespace LanguageService
 
         internal bool EndOfStream()
         {
-            return this.Peek() == unchecked((char)-1);
+            return this.Peek() == EOF;
         }
 
         internal char Peek()
@@ -96,10 +96,7 @@ namespace LanguageService
 
         public void Dispose()
         {
-            if (textReader != null)
-            {
-                textReader.Dispose();
-            }
+            textReader?.Dispose();
         }
     }
 }

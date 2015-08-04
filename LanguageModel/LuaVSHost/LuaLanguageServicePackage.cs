@@ -1,8 +1,8 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="LuaLanguageServicePackage.cs" company="Company">
-//     Copyright (c) Company.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
 
 using System;
 using System.Diagnostics.CodeAnalysis;
