@@ -54,7 +54,7 @@
     <Compile Include="Formatting\CommandFilter.cs" />
     <Compile Include="Formatting\IFormatter.cs" />
     <Compile Include="Formatting\IMiniCommandFilter.cs" />
-    <Compile Include="Formatting\Manager.cs" />
+    <Compile Include="Formatting\FormatCommandHandler.cs" />
     <Compile Include="Formatting\OptionPages\BaseDialogPage.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -56,7 +56,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 
             CommandFilter filter = new CommandFilter();
 
-            Manager formattingManager = new Manager(textBuffer, this.WpfTextView, this.core);
+            FormatCommandHandler formattingManager = new FormatCommandHandler(textBuffer, this.WpfTextView, this.core);
             filter.MiniFilters.Add(formattingManager);
 
             IOleCommandTarget nextFilter = null;

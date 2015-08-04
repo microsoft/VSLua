@@ -12,9 +12,9 @@ using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
-    internal sealed class Manager : IMiniCommandFilter, IFormatter
+    internal sealed class FormatCommandHandler : IMiniCommandFilter, IFormatter
     {
-        internal Manager(ITextBuffer textBuffer, ITextView textView, IServiceCore core)
+        internal FormatCommandHandler(ITextBuffer textBuffer, ITextView textView, IServiceCore core)
         {
             Requires.NotNull(textBuffer, nameof(textBuffer));
             Requires.NotNull(textView, nameof(textView));
