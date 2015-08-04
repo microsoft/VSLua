@@ -14,16 +14,8 @@ namespace LanguageService.Tests
     [DeploymentItem("SerializedJsonOutput", "SerializedJsonOutput")]
     public class ParserTests
     {
-        //private ITestOutputHelper logger;
-
-        //public ParserTests(ITestOutputHelper logger)
-        //{
-        //    this.logger = logger;
-        //}
-        
-
         [Fact]
-        public void testSyntaxTreeJsonSerialization()
+        public void DebugTreeEnumeratorMethod()
         {
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\smallif.lua");
 
@@ -31,7 +23,23 @@ namespace LanguageService.Tests
             tree.Root.Accept(visitor);
 
             Debug.WriteLine(visitor.SyntaxTreeAsString());
-            //string expected = File.ReadAllText(@"SerializedJsonOutput\smallif.json");
+
+            foreach(var node in tree.Next(tree.Root))
+            {
+                if(node is Token)
+                {
+                    Debug.WriteLine(((Token)node).Kind.ToString() + "\n");
+                } else
+                {
+                    Debug.WriteLine(((SyntaxNode)node).Kind.ToString() + "\n");
+                }
+                
+            }
+
+            foreach (var error in tree.ErrorList)
+                Debug.WriteLine(error.Message);
+
+            Assert.Equal(0, tree.ErrorList.Count);
         }
 
 

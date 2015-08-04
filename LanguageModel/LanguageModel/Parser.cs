@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
+using System.Linq;
 
 namespace LanguageService
 {
@@ -747,8 +748,8 @@ namespace LanguageService
         {
             var node = NameVar.CreateBuilder();
             node.Kind = SyntaxKind.NameVar;
-            node.StartPosition = currentToken.Start;
-            node.Name = currentToken;
+            node.StartPosition = Peek().Start;
+            node.Name = GetExpectedToken(SyntaxKind.Identifier);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
@@ -770,6 +771,7 @@ namespace LanguageService
                 case SyntaxKind.String:
                     return ParseStringArg();
                 default:
+                    Token token = Peek();
                     throw new InvalidOperationException();
             }
         }
@@ -857,6 +859,11 @@ namespace LanguageService
                     break;
             }
 
+            if(listNode.SyntaxList == null)
+            {
+                listNode.SyntaxList = ImmutableList.Create<SeparatedListElement>();
+            }
+
             listNode.Length = currentToken.End - listNode.StartPosition;
             contextStack.Pop();
 
@@ -925,10 +932,17 @@ namespace LanguageService
                     return tokenType == SyntaxKind.EndKeyword;
                 case ParsingContext.RepeatStatementBlock:
                     return tokenType == SyntaxKind.UntilKeyword;
+
+                ////////////////////// UNSURE /////////////////////////////////////
                 case ParsingContext.ExpList:
+                    return tokenType == SyntaxKind.CloseParen || tokenType == SyntaxKind.Semicolon || tokenType == SyntaxKind.DoKeyword; //TODO: whatabout end of assignment statement context?
                 case ParsingContext.NameList:
+                    return tokenType == SyntaxKind.InKeyword || tokenType == SyntaxKind.AssignmentOperator; //TODO: whatabout end of assignment statement context?
                 case ParsingContext.FuncNameDotSeperatedNameList:
-                    return false; //TODO: Confirm there is no concretely defined terminator...
+                    return tokenType == SyntaxKind.Colon || tokenType == SyntaxKind.OpenParen; //TODO: Confirm there is no concretely defined terminator...
+
+                ////////////////////// UNSURE /////////////////////////////////////
+
                 case ParsingContext.VarList:
                     return tokenType == SyntaxKind.AssignmentOperator;
                 case ParsingContext.FieldList:
@@ -1034,7 +1048,7 @@ namespace LanguageService
 
         private bool isInSomeParsingContext()
         {
-            Stack<ParsingContext> tempStack = contextStack;
+            var tempStack = new Stack<ParsingContext>(contextStack.Reverse());
 
             while (contextStack.Count > 0)
             {

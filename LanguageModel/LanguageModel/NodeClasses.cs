@@ -20,6 +20,7 @@ namespace LanguageService
         [Required]
         readonly int length;
 
+        public abstract ImmutableList<SyntaxNodeOrToken> Children { get; }
         public abstract void Accept(NodeWalker walker);
     }
 
@@ -31,7 +32,7 @@ namespace LanguageService
         [Required]
         readonly Token endOfFile;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -51,7 +52,7 @@ namespace LanguageService
         [Required, NotRecursive]
         readonly ImmutableList<StatementNode> statements;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -75,7 +76,7 @@ namespace LanguageService
         [Required]
         readonly Token semiColon;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -99,7 +100,7 @@ namespace LanguageService
         [Required]
         readonly Args args;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -130,7 +131,7 @@ namespace LanguageService
         readonly SeparatedList expList;
         readonly Token semiColon;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -153,7 +154,7 @@ namespace LanguageService
         [Required]
         readonly Token breakKeyword;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -175,7 +176,7 @@ namespace LanguageService
         [Required]
         readonly Token name;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -199,7 +200,7 @@ namespace LanguageService
         [Required]
         readonly Token endKeyword;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -226,7 +227,7 @@ namespace LanguageService
         readonly BlockNode block;
         [Required]
         readonly Token endKeyword;
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -252,7 +253,7 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode exp;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -276,7 +277,7 @@ namespace LanguageService
         [Required]
         readonly FuncBodyNode funcBody;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -300,7 +301,7 @@ namespace LanguageService
         readonly Token assignmentOperator;
         readonly SeparatedList expList;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -334,7 +335,7 @@ namespace LanguageService
         [Required]
         readonly FuncBodyNode funcBody;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -372,7 +373,7 @@ namespace LanguageService
         [Required]
         readonly Token endKeyword;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -413,7 +414,7 @@ namespace LanguageService
         [Required]
         readonly Token endKeyword;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -437,7 +438,7 @@ namespace LanguageService
         [Required]
         readonly Token doubleColon2;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -461,7 +462,7 @@ namespace LanguageService
         [Required]
         readonly SeparatedList expList;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -494,15 +495,24 @@ namespace LanguageService
         [Required]
         readonly Token endKeyword;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
                 var children = ImmutableList.Create<SyntaxNodeOrToken>(ifKeyword, exp, thenKeyword, ifBlock);
-                foreach (var node in elseIfList)
+
+                //TODO remove temporary code:
+                if(elseIfList == null)
                 {
-                    children.Add(node);
+                    children.Add(Token.CreateMissingToken(ifBlock.StartPosition + ifBlock.Length));
+                } else
+                {
+                    foreach (var node in elseIfList)
+                    {
+                        children.Add(node);
+                    }
                 }
+                
                 children.Add(elseBlock);
                 children.Add(endKeyword);
                 return children;
@@ -523,7 +533,7 @@ namespace LanguageService
         [Required]
         readonly BlockNode block;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -549,7 +559,7 @@ namespace LanguageService
         [Required]
         readonly BlockNode block;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -575,7 +585,7 @@ namespace LanguageService
         [Required]
         readonly Token expressionValue;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -599,7 +609,7 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode exp2;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -621,7 +631,7 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode exp;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -645,7 +655,7 @@ namespace LanguageService
         [Required]
         readonly Token closeCurly;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -668,7 +678,7 @@ namespace LanguageService
         [Required]
         readonly FuncBodyNode functionBody;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -700,7 +710,7 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode assignedExp;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -724,7 +734,7 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode exp;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -744,7 +754,7 @@ namespace LanguageService
         [Required]
         readonly ExpressionNode exp;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -772,7 +782,7 @@ namespace LanguageService
         [Required]
         readonly Token name;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -798,7 +808,7 @@ namespace LanguageService
         [Required]
         readonly Token closeBracket;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -822,7 +832,7 @@ namespace LanguageService
         [Required]
         readonly Token nameIdentifier;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -846,7 +856,7 @@ namespace LanguageService
         [Required]
         readonly Args args;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -877,7 +887,7 @@ namespace LanguageService
         [Required]
         readonly Token closeParen;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -908,7 +918,7 @@ namespace LanguageService
         [Required]
         readonly Token closeCurly;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -932,7 +942,7 @@ namespace LanguageService
         [Required]
         readonly Token closeParen;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -952,7 +962,7 @@ namespace LanguageService
         [Required]
         readonly Token stringLiteral;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -975,11 +985,11 @@ namespace LanguageService
         [Required, NotRecursive]
         readonly ImmutableList<SeparatedListElement> syntaxList;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return syntaxList.Cast<SyntaxNodeOrToken>().ToImmutableList();
+                return SyntaxList.Cast<SyntaxNodeOrToken>().ToImmutableList();
             }
         }
 
@@ -997,7 +1007,7 @@ namespace LanguageService
         [Required]
         readonly SyntaxNodeOrToken element;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -1011,43 +1021,6 @@ namespace LanguageService
         }
     }
 
-    //#region Code To Deprecate
-    //[GenerateImmutable(GenerateBuilder = true)]
-    //public partial class NameList : SyntaxNode
-    //{
-    //    [Required]
-    //    readonly ImmutableList<NameCommaPair> names;
-
-    //    public override void Accept(NodeWalker walker)
-    //    {
-    //        walker.Visit(this);
-    //    }
-    //}
-
-    //[GenerateImmutable(GenerateBuilder = true)]
-    //public partial class FieldList : SyntaxNode
-    //{
-    //    [Required]
-    //    readonly ImmutableList<FieldAndSeperatorPair> fields;
-
-    //    public override void Accept(NodeWalker walker)
-    //    {
-    //        walker.Visit(this);
-    //    }
-    //}
-
-    //[GenerateImmutable(GenerateBuilder = true)]
-    //public partial class ExpList : SyntaxNode
-    //{
-    //    [Required]
-    //    readonly ImmutableList<ExpressionCommaPair> expressions;
-
-    //    public override void Accept(NodeWalker walker)
-    //    {
-    //        walker.Visit(this);
-    //    }
-    //}
-
     [GenerateImmutable(GenerateBuilder = true)]
     public abstract partial class ParList : SyntaxNode { }
 
@@ -1056,6 +1029,14 @@ namespace LanguageService
     {
         [Required]
         readonly Token varargOperator;
+
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return ImmutableList.Create<SyntaxNodeOrToken>(varargOperator);
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -1071,78 +1052,26 @@ namespace LanguageService
         readonly Token comma;
         readonly Token vararg;
 
+        public override ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                var children = ImmutableList.Create<SyntaxNodeOrToken>(namesList);
+                if(comma != null)
+                {
+                    children.Add(comma);
+                    children.Add(vararg);
+                }
+                return children;
+            }
+        }
+
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
         }
     }
 
-    //[GenerateImmutable(GenerateBuilder = true)]
-    //public partial class VarList : SyntaxNode
-    //{
-    //    [Required]
-    //    readonly ImmutableList<CommaVarPair> vars;
-
-    //    public override void Accept(NodeWalker walker)
-    //    {
-    //        walker.Visit(this);
-    //    }
-    //}
-
-    //#region List Pairs
-    //[GenerateImmutable(GenerateBuilder = true)]
-    //public partial class CommaVarPair
-    //{
-    //    [Required]
-    //    readonly Token comma;
-    //    [Required]
-    //    readonly Var var;
-    //}
-
-    //[GenerateImmutable(GenerateBuilder = true)]
-    //public partial class CommaVarArgPair
-    //{
-    //    [Required]
-    //    readonly Token comma;
-    //    [Required]
-    //    readonly Token varargOperator;
-    //}
-
-    //[GenerateImmutable(GenerateBuilder = true)]
-    //public partial class NameCommaPair
-    //{
-    //    [Required]
-    //    readonly Token comma;
-    //    [Required]
-    //    readonly Token name;
-    //}
-
-    //[GenerateImmutable(GenerateBuilder = true)]
-    //public partial class ExpressionCommaPair
-    //{
-    //    [Required]
-    //    readonly Token comma;
-    //    [Required]
-    //    readonly ExpressionNode expression;
-    //}
-
-    //[GenerateImmutable(GenerateBuilder = true)]
-    //public partial class FieldAndSeperatorPair
-    //{
-    //    readonly FieldNode field;
-    //    readonly Token fieldSeparator;
-    //}
-
-    //[GenerateImmutable(GenerateBuilder = true)]
-    //public partial class NameDotPair
-    //{
-    //    [Required]
-    //    readonly Token dot;
-    //    [Required]
-    //    readonly Token name;
-    //}
-    //#endregion
-    //#endregion
     #endregion
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -1155,7 +1084,7 @@ namespace LanguageService
         [Required]
         readonly Token closeCurly;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -1183,7 +1112,7 @@ namespace LanguageService
         [Required]
         readonly Token endKeyword;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
@@ -1207,7 +1136,7 @@ namespace LanguageService
         readonly Token optionalColon;
         readonly Token optionalName;
 
-        public ImmutableList<SyntaxNodeOrToken> Children
+        public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
