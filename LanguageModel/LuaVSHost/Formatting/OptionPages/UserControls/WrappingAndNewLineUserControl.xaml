@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages.UserControls.WrappingAndNewLineUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages.UserControls"
+             xmlns:properties="clr-namespace:Microsoft.VisualStudio.LanguageServices.Lua.Properties"
+             mc:Ignorable="d">
+
+    <DockPanel>
+        <StackPanel>
+            <GroupBox Header="{x:Static properties:Resources.WrappingGroupBoxHeader}" VerticalAlignment="Top"
+                  Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}">
+                <StackPanel DockPanel.Dock ="Top" Margin="0,2,0,0" KeyboardNavigation.TabNavigation="Contained">
+                    <CheckBox x:Name="wrapSingleLineFunctionsCheckbox"
+                          Content="{x:Static properties:Resources.WrapSingleLineFunctionsCheckBoxContent}"
+                          HorizontalAlignment="Left" Margin="0,0,0,7"
+                          IsChecked="{Binding WrapSingleLineFunctions}"/>
+                    <CheckBox x:Name="wrapSingleLineForLoopsCheckbox"
+                          Content="{x:Static properties:Resources.WrapSingleLineForLoopsCheckBoxContent}"
+                          HorizontalAlignment="Left" Margin="0,0,0,7"
+                          IsChecked="{Binding WrapSingleLineForLoops}"/>
+                    <CheckBox x:Name="wrapSingleLineTableConstructorsCheckbox"
+                          Content="{x:Static properties:Resources.WrapSingleLineTableConstructorsCheckBoxContent}"
+                          HorizontalAlignment="Left" Margin="0,0,0,0"
+                          IsChecked="{Binding WrapSingleLineTableConstructors}"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="{x:Static properties:Resources.NewLinesGroupBoxHeader}"
+                      VerticalAlignment="Top"
+                  Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}">
+                <StackPanel DockPanel.Dock="Top" Margin="0,2,0,0" KeyboardNavigation.TabNavigation="Contained">
+                    <CheckBox x:Name="addNewLinesToMultilineTableConstructorsCheckbox"
+                          Content="{x:Static properties:Resources.AddNewLinesToMultilineTableConstructorsCheckBoxContent}"
+                          HorizontalAlignment="Left" Margin="0,0,0,0"
+                          IsChecked="{Binding AddNewLinesToMultilineTableConstructors}"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </DockPanel>
+</UserControl>

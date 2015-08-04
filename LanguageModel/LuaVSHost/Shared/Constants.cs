@@ -16,8 +16,8 @@
                 internal const string General = "General";
                 internal const string Spacing = "Spacing";
                 internal const string Indentation = "Indentation";
-                internal const string Wrapping = "Wrapping";
-                internal const string NewLines = "NewLines";
+                internal const string WrappingAndNewLines = "WrappingNewLines";
+                //internal const string NewLines = "NewLines";
             }
         }
     }

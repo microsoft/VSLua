@@ -61,8 +61,26 @@
     <Compile Include="Formatting\OptionPages\GeneralPage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Formatting\OptionPages\SpacingPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Formatting\OptionPages\UserControls\GeneralUserControl.xaml.cs">
       <DependentUpon>GeneralUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Formatting\OptionPages\IndentationPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Formatting\OptionPages\UserControls\IndentationUserControl.xaml.cs">
+      <DependentUpon>IndentationUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Formatting\OptionPages\UserControls\SpacingUserControl.xaml.cs">
+      <DependentUpon>SpacingUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Formatting\OptionPages\UserControls\WrappingAndNewLineUserControl.xaml.cs">
+      <DependentUpon>WrappingAndNewLineUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Formatting\OptionPages\WrappingAndNewLinePage.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Formatting\TextView.cs" />
     <Compile Include="Formatting\UserSettings.cs" />
@@ -234,6 +252,18 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Formatting\OptionPages\UserControls\GeneralUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Formatting\OptionPages\UserControls\IndentationUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Formatting\OptionPages\UserControls\SpacingUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Formatting\OptionPages\UserControls\WrappingAndNewLineUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -61,6 +61,33 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add new lines to multiline table constructors.
+        /// </summary>
+        public static string AddNewLinesToMultilineTableConstructorsCheckBoxContent {
+            get {
+                return ResourceManager.GetString("AddNewLinesToMultilineTableConstructorsCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed.
+        /// </summary>
+        public static string FixedFunctionIndentationRadioContent {
+            get {
+                return ResourceManager.GetString("FixedFunctionIndentationRadioContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed.
+        /// </summary>
+        public static string FixedTableIndentationRadioContent {
+            get {
+                return ResourceManager.GetString("FixedTableIndentationRadioContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Format on block.
         /// </summary>
         public static string FormatOnBlockCheckboxContent {
@@ -115,11 +142,191 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Functions.
+        /// </summary>
+        public static string FunctionIndentationGroupBoxHeader {
+            get {
+                return ResourceManager.GetString("FunctionIndentationGroupBoxHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
         public static string GeneralGroupBoxHeader {
             get {
                 return ResourceManager.GetString("GeneralGroupBoxHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Lines.
+        /// </summary>
+        public static string NewLinesGroupBoxHeader {
+            get {
+                return ResourceManager.GetString("NewLinesGroupBoxHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Relative.
+        /// </summary>
+        public static string RelativeFunctionIndentationRadioContent {
+            get {
+                return ResourceManager.GetString("RelativeFunctionIndentationRadioContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Relative.
+        /// </summary>
+        public static string RelativeTableIndentationRadioContent {
+            get {
+                return ResourceManager.GetString("RelativeTableIndentationRadioContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove spaces between index limits in a for loop.
+        /// </summary>
+        public static string RemoveSpaceBetweenIndexLimitsCheckBoxContent {
+            get {
+                return ResourceManager.GetString("RemoveSpaceBetweenIndexLimitsCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert spaces after commas.
+        /// </summary>
+        public static string SpaceAfterCommasCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceAfterCommasCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert a space before and after an assignment operator used for fields in table contructors.
+        /// </summary>
+        public static string SpaceBeforeAndAfterAssignmentOpsInFieldCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceBeforeAndAfterAssignmentOpsInFieldCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert a space before and after an assignment operator used in for loop header.
+        /// </summary>
+        public static string SpaceBeforeAndAfterAssignmentOpsInForLoopCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceBeforeAndAfterAssignmentOpsInForLoopCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert a space before and after an assignment operator used for statements.
+        /// </summary>
+        public static string SpaceBeforeAndAfterAssignmentOpsInStatementsCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceBeforeAndAfterAssignmentOpsInStatementsCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert a space before and after binary operations.
+        /// </summary>
+        public static string SpaceBeforeAndAfterBinOpsCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceBeforeAndAfterBinOpsCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert a space between a function name/keyword and an open parenthesis..
+        /// </summary>
+        public static string SpaceBetweenFunctionAndOpenParenCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceBetweenFunctionAndOpenParenCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert spaces on inside of curly braces.
+        /// </summary>
+        public static string SpaceInsideOfCurlyBracesCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceInsideOfCurlyBracesCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert spaces on the inside of parenthesis.
+        /// </summary>
+        public static string SpaceInsideOfParenthesisCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceInsideOfParenthesisCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert spaces on inside of square brackets.
+        /// </summary>
+        public static string SpaceInsideOfSquareBracketsCheckBoxContent {
+            get {
+                return ResourceManager.GetString("SpaceInsideOfSquareBracketsCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spacing.
+        /// </summary>
+        public static string SpacingGroupBoxHeader {
+            get {
+                return ResourceManager.GetString("SpacingGroupBoxHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tables.
+        /// </summary>
+        public static string TableIndentationGroupBoxHeader {
+            get {
+                return ResourceManager.GetString("TableIndentationGroupBoxHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrapping.
+        /// </summary>
+        public static string WrappingGroupBoxHeader {
+            get {
+                return ResourceManager.GetString("WrappingGroupBoxHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrap all single-line for loops.
+        /// </summary>
+        public static string WrapSingleLineForLoopsCheckBoxContent {
+            get {
+                return ResourceManager.GetString("WrapSingleLineForLoopsCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrap all single-line functions.
+        /// </summary>
+        public static string WrapSingleLineFunctionsCheckBoxContent {
+            get {
+                return ResourceManager.GetString("WrapSingleLineFunctionsCheckBoxContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrap all single-line table constructors.
+        /// </summary>
+        public static string WrapSingleLineTableConstructorsCheckBoxContent {
+            get {
+                return ResourceManager.GetString("WrapSingleLineTableConstructorsCheckBoxContent", resourceCulture);
             }
         }
     }

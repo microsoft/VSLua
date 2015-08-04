@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages.UserControls.IndentationUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages.UserControls"
+             xmlns:properties="clr-namespace:Microsoft.VisualStudio.LanguageServices.Lua.Properties"
+             mc:Ignorable="d">
+
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top">
+            <GroupBox Header="{x:Static properties:Resources.FunctionIndentationGroupBoxHeader}"
+                      VerticalAlignment="Top" Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}">
+                <StackPanel DockPanel.Dock="Top" Margin="0,2,0,0">
+                    <RadioButton x:Name="functionFixedIndentationRadio"
+                                 Content="{x:Static properties:Resources.FixedFunctionIndentationRadioContent}"
+                             HorizontalAlignment="Left" Margin="0,0,0,7"
+                             IsChecked="{Binding FunctionFixedIndentation}"/>
+
+                    <RadioButton x:Name="functionRelativeIndentationRadio"
+                                 Content="{x:Static properties:Resources.RelativeFunctionIndentationRadioContent}"
+                             HorizontalAlignment="Left" Margin="0,0,0,0"
+                             IsChecked="{Binding FunctionRelativeIndentation}"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Tables" VerticalAlignment="Top">
+                <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Left" Margin="0,2,0,0">
+                    <RadioButton x:Name="tableFixedIndentationRadio"
+                                 Content="{x:Static properties:Resources.FixedTableIndentationRadioContent}"
+                             HorizontalAlignment="Left" Margin="0,0,0,7"
+                             IsChecked="{Binding TableFixedIndentation}"/>
+                    <RadioButton x:Name="tableRelativeIndentationRadio"
+                                 Content="{x:Static properties:Resources.RelativeTableIndentationRadioContent}"
+                             HorizontalAlignment="Left" Margin="0,0,0,0"
+                             IsChecked="{Binding TableRelativeIndentation}"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </DockPanel>
+</UserControl>

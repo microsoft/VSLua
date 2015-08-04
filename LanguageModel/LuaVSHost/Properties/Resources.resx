@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddNewLinesToMultilineTableConstructorsCheckBoxContent" xml:space="preserve">
+    <value>Add new lines to multiline table constructors</value>
+  </data>
+  <data name="FixedFunctionIndentationRadioContent" xml:space="preserve">
+    <value>Fixed</value>
+  </data>
+  <data name="FixedTableIndentationRadioContent" xml:space="preserve">
+    <value>Fixed</value>
+  </data>
   <data name="FormatOnBlockCheckboxContent" xml:space="preserve">
     <value>Format on block</value>
   </data>
@@ -135,7 +144,67 @@
   <data name="FormatOnPasteCheckboxToolTip" xml:space="preserve">
     <value>Formatting is applied on pasted text automattically.</value>
   </data>
+  <data name="FunctionIndentationGroupBoxHeader" xml:space="preserve">
+    <value>Functions</value>
+  </data>
   <data name="GeneralGroupBoxHeader" xml:space="preserve">
     <value>General</value>
+  </data>
+  <data name="NewLinesGroupBoxHeader" xml:space="preserve">
+    <value>New Lines</value>
+  </data>
+  <data name="RelativeFunctionIndentationRadioContent" xml:space="preserve">
+    <value>Relative</value>
+  </data>
+  <data name="RelativeTableIndentationRadioContent" xml:space="preserve">
+    <value>Relative</value>
+  </data>
+  <data name="RemoveSpaceBetweenIndexLimitsCheckBoxContent" xml:space="preserve">
+    <value>Remove spaces between index limits in a for loop</value>
+  </data>
+  <data name="SpaceAfterCommasCheckBoxContent" xml:space="preserve">
+    <value>Insert spaces after commas</value>
+  </data>
+  <data name="SpaceBeforeAndAfterAssignmentOpsInFieldCheckBoxContent" xml:space="preserve">
+    <value>Insert a space before and after an assignment operator used for fields in table contructors</value>
+  </data>
+  <data name="SpaceBeforeAndAfterAssignmentOpsInForLoopCheckBoxContent" xml:space="preserve">
+    <value>Insert a space before and after an assignment operator used in for loop header</value>
+  </data>
+  <data name="SpaceBeforeAndAfterAssignmentOpsInStatementsCheckBoxContent" xml:space="preserve">
+    <value>Insert a space before and after an assignment operator used for statements</value>
+  </data>
+  <data name="SpaceBeforeAndAfterBinOpsCheckBoxContent" xml:space="preserve">
+    <value>Insert a space before and after binary operations</value>
+  </data>
+  <data name="SpaceBetweenFunctionAndOpenParenCheckBoxContent" xml:space="preserve">
+    <value>Insert a space between a function name/keyword and an open parenthesis.</value>
+  </data>
+  <data name="SpaceInsideOfCurlyBracesCheckBoxContent" xml:space="preserve">
+    <value>Insert spaces on inside of curly braces</value>
+  </data>
+  <data name="SpaceInsideOfParenthesisCheckBoxContent" xml:space="preserve">
+    <value>Insert spaces on the inside of parenthesis</value>
+  </data>
+  <data name="SpaceInsideOfSquareBracketsCheckBoxContent" xml:space="preserve">
+    <value>Insert spaces on inside of square brackets</value>
+  </data>
+  <data name="SpacingGroupBoxHeader" xml:space="preserve">
+    <value>Spacing</value>
+  </data>
+  <data name="TableIndentationGroupBoxHeader" xml:space="preserve">
+    <value>Tables</value>
+  </data>
+  <data name="WrappingGroupBoxHeader" xml:space="preserve">
+    <value>Wrapping</value>
+  </data>
+  <data name="WrapSingleLineForLoopsCheckBoxContent" xml:space="preserve">
+    <value>Wrap all single-line for loops</value>
+  </data>
+  <data name="WrapSingleLineFunctionsCheckBoxContent" xml:space="preserve">
+    <value>Wrap all single-line functions</value>
+  </data>
+  <data name="WrapSingleLineTableConstructorsCheckBoxContent" xml:space="preserve">
+    <value>Wrap all single-line table constructors</value>
   </data>
 </root>
