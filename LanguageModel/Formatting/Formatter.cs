@@ -10,6 +10,7 @@ namespace LanguageService.Formatting
 {
     public static class Formatter
     {
+        // Temporary stream creator for testing
         public static Stream GenerateStreamFromString(string s)
         {
             MemoryStream stream = new MemoryStream();
@@ -22,7 +23,6 @@ namespace LanguageService.Formatting
 
         public static List<TextEditInfo> Format(string span)
         {
-
             RuleMap ruleMap = Rules.GetRuleMap();
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
@@ -38,16 +38,13 @@ namespace LanguageService.Formatting
 
                 if (rule != null)
                 {
-                    /* test */
                     foreach (TextEditInfo textEdit in rule.Apply(formattingContext))
                     {
                         textEdits.Add(textEdit);
                     }
                 }
             }
-
             Indenter.GetIndentations(parsedTokens, textEdits);
-
             return textEdits;
         }
     }

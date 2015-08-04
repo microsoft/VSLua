@@ -19,19 +19,24 @@ namespace LanguageService.Formatting
                 if (lastNewline != null)
                 {
                     string indentationString =
-                        Indenter.GetIndentationFromBlockLevel(parsedToken.BlockLevel, null);
+                        Indenter.GetIndentationStringFromBlockLevel(parsedToken.BlockLevel, null);
 
                     edits.Add(new TextEditInfo(lastNewline[0], lastNewline[1], indentationString));
                 }
             }
         }
 
-        private static string GetIndentationFromBlockLevel(int blockLevel, SyntaxNode syntaxNode)
+        private static string GetIndentationStringFromBlockLevel(int blockLevel, SyntaxNode syntaxNode)
         {
-            return Indenter.MakeIndentation(blockLevel * 4); // TODO: hardcoded for now
+            // Here I would put the calculation for the indentation string parts
+            // how many tabs, spaces that I need. I would also check the options for
+            // how tabs are setup.
+            return Indenter.MakeIndentation(blockLevel * 4);
         }
 
-        // TODO: Make it actually do something, pretty hardcoded.
+
+        // This is for the actual construction of the indentation, the actual string.
+        // For now the parameter just takes how many spaces are needed.
         private static string MakeIndentation(int spaces)
         {
             string indentation = "";
@@ -45,25 +50,19 @@ namespace LanguageService.Formatting
         private static int[] GetSpacePositionAndLengthAfterLastNewline(ParsedToken parsedToken)
         {
             int length = 0;
-            int realStart = parsedToken.Token.FullStart;
-
             int start = parsedToken.Token.FullStart;
+
+            int currentStart = parsedToken.Token.FullStart;
             bool foundNewline = false;
 
             var leadingTrivia = parsedToken.Token.LeadingTrivia;
 
             for (int i = 0; i < leadingTrivia.Count; ++i)
             {
-                
-                if (parsedToken.Token.FullStart == 0)
-                {
-                    //TODO: Make this indentation work on first line
-                }
-
                 if (leadingTrivia[i].Type == Trivia.TriviaType.Newline)
                 {
-                    realStart = start + leadingTrivia[i].Text.Length;
                     foundNewline = true;
+                    start = currentStart + leadingTrivia[i].Text.Length;
                     length = 0;
                     if (i + 1 < leadingTrivia.Count &&
                         leadingTrivia[i + 1].Type == Trivia.TriviaType.Whitespace)
@@ -72,12 +71,12 @@ namespace LanguageService.Formatting
                     }
                 }
 
-                start += leadingTrivia[i].Text.Length;
+                currentStart += leadingTrivia[i].Text.Length;
             }
 
             if (foundNewline)
             {
-                return new int[2] { realStart, length };
+                return new int[2] { start, length };
             }
             return null;
         }
