@@ -647,10 +647,11 @@ namespace LanguageService
         {
             var node = BracketField.CreateBuilder();
             node.Kind = SyntaxKind.BracketField;
-            node.StartPosition = currentToken.Start;
+            node.StartPosition = Peek().Start;
             node.OpenBracket = GetExpectedToken(SyntaxKind.OpenBracket);
             node.IdentifierExp = ParseExpression().ToBuilder();
             node.CloseBracket = GetExpectedToken(SyntaxKind.CloseBracket);
+            node.AssignmentOperator = GetExpectedToken(SyntaxKind.AssignmentOperator);
             node.AssignedExp = ParseExpression().ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -1035,6 +1036,7 @@ namespace LanguageService
                             return false;
                     }
                 case ParsingContext.ExpList:
+                case ParsingContext.FieldList:
                     switch (tokenType)
                     {
                         case SyntaxKind.NilKeyValue:
@@ -1070,15 +1072,15 @@ namespace LanguageService
                     {
                         return false;
                     }
-                case ParsingContext.FieldList:
-                    if (tokenType == SyntaxKind.Identifier || tokenType == SyntaxKind.OpenBracket)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                //case ParsingContext.FieldList:
+                //if (tokenType == SyntaxKind.Identifier || tokenType == SyntaxKind.OpenBracket)
+                //{
+                //    return true;
+                //}
+                //else
+                //{
+                //    return false;
+                //}
                 default:
                     throw new InvalidOperationException();
             }
