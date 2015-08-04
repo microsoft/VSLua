@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.LanguageServices.Lua.Formatting;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
-    internal interface IServiceCore
+    internal interface ISingletons
     {
         GlobalEditorOptions GlobalEditorOptions { get; }
         IVsEditorAdaptersFactoryService EditorAdaptersFactory { get; }

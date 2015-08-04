@@ -77,10 +77,10 @@
     <Compile Include="Shared\ConnectionPointCookie.cs" />
     <Compile Include="Shared\Constants.cs" />
     <Compile Include="Shared\ContentTypes.cs" />
-    <Compile Include="Shared\ServiceCore.cs" />
+    <Compile Include="Shared\Singletons.cs" />
     <Compile Include="Shared\GlobalEditorOptions.cs" />
     <Compile Include="Shared\Guids.cs" />
-    <Compile Include="Shared\IServiceCore.cs" />
+    <Compile Include="Shared\ISingletons.cs" />
     <Compile Include="Shared\SourceTextCache.cs" />
     <Compile Include="Shared\EditorUtilities.cs" />
   </ItemGroup>

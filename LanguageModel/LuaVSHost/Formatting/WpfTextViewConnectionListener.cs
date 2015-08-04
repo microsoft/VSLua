@@ -15,7 +15,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
     class WpfTextViewConnectionListener : IWpfTextViewConnectionListener
     {
         [Import]
-        private IServiceCore core;
+        private ISingletons core;
 
         public void SubjectBuffersConnected(IWpfTextView textView, ConnectionReason reason, Collection<ITextBuffer> subjectBuffers)
         {
