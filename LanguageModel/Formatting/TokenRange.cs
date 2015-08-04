@@ -17,32 +17,31 @@ namespace LanguageService.Formatting
                 Enum.GetValues(typeof(TokenType)),
                 new TokenType[] { });
 
-        internal static readonly ImmutableArray<TokenType> BinaryOperators =
-            ImmutableArray.Create
-            (
-                TokenType.AndBinop,
-                TokenType.BitwiseAndOperator,
-                TokenType.BitwiseLeftOperator,
-                TokenType.BitwiseOrOperator,
-                TokenType.BitwiseRightOperator,
-                TokenType.EqualityOperator,
-                TokenType.ExponentOperator,
-                TokenType.FloorDivideOperator,
-                TokenType.DivideOperator,
-                TokenType.GreaterOrEqualOperator,
-                TokenType.GreaterThanOperator,
-                TokenType.LessOrEqualOperator,
-                TokenType.LessThanOperator,
-                TokenType.MinusOperator,
-                TokenType.ModulusOperator,
-                TokenType.MultiplyOperator,
-                TokenType.NotEqualsOperator,
-                TokenType.OrBinop,
-                TokenType.PlusOperator,
-                TokenType.StringConcatOperator,
-                TokenType.TildeUnOp,
-                TokenType.VarArgOperator
-            );
+        internal static readonly ImmutableArray<TokenType> BinaryOperators = ImmutableArray.Create
+        (
+            TokenType.AndBinop,
+            TokenType.BitwiseAndOperator,
+            TokenType.BitwiseLeftOperator,
+            TokenType.BitwiseOrOperator,
+            TokenType.BitwiseRightOperator,
+            TokenType.EqualityOperator,
+            TokenType.ExponentOperator,
+            TokenType.FloorDivideOperator,
+            TokenType.DivideOperator,
+            TokenType.GreaterOrEqualOperator,
+            TokenType.GreaterThanOperator,
+            TokenType.LessOrEqualOperator,
+            TokenType.LessThanOperator,
+            TokenType.MinusOperator,
+            TokenType.ModulusOperator,
+            TokenType.MultiplyOperator,
+            TokenType.NotEqualsOperator,
+            TokenType.OrBinop,
+            TokenType.PlusOperator,
+            TokenType.StringConcatOperator,
+            TokenType.TildeUnOp,
+            TokenType.VarArgOperator
+        );
 
         internal static readonly ImmutableArray<TokenType> Brackets = ImmutableArray.Create
         (

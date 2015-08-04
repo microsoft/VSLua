@@ -21,13 +21,7 @@ namespace Microsoft.VisualStudio.LuaLanguageService.Shared
         private SourceTextCache sourceTextCache;
         private LuaFeatureContainer featureContainer;
 
-        public GlobalEditorOptions GlobalEditorOptions
-        {
-            get
-            {
-                return this.globalEditorOptions;
-            }
-        }
+        public GlobalEditorOptions GlobalEditorOptions => this.globalEditorOptions;
 
         public IServiceProvider ServiceProvider
         {
