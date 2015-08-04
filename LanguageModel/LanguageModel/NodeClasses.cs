@@ -1012,7 +1012,14 @@ namespace LanguageService
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(seperator, element);
+                if (seperator != null)
+                {
+                    return ImmutableList.Create<SyntaxNodeOrToken>(seperator, element);
+                }
+                else
+                {
+                    return ImmutableList.Create<SyntaxNodeOrToken>(element);
+                }
             }
         }
 

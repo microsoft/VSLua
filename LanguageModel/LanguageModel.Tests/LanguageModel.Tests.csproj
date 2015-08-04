@@ -82,6 +82,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="TestGeneration\GeneratedTestFiles\Assignments_Generated.cs" />
+    <Compile Include="TestGeneration\GeneratedTestFiles\MultipleTypeAssignment_Generated.cs" />
     <Compile Include="TestGeneration\GeneratedTestFiles\SmallIf_Generated.cs" />
     <Compile Include="LexerTests.cs" />
     <Compile Include="ParserTests.cs" />
@@ -94,6 +95,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <None Include="App.config" />
+    <None Include="CorrectSampleLuaFiles\Assignments.lua" />
     <None Include="CorrectSampleLuaFiles\concat.lua" />
     <None Include="CorrectSampleLuaFiles\if.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

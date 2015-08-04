@@ -18,17 +18,29 @@ namespace LanguageService.Tests
         public void SmallIfGeneratedTest()
         {
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\smallif.lua");
-            var generator = new TestGenerator();
-            generator.GenerateTestForFile(@"CorrectSampleLuaFiles\smallif.lua","smallif.lua");
             new SmallIf_Generated().Test(new Tester(tree));
         }
 
         [Fact]
-        public void AutoGenerateTests()
+        public void AssignmentsGeneratedTest()
         {
-            var generator = new TestGenerator();
-            generator.GenerateTestsForAllFiles();
+            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\Assignments.lua");
+            new Assignments_Generated().Test(new Tester(tree));
         }
+
+        [Fact]
+        public void MultipleTypeAssignmentGeneratedTest()
+        {
+            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\MultipleTypeAssignment.lua");
+            new MultipleTypeAssignment_Generated().Test(new Tester(tree));
+        }
+
+        //[Fact]
+        //public void AutoGenerateTests()
+        //{
+        //    var generator = new TestGenerator();
+        //    generator.GenerateTestsForAllFiles();
+        //}
 
         [Fact]
         public void DebugTreeEnumeratorMethod()
