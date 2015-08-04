@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using IOleConnectionPoint = Microsoft.VisualStudio.OLE.Interop.IConnectionPoint;
 using IOleConnectionPointContainer = Microsoft.VisualStudio.OLE.Interop.IConnectionPointContainer;
 
+// Note: This class is coming in from the JavaScriptLanguageService source.
 namespace Microsoft.VisualStudio.LuaLanguageService.Shared
 {
 
