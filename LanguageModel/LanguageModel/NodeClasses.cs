@@ -502,18 +502,19 @@ namespace LanguageService
                 var children = new List<SyntaxNodeOrToken> { ifKeyword, exp, thenKeyword, ifBlock };
 
                 //TODO remove temporary code:
-                if(elseIfList == null)
-                {
-                    children.Add(Token.CreateMissingToken(ifBlock.StartPosition + ifBlock.Length));
-                } else
+                if (elseIfList != null)
                 {
                     foreach (var node in elseIfList)
                     {
                         children.Add(node);
                     }
                 }
-                
-                children.Add(elseBlock);
+
+                if (elseBlock != null)
+                {
+                    children.Add(elseBlock);
+                }
+
                 children.Add(endKeyword); //Why doesnt this do anything??!?!!
                 return children.ToImmutableList();
             }
@@ -1057,7 +1058,7 @@ namespace LanguageService
             get
             {
                 var children = ImmutableList.Create<SyntaxNodeOrToken>(namesList);
-                if(comma != null)
+                if (comma != null)
                 {
                     children.Add(comma);
                     children.Add(vararg);
@@ -1141,7 +1142,7 @@ namespace LanguageService
             get
             {
                 var children = ImmutableList.Create<SyntaxNodeOrToken>(name, funcNameList);
-                if(optionalColon!=null)
+                if (optionalColon != null)
                 {
                     children.Add(optionalColon);
                     children.Add(optionalName);
