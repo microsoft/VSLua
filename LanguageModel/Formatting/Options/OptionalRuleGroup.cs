@@ -20,6 +20,7 @@ namespace LanguageService.Formatting.Options
         SpaceBeforeAndAfterBinaryOperations,
         SpaceBeforeAndAfterAssignmentForField,
         SpaceBeforeAndAfterAssignmentForStatement,
-        FormattingInFor
+        SpaceBeforeAndAfterAssignmentInForLoopHeader,
+        NoSpaceBeforeAndAfterIndiciesInForLoopHeader
     }
 }

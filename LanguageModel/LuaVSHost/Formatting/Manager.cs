@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using LanguageService;
 using LanguageService.Formatting;
+using LanguageService.Formatting.Options;
 using LanguageService.Shared;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.OLE.Interop;
@@ -232,7 +233,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 
             SourceText sourceText = this.core.SourceTextCache.Get(this.textBuffer.CurrentSnapshot);
             Range range = new Range(span.Start.Position, span.End.Position);
-            List<TextEditInfo> edits = this.core.FeatureContainer.Formatter.Format(sourceText, range, null);
+
+            NewOptions newOptions = this.GetNewOptions(this.core.FormattingUserSettings);
+
+            List<TextEditInfo> edits = this.core.FeatureContainer.Formatter.Format(sourceText, range, newOptions);
 
             using (ITextEdit textEdit = this.textBuffer.CreateEdit())
             {
@@ -245,6 +249,101 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             }
 
             return true;
+        }
+
+        private NewOptions GetNewOptions(UserSettings settings)
+        {
+            if (!this.core.FormattingUserSettings.RulesChanged)
+            {
+                return null;
+            }
+
+            IndentStyleInfo indentStyleInfo = new IndentStyleInfo(
+                settings.FunctionRelativeIndentation != true ? IndentStyle.Fixed : IndentStyle.Relative,
+                settings.TableRelativeIndentation != true ? IndentStyle.Fixed : IndentStyle.Relative);
+
+            List<OptionalRuleGroup> disabledRuleGroups = this.GetDisabledRules(settings);
+
+            NewOptions newOptions = new NewOptions(disabledRuleGroups, settings.TabSize, indentStyleInfo);
+
+            return newOptions;
+        }
+
+        private List<OptionalRuleGroup> GetDisabledRules(UserSettings settings)
+        {
+            var disabledRules = new List<OptionalRuleGroup>();
+
+            if (settings.AddSpacesOnInsideOfCurlyBraces != true)
+            {
+                disabledRules.Add(OptionalRuleGroup.SpaceOnInsideOfCurlyBraces);
+            }
+
+            if (settings.AddSpacesOnInsideOfParenthesis != true)
+            {
+                disabledRules.Add(OptionalRuleGroup.SpaceOnInsideOfParenthesis);
+            }
+
+            if (settings.AddSpacesOnInsideOfSquareBrackets != true)
+            {
+                disabledRules.Add(OptionalRuleGroup.SpaceOnInsideOfSquareBrackets);
+            }
+
+            if (settings.SpaceBetweenFunctionAndParenthesis != true)
+            {
+                disabledRules.Add(OptionalRuleGroup.SpaceBeforeOpenParenthesis);
+            }
+
+            if (settings.SpaceAfterCommas != true)
+            {
+                disabledRules.Add(OptionalRuleGroup.SpaceAfterCommas);
+            }
+
+            if (settings.SpaceBeforeAndAfterAssignmentInStatement != true)
+            {
+                disabledRules.Add(OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForStatement);
+            }
+
+            if (settings.SpaceBeforeAndAfterAssignmentOperatorOnField != true)
+            {
+                disabledRules.Add(OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForField);
+            }
+
+            if (settings.ForLoopAssignmentSpacing != true)
+            {
+                disabledRules.Add(OptionalRuleGroup.SpaceBeforeAndAfterAssignmentInForLoopHeader);
+            }
+
+            if (settings.ForLoopIndexSpacing != true)
+            {
+                disabledRules.Add(OptionalRuleGroup.NoSpaceBeforeAndAfterIndiciesInForLoopHeader);
+            }
+
+            if (settings.AddNewLinesToMultilineTableConstructors != true)
+            {
+                disabledRules.Add(OptionalRuleGroup.WrappingMoreLinesForTableConstructors);
+            }
+
+            if (settings.WrapSingleLineForLoops != true)
+            {
+                disabledRules.Add(OptionalRuleGroup.WrappingOneLineForFors);
+            }
+
+            if (settings.WrapSingleLineFunctions != true)
+            {
+                disabledRules.Add(OptionalRuleGroup.WrappingOneLineForFunctions);
+            }
+
+            if (settings.WrapSingleLineTableConstructors != true)
+            {
+                disabledRules.Add(OptionalRuleGroup.WrappingOneLineForTableConstructors);
+            }
+
+            if (settings.SpaceBeforeAndAfterBinaryOperations != true)
+            {
+                disabledRules.Add(OptionalRuleGroup.SpaceBeforeAndAfterBinaryOperations);
+            }
+
+            return disabledRules;
         }
     }
 }

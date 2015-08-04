@@ -9,11 +9,6 @@ namespace LanguageService.Formatting.Options
     public enum IndentStyle
     {
         /// <summary>
-        /// None - No indent formatting is applied
-        /// </summary>
-        None,
-
-        /// <summary>
         /// Fixed - Indent is based soley on tab size given from the editor
         /// </summary>
         Fixed,
