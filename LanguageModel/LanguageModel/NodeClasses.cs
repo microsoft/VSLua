@@ -499,7 +499,7 @@ namespace LanguageService
         {
             get
             {
-                var children = ImmutableList.Create<SyntaxNodeOrToken>(ifKeyword, exp, thenKeyword, ifBlock);
+                var children = new List<SyntaxNodeOrToken> { ifKeyword, exp, thenKeyword, ifBlock };
 
                 //TODO remove temporary code:
                 if(elseIfList == null)
@@ -514,8 +514,8 @@ namespace LanguageService
                 }
                 
                 children.Add(elseBlock);
-                children.Add(endKeyword);
-                return children;
+                children.Add(endKeyword); //Why doesnt this do anything??!?!!
+                return children.ToImmutableList();
             }
         }
 

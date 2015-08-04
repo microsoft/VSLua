@@ -1,6 +1,7 @@
 ﻿using LanguageService;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,13 +18,23 @@ namespace LanguageModel.Tests
         public void GenerateTestsForAllFiles()
         {
             int fileNumber = 0;
-            //TODO avoid hardcoding
+            //TODO avoid hardcoding file path
             foreach (string file in Directory.EnumerateFiles(@"C:\\Users\\t-kevimi\\Documents\\Engineering\\Lua Files for Testing", "*.lua"))
             {
                 SyntaxTree tree = SyntaxTree.Create(file);
                 File.WriteAllText("C:\\Users\\t-kevimi\\Documents\\Engineering\\Generated Test Files\\" + fileNumber + "_Generated.cs", @"//" + file + "\n" + GenerateTest(tree));
+
+                foreach (var error in tree.ErrorList)
+                    Debug.WriteLine(error.Message);
+
                 fileNumber++;
             }
+        }
+
+        public void GenerateTestForFile(string filePath, string name)
+        {
+            SyntaxTree tree = SyntaxTree.Create(filePath);
+            File.WriteAllText("C:\\Users\\t-kevimi\\Documents\\Engineering\\Generated Test Files\\" + name + "_Generated.cs", GenerateTest(tree));
         }
 
         public string GenerateTest(SyntaxTree tree)

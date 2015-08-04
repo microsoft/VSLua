@@ -1,5 +1,4 @@
-﻿//C:\\Users\\t-kevimi\\Documents\\Engineering\\Lua Files for Testing\Assignments.lua
-using LanguageModel.Tests.TestGeneration;
+﻿using LanguageModel.Tests.TestGeneration;
 using LanguageService;
 using Xunit;
 
@@ -14,127 +13,43 @@ namespace LanguageModel.Tests.GeneratedTestFiles
             {
                 t.N(SyntaxKind.BlockNode);
                 {
-                    t.N(SyntaxKind.AssignmentStatementNode);
+                    t.N(SyntaxKind.IfStatementNode);
                     {
-                        t.N(SyntaxKind.DoKeyword);
+                        t.N(SyntaxKind.IfKeyword);
+                        t.N(SyntaxKind.BinaryOperatorExpression);
                         {
-                            t.N(SyntaxKind.SeparatedListElement);
+                            t.N(SyntaxKind.SimpleExpression);
+                            {
+                                t.N(SyntaxKind.TrueKeyValue);
+                            }
+                            t.N(SyntaxKind.EqualityOperator);
+                            t.N(SyntaxKind.SimpleExpression);
+                            {
+                                t.N(SyntaxKind.String);
+                            }
+                        }
+                        t.N(SyntaxKind.ThenKeyword);
+                        t.N(SyntaxKind.BlockNode);
+                        {
+                            t.N(SyntaxKind.FunctionCallStatementNode);
                             {
                                 t.N(SyntaxKind.NameVar);
                                 {
                                     t.N(SyntaxKind.Identifier);
                                 }
+                                t.N(SyntaxKind.ParenArg);
+                                {
+                                    t.N(SyntaxKind.OpenParen);
+                                    t.N(SyntaxKind.ExpList);
+                                    t.N(SyntaxKind.CloseParen);
+                                }
+                            }
+                            t.N(SyntaxKind.SemiColonStatementNode);
+                            {
+                                t.N(SyntaxKind.Semicolon);
                             }
                         }
-                        t.N(SyntaxKind.AssignmentOperator);
-                        t.N(SyntaxKind.ExpList);
-                        {
-                            t.N(SyntaxKind.SeparatedListElement);
-                            {
-                                t.N(SyntaxKind.BinaryOperatorExpression);
-                                {
-                                    t.N(SyntaxKind.SimpleExpression);
-                                    {
-                                        t.N(SyntaxKind.String);
-                                    }
-                                    t.N(SyntaxKind.StringConcatOperator);
-                                    t.N(SyntaxKind.SimpleExpression);
-                                    {
-                                        t.N(SyntaxKind.String);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    t.N(SyntaxKind.AssignmentStatementNode);
-                    {
-                        t.N(SyntaxKind.VarList);
-                        {
-                            t.N(SyntaxKind.SeparatedListElement);
-                            {
-                                t.N(SyntaxKind.DotVar);
-                                {
-                                    t.N(SyntaxKind.NameVar);
-                                    {
-                                        t.N(SyntaxKind.Identifier);
-                                    }
-                                    t.N(SyntaxKind.Dot);
-                                    t.N(SyntaxKind.Identifier);
-                                }
-                            }
-                        }
-                        t.N(SyntaxKind.AssignmentOperator);
-                        t.N(SyntaxKind.ExpList);
-                        {
-                            t.N(SyntaxKind.SeparatedListElement);
-                            {
-                                t.N(SyntaxKind.BinaryOperatorExpression);
-                                {
-                                    t.N(SyntaxKind.DotVar);
-                                    {
-                                        t.N(SyntaxKind.NameVar);
-                                        {
-                                            t.N(SyntaxKind.Identifier);
-                                        }
-                                        t.N(SyntaxKind.Dot);
-                                        t.N(SyntaxKind.Identifier);
-                                    }
-                                    t.N(SyntaxKind.PlusOperator);
-                                    t.N(SyntaxKind.SimpleExpression);
-                                    {
-                                        t.N(SyntaxKind.Number);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    t.N(SyntaxKind.AssignmentStatementNode);
-                    {
-                        t.N(SyntaxKind.VarList);
-                        {
-                            t.N(SyntaxKind.SeparatedListElement);
-                            {
-                                t.N(SyntaxKind.Comma);
-                                t.N(SyntaxKind.NameVar);
-                                {
-                                    t.N(SyntaxKind.Identifier);
-                                }
-                            }
-                            t.N(SyntaxKind.SeparatedListElement);
-                            {
-                                t.N(SyntaxKind.NameVar);
-                                {
-                                    t.N(SyntaxKind.Identifier);
-                                }
-                            }
-                        }
-                        t.N(SyntaxKind.AssignmentOperator);
-                        t.N(SyntaxKind.ExpList);
-                        {
-                            t.N(SyntaxKind.SeparatedListElement);
-                            {
-                                t.N(SyntaxKind.Comma);
-                                t.N(SyntaxKind.SimpleExpression);
-                                {
-                                    t.N(SyntaxKind.Number);
-                                }
-                            }
-                            t.N(SyntaxKind.SeparatedListElement);
-                            {
-                                t.N(SyntaxKind.BinaryOperatorExpression);
-                                {
-                                    t.N(SyntaxKind.SimpleExpression);
-                                    {
-                                        t.N(SyntaxKind.Number);
-                                    }
-                                    t.N(SyntaxKind.MultiplyOperator);
-                                    t.N(SyntaxKind.NameVar);
-                                    {
-                                        t.N(SyntaxKind.Identifier);
-                                    }
-                                }
-                            }
-                        }
+                        t.N(SyntaxKind.EndKeyword);
                     }
                 }
                 t.N(SyntaxKind.EndOfFile);
