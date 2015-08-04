@@ -528,7 +528,7 @@ namespace LanguageService
 
             if (Peek().Kind == SyntaxKind.OpenParen)
             {
-               node.PrefixExp = ParseParenPrefixExp().ToBuilder();
+                node.PrefixExp = ParseParenPrefixExp().ToBuilder();
             }
             else
             {
@@ -719,13 +719,10 @@ namespace LanguageService
 
         private Var ParseVar()
         {
-            PrefixExp returnObject;
-            int initialPosition = positionInTokenList; //Lookahead and then decide which type of var this is.
             switch (Peek().Kind)
             {
                 case SyntaxKind.OpenParen:
-                    returnObject = ParseParenPrefixExp();
-                    break;
+                    return ParsePotentialVarWithPrefixExp();
                 case SyntaxKind.Identifier:
                     switch (Peek(2).Kind)
                     {
@@ -737,28 +734,24 @@ namespace LanguageService
                         case SyntaxKind.OpenCurlyBrace:
                         case SyntaxKind.OpenParen:
                         case SyntaxKind.String:
-                            //Lookahead past functioncall
-                            NextToken();
-                            ParseExpected(SyntaxKind.Colon);
-                            ParseArgs();
-                            break;
+                            return ParsePotentialVarWithPrefixExp();
                         default:
                             return ParseNameVar();
                     }
-                    break;
                 default:
                     throw new InvalidOperationException();
             }
 
-            if(Peek().Kind == SyntaxKind.OpenBracket)
-            {
-                positionInTokenList = initialPosition;
-                return ParseSquareBracketVar();
-            } else
-            {
-                positionInTokenList = initialPosition;
-                return ParseDotVar();
-            }
+            //if (Peek().Kind == SyntaxKind.OpenBracket)
+            //{
+            //    positionInTokenList = initialPosition;
+            //    return ParseSquareBracketVar();
+            //}
+            //else
+            //{
+            //    positionInTokenList = initialPosition;
+            //    return ParseDotVar();
+            //}
         }
 
         private NameVar ParseNameVar()
@@ -1273,22 +1266,22 @@ namespace LanguageService
             }
         }
 
-        //private Var ParsePotentialVarWithPrefixExp()
-        //{
-        //    int tempPosition = positionInTokenList;
-        //    ParsePrefixExp(); //Skip to the end of the prefix exp before checking.
-        //    if (Peek().Kind == SyntaxKind.OpenBracket)
-        //    {
-        //        positionInTokenList = tempPosition; //Restore tokenList to beginning of node
-        //        return ParseSquareBracketVar();
-        //    }
-        //    else
-        //    {
-        //        //This case has arbitrarily chosen DotVar as the default for incomplete Vars starting with prefixexps
-        //        positionInTokenList = tempPosition; //Restore tokenList to beginning of node
-        //        return ParseDotVar();
-        //    }
-        //}
+        private Var ParsePotentialVarWithPrefixExp()
+        {
+            int tempPosition = positionInTokenList;
+            ParsePrefixExp(); //Skip to the end of the prefix exp before checking.
+            if (Peek().Kind == SyntaxKind.OpenBracket)
+            {
+                positionInTokenList = tempPosition; //Restore tokenList to beginning of node
+                return ParseSquareBracketVar();
+            }
+            else
+            {
+                //This case has arbitrarily chosen DotVar as the default for incomplete Vars starting with prefixexps
+                positionInTokenList = tempPosition; //Restore tokenList to beginning of node
+                return ParseDotVar();
+            }
+        }
 
         #endregion
     }
