@@ -1098,9 +1098,10 @@ namespace LanguageService
                 return true;
             }
 
+            //Append skipped token to leading trivia of next token
+            //TODO: test if this is correct
+            Peek().LeadingTrivia.Add(new Trivia(currentToken.Kind, currentToken.Text));
             NextToken();
-
-            //  new Trivia(Trivia.TriviaType.SkippedToken,currentToken.Text)
             ParseErrorAtCurrentToken(ErrorMessages.SkippedToken + '"' + currentToken.Text + '"');
             return false;
         }

@@ -64,7 +64,7 @@ namespace LanguageService.Formatting
                 yield break;
             }
 
-            if (parsedToken.Token.FullStart == 0 && leadingTrivia[0].Type == Trivia.TriviaType.Whitespace)
+            if (parsedToken.Token.FullStart == 0 && leadingTrivia[0].Type == SyntaxKind.Whitespace)
             {
                 yield return new IndentInfo(parsedToken.Token.FullStart, leadingTrivia[0].Text.Length);
             }
@@ -76,20 +76,20 @@ namespace LanguageService.Formatting
                 start += leadingTrivia[i].Text.Length;
 
                 Trivia currentTrivia = leadingTrivia[i];
-                if (currentTrivia.Type != Trivia.TriviaType.Newline)
+                if (currentTrivia.Type != SyntaxKind.Newline)
                 {
                     continue;
                 }
 
                 if (i + 1 >= leadingTrivia.Count ||
-                    leadingTrivia[i + 1].Type != Trivia.TriviaType.Whitespace)
+                    leadingTrivia[i + 1].Type != SyntaxKind.Whitespace)
                 {
                     yield return new IndentInfo(start, 0);
                 }
                 else
                 {
                     Trivia nextTrivia = leadingTrivia[i + 1];
-                    if (nextTrivia.Type == Trivia.TriviaType.Whitespace)
+                    if (nextTrivia.Type == SyntaxKind.Whitespace)
                     {
                         yield return new IndentInfo(start, nextTrivia.Text.Length);
                     }

@@ -53,8 +53,8 @@ namespace LanguageService.Formatting.Ruling
                 return false;
             }
 
-            return triviaList[index].Type == Trivia.TriviaType.Whitespace
-                && triviaList[index + 1].Type == Trivia.TriviaType.Newline;
+            return triviaList[index].Type == SyntaxKind.Whitespace
+                && triviaList[index + 1].Type == SyntaxKind.Newline;
         }
 
         private bool IsSpaceBeforeEndOfFile(int index, List<Trivia> triviaList)
@@ -64,7 +64,7 @@ namespace LanguageService.Formatting.Ruling
                 return false;
             }
 
-            return triviaList[index].Type == Trivia.TriviaType.Whitespace;
+            return triviaList[index].Type == SyntaxKind.Whitespace;
         }
     }
 }

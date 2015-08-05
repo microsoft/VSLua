@@ -211,7 +211,7 @@ namespace LanguageService.Tests
             TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\trivia1.lua");
             List<Token> tokenList = Lexer.Tokenize(testProgramStream);
 
-            List<Trivia.TriviaType> allTrivia = new List<Trivia.TriviaType>();
+            List<SyntaxKind> allTrivia = new List<SyntaxKind>();
 
             foreach (Token token in tokenList)
             {
@@ -221,14 +221,14 @@ namespace LanguageService.Tests
                 }
             }
 
-            List<Trivia.TriviaType> compareTrivia = new List<Trivia.TriviaType>
+            List<SyntaxKind> compareTrivia = new List<SyntaxKind>
             {
-                Trivia.TriviaType.Whitespace,
-                Trivia.TriviaType.Newline,
-                Trivia.TriviaType.Newline,
-                Trivia.TriviaType.Whitespace,
-                Trivia.TriviaType.Newline,
-                Trivia.TriviaType.Whitespace,
+                SyntaxKind.Whitespace,
+                SyntaxKind.Newline,
+                SyntaxKind.Newline,
+                SyntaxKind.Whitespace,
+                SyntaxKind.Newline,
+                SyntaxKind.Whitespace,
             };
 
             Assert.Equal(compareTrivia, allTrivia);
@@ -296,7 +296,7 @@ namespace LanguageService.Tests
                 List<Token> tokenList = Lexer.Tokenize(testProgramStream);
                 for (int triviaIndex = 0; triviaIndex < 8; triviaIndex++)
                 {
-                    Assert.Equal(Trivia.TriviaType.Newline, tokenList[0].LeadingTrivia[triviaIndex].Type);
+                    Assert.Equal(SyntaxKind.Newline, tokenList[0].LeadingTrivia[triviaIndex].Type);
                 }
                 Assert.Equal(SyntaxKind.EndOfFile, tokenList[0].Kind);
             }
@@ -309,9 +309,9 @@ namespace LanguageService.Tests
             int tokenIndex = 0;
             Assert.Equal(SyntaxKind.EndKeyword, tokenList[tokenIndex++].Kind);
             int triviaIndex = 0;
-            Assert.Equal(Trivia.TriviaType.Newline, tokenList[tokenIndex].LeadingTrivia[triviaIndex++].Type);
-            Assert.Equal(Trivia.TriviaType.Newline, tokenList[tokenIndex].LeadingTrivia[triviaIndex++].Type);
-            Assert.Equal(Trivia.TriviaType.Comment, tokenList[tokenIndex].LeadingTrivia[triviaIndex++].Type);
+            Assert.Equal(SyntaxKind.Newline, tokenList[tokenIndex].LeadingTrivia[triviaIndex++].Type);
+            Assert.Equal(SyntaxKind.Newline, tokenList[tokenIndex].LeadingTrivia[triviaIndex++].Type);
+            Assert.Equal(SyntaxKind.Comment, tokenList[tokenIndex].LeadingTrivia[triviaIndex++].Type);
             Assert.Equal(SyntaxKind.Identifier, tokenList[tokenIndex++].Kind);
             Assert.Equal(SyntaxKind.AssignmentOperator, tokenList[tokenIndex++].Kind);
         }

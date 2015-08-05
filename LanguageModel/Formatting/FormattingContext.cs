@@ -16,7 +16,7 @@ namespace LanguageService.Formatting
         internal ParsedToken CurrentToken { get; }
         internal ParsedToken NextToken { get; }
 
-        internal bool TriviaBetweenTokensContains(Trivia.TriviaType triviaType)
+        internal bool TriviaBetweenTokensContains(SyntaxKind triviaType)
         {
             foreach (Trivia trivia in NextToken.Token.LeadingTrivia)
             {
@@ -31,12 +31,12 @@ namespace LanguageService.Formatting
 
         internal bool ContainsCommentsBetweenTokens()
         {
-            return this.TriviaBetweenTokensContains(Trivia.TriviaType.Comment);
+            return this.TriviaBetweenTokensContains(SyntaxKind.Comment);
         }
 
         internal bool TokensOnSameLine()
         {
-            return !this.TriviaBetweenTokensContains(Trivia.TriviaType.Newline);
+            return !this.TriviaBetweenTokensContains(SyntaxKind.Newline);
         }
     }
 }

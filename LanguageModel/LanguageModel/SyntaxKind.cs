@@ -123,6 +123,11 @@ namespace LanguageService
         FuncBodyNode,
         FuncNameNode,
         DotSeparatedNameList,
-        SeparatedListElement
+        SeparatedListElement,
+
+        //Trivia type
+        Whitespace,
+        Comment,
+        Newline
     }
 }

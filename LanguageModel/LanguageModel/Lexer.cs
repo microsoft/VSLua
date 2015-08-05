@@ -125,7 +125,7 @@ namespace LanguageService
                         break;
                     case '\n':
                         isTrivia = true;
-                        Trivia newLineTrivia = new Trivia(Trivia.TriviaType.Newline, stream.ReadChar().ToString());
+                        Trivia newLineTrivia = new Trivia(SyntaxKind.Newline, stream.ReadChar().ToString());
                         triviaList.Add(newLineTrivia);
                         break;
 
@@ -139,11 +139,11 @@ namespace LanguageService
                         if (next == '\n')
                         {
                             stream.ReadChar();
-                            returnTrivia = new Trivia(Trivia.TriviaType.Newline, "\r\n");
+                            returnTrivia = new Trivia(SyntaxKind.Newline, "\r\n");
                         }
                         else
                         {
-                            returnTrivia = new Trivia(Trivia.TriviaType.Newline, "\r");
+                            returnTrivia = new Trivia(SyntaxKind.Newline, "\r");
                         }
 
                         triviaList.Add(returnTrivia);
@@ -199,7 +199,7 @@ namespace LanguageService
                 commentSoFar += stream.ReadChar();
             }
 
-            return new Trivia(Trivia.TriviaType.Comment, commentSoFar);
+            return new Trivia(SyntaxKind.Comment, commentSoFar);
         }
 
         private static int? GetLongCommentOpenBracket(TrackableTextReader stream, ref string commentSoFar)
@@ -518,7 +518,7 @@ namespace LanguageService
                 whitespace.Append(stream.ReadChar());
             }
 
-            return new Trivia(Trivia.TriviaType.Whitespace, whitespace.ToString());
+            return new Trivia(SyntaxKind.Whitespace, whitespace.ToString());
         }
 
         private static bool IsValidTerminator(char next)
@@ -540,7 +540,7 @@ namespace LanguageService
                 comment += stream.ReadChar();
             }
 
-            return new Trivia(Trivia.TriviaType.Comment, comment);
+            return new Trivia(SyntaxKind.Comment, comment);
         }
 
         private static bool IsValidNumber(char character)

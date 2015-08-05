@@ -40,7 +40,7 @@ namespace LanguageService.Formatting.Ruling
 
             TextEditInfo edit = null;
 
-            if (lastTrivia.Type == Trivia.TriviaType.Whitespace)
+            if (lastTrivia.Type == SyntaxKind.Whitespace)
             {
                 int length = lastTrivia.Text.Length;
                 int start = token.Start - length;

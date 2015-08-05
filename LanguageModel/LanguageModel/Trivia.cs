@@ -4,12 +4,12 @@ namespace LanguageService
 {
     public class Trivia
     {
-        public enum TriviaType { Whitespace, Comment, Newline, SkippedToken} // TODO: skippedtoken
+        //public enum SyntaxKind { Whitespace, Comment, Newline, SkippedToken} // TODO: skippedtoken
 
-        public TriviaType Type { get; private set; }
+        public SyntaxKind Type { get; private set; }
         public string Text { get; private set; }
 
-        public Trivia(TriviaType type, string trivia)
+        public Trivia(SyntaxKind type, string trivia)
         {
             this.Type = type;
             this.Text = trivia;
@@ -17,7 +17,7 @@ namespace LanguageService
 
         public string ToString()
         {
-            return string.Format("{0},\t{1}", Enum.GetName(typeof(TriviaType), Type), ConvertStringToSymbols(Text));
+            return string.Format("{0},\t{1}", Enum.GetName(typeof(SyntaxKind), Type), ConvertStringToSymbols(Text));
         }
 
         private string ConvertStringToSymbols(string s) //TODO: temp, just for testing
