@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 
 namespace LanguageService
 {
@@ -22,6 +23,14 @@ namespace LanguageService
         public static SyntaxTree Create(string filename)
         {
             Stream luaStream = File.OpenRead(filename);
+            return new Parser().CreateSyntaxTree(luaStream);
+        }
+
+        public static SyntaxTree CreateFromString(string program)
+        {
+            // convert string to stream
+            byte[] byteArray = Encoding.UTF8.GetBytes(program);
+            MemoryStream luaStream = new MemoryStream(byteArray);
             return new Parser().CreateSyntaxTree(luaStream);
         }
 

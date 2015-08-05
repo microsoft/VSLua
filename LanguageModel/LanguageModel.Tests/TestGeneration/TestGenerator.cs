@@ -13,16 +13,28 @@ namespace LanguageModel.Tests
     class TestGenerator
     {
         public IndentingTextWriter IndentingWriter { get; private set; }
-        public StringBuilder SB { get; private set; }
+        public StringBuilder sb { get; private set; }
+
+        private static readonly string BasePath = Environment.ExpandEnvironmentVariables(@"%UserProfile%\\Documents\\LuaTests");
+        private static readonly string GenPath = Path.Combine(BasePath, "Generated Test Files");
+        private static readonly string GenFileFormat = "{0}_Generated.cs";
+
+        private string GetGenFilePath(string fileName)
+        {
+            return Path.Combine(GenPath, string.Format(GenFileFormat, fileName));
+        }
 
         public void GenerateTestsForAllFiles()
         {
+            if (!Directory.Exists(GenPath))
+                Directory.CreateDirectory(GenPath);
+
             int fileNumber = 0;
-            //TODO avoid hardcoding file path
-            foreach (string file in Directory.EnumerateFiles(@"C:\\Users\\t-kevimi\\Documents\\Engineering\\Lua Files for Testing", "*.lua"))
+
+            foreach (string file in Directory.EnumerateFiles(Path.Combine(BasePath, "Lua Files for Testing"), "*.lua"))
             {
                 SyntaxTree tree = SyntaxTree.Create(file);
-                File.WriteAllText("C:\\Users\\t-kevimi\\Documents\\Engineering\\Generated Test Files\\" + fileNumber + "_Generated.cs", @"//" + file + "\n" + GenerateTest(tree, fileNumber.ToString()));
+                File.WriteAllText(GetGenFilePath(fileNumber.ToString()), string.Format(@"//{0}\r\n{1}", file, GenerateTest(tree, fileNumber.ToString())));
 
                 foreach (var error in tree.ErrorList)
                     Debug.WriteLine(error.Message);
@@ -34,29 +46,30 @@ namespace LanguageModel.Tests
         public void GenerateTestForFile(string filePath, string name)
         {
             SyntaxTree tree = SyntaxTree.Create(filePath);
-            File.WriteAllText("C:\\Users\\t-kevimi\\Documents\\Engineering\\Generated Test Files\\" + name + "_Generated.cs", GenerateTest(tree, name + "_Generated"));
+            File.WriteAllText(GetGenFilePath(name), GenerateTest(tree, name + "_Generated"));
+        }
+
+        public void GenerateTestForString(string program, string name)
+        {
+            SyntaxTree tree = SyntaxTree.CreateFromString(program);
+            File.WriteAllText(GetGenFilePath(name), GenerateTest(tree, name + "_Generated"));
         }
 
         public string GenerateTest(SyntaxTree tree, string name)
         {
-            //ISSUE: bad practice?
             IndentingWriter = IndentingTextWriter.Get(new StringWriter());
-            SB = new StringBuilder();
+            sb = new StringBuilder();
 
-            SB.Append(@"using LanguageModel.Tests.TestGeneration;
-using LanguageService;
-using Xunit;
-
-namespace LanguageModel.Tests.GeneratedTestFiles
-{
-    class ");
-            SB.Append(name);
-            SB.Append(@"
-    {
-        [Fact]
-        public void Test(Tester t)
-        {
-");
+            sb.AppendLine("using LanguageModel.Tests.TestGeneration;");
+            sb.AppendLine("using LanguageService;");
+            sb.AppendLine("using Xunit;");
+            sb.AppendLine("namespace LanguageModel.Tests.GeneratedTestFiles");
+            sb.AppendLine("{");
+            sb.AppendLine(string.Format("    class {0}", name));
+            sb.AppendLine("    {");
+            sb.AppendLine("        [Fact]");
+            sb.AppendLine("        public void Test(Tester t)");
+            sb.AppendLine("        {\r\n");
 
             using (IndentingWriter.Indent())
             {
@@ -69,17 +82,15 @@ namespace LanguageModel.Tests.GeneratedTestFiles
                 };
             };
 
-            SB.Append(IndentingWriter.ToString());
-            SB.Append(@"
-        }
-    }
-}");
-            return SB.ToString();
+            sb.Append(IndentingWriter.ToString());
+            sb.AppendLine("        }");
+            sb.AppendLine("    }");
+            sb.AppendLine("}");
+            return sb.ToString();
         }
 
         private void GenerateTestStructure(SyntaxNodeOrToken syntaxNodeOrToken)
         {
-
             if (syntaxNodeOrToken == null)
             {
                 return;

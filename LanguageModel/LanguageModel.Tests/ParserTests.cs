@@ -59,9 +59,7 @@ namespace LanguageService.Tests
         [Fact]
         public void TripleNestedFunctionCallGeneratedTest()
         {
-            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\TripleNestedFunctionCall.lua");
-            var generator = new TestGenerator();
-            generator.GenerateTestForFile(@"CorrectSampleLuaFiles\TripleNestedFunctionCall.lua", "TripleNestedFunctionCall");
+            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\TripleNestedFunctionCall.lua");;
             new TripleNestedFunctionCall_Generated().Test(new Tester(tree));
         }
 
@@ -74,14 +72,14 @@ namespace LanguageService.Tests
             new FunctionDefError_Generated().Test(new Tester(tree));
         }
 
-        [Fact]
-        public void FunctionDefErrorGeneratedTest()
-        {
-            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\FunctionDefError.lua");
-            var generator = new TestGenerator();
-            generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
-            new FunctionDefError_Generated().Test(new Tester(tree));
-        }
+        //[Fact]
+        //public void FunctionDefErrorGeneratedTest()
+        //{
+        //    SyntaxTree tree = SyntaxTree.CreateFromString(@"CorrectSampleLuaFiles\FunctionDefError.lua");
+        //    var generator = new TestGenerator();
+        //    generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
+        //    new FunctionDefError_Generated().Test(new Tester(tree));
+        //}
 
 
         //[Fact]
