@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Internal.VisualStudio.Shell;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -83,7 +84,6 @@ namespace LanguageService
             Requires.NotNull(textReader, nameof(textReader));
 
             TrackableTextReader trackableTextReader = new TrackableTextReader(textReader);
-
             Token nextToken;
             List<Trivia> trivia;
 
@@ -189,11 +189,7 @@ namespace LanguageService
 
         private static Trivia ReadLongComment(TrackableTextReader stream, string commentSoFar, int? level)
         {
-            // TODO: temp
-            if (level == null)
-            {
-                throw new ArgumentNullException(nameof(level));
-            }
+            Validate.IsNotNull(level, nameof(level));
 
             //TODO: re-write without regex
             Regex closeBracketPattern = new Regex(@"\]={" + level.ToString() + @"}\]");
@@ -232,7 +228,7 @@ namespace LanguageService
                     else
                     {
                         return null;
-                    }
+                }
                 }
                 return null;
             }
@@ -338,15 +334,15 @@ namespace LanguageService
                         nextChar = stream.Peek();
 
                         if (nextChar == '\r' || nextChar == '\n')
-                    {
+                        {
                             type = SyntaxKind.UnterminatedString;
                             terminateString = true;
-                    }
                         }
+                    }
 
                     if (nextChar == stringDelimiter || terminateString)
-                            {
-                                    fullString.Append(stream.ReadChar());
+                                    {
+                                        fullString.Append(stream.ReadChar());
                         return new Token(type, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                                     }
                                     else
@@ -408,13 +404,13 @@ namespace LanguageService
                         if (bracketLevel == 0)
                         {
                             return new Token(SyntaxKind.OpenBracket, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
-                        }
-                        else
-                        {
+                            }
+                            else
+                            {
                                 // Error, not valid syntax
                             return new Token(SyntaxKind.Unknown, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                             }
-                    }
+                            }
                         default:
                     throw new ArgumentOutOfRangeException(nameof(stringDelimiter), "Unrecognized String delimiter");
             }

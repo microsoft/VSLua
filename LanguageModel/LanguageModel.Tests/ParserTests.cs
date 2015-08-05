@@ -39,8 +39,6 @@ namespace LanguageService.Tests
         public void WhileStatementGeneratedTest()
         {
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\WhileStatement.lua");
-            var generator = new TestGenerator();
-            generator.GenerateTestForFile(@"CorrectSampleLuaFiles\WhileStatement.lua", "WhileStatement");
             new WhileStatement_Generated().Test(new Tester(tree));
         }
 
@@ -48,10 +46,50 @@ namespace LanguageService.Tests
         public void ComplexTableConstructorGeneratedTest()
         {
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\ComplexTableConstructor.lua");
-            var generator = new TestGenerator();
-            generator.GenerateTestForFile(@"CorrectSampleLuaFiles\ComplexTableConstructor.lua", "ComplexTableConstructor");
-            //new ComplexTableConstructor_Generated().Test(new Tester(tree));
+            new ComplexTableConstructor_Generated().Test(new Tester(tree));
         }
+
+        [Fact]
+        public void TableStatementsGeneratedTest()
+        {
+            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\TableStatements.lua");
+            new TableStatements_Generated().Test(new Tester(tree));
+        }
+
+        [Fact]
+        public void TripleNestedFunctionCallGeneratedTest()
+        {
+            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\TripleNestedFunctionCall.lua");;
+            new TripleNestedFunctionCall_Generated().Test(new Tester(tree));
+        }
+
+        [Fact]
+        public void FunctionDefErrorGeneratedTest()
+        {
+            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\FunctionDefError.lua");
+            var generator = new TestGenerator();
+            generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
+            new FunctionDefError_Generated().Test(new Tester(tree));
+        }
+
+        //[Fact]
+        //public void FunctionDefErrorGeneratedTest()
+        //{
+        //    SyntaxTree tree = SyntaxTree.CreateFromString(@"CorrectSampleLuaFiles\FunctionDefError.lua");
+        //    var generator = new TestGenerator();
+        //    generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
+        //    new FunctionDefError_Generated().Test(new Tester(tree));
+        //}
+
+
+        //[Fact]
+        //public void FunctionDefErrorGeneratedTest()
+        //{
+        //    SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\FunctionDefError.lua");
+        //    var generator = new TestGenerator();
+        //    generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
+        //    new FunctionDefError_Generated().Test(new Tester(tree));
+        //}
 
         //[Fact]
         //public void AutoGenerateTests()
