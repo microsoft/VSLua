@@ -123,7 +123,7 @@ namespace LanguageService
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class ReturnStatementNode : SyntaxNode
+    public partial class ReturnStatementNode : StatementNode
     {
         [Required]
         readonly Token returnKeyword;
@@ -135,10 +135,10 @@ namespace LanguageService
         {
             get
             {
-                var children = ImmutableList.Create<SyntaxNodeOrToken>(returnKeyword, expList);
+                var children = new List<SyntaxNodeOrToken> { returnKeyword, expList };
                 if (semiColon != null)
                     children.Add(semiColon);
-                return children;
+                return children.ToImmutableList();
             }
         }
 
@@ -377,7 +377,7 @@ namespace LanguageService
         {
             get
             {
-                var children = ImmutableList.Create<SyntaxNodeOrToken>(forKeyword, name, assignmentOperator, exp1, comma, exp2);
+                var children = new List<SyntaxNodeOrToken> { forKeyword, name, assignmentOperator, exp1, comma, exp2 };
                 if (optionalComma != null)
                 {
                     children.Add(optionalComma);
@@ -386,7 +386,7 @@ namespace LanguageService
                 children.Add(doKeyword);
                 children.Add(block);
                 children.Add(endKeyword);
-                return children;
+                return children.ToImmutableList();
             }
         }
 
@@ -660,8 +660,7 @@ namespace LanguageService
         {
             get
             {
-                var children = ImmutableList.Create<SyntaxNodeOrToken>(openCurly, fieldList, closeCurly);
-                return children;
+                return ImmutableList.Create<SyntaxNodeOrToken>(openCurly, fieldList, closeCurly);
             }
         }
 
@@ -861,14 +860,14 @@ namespace LanguageService
         {
             get
             {
-                var children = ImmutableList.Create<SyntaxNodeOrToken>(prefixExp);
+                var children = new List<SyntaxNodeOrToken> { prefixExp };
                 if (colon != null)
                 {
                     children.Add(colon);
                     children.Add(name);
                 }
                 children.Add(args);
-                return children;
+                return children.ToImmutableList();
             }
         }
 
@@ -1064,13 +1063,13 @@ namespace LanguageService
         {
             get
             {
-                var children = ImmutableList.Create<SyntaxNodeOrToken>(namesList);
+                var children = new List<SyntaxNodeOrToken>{ namesList};
                 if (comma != null)
                 {
                     children.Add(comma);
                     children.Add(vararg);
                 }
-                return children;
+                return children.ToImmutableList();
             }
         }
 
@@ -1148,13 +1147,13 @@ namespace LanguageService
         {
             get
             {
-                var children = ImmutableList.Create<SyntaxNodeOrToken>(name, funcNameList);
+                var children = new List<SyntaxNodeOrToken> { name, funcNameList };
                 if (optionalColon != null)
                 {
                     children.Add(optionalColon);
                     children.Add(optionalName);
                 }
-                return children;
+                return children.ToImmutableList();
             }
         }
 
