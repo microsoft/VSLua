@@ -153,6 +153,8 @@ namespace LanguageService
                     return ParseDoStatementNode();
                 case SyntaxKind.WhileKeyword:
                     return ParseWhileStatementNode();
+                case SyntaxKind.ReturnKeyword:
+                    return ParseRetStat();
                 case SyntaxKind.RepeatKeyword:
                     return ParseRepeatStatementNode();
                 case SyntaxKind.IfKeyword:
@@ -393,8 +395,8 @@ namespace LanguageService
         {
             var node = ReturnStatementNode.CreateBuilder();
             node.Kind = SyntaxKind.ReturnStatementNode;
-            node.StartPosition = currentToken.Start;
-            node.ReturnKeyword = currentToken;
+            node.StartPosition = Peek().Start;
+            node.ReturnKeyword = GetExpectedToken(SyntaxKind.ReturnKeyword);
             node.ExpList = ParseExpList().ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -776,17 +778,6 @@ namespace LanguageService
                 default:
                     throw new InvalidOperationException();
             }
-
-            //if (Peek().Kind == SyntaxKind.OpenBracket)
-            //{
-            //    positionInTokenList = initialPosition;
-            //    return ParseSquareBracketVar();
-            //}
-            //else
-            //{
-            //    positionInTokenList = initialPosition;
-            //    return ParseDotVar();
-            //}
         }
 
         private NameVar ParseNameVar()
@@ -913,7 +904,11 @@ namespace LanguageService
             listNode.SyntaxList = syntaxList.ToImmutableList();
 
             listNode.Length = currentToken.End - listNode.StartPosition;
-            contextStack.Pop();
+
+            if (contextStack.Count > 0 && contextStack.Peek() == context)
+            {
+                contextStack.Pop();
+            }
 
             return listNode.ToImmutable();
         }
@@ -963,6 +958,9 @@ namespace LanguageService
 
         private bool IsListTerminator(ParsingContext context, SyntaxKind tokenType)
         {
+            if (tokenType == SyntaxKind.EndOfFile || tokenType == SyntaxKind.EndKeyword)
+                return true;
+
             switch (context)
             {
                 case ParsingContext.IfBlock:
@@ -1028,6 +1026,7 @@ namespace LanguageService
                         case SyntaxKind.ForKeyword:
                         case SyntaxKind.FunctionKeyword:
                         case SyntaxKind.LocalKeyword:
+                        case SyntaxKind.ReturnKeyword:
                             return true;
                         default:
                             return false;
@@ -1086,15 +1085,6 @@ namespace LanguageService
                     {
                         return false;
                     }
-                //case ParsingContext.FieldList:
-                //if (tokenType == SyntaxKind.Identifier || tokenType == SyntaxKind.OpenBracket)
-                //{
-                //    return true;
-                //}
-                //else
-                //{
-                //    return false;
-                //}
                 default:
                     throw new InvalidOperationException();
             }
@@ -1119,9 +1109,13 @@ namespace LanguageService
 
             while (contextStack.Count > 0)
             {
-                if (IsListElementBeginner(contextStack.Pop(), Peek().Kind))
+                if (IsListElementBeginner(contextStack.Peek(), Peek().Kind))
                 {
                     return true;
+                }
+                else
+                {
+                    contextStack.Pop();
                 }
             }
 

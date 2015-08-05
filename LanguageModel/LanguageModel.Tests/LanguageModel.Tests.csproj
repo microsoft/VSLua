@@ -81,6 +81,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="TestGeneration\GeneratedTestFiles\FunctionDefError_Generated.cs" />
+    <Compile Include="TestGeneration\GeneratedTestFiles\TableStatements_Generated.cs" />
     <Compile Include="TestGeneration\GeneratedTestFiles\Assignments_Generated.cs" />
     <Compile Include="TestGeneration\GeneratedTestFiles\ComplexTableConstructor_Generated.cs" />
     <Compile Include="TestGeneration\GeneratedTestFiles\MultipleTypeAssignment_Generated.cs" />
@@ -91,6 +93,7 @@
     <Compile Include="TestGeneration\Tester.cs" />
     <Compile Include="TestGeneration\TestGenerator.cs" />
     <Compile Include="TestGeneration\GeneratedTestFiles\WhileStatement_Generated.cs" />
+    <Compile Include="TestGeneration\GeneratedTestFiles\TripleNestedFunctionCall_Generated.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CorrectSampleLuaFiles\assignment.lua">

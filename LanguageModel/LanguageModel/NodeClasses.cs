@@ -123,7 +123,7 @@ namespace LanguageService
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class ReturnStatementNode : SyntaxNode
+    public partial class ReturnStatementNode : StatementNode
     {
         [Required]
         readonly Token returnKeyword;
