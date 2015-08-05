@@ -59,7 +59,7 @@ namespace LanguageService.Tests
         [Fact]
         public void TripleNestedFunctionCallGeneratedTest()
         {
-            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\TripleNestedFunctionCall.lua");;
+            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\TripleNestedFunctionCall.lua"); ;
             new TripleNestedFunctionCall_Generated().Test(new Tester(tree));
         }
 
@@ -67,19 +67,186 @@ namespace LanguageService.Tests
         public void FunctionDefErrorGeneratedTest()
         {
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\FunctionDefError.lua");
-            var generator = new TestGenerator();
-            generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
             new FunctionDefError_Generated().Test(new Tester(tree));
         }
 
-        //[Fact]
-        //public void FunctionDefErrorGeneratedTest()
-        //{
-        //    SyntaxTree tree = SyntaxTree.CreateFromString(@"CorrectSampleLuaFiles\FunctionDefError.lua");
-        //    var generator = new TestGenerator();
-        //    generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
-        //    new FunctionDefError_Generated().Test(new Tester(tree));
+
+
+
+        [Fact]
+        public void SimpleTableGeneratedTest()
+        {
+            SyntaxTree tree = SyntaxTree.CreateFromString("{ x=1, y=2 }");
+            var generator = new TestGenerator();
+            generator.GenerateTestFromString("{ x=1, y=2 }", "SimpleTable");
+            new FunctionDefError_Generated().Test(new Tester(tree));
+        }
+
+
+        //"1+1"
+
+        //"-hello_world"
+
+        //"+-*/"
+
+        //"x ==--[[ comment ]]y"
+
+        //"x..y"
+
+        //"x +1 == 2   x= 3 /2+4"
+
+        //"
+        //x=
+        //1"
+
+        //"1     +       2        =       x"
+
+        //"
+        //1+1+
+        //1"
+
+        //"
+        //1+1+
+        //1"
+
+        //"1+"
+
+        //"t[1]"
+
+        //"}("
+
+        //")("
+
+        //"]("
+
+        //"t = [ 1--[[ comment ]]]"
+
+        //"foo = function (x, y, z, w) end"
+
+        //"t[\"this is a test that grabs this key in Lua\"]"
+
+        //"t = {1, 3, 4, 5, 6, 7,}"
+
+        //"
+        //t = {
+        //    1,
+        //    2,
+        //}"
+
+        //"
+        //foo = function(
+        //    a, b, c)"
+
+        //"
+        //t = [
+
+
+        //1
+
+
+        //]"
+
+        //"
+        //t :
+        //foo()
+        //t.
+        // bar ()"
+
+        //"
+        //foo = function()
+        //    return
+        //end"
+
+        //"
+        //foo = function()
+        //return
+        //end"
+
+        //"
+        //t1 = {
+        //1,
+        //}"
+
+        //"
+        //foo = function
+        //--[[comment]] return
+        //end"
+
+        //"
+        //foo = function
+        //bar = function
+        //end
+        //end"
+
+        //"
+        //t1 = {
+        //t2 = {
+        //x, y, z
+        //    }
+        //    t3 = {
+        //x
         //}
+        //}"
+
+        //"
+        //foo = function()
+        //return--comment
+        //    end"
+
+        //"     foo"
+
+        //"
+
+        //foo = function()
+        //                  return
+        //end"
+
+        //"{
+        //       x"
+
+        //",x"
+
+        //"x,= 1"
+
+        //"{ x,,y }"
+
+        //",--[[ comment ]]x"
+
+        //"{ x,y,z }"
+
+        //"{ x,y, ,,,, },y32,,,s2,"
+
+        //"x,             y"
+
+        //"
+        //x,
+        //y = 1,2"
+
+        //"x,y = 1,2"
+
+        //"function foo(x,y,z)"
+
+        //"{ x, y,}"
+
+        //"x,y"
+
+        //"
+        //x
+
+        //x       "
+
+        //"
+        //x = 10           
+        //-- comment here
+        //--[[block
+        //comment
+        //here]]
+        //x = x + 1            "
+
+        //"x   
+        //    "
+
+
 
 
         //[Fact]
@@ -108,16 +275,17 @@ namespace LanguageService.Tests
 
             Debug.WriteLine(visitor.SyntaxTreeAsString());
 
-            foreach(var node in tree.Next(tree.Root))
+            foreach (var node in tree.Next(tree.Root))
             {
-                if(node is Token)
+                if (node is Token)
                 {
                     Debug.WriteLine(((Token)node).Kind.ToString() + "\n");
-                } else
+                }
+                else
                 {
                     Debug.WriteLine(((SyntaxNode)node).Kind.ToString() + "\n");
                 }
-                
+
             }
 
             foreach (var error in tree.ErrorList)

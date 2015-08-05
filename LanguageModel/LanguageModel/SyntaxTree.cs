@@ -24,10 +24,16 @@ namespace LanguageService
             return new Parser().CreateSyntaxTree(luaStream);
         }
 
+        public static SyntaxTree CreateFromString(string program)
+        {
+            TextReader luaStream = new StringReader(program);
+            return new Parser().CreateSyntaxTree(luaStream);
+        }
+
         public IEnumerable<SyntaxNodeOrToken> Next(SyntaxNodeOrToken syntaxNodeOrToken)
         {
             //TODO remove is-check once Immutable graph object bug is fixed. 
-            if(syntaxNodeOrToken is SyntaxNode && ((SyntaxNode) syntaxNodeOrToken).Kind == SyntaxKind.ChunkNode)
+            if (syntaxNodeOrToken is SyntaxNode && ((SyntaxNode)syntaxNodeOrToken).Kind == SyntaxKind.ChunkNode)
             {
                 yield return syntaxNodeOrToken;
             }
@@ -43,11 +49,6 @@ namespace LanguageService
                         yield return nextNode;
                     }
                 }
-            }
-            else
-            {
-                //TODO: do nothing here?
-                //yield return syntaxNodeOrToken;
             }
         }
 

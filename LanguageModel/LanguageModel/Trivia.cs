@@ -4,7 +4,7 @@ namespace LanguageService
 {
     public class Trivia
     {
-        public enum TriviaType { Whitespace, Comment, Newline} // TODO: skippedtoken
+        public enum TriviaType { Whitespace, Comment, Newline, SkippedToken} // TODO: skippedtoken
 
         public TriviaType Type { get; private set; }
         public string Text { get; private set; }
