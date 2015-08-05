@@ -44,11 +44,6 @@ namespace LanguageService
                     }
                 }
             }
-            else
-            {
-                //TODO: do nothing here?
-                //yield return syntaxNodeOrToken;
-            }
         }
 
         public static bool IsLeafNode(SyntaxNodeOrToken node)

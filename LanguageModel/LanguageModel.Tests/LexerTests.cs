@@ -5,7 +5,6 @@ using System.IO;
 using Xunit;
 
 using Assert = Xunit.Assert;
-using System;
 
 namespace LanguageService.Tests
 {
@@ -291,15 +290,13 @@ namespace LanguageService.Tests
         [Fact]
         public void IdentifyNewLinesTokenTypes()
         {
-            using (TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\newlines.lua"))
+            TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\newlines.lua");
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
+            for (int triviaIndex = 0; triviaIndex < 8; triviaIndex++)
             {
-                List<Token> tokenList = Lexer.Tokenize(testProgramStream);
-                for (int triviaIndex = 0; triviaIndex < 8; triviaIndex++)
-                {
-                    Assert.Equal(Trivia.TriviaType.Newline, tokenList[0].LeadingTrivia[triviaIndex].Type);
-                }
-                Assert.Equal(SyntaxKind.EndOfFile, tokenList[0].Kind);
+                Assert.Equal(Trivia.TriviaType.Newline, tokenList[0].LeadingTrivia[triviaIndex].Type);
             }
+            Assert.Equal(SyntaxKind.EndOfFile, tokenList[0].Kind);
         }
 
         public void TestSampleProgram()
