@@ -21,6 +21,24 @@ namespace LanguageService.Formatting
         internal SyntaxNode Node { get; }
 
 
+        private static readonly ImmutableHashSet<SyntaxKind> StatKinds = ImmutableHashSet.Create(
+            SyntaxKind.Semicolon,
+            SyntaxKind.AssignmentStatementNode,
+            SyntaxKind.FunctionCallStatementNode,
+            SyntaxKind.LabelStatementNode,
+            SyntaxKind.BreakStatementNode,
+            SyntaxKind.GoToStatementNode,
+            SyntaxKind.DoStatementNode,
+            SyntaxKind.WhileStatementNode,
+            SyntaxKind.RepeatStatementNode,
+            SyntaxKind.IfStatementNode,
+            SyntaxKind.MultipleArgForStatementNode,
+            SyntaxKind.SimpleForStatementNode,
+            SyntaxKind.GlobalFunctionStatementNode,
+            SyntaxKind.LocalFunctionStatementNode,
+            SyntaxKind.LocalAssignmentStatementNode
+        );
+
         private static IEnumerable<ParsedToken> WalkTreeRangeKeepLevelAndParent(SyntaxNodeOrToken currentRoot, int blockLevel, SyntaxNode parent)
         {
             if (!SyntaxTree.IsLeafNode(currentRoot))
@@ -29,13 +47,19 @@ namespace LanguageService.Formatting
                 foreach (SyntaxNodeOrToken node in syntaxNode.Children)
                 {
                     SyntaxNode nextParent = syntaxNode;
-                    if (syntaxNode.Kind == SyntaxKind.BlockNode)
+                    bool increaseBlockLevel = false;
+
+                    if (!StatKinds.Contains(syntaxNode.Kind))
                     {
                         nextParent = parent;
-                        blockLevel++;
                     }
 
-                    foreach (ParsedToken parsedToken in WalkTreeRangeKeepLevelAndParent(node, blockLevel, nextParent))
+                    if ((syntaxNode.Kind == SyntaxKind.BlockNode && nextParent != null) || syntaxNode.Kind == SyntaxKind.FieldList)
+                    {
+                        increaseBlockLevel = true;
+                    }
+
+                    foreach (ParsedToken parsedToken in WalkTreeRangeKeepLevelAndParent(node, increaseBlockLevel ? blockLevel + 1 : blockLevel, nextParent))
                     {
                         yield return parsedToken;
                     }
