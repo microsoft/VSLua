@@ -62,7 +62,7 @@ namespace LanguageService.Formatting
                 }
             }
 
-            textEdits.AddRange(Indenter.GetIndentations(parsedTokens));
+            textEdits.AddRange(Indenter.GetIndentations(parsedTokens, globalOptions));
 
             return textEdits;
         }

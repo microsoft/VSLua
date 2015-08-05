@@ -40,7 +40,7 @@ t1 = {
             string expected2 = @"
 t1 = {
       1,
-}";
+     }";
             GeneralTest(original, expected1, expected2);
         }
 
