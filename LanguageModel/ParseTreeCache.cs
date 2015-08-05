@@ -7,23 +7,23 @@ namespace LanguageService
 {
     internal class ParseTreeCache
     {
-        private readonly ConditionalWeakTable<SourceText, List<Token>> sources = 
-            new ConditionalWeakTable<SourceText, List<Token>>();
+        private readonly ConditionalWeakTable<SourceText, SyntaxTree> sources = 
+            new ConditionalWeakTable<SourceText, SyntaxTree>();
 
-        internal List<Token> Get(SourceText sourceText)
+        internal SyntaxTree Get(SourceText sourceText)
         {
             Requires.NotNull(sourceText, nameof(sourceText));
 
-            List<Token> tokens;
-            if (sources.TryGetValue(sourceText, out tokens))
+            SyntaxTree syntaxTree;
+            if (sources.TryGetValue(sourceText, out syntaxTree))
             {
-                return tokens;
+                return syntaxTree;
             }
 
-            tokens = Lexer.Tokenize(sourceText.TextReader);
-            sources.Add(sourceText, tokens);
+            syntaxTree = new Parser().CreateSyntaxTree(sourceText.TextReader);
+            sources.Add(sourceText, syntaxTree);
 
-            return tokens;
+            return syntaxTree;
         }
     }
 }
