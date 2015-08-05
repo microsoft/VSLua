@@ -119,7 +119,6 @@ namespace LanguageService
         VarArgPar,
         NameListPar,
         VarList,
-        TableConstructorNode,
         FuncBodyNode,
         FuncNameNode,
         DotSeparatedNameList,

@@ -1098,10 +1098,11 @@ namespace LanguageService
                 return true;
             }
 
+            NextToken();
+
             //Append skipped token to leading trivia of next token
             //TODO: test if this is correct
             Peek().LeadingTrivia.Add(new Trivia(currentToken.Kind, currentToken.Text));
-            NextToken();
             ParseErrorAtCurrentToken(ErrorMessages.SkippedToken + '"' + currentToken.Text + '"');
             return false;
         }
@@ -1203,18 +1204,6 @@ namespace LanguageService
             node.Block = ParseBlock(ParsingContext.FuncBodyBlock).ToBuilder();
             node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = Peek().FullStart - node.StartPosition - 1;
-            return node.ToImmutable();
-        }
-
-        private TableConstructorNode ParseTableConstructor()
-        {
-            var node = TableConstructorNode.CreateBuilder();
-            node.Kind = SyntaxKind.TableConstructorNode;
-            node.StartPosition = Peek().Start;
-            node.OpenCurly = GetExpectedToken(SyntaxKind.OpenCurlyBrace);
-            node.FieldList = ParseFieldList().ToBuilder();
-            node.CloseCurly = GetExpectedToken(SyntaxKind.CloseCurlyBrace);
-            node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
 

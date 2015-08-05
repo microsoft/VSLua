@@ -79,6 +79,8 @@ namespace LanguageService.Tests
             SyntaxTree tree = SyntaxTree.CreateFromString("{ x=1, y=2 }");
             var generator = new TestGenerator();
             generator.GenerateTestFromString("{ x=1, y=2 }", "SimpleTable");
+
+            Debug.WriteLine(tree.ErrorList.Count);
             new FunctionDefError_Generated().Test(new Tester(tree));
         }
 
