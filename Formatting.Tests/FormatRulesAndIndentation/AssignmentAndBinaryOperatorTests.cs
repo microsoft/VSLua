@@ -25,6 +25,14 @@ namespace Formatting.Tests
         }
 
         [Fact]
+        public void BasicMinus()
+        {
+            string original = "-hello_world";
+            string expected = "- hello_world";
+            GeneralTest(original, expected);
+        }
+
+        [Fact]
         public void AssignmentTable()
         {
             string original = "{ x=1, y=2 }";

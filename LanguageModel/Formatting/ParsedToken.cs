@@ -1,68 +1,70 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace LanguageService.Formatting
 {
-    internal sealed class ParsedToken
+    internal class ParsedToken
     {
-
-        internal Token Token { get; private set; }
-        internal int BlockLevel { get; private set; }
-        internal SyntaxNode Node { get; private set; }
-
         internal ParsedToken(Token token, int blockLevel, SyntaxNode node)
         {
+            Validation.Requires.NotNull(token, nameof(token));
+
             this.Token = token;
             this.BlockLevel = blockLevel;
             this.Node = node;
         }
 
+        internal Token Token { get; }
+        internal int BlockLevel { get; }
+        internal SyntaxNode Node { get; }
+
+        // This function wouldn't exist in the final version since instead of iterating
+        //   through all the tokens from the lexer, I'd just walk the parsetree from the start
         internal static List<ParsedToken> GetParsedTokens(List<Token> tokens)
         {
+            Validation.Requires.NotNull(tokens, nameof(tokens));
+
             List<ParsedToken> parsedTokens = new List<ParsedToken>();
 
-            List<SyntaxKind> IncreaseIndentAfter = new List<SyntaxKind>
-            {
-                SyntaxKind.DoKeyword,
-                SyntaxKind.ThenKeyword,
-                SyntaxKind.ElseKeyword,
-                SyntaxKind.FunctionKeyword,
-                SyntaxKind.OpenCurlyBrace
-            };
-
-            List<SyntaxKind> DecreaseIndentOn = new List<SyntaxKind>
-            {
-                SyntaxKind.EndKeyword,
-                SyntaxKind.ElseIfKeyword,
-                SyntaxKind.CloseCurlyBrace,
-                SyntaxKind.ElseKeyword
-            };
-
             int indent_level = 0;
-
             foreach (Token token in tokens)
             {
-                if (DecreaseIndentOn.Contains(token.Kind))
+                if (DecreaseIndentOn.Contains(token.Type))
                 {
                     indent_level--;
                 }
 
                 indent_level = indent_level < 0 ? 0 : indent_level;
-
                 parsedTokens.Add(new ParsedToken(token, indent_level, null));
-
-                if (IncreaseIndentAfter.Contains(token.Kind))
+                if (IncreaseIndentAfter.Contains(token.Type))
                 {
                     indent_level++;
                 }
-            }
 
+                if (token.Type == TokenType.ReturnKeyword)
+                {
+                    indent_level--;
+                }
+            }
 
             return parsedTokens;
         }
 
+        private static readonly ImmutableArray<TokenType> IncreaseIndentAfter = ImmutableArray.Create
+            (
+        TokenType.DoKeyword,
+        TokenType.ThenKeyword,
+        TokenType.ElseKeyword,
+        TokenType.FunctionKeyword,
+        TokenType.OpenCurlyBrace
+            );
+
+        private static readonly ImmutableArray<TokenType> DecreaseIndentOn = ImmutableArray.Create
+            (
+                TokenType.EndKeyword,
+                TokenType.ElseIfKeyword,
+                TokenType.CloseCurlyBrace,
+                TokenType.ElseKeyword
+            );
     }
 }

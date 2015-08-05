@@ -1,33 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace LanguageService.Formatting
 {
     internal class Indenter
     {
-
-
-        internal static void GetIndentations(List<ParsedToken> parsedTokens, List<TextEditInfo> edits)
+        internal static IEnumerable<TextEditInfo> GetIndentations(List<ParsedToken> parsedTokens)
         {
+            Validation.Requires.NotNull(parsedTokens, nameof(parsedTokens));
+
             foreach (ParsedToken parsedToken in parsedTokens)
             {
-                int[] lastNewline = Indenter.GetSpacePositionAndLengthAfterLastNewline(parsedToken);
-
-                if (lastNewline != null)
-                {
-                    string indentationString =
+                string indentationString =
                         Indenter.GetIndentationStringFromBlockLevel(parsedToken.BlockLevel, null);
-
-                    edits.Add(new TextEditInfo(lastNewline[0], lastNewline[1], indentationString));
+                foreach (IndentInfo indentInfo in Indenter.GetIndentInformation(parsedToken))
+                {
+                    yield return new TextEditInfo(indentInfo.Start, indentInfo.Length, indentationString);
                 }
             }
         }
 
+        private struct IndentInfo
+        {
+            internal IndentInfo(int start, int length)
+            {
+                this.Start = start;
+                this.Length = length;
+            }
+
+            internal int Start { get; }
+            internal int Length { get; }
+        }
+
         private static string GetIndentationStringFromBlockLevel(int blockLevel, SyntaxNode syntaxNode)
         {
+            if (syntaxNode == null)
+            {
+                //throw new ArgumentNullException();
+            }
+
             // Here I would put the calculation for the indentation string parts
             // how many tabs, spaces that I need. I would also check the options for
             // how tabs are setup.
@@ -37,48 +47,53 @@ namespace LanguageService.Formatting
 
         // This is for the actual construction of the indentation, the actual string.
         // For now the parameter just takes how many spaces are needed.
-        private static string MakeIndentation(int spaces)
+        private static string MakeIndentation(int amount)
         {
-            string indentation = "";
-            for (int i = 0; i < spaces; ++i)
-            {
-                indentation += ' ';
-            }
-            return indentation;
+            return new string(' ', amount);
         }
 
-        private static int[] GetSpacePositionAndLengthAfterLastNewline(ParsedToken parsedToken)
+        private static IEnumerable<IndentInfo> GetIndentInformation(ParsedToken parsedToken)
         {
-            int length = 0;
+            Validation.Requires.NotNull(parsedToken, nameof(parsedToken));
+
+            List<Trivia> leadingTrivia = parsedToken.Token.LeadingTrivia;
+
+            if (leadingTrivia.Count <= 0)
+            {
+                yield break;
+            }
+
+            if (parsedToken.Token.FullStart == 0 && leadingTrivia[0].Type == Trivia.TriviaType.Whitespace)
+            {
+                yield return new IndentInfo(parsedToken.Token.FullStart, leadingTrivia[0].Text.Length);
+            }
+
             int start = parsedToken.Token.FullStart;
-
-            int currentStart = parsedToken.Token.FullStart;
-            bool foundNewline = false;
-
-            var leadingTrivia = parsedToken.Token.LeadingTrivia;
 
             for (int i = 0; i < leadingTrivia.Count; ++i)
             {
-                if (leadingTrivia[i].Type == Trivia.TriviaType.Newline)
+                start += leadingTrivia[i].Text.Length;
+
+                Trivia currentTrivia = leadingTrivia[i];
+                if (currentTrivia.Type != Trivia.TriviaType.Newline)
                 {
-                    foundNewline = true;
-                    start = currentStart + leadingTrivia[i].Text.Length;
-                    length = 0;
-                    if (i + 1 < leadingTrivia.Count &&
-                        leadingTrivia[i + 1].Type == Trivia.TriviaType.Whitespace)
-                    {
-                        length = leadingTrivia[i + 1].Text.Length;
-                    }
+                    continue;
                 }
 
-                currentStart += leadingTrivia[i].Text.Length;
+                if (i + 1 >= leadingTrivia.Count ||
+                    leadingTrivia[i + 1].Type != Trivia.TriviaType.Whitespace)
+                {
+                    yield return new IndentInfo(start, 0);
+                }
+                else
+                {
+                    Trivia nextTrivia = leadingTrivia[i + 1];
+                    if (nextTrivia.Type == Trivia.TriviaType.Whitespace)
+                    {
+                        yield return new IndentInfo(start, nextTrivia.Text.Length);
+                    }
+                }
             }
-
-            if (foundNewline)
-            {
-                return new int[2] { start, length };
-            }
-            return null;
         }
     }
 }

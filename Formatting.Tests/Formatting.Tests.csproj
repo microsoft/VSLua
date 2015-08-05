@@ -78,16 +78,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssignmentAndBinaryOperatorTests.cs" />
-    <Compile Include="BracketTests.cs" />
-    <Compile Include="ForLoopTests.cs" />
-    <Compile Include="IndentationTests.cs" />
-    <Compile Include="LeftCommaTests.cs" />
-    <Compile Include="MixedTests.cs" />
-    <Compile Include="NewlineRuleTesting.cs" />
+    <Compile Include="FormatRulesAndIndentation\AssignmentAndBinaryOperatorTests.cs" />
+    <Compile Include="FormatRulesAndIndentation\BracketTests.cs" />
+    <Compile Include="FormatRulesAndIndentation\DotColonTests.cs" />
+    <Compile Include="FormatRulesAndIndentation\ForLoopTests.cs" />
+    <Compile Include="FormatRulesAndIndentation\IndentationTests.cs" />
+    <Compile Include="FormatRulesAndIndentation\LeftCommaTests.cs" />
+    <Compile Include="FormatRulesAndIndentation\MixedTests.cs" />
+    <Compile Include="FormatRulesAndIndentation\NewlineRuleTesting.cs" />
     <Compile Include="Tester.cs" />
-    <Compile Include="TrailingWhitespaceTests.cs" />
-    <Compile Include="WrappingTests.cs" />
+    <Compile Include="FormatRulesAndIndentation\TrailingWhitespaceTests.cs" />
+    <Compile Include="FormatRulesAndIndentation\WrappingTests.cs" />
+    <Compile Include="FormatsOn\FormatOnPasteTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

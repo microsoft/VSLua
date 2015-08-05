@@ -1,26 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LanguageService.Formatting.Ruling
 {
-
-    internal delegate bool ContextFilter(FormattingContext formattingContext);
-
     internal class RuleOperationContext
     {
-        private List<ContextFilter> contextFilters;
+        private List<Func<FormattingContext, bool>> contextFilters;
 
-        internal RuleOperationContext(List<ContextFilter> contextFilters)
+        internal RuleOperationContext(List<Func<FormattingContext, bool>> contextFilters)
         {
+            Validation.Requires.NotNull(contextFilters, nameof(contextFilters));
             this.contextFilters = contextFilters;
         }
 
         internal bool InContext(FormattingContext formattingContext)
         {
-            foreach (ContextFilter contextFilter in contextFilters)
+            //Validation.Requires.NotNull(formattingContext, nameof(formattingContext));
+            foreach (Func<FormattingContext, bool> contextFilter in contextFilters)
             {
                 if (!contextFilter(formattingContext))
                 {
@@ -29,6 +25,5 @@ namespace LanguageService.Formatting.Ruling
             }
             return true;
         }
-
     }
 }

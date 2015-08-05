@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using LanguageModel;
+using LanguageService.Formatting;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio;
-using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
 using Microsoft.VisualStudio.Text.Editor;
+using VSLua.Shared;
 
-using LanguageService.Formatting;
+using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
 
 namespace VSLua.Formatting
 {
@@ -124,7 +123,9 @@ namespace VSLua.Formatting
             SnapshotPoint startLinePoint = span.Start.GetContainingLine().Start;
             span = new SnapshotSpan(startLinePoint, span.End);
 
-            List<TextEditInfo> edits = Formatter.Format(span.GetText());
+            SourceText sourceText = SourceTextProvider.Get(this.textBuffer.CurrentSnapshot);
+
+            List<TextEditInfo> edits = Formatter.Format(sourceText);
 
             using (ITextEdit textEdit = this.textBuffer.CreateEdit())
             {

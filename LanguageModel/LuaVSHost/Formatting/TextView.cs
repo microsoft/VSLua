@@ -1,22 +1,17 @@
-﻿using Microsoft.VisualStudio.Editor;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Differencing;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VSLua.Formatting
 {
     internal class TextView
     {
         private static Dictionary<IWpfTextView, TextView> viewMap = new Dictionary<IWpfTextView, TextView>();
-
-
 
         protected IWpfTextView WpfTextView { get; private set; }
         protected IVsTextView VsTextView { get; set; }

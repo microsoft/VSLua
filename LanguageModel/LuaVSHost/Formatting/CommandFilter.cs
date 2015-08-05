@@ -1,7 +1,7 @@
-﻿using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.OLE.Interop;
 
 namespace VSLua.Formatting
 {

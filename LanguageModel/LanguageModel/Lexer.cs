@@ -82,19 +82,20 @@ namespace LanguageService
         {
             Validate.IsNotNull(stream, nameof(stream));
 
+            TrackableTextReader trackableTextReader = new TrackableTextReader(textReader);
             Token nextToken;
             List<Trivia> trivia;
 
             List<Token> tokenList = new List<Token>();
 
-            while (!stream.EndOfStream())
+            while (!trackableTextReader.EndOfStream())
             {
-                int fullStart = (int)stream.Position;
-                trivia = ConsumeTrivia(stream);
-                nextToken = ReadNextToken(stream, trivia, fullStart);
+                int fullStart = trackableTextReader.Position;
+                trivia = ConsumeTrivia(trackableTextReader);
+                nextToken = ReadNextToken(trackableTextReader, trivia, fullStart);
                 tokenList.Add(nextToken);
 
-                if (stream.EndOfStream() && nextToken.Kind != SyntaxKind.EndOfFile)
+                if (trackableTextReader.EndOfStream() && nextToken.Type != TokenType.EndOfFile)
                 {
                     nextToken = new Token(SyntaxKind.EndOfFile, "", new List<Trivia>(), fullStart, (int)stream.Position);
                     tokenList.Add(nextToken);
@@ -102,8 +103,7 @@ namespace LanguageService
             }
             return tokenList;
         }
-
-        private static List<Trivia> ConsumeTrivia(Stream stream)
+        private static List<Trivia> ConsumeTrivia(TrackableTextReader stream)
         {
             List<Trivia> triviaList = new List<Trivia>();
             bool isTrivia = false;
@@ -171,7 +171,7 @@ namespace LanguageService
                         else
                         {
                             isTrivia = false;
-                            stream.Position--;
+                            stream.Pushback();
                         }
                         break;
 
@@ -185,7 +185,7 @@ namespace LanguageService
             return triviaList;
         }
 
-        private static Trivia ReadLongComment(Stream stream, string commentSoFar, int? level)
+        private static Trivia ReadLongComment(TrackableTextReader stream, string commentSoFar, int? level)
         {
             Validate.IsNotNull(level, nameof(level));
 
@@ -200,7 +200,7 @@ namespace LanguageService
             return new Trivia(Trivia.TriviaType.Comment, commentSoFar);
         }
 
-        private static int? GetLongCommentOpenBracket(Stream stream, ref string commentSoFar)
+        private static int? GetLongCommentOpenBracket(TrackableTextReader stream, ref string commentSoFar)
         {
             if (stream.Peek() != '[')
             {
@@ -232,7 +232,8 @@ namespace LanguageService
             }
         }
 
-        private static Token ReadNextToken(Stream stream, List<Trivia> trivia, int fullStart)
+
+        private static Token ReadNextToken(TrackableTextReader stream, List<Trivia> trivia, int fullStart)
         {
             char nextChar;
 
@@ -264,8 +265,7 @@ namespace LanguageService
                 return ReadSymbolToken(stream, trivia, fullStart);
             }
         }
-
-        private static Token ReadAlphaToken(Stream stream, List<Trivia> trivia, int fullStart)
+        private static Token ReadAlphaToken(TrackableTextReader stream, List<Trivia> trivia, int fullStart)
         {
             // Keyword or Identifier
             char nextChar;
@@ -289,7 +289,7 @@ namespace LanguageService
             }
         }
 
-        private static Token ReadNumberToken(Stream stream, List<Trivia> trivia, int fullStart)
+        private static Token ReadNumberToken(TrackableTextReader stream, List<Trivia> trivia, int fullStart)
         {
             StringBuilder number = new StringBuilder();
             int tokenStartPosition = (int)stream.Position;
@@ -312,7 +312,7 @@ namespace LanguageService
             }
         }
 
-        private static Token ReadStringToken(char stringDelimiter, Stream stream, List<Trivia> leadingTrivia, int fullStart)
+        private static Token ReadStringToken(char stringDelimiter, TrackableTextReader stream, List<Trivia> leadingTrivia, int fullStart)
         {
             StringBuilder fullString = new StringBuilder();
             int tokenStartPosition = (int)stream.Position;
@@ -323,8 +323,8 @@ namespace LanguageService
             {
                 case '"':
                 case '\'':
-                    fullString.Append(stream.ReadChar());
-                    nextChar = stream.Peek();
+                        fullString.Append(stream.ReadChar());
+                        nextChar = stream.Peek();
                     bool terminateString = false;
                     while ((nextChar != stringDelimiter) && !stream.EndOfStream() && !terminateString)
                     {
@@ -332,38 +332,38 @@ namespace LanguageService
                         nextChar = stream.Peek();
 
                         if (nextChar == '\r' || nextChar == '\n')
-                        {
+                    {
                             type = SyntaxKind.UnterminatedString;
                             terminateString = true;
-                        }
                     }
+                        }
 
                     if (nextChar == stringDelimiter || terminateString)
-                    {
-                        fullString.Append(stream.ReadChar());
+                            {
+                                    fullString.Append(stream.ReadChar());
                         return new Token(type, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
-                    }
-                    else
-                    {
+                                    }
+                                    else
+                                    {
                         return new Token(SyntaxKind.EndOfFile, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition); //TODO bug... should return a string then a EOF token right?
-                    }
+                                    }
 
                 case '[':
-                    fullString.Append(stream.ReadChar());
+                                    fullString.Append(stream.ReadChar());
                     int bracketLevel = 0;
-                    nextChar = stream.Peek();
+                                    nextChar = stream.Peek();
 
                     bracketLevel = CountLevels(false, nextChar, 0, stream, fullString);
-                    nextChar = stream.Peek();
+                            nextChar = stream.Peek();
 
                     if (nextChar == '[')
-                    {
-                        fullString.Append(stream.ReadChar());
-                        nextChar = stream.Peek();
+                            {
+                                fullString.Append(stream.ReadChar());
+                                nextChar = stream.Peek();
 
                         //Lua ignores a new line directly after the opening delimiter of a string.
                         if (nextChar == '\r' || nextChar == '\n')
-                        {
+                            {
                             if (nextChar == '\r')
                                 stream.ReadChar();
                             if (stream.Peek() == '\n')
@@ -372,49 +372,49 @@ namespace LanguageService
                         }
 
                         while (!stream.EndOfStream())
-                        {
-                            if (nextChar == ']')
-                            {
-                                fullString.Append(stream.ReadChar());
-                                nextChar = stream.Peek();
+                                {
+                                    if (nextChar == ']')
+                                    {
+                                        fullString.Append(stream.ReadChar());
+                                        nextChar = stream.Peek();
                                 int currentLevel = bracketLevel;
 
                                 currentLevel = CountLevels(true, nextChar, currentLevel, stream, fullString);
-                                nextChar = stream.Peek();
+                                            nextChar = stream.Peek();
 
                                 if ((nextChar == ']') && (currentLevel == 0))
-                                {
-                                    fullString.Append(stream.ReadChar());
+                                        {
+                                            fullString.Append(stream.ReadChar());
                                     return new Token(type, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        fullString.Append(stream.ReadChar());
+                                    }
+                                    nextChar = stream.Peek();
                                 }
+
+                        return new Token(SyntaxKind.UnterminatedString, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                             }
                             else
                             {
-                                fullString.Append(stream.ReadChar());
-                            }
-                            nextChar = stream.Peek();
-                        }
-
-                        return new Token(SyntaxKind.UnterminatedString, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
-                    }
-                    else
-                    {
                         if (bracketLevel == 0)
                         {
                             return new Token(SyntaxKind.OpenBracket, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                         }
                         else
                         {
-                            // Error, not valid syntax
+                                // Error, not valid syntax
                             return new Token(SyntaxKind.Unknown, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
-                        }
+                            }
                     }
-                default:
+                        default:
                     throw new ArgumentOutOfRangeException(nameof(stringDelimiter), "Unrecognized String delimiter");
             }
         }
 
-        private static Token ReadSymbolToken(Stream stream, List<Trivia> leadingTrivia, int fullStart)
+        private static Token ReadSymbolToken(TrackableTextReader stream, List<Trivia> leadingTrivia, int fullStart)
         {
             int tokenStartPosition = (int)stream.Position;
             char nextChar = stream.ReadChar();
@@ -505,7 +505,8 @@ namespace LanguageService
             return (char.IsLetter(a) || char.IsNumber(a) || (a == '_')); //TODO? Unicode?
         }
 
-        private static Trivia CollectWhitespace(Stream stream)
+
+        private static Trivia CollectWhitespace(TrackableTextReader stream)
         {
             StringBuilder whitespace = new StringBuilder();
             whitespace.Append(stream.ReadChar());
@@ -528,9 +529,9 @@ namespace LanguageService
             return ((nextChar == '"') || (nextChar == '\'') || (nextChar == '['));
         }
 
-        private static Trivia ReadLineComment(Stream stream, char[] commentRead)
+        private static Trivia ReadLineComment(TrackableTextReader stream, char[] commentRead)
         {
-            string comment = "-" + new string(commentRead);
+            string comment = new string(commentRead);
 
             while (stream.Peek() != '\n' && stream.Peek() != '\r' && stream.Peek() != Eof) // Todo: maybe not the safest way of checking for newline
             {
@@ -552,7 +553,7 @@ namespace LanguageService
             // 1exexexexe4 <- not a number
         }
 
-        public static void PrintTokens(Stream stream)
+        public static void PrintTokens(TextReader stream)
         {
             IEnumerable<Token> tokenEnumerable = Lexer.Tokenize(stream);
             foreach (Token t in tokenEnumerable)
@@ -587,7 +588,7 @@ namespace LanguageService
                 else
                 {
                     levelCount++;
-                }
+        }
 
                 character = stream.Peek();
             }

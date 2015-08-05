@@ -1,33 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Immutable;
 
 namespace LanguageService.Formatting.Ruling
 {
     internal class RuleDescriptor
     {
-        internal List<SyntaxKind> TokenRangeLeft { get; private set; }
-        internal List<SyntaxKind> TokenRangeRight { get; private set; }
-
-        internal RuleDescriptor(List<SyntaxKind> tokenLeft, List<SyntaxKind> tokenRight)
+        internal RuleDescriptor(ImmutableArray<TokenType> tokenLeft, ImmutableArray<TokenType> tokenRight)
         {
             this.TokenRangeLeft = tokenLeft;
             this.TokenRangeRight = tokenRight;
         }
 
-        internal RuleDescriptor(List<SyntaxKind> tokenLeft, SyntaxKind tokenRight) :
-            this(tokenLeft, new List<SyntaxKind> { tokenRight })
+        internal RuleDescriptor(ImmutableArray<TokenType> tokenLeft, TokenType tokenRight) :
+            this(tokenLeft, ImmutableArray.Create(tokenRight))
         { }
 
-        internal RuleDescriptor(SyntaxKind tokenLeft, List<SyntaxKind> tokenRight) :
-            this(new List<SyntaxKind> { tokenLeft }, tokenRight)
+        internal RuleDescriptor(TokenType tokenLeft, ImmutableArray<TokenType> tokenRight) :
+            this(ImmutableArray.Create(tokenLeft), tokenRight)
         { }
 
-        internal RuleDescriptor(SyntaxKind tokenLeft, SyntaxKind tokenRight) :
-            this(new List<SyntaxKind> { tokenLeft }, new List<SyntaxKind> { tokenRight })
+        internal RuleDescriptor(TokenType tokenLeft, TokenType tokenRight) :
+            this(ImmutableArray.Create(tokenLeft), ImmutableArray.Create(tokenRight))
         { }
 
+        internal ImmutableArray<TokenType> TokenRangeLeft { get; }
+        internal ImmutableArray<TokenType> TokenRangeRight { get; }
     }
 }

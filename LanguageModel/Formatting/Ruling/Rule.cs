@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace LanguageService.Formatting.Ruling
 {
@@ -12,6 +8,6 @@ namespace LanguageService.Formatting.Ruling
         internal abstract RuleOperation RuleOperationContext { get; }
 
         internal abstract bool AppliesTo(FormattingContext formattingContext);
-        internal abstract List<TextEditInfo> Apply(FormattingContext formattingContext);
+        internal abstract IEnumerable<TextEditInfo> Apply(FormattingContext formattingContext);
     }
 }

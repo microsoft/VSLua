@@ -6,8 +6,7 @@ namespace LanguageService.Formatting.Ruling
     {
         private List<Rule> rules;
 
-        // The reason I am wrapping a class around the List collections is because
-        // I might want to order the rules... And it looks like I might have to
+        // This methods is here for when I need to add precedence to the rules
         internal void Add(Rule rule)
         {
             if (rules == null)
@@ -28,7 +27,5 @@ namespace LanguageService.Formatting.Ruling
             }
             return null;
         }
-
-
     }
 }
