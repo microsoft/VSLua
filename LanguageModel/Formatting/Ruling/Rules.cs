@@ -17,15 +17,27 @@ namespace LanguageService.Formatting.Ruling
                 new RuleDescriptor(SyntaxKind.Comma, TokenRange.AnyVisible),
                 defaultFilters, RuleAction.Space);
 
-        internal static readonly Rule SpaceAfterAssignmentOperator =
+        internal static readonly Rule SpaceAfterAssignmentOperatorInStatement =
             new SimpleRule(
                 new RuleDescriptor(SyntaxKind.AssignmentOperator, TokenRange.AnyVisible),
-                defaultFilters, RuleAction.Space);
+                new List<Func<FormattingContext, bool>>
+                {
+                    TokensAreOnSameLine,
+                    NoCommentsBetweenTokens,
+                    InSyntaxNode(Side.Left, new List<SyntaxKind> { SyntaxKind.AssignmentStatementNode })
+                },
+                RuleAction.Space);
 
-        internal static readonly Rule SpaceBeforeAssignmentOperator =
+        internal static readonly Rule SpaceBeforeAssignmentOperatorInStatement =
             new SimpleRule(
                 new RuleDescriptor(TokenRange.AnyVisible, SyntaxKind.AssignmentOperator),
-                defaultFilters, RuleAction.Space);
+                new List<Func<FormattingContext, bool>>
+                {
+                    TokensAreOnSameLine,
+                    NoCommentsBetweenTokens,
+                    InSyntaxNode(Side.Right, new List<SyntaxKind> { SyntaxKind.AssignmentStatementNode })
+                },
+                RuleAction.Space);
 
         internal static readonly Rule SpaceAfterBinaryOperator =
             new SimpleRule(
@@ -123,8 +135,8 @@ namespace LanguageService.Formatting.Ruling
         internal static readonly ImmutableArray<Rule> AllRules = ImmutableArray.Create(
             NoSpaceAfterCommaInFor,
             SpaceAfterComma,
-            SpaceAfterAssignmentOperator,
-            SpaceBeforeAssignmentOperator,
+            SpaceAfterAssignmentOperatorInStatement,
+            SpaceBeforeAssignmentOperatorInStatement,
             SpaceAfterBinaryOperator,
             SpaceBeforeBinaryOperator,
             SpaceAfterValueBeforeOpenParenthesis,
