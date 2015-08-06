@@ -1312,11 +1312,18 @@ namespace LanguageService
         private void SkipCurrentToken(string message = null)
         {
             //TODO: conduct roundtrip test on erroneous files
-            if(Peek().Kind != SyntaxKind.EndOfFile)
-            {
+            NextToken();
 
-                throw new NotImplementedException();
+            var tempTriviaList = currentToken.LeadingTrivia;
+            tempTriviaList.Add(new Trivia(currentToken.Kind, currentToken.Text));
+
+            foreach (var triv in Peek().LeadingTrivia)
+            {
+                tempTriviaList.Add(triv);
             }
+
+            tokenList[positionInTokenList + 1] = new Token(Peek().Kind, Peek().Text, tempTriviaList, currentToken.FullStart, Peek().Start);
+            ParseErrorAtCurrentToken(ErrorMessages.SkippedToken + '"' + currentToken.Text + '"');
         }
 
         private bool isInSomeParsingContext()
