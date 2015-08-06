@@ -97,6 +97,15 @@ namespace LanguageService.LanguageModel {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This is not a complete statement. Expecting assignment operator: &quot;=&quot;.
+        /// </summary>
+        internal static string InvalidStatementWithoutAssignementOperator {
+            get {
+                return ResourceManager.GetString("InvalidStatementWithoutAssignementOperator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Expected Token: .
         /// </summary>
         internal static string MissingToken {

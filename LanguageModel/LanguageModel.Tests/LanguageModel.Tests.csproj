@@ -84,6 +84,7 @@
     <Compile Include="TestGeneration\GeneratedTestFiles\Assignments_Generated.cs" />
     <Compile Include="TestGeneration\GeneratedTestFiles\ComplexTableConstructor_Generated.cs" />
     <Compile Include="TestGeneration\GeneratedTestFiles\FunctionDefError_Generated.cs" />
+    <Compile Include="TestGeneration\GeneratedTestFiles\GrabKeyFromTable_Generated.cs" />
     <Compile Include="TestGeneration\GeneratedTestFiles\MultipleTypeAssignment_Generated.cs" />
     <Compile Include="TestGeneration\GeneratedTestFiles\SimpleTableError_Generated.cs" />
     <Compile Include="TestGeneration\GeneratedTestFiles\SmallIf_Generated.cs" />

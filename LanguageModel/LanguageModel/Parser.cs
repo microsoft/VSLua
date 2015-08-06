@@ -62,7 +62,15 @@ namespace LanguageService
             }
             else
             {
-                ParseErrorAtCurrentPosition(ErrorMessages.MissingToken + kind.ToString());
+                if(kind == SyntaxKind.AssignmentOperator && IsBlockContext(contextStack.Peek()))
+                {
+                    ParseErrorAtCurrentPosition(ErrorMessages.InvalidStatementWithoutAssignementOperator);
+                }
+                else
+                {
+                    ParseErrorAtCurrentPosition(ErrorMessages.MissingToken + kind.ToString());
+                }
+                
                 return Token.CreateMissingToken(currentToken.End);
             }
         }
@@ -1338,6 +1346,25 @@ namespace LanguageService
                 //This case has arbitrarily chosen DotVar as the default for incomplete Vars starting with prefixexps
                 positionInTokenList = tempPosition; //Restore tokenList to beginning of node
                 return ParseDotVar();
+            }
+        }
+
+        private bool IsBlockContext(ParsingContext context)
+        {
+            switch (context)
+            {
+                case ParsingContext.IfBlock:
+                case ParsingContext.ChunkNodeBlock:
+                case ParsingContext.ElseBlock:
+                case ParsingContext.ElseIfBlock:
+                case ParsingContext.DoStatementBlock:
+                case ParsingContext.FuncBodyBlock:
+                case ParsingContext.WhileBlock:
+                case ParsingContext.RepeatStatementBlock:
+                case ParsingContext.ForStatementBlock:
+                    return true;
+                default:
+                    return false;
             }
         }
 

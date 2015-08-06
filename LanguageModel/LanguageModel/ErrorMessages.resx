@@ -147,4 +147,7 @@
   <data name="VarListParseError" xml:space="preserve">
     <value>Unexpected token in variable list.</value>
   </data>
+  <data name="InvalidStatementWithoutAssignementOperator" xml:space="preserve">
+    <value>This is not a complete statement. Expecting assignment operator: "="</value>
+  </data>
 </root>
