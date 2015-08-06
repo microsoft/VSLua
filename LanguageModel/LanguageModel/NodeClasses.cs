@@ -1,11 +1,11 @@
 ﻿using ImmutableObjectGraph;
 using ImmutableObjectGraph.CodeGeneration;
 using LanguageService.LanguageModel.TreeVisitors;
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Immutable;
-    using System.IO;
-    using System.Linq;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.IO;
+using System.Linq;
 
 namespace LanguageService
 {
@@ -26,7 +26,7 @@ namespace LanguageService
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class ChunkNode : SyntaxNode
-        {
+    {
         [Required]
         readonly BlockNode programBlock;
         [Required]
@@ -37,8 +37,8 @@ namespace LanguageService
             get
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(programBlock, endOfFile);
+            }
         }
-    }
 
         public override void Accept(NodeWalker walker)
         {
@@ -57,8 +57,8 @@ namespace LanguageService
             get
             {
                 return statements.Cast<SyntaxNodeOrToken>().ToImmutableList();
+            }
         }
-    }
 
         public override void Accept(NodeWalker walker)
         {
@@ -81,8 +81,8 @@ namespace LanguageService
             get
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(semiColon);
+            }
         }
-    }
 
         public override void Accept(NodeWalker walker)
         {
@@ -143,11 +143,11 @@ namespace LanguageService
         }
 
         public override void Accept(NodeWalker walker)
-            {
+        {
             walker.Visit(this);
         }
-            }
-            
+    }
+
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class BreakStatementNode : StatementNode
     {
@@ -160,7 +160,7 @@ namespace LanguageService
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(breakKeyword);
             }
-            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -185,10 +185,10 @@ namespace LanguageService
         }
 
         public override void Accept(NodeWalker walker)
-                {
+        {
             walker.Visit(this);
-                }
-            }
+        }
+    }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class DoStatementNode : StatementNode
@@ -201,12 +201,12 @@ namespace LanguageService
         readonly Token endKeyword;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
-            {
+        {
             get
-                {
+            {
                 return ImmutableList.Create<SyntaxNodeOrToken>(doKeyword, block, endKeyword);
-                }
-            }            
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -233,17 +233,17 @@ namespace LanguageService
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(whileKeyword, exp, doKeyword, block, endKeyword);
             }
-            }
+        }
 
         public override void Accept(NodeWalker walker)
-            {
+        {
             walker.Visit(this);
         }
-            }
+    }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class RepeatStatementNode : StatementNode
-            {
+    {
         [Required]
         readonly Token repeatKeyword;
         [Required]
@@ -254,18 +254,18 @@ namespace LanguageService
         readonly ExpressionNode exp;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
-                {
+        {
             get
-                    {
+            {
                 return ImmutableList.Create<SyntaxNodeOrToken>(repeatKeyword, block, untilKeyword, exp);
             }
         }
 
         public override void Accept(NodeWalker walker)
-                        {
+        {
             walker.Visit(this);
         }
-                        }
+    }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class GlobalFunctionStatementNode : StatementNode
@@ -280,16 +280,16 @@ namespace LanguageService
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
-                        {
+            {
                 return ImmutableList.Create<SyntaxNodeOrToken>(functionKeyword, funcName, funcBody);
-                      }
-                    }
+            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
-                }
-            }
+        }
+    }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class LocalAssignmentStatementNode : StatementNode
@@ -302,9 +302,9 @@ namespace LanguageService
         readonly SeparatedList expList;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
-            {
+        {
             get
-                {
+            {
                 var children = new List<SyntaxNodeOrToken>();
                 children.Add(localKeyword);
                 children.Add(nameList);
@@ -320,7 +320,7 @@ namespace LanguageService
         public override void Accept(NodeWalker walker)
         {
             walker.Visit(this);
-    }
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -340,7 +340,7 @@ namespace LanguageService
             get
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(localKeyword, functionKeyword, name, funcBody);
-    }
+            }
         }
 
         public override void Accept(NodeWalker walker)
@@ -391,10 +391,10 @@ namespace LanguageService
         }
 
         public override void Accept(NodeWalker walker)
-            {
+        {
             walker.Visit(this);
-            }
         }
+    }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class MultipleArgForStatementNode : StatementNode
@@ -419,7 +419,7 @@ namespace LanguageService
             get
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(forKeyword, nameList, inKeyword, expList, doKeyword, block, endKeyword);
-    }
+            }
         }
 
         public override void Accept(NodeWalker walker)
@@ -468,10 +468,10 @@ namespace LanguageService
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(varList, assignmentOperator, expList);
             }
-            }
+        }
 
         public override void Accept(NodeWalker walker)
-            {
+        {
             walker.Visit(this);
         }
     }
@@ -503,22 +503,22 @@ namespace LanguageService
 
                 //TODO remove temporary code:
                 if (elseIfList != null)
-        {
+                {
                     foreach (var node in elseIfList)
-            {
+                    {
                         children.Add(node);
                     }
-            }
+                }
 
                 if (elseBlock != null)
-            {
+                {
                     children.Add(elseBlock);
                 }
 
                 children.Add(endKeyword); //Why doesnt this do anything??!?!!
                 return children.ToImmutableList();
             }
-            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -540,7 +540,7 @@ namespace LanguageService
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(elseKeyword, block);
             }
-            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -591,13 +591,13 @@ namespace LanguageService
             get
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(expressionValue);
-    }
+            }
         }
 
         public override void Accept(NodeWalker walker)
-    {
+        {
             walker.Visit(this);
-    }
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -615,7 +615,7 @@ namespace LanguageService
             get
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(exp1, binaryOperator, exp2);
-    }
+            }
         }
 
         public override void Accept(NodeWalker walker)
@@ -637,7 +637,7 @@ namespace LanguageService
             get
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(unaryOperator, exp);
-    }
+            }
         }
 
         public override void Accept(NodeWalker walker)
@@ -665,14 +665,14 @@ namespace LanguageService
         }
 
         public override void Accept(NodeWalker walker)
-                {
+        {
             walker.Visit(this);
         }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public partial class FunctionDef : ExpressionNode
-                {
+    {
         [Required]
         readonly Token functionKeyword;
         [Required]
@@ -683,8 +683,8 @@ namespace LanguageService
             get
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(functionKeyword, functionBody);
-                }
             }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -740,10 +740,10 @@ namespace LanguageService
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(name, assignmentOperator, exp);
             }
-    }
+        }
 
         public override void Accept(NodeWalker walker)
-    {
+        {
             walker.Visit(this);
         }
     }
@@ -757,10 +757,10 @@ namespace LanguageService
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
-        {
+            {
                 return ImmutableList.Create<SyntaxNodeOrToken>(exp);
+            }
         }
-    }
 
         public override void Accept(NodeWalker walker)
         {
@@ -788,10 +788,10 @@ namespace LanguageService
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(name);
             }
-    }
+        }
 
         public override void Accept(NodeWalker walker)
-    {
+        {
             walker.Visit(this);
         }
     }
@@ -814,10 +814,10 @@ namespace LanguageService
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(prefixExp, openBracket, exp, closeBracket);
             }
-    }
+        }
 
         public override void Accept(NodeWalker walker)
-    {
+        {
             walker.Visit(this);
         }
     }
@@ -869,12 +869,12 @@ namespace LanguageService
                 children.Add(args);
                 return children.ToImmutableList();
             }
-    }
+        }
 
         public override void Accept(NodeWalker walker)
-    {
+        {
             walker.Visit(this);
-    }
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -892,13 +892,13 @@ namespace LanguageService
             get
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(openParen, exp, closeParen);
-    }
+            }
         }
 
         public override void Accept(NodeWalker walker)
-    {
+        {
             walker.Visit(this);
-    }
+        }
     }
     #endregion
 
@@ -1062,16 +1062,16 @@ namespace LanguageService
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
-        {
+            {
                 var children = new List<SyntaxNodeOrToken>{ namesList};
                 if (comma != null)
-            {
+                {
                     children.Add(comma);
                     children.Add(vararg);
                 }
                 return children.ToImmutableList();
             }
-            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -1097,7 +1097,7 @@ namespace LanguageService
             {
                 return ImmutableList.Create<SyntaxNodeOrToken>(openCurly, fieldList, closeCurly);
             }
-            }
+        }
 
         public override void Accept(NodeWalker walker)
         {
@@ -1155,7 +1155,7 @@ namespace LanguageService
                 }
                 return children.ToImmutableList();
             }
-    }
+        }
 
         public override void Accept(NodeWalker walker)
         {

@@ -45,9 +45,9 @@ namespace LanguageService.Formatting
 
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
-            List<Token> tokens = this.parseTreeProvider.Get(sourceText);
+            SyntaxTree syntaxTree = this.parseTreeProvider.Get(sourceText);
 
-            List<ParsedToken> parsedTokens = ParsedToken.GetParsedTokens(tokens, range.Start, range.End);
+            List<ParsedToken> parsedTokens = new List<ParsedToken>(ParsedToken.GetParsedTokens(syntaxTree, range));
 
             for (int i = 0; i < parsedTokens.Count - 1; ++i)
             {
@@ -62,7 +62,7 @@ namespace LanguageService.Formatting
                 }
             }
 
-            textEdits.AddRange(Indenter.GetIndentations(parsedTokens));
+            textEdits.AddRange(Indenter.GetIndentations(parsedTokens, globalOptions));
 
             return textEdits;
         }

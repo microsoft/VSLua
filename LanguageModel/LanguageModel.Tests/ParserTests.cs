@@ -287,7 +287,7 @@ namespace LanguageService.Tests
                 {
                     Debug.WriteLine(((SyntaxNode)node).Kind.ToString() + "\n");
                 }
-
+                
             }
 
             foreach (var error in tree.ErrorList)
