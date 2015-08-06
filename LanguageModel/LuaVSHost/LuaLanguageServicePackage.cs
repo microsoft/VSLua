@@ -20,16 +20,13 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
 
     [ProvideOptionPage(typeof(GeneralPage), Constants.Formatting.Category, Constants.Formatting.Pages.General,
-        1000, 1002, false, ProfileMigrationType = ProfileMigrationType.PassThrough)]
-
-    [ProvideOptionPage(typeof(IndentationPage), Constants.Formatting.Category, Constants.Formatting.Pages.Indentation,
-        1000, 1003, false, ProfileMigrationType = ProfileMigrationType.PassThrough)]
+        1000, 1002, true, ProfileMigrationType = ProfileMigrationType.PassThrough)]
 
     [ProvideOptionPage(typeof(SpacingPage), Constants.Formatting.Category, Constants.Formatting.Pages.Spacing,
-        1000, 1004, false, ProfileMigrationType = ProfileMigrationType.PassThrough)]
+        1000, 1004, true, ProfileMigrationType = ProfileMigrationType.PassThrough)]
 
     [ProvideOptionPage(typeof(WrappingAndNewLinePage), Constants.Formatting.Category, Constants.Formatting.Pages.WrappingAndNewLines,
-        1000, 1005, false, ProfileMigrationType = ProfileMigrationType.PassThrough)]
+        1000, 1005, true, ProfileMigrationType = ProfileMigrationType.PassThrough)]
 
     public sealed class LuaLanguageServicePackage : Package
     {

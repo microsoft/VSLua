@@ -6,7 +6,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
     internal interface ISingletons
     {
-        GlobalEditorOptions GlobalEditorOptions { get; }
         IVsEditorAdaptersFactoryService EditorAdaptersFactory { get; }
         SourceTextCache SourceTextCache { get; }
         LuaFeatureContainer FeatureContainer { get; }

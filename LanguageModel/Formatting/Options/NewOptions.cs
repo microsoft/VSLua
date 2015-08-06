@@ -19,22 +19,17 @@ namespace LanguageService.Formatting.Options
         /// <param name="indentSize">
         /// How big in spaces the indents are.
         /// </param>
-        /// <param name="indentStyleInfo">The indentation information for the Indenter.</param>
         public NewOptions(
             List<OptionalRuleGroup> disableRuleGroups,
-            uint indentSize,
-            IndentStyleInfo indentStyleInfo)
+            uint indentSize)
         {
             Requires.NotNull(disableRuleGroups, nameof(disableRuleGroups));
-            Requires.NotNull(indentStyleInfo, nameof(indentStyleInfo));
 
             this.RuleGroupsToDisable = disableRuleGroups.ToImmutableArray();
             this.IndentSize = indentSize;
-            this.IndentStyleInfo = indentStyleInfo;
         }
 
         internal ImmutableArray<OptionalRuleGroup> RuleGroupsToDisable { get; }
         internal uint IndentSize { get; }
-        internal IndentStyleInfo IndentStyleInfo { get; }
     }
 }
