@@ -252,13 +252,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                 return null;
             }
 
-            IndentStyleInfo indentStyleInfo = new IndentStyleInfo(
-                settings.FunctionRelativeIndentation != true ? IndentStyle.Fixed : IndentStyle.Relative,
-                settings.TableRelativeIndentation != true ? IndentStyle.Fixed : IndentStyle.Relative);
-
             List<OptionalRuleGroup> disabledRuleGroups = this.GetDisabledRules(settings);
 
-            NewOptions newOptions = new NewOptions(disabledRuleGroups, settings.TabSize, indentStyleInfo);
+            NewOptions newOptions = new NewOptions(disabledRuleGroups, settings.TabSize);
 
             return newOptions;
         }

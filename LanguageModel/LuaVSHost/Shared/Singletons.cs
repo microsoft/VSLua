@@ -11,9 +11,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
     internal class Singletons : ISingletons
     {
         [Import]
-        private GlobalEditorOptions globalEditorOptions;
-
-        [Import]
         private IVsEditorAdaptersFactoryService editorAdaptersFactory;
 
         [Import]
@@ -22,14 +19,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         private SourceTextCache sourceTextCache;
         private LuaFeatureContainer featureContainer;
         private Formatting.UserSettings userSettings;
-
-        public GlobalEditorOptions GlobalEditorOptions
-        {
-            get
-            {
-                return this.globalEditorOptions;
-            }
-        }
 
         public IVsEditorAdaptersFactoryService EditorAdaptersFactory
         {
