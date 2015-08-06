@@ -121,7 +121,7 @@ get_zero = function() return 0 end", "LucaDemo");
             SyntaxTree tree = SyntaxTree.CreateFromString("");
             var generator = new TestGenerator();
             generator.GenerateTestFromString("", "EmptyProgram");
-            new GrabKeyFromTable_Generated().Test(new Tester(tree));
+            new EmptyProgram_Generated().Test(new Tester(tree));
         }
 
         [Fact]

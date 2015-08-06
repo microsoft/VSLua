@@ -102,6 +102,13 @@ namespace LanguageService
                     tokenList.Add(nextToken);
                 }
             }
+
+            if(tokenList.Count == 0)
+            {
+                //If there is an empty program send back an end of file token.
+                tokenList.Add(new Token(SyntaxKind.EndOfFile, "", new List<Trivia>(), 0, (int)trackableTextReader.Position));
+            }
+
             return tokenList;
         }
 

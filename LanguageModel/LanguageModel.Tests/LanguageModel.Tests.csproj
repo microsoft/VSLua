@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="TestGeneration\GeneratedTestFiles\Assignments_Generated.cs" />
     <Compile Include="TestGeneration\GeneratedTestFiles\ComplexTableConstructor_Generated.cs" />
+    <Compile Include="TestGeneration\GeneratedTestFiles\EmptyProgram_Generated.cs" />
     <Compile Include="TestGeneration\GeneratedTestFiles\FunctionDefError_Generated.cs" />
     <Compile Include="TestGeneration\GeneratedTestFiles\GrabKeyFromTable_Generated.cs" />
     <Compile Include="TestGeneration\GeneratedTestFiles\MultipleTypeAssignment_Generated.cs" />
