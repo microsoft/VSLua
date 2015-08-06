@@ -24,7 +24,11 @@ namespace LanguageService.Formatting.Ruling
                 {
                     TokensAreOnSameLine,
                     NoCommentsBetweenTokens,
-                    InSyntaxNode(Side.Left, new List<SyntaxKind> { SyntaxKind.AssignmentStatementNode })
+                    InSyntaxNode(Side.Left, new List<SyntaxKind>
+                    {
+                        SyntaxKind.AssignmentStatementNode,
+                        SyntaxKind.LocalAssignmentStatementNode
+                    })
                 },
                 RuleAction.Space);
 
@@ -35,7 +39,11 @@ namespace LanguageService.Formatting.Ruling
                 {
                     TokensAreOnSameLine,
                     NoCommentsBetweenTokens,
-                    InSyntaxNode(Side.Right, new List<SyntaxKind> { SyntaxKind.AssignmentStatementNode })
+                    InSyntaxNode(Side.Right, new List<SyntaxKind>
+                    {
+                        SyntaxKind.AssignmentStatementNode,
+                        SyntaxKind.LocalAssignmentStatementNode
+                    })
                 },
                 RuleAction.Space);
 
@@ -206,13 +214,18 @@ namespace LanguageService.Formatting.Ruling
             Right
         }
 
+        private static ParsedToken GetTokenOn(Side side, FormattingContext formattingContext)
+        {
+            return (side == Side.Left) ?
+                    formattingContext.CurrentToken :
+                    formattingContext.NextToken;
+        }
+
         private static Func<FormattingContext, bool> IsInATableConstructor(Side side)
         {
             return (FormattingContext formattingContext) =>
             {
-                ParsedToken parsedToken = (side == Side.Left) ?
-                    formattingContext.CurrentToken :
-                    formattingContext.NextToken;
+                ParsedToken parsedToken = GetTokenOn(side, formattingContext);
 
                 return parsedToken.InTableConstructor;
             };
@@ -222,13 +235,26 @@ namespace LanguageService.Formatting.Ruling
         {
             return (FormattingContext formattingContext) =>
             {
-                ParsedToken parsedToken = (side == Side.Left) ?
-                    formattingContext.CurrentToken :
-                    formattingContext.NextToken;
+                ParsedToken parsedToken = GetTokenOn(side, formattingContext);
 
                 return statementKinds.Contains(parsedToken.StatementNode.Kind);
             };
         }
+
+        private static Func<FormattingContext, bool> IsStartOfStatement(Side side)
+        {
+            return (FormattingContext formattingContext) =>
+            {
+                ParsedToken parsedToken = GetTokenOn(side, formattingContext);
+
+                return parsedToken.Token.Start == parsedToken.StatementNode.StartPosition;
+            };
+        }
+
+        //private static bool StatementOnOneLine(FormattingContext formattingContext)
+        //{
+        //    return formattingContext.CurrentToken.StatementNode.
+        //}
 
     }
 }
