@@ -83,6 +83,11 @@ namespace LanguageService.Formatting.Options
             Rules.SpaceBeforeAssignmentOperatorInStatement
             );
 
+        private static ImmutableArray<Rule> SpaceBeforeAndAfterAssignmentInFor = ImmutableArray.Create(
+            Rules.SpaceBeforeAssignmentOperatorInFor,
+            Rules.SpaceAfterAssignmentOperatorInFor
+            );
+
         private static Dictionary<OptionalRuleGroup, IEnumerable<Rule>> optionalRuleGroups = new Dictionary<OptionalRuleGroup, IEnumerable<Rule>>
         {
             {OptionalRuleGroup.SpaceBeforeOpenParenthesis, SpaceBeforeOpenParenthesis},
@@ -91,7 +96,8 @@ namespace LanguageService.Formatting.Options
             {OptionalRuleGroup.SpaceOnInsideOfSquareBrackets, SpaceOnInsideOfSquareBrackets},
             {OptionalRuleGroup.SpaceAfterCommas, SpaceAfterCommas},
             {OptionalRuleGroup.SpaceBeforeAndAfterBinaryOperations, SpaceBeforeAndAfterBinaryOperations},
-            {OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForStatement, SpaceBeforeAndAfterAssignmentInStatement}
+            {OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForStatement, SpaceBeforeAndAfterAssignmentInStatement},
+            {OptionalRuleGroup.NoSpaceBeforeAndAfterIndiciesInForLoopHeader, SpaceBeforeAndAfterAssignmentInFor}
         };
     }
 }
