@@ -51,6 +51,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Classifications\Tagger.cs" />
+    <Compile Include="Classifications\TaggerProvider.cs" />
     <Compile Include="Formatting\CommandFilter.cs" />
     <Compile Include="Formatting\IFormatter.cs" />
     <Compile Include="Formatting\IMiniCommandFilter.cs" />
@@ -141,6 +143,7 @@
       <HintPath>..\packages\Microsoft.VisualStudio.Imaging.14.0.23020-MVP\lib\net45\Microsoft.VisualStudio.Imaging.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Language.StandardClassification, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\packages\Microsoft.VisualStudio.OLE.Interop.7.10.6070-pre\lib\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
       <Private>True</Private>
