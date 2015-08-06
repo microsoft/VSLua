@@ -137,6 +137,8 @@ namespace LanguageService.Formatting.Ruling
             SpaceAfterComma,
             SpaceAfterAssignmentOperatorInStatement,
             SpaceBeforeAssignmentOperatorInStatement,
+            SpaceBeforeAssignmentOperatorInFor,
+            SpaceAfterAssignmentOperatorInFor,
             SpaceAfterBinaryOperator,
             SpaceBeforeBinaryOperator,
             SpaceAfterValueBeforeOpenParenthesis,
@@ -173,6 +175,20 @@ namespace LanguageService.Formatting.Ruling
         {
             Left,
             Right
+        }
+
+        private static Func<FormattingContext, bool> IsInAField(Side side)
+        {
+            return (FormattingContext formattingContext) =>
+            {
+                ParsedToken parsedToken = (side == Side.Left) ?
+                    formattingContext.CurrentToken :
+                    formattingContext.NextToken;
+
+                for (SyntaxNode syntaxNode in )
+
+                return true;
+            };
         }
 
         private static Func<FormattingContext, bool> InSyntaxNode(Side side, List<SyntaxKind> statementKinds)
