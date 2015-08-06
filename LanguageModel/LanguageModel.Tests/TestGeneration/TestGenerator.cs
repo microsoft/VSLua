@@ -69,7 +69,7 @@ namespace LanguageModel.Tests
             sb.AppendLine("    {");
             sb.AppendLine("        [Fact]");
             sb.AppendLine("        public void Test(Tester t)");
-            sb.AppendLine("        {\r\n");
+            sb.AppendLine("        {");
 
             using (IndentingWriter.Indent())
             {
