@@ -95,9 +95,28 @@ namespace LanguageService.Formatting.Ruling
                     TokensAreOnSameLine,
                     NoCommentsBetweenTokens,
                     InSyntaxNode(Side.Left, new List<SyntaxKind> { SyntaxKind.SimpleForStatementNode })
-                        },
-
+                },
                 RuleAction.Delete);
+
+        internal static readonly Rule SpaceBeforeAssignmentOperatorInFor =
+            new SimpleRule(new RuleDescriptor(TokenRange.AnyVisible, SyntaxKind.AssignmentOperator),
+                new List<Func<FormattingContext, bool>>
+                {
+                    TokensAreNotOnSameLine,
+                    NoCommentsBetweenTokens,
+                    InSyntaxNode(Side.Right, new List<SyntaxKind> { SyntaxKind.SimpleForStatementNode })
+                },
+                RuleAction.Space);
+
+        internal static readonly Rule SpaceAfterAssignmentOperatorInFor =
+            new SimpleRule(new RuleDescriptor(SyntaxKind.AssignmentOperator, TokenRange.AnyVisible),
+                new List<Func<FormattingContext, bool>>
+                {
+                    TokensAreNotOnSameLine,
+                    NoCommentsBetweenTokens,
+                    InSyntaxNode(Side.Left, new List<SyntaxKind> { SyntaxKind.SimpleForStatementNode })
+                },
+                RuleAction.Space);
 
 
 
