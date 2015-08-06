@@ -16,11 +16,11 @@ foo = function()
 return
 end";
             string expected1 = @"
-foo = function()
+foo = function ()
     return
 end";
             string expected2 = @"
-foo = function()
+foo = function ()
       return
 end";
             GeneralTest(original, expected1, expected2);
