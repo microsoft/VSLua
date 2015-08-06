@@ -1098,13 +1098,25 @@ namespace LanguageService
                 return true;
             }
 
-            NextToken();
-
-            //Append skipped token to leading trivia of next token
-            //TODO: test if this is correct
-            Peek().LeadingTrivia.Add(new Trivia(currentToken.Kind, currentToken.Text));
-            ParseErrorAtCurrentToken(ErrorMessages.SkippedToken + '"' + currentToken.Text + '"');
+            SkipCurrentToken();
             return false;
+        }
+
+        private void SkipCurrentToken()
+        {
+            //TODO: conduct roundtrip test on erroneous files
+            NextToken();
+            
+            var tempTriviaList = currentToken.LeadingTrivia;
+            tempTriviaList.Add(new Trivia(currentToken.Kind, currentToken.Text));
+
+            foreach(var triv in Peek().LeadingTrivia)
+            {
+                tempTriviaList.Add(triv);
+            }
+            
+            tokenList[positionInTokenList + 1] = new Token(Peek().Kind, Peek().Text, tempTriviaList, currentToken.FullStart, Peek().Start);
+            ParseErrorAtCurrentToken(ErrorMessages.SkippedToken + '"' + currentToken.Text + '"');
         }
 
         private bool isInSomeParsingContext()

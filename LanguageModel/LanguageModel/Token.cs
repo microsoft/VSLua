@@ -19,10 +19,10 @@ namespace LanguageService
 
         public List<Trivia> LeadingTrivia { get; private set; } //TODO: change to Immutable List
 
-        public Token(SyntaxKind SyntaxKind, string value, List<Trivia> trivia, int fullStart, int start)
+        public Token(SyntaxKind SyntaxKind, string text, List<Trivia> trivia, int fullStart, int start)
         {
             this.Kind = SyntaxKind;
-            this.Text = value;
+            this.Text = text;
             this.LeadingTrivia = trivia;
             this.FullStart = fullStart;
             this.Start = start;

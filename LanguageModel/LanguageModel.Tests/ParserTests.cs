@@ -69,23 +69,31 @@ namespace LanguageService.Tests
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\FunctionDefError.lua");
             new FunctionDefError_Generated().Test(new Tester(tree));
         }
-
-
-
-
+        
         [Fact]
         public void SimpleTableGeneratedTest()
         {
             SyntaxTree tree = SyntaxTree.CreateFromString("{ x=1, y=2 }");
-            var generator = new TestGenerator();
-            generator.GenerateTestFromString("{ x=1, y=2 }", "SimpleTable");
-
-            Debug.WriteLine(tree.ErrorList.Count);
-            new FunctionDefError_Generated().Test(new Tester(tree));
+            new SimpleTableError_Generated().Test(new Tester(tree));
         }
 
+        //[Fact]
+        //public void SimpleTableGeneratedTest()
+        //{
+        //    SyntaxTree tree = SyntaxTree.CreateFromString("1+1");
+        //    var generator = new TestGenerator();
+        //    generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
+        //    new SimpleTableError_Generated().Test(new Tester(tree));
+        //}
 
-        //"1+1"
+        //[Fact]
+        //public void FunctionDefErrorGeneratedTest()
+        //{
+        //    SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\FunctionDefError.lua");
+        //    var generator = new TestGenerator();
+        //    generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
+        //    new FunctionDefError_Generated().Test(new Tester(tree));
+        //}
 
         //"-hello_world"
 
