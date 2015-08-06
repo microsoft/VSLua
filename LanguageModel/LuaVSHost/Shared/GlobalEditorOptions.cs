@@ -46,6 +46,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
             {
                 this.singletons.FormattingUserSettings.IndentStyle = languagePreferences[0].IndentStyle;
                 this.singletons.FormattingUserSettings.TabSize = languagePreferences[0].uTabSize;
+                this.singletons.FormattingUserSettings.IndentSize = languagePreferences[0].uIndentSize;
+                this.singletons.FormattingUserSettings.UsingTabs = Convert.ToBoolean(languagePreferences[0].fInsertTabs);
                 this.FireOnUpdateLanguagePreferences();
             }
         }

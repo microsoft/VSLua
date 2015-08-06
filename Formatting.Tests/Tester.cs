@@ -73,7 +73,7 @@ namespace Formatting.Tests
             LuaFeatureContainer featureContainer = new LuaFeatureContainer();
             Range range = new Range(0, original.Length);
 
-            NewOptions newOptions = new NewOptions(new List<OptionalRuleGroup>(), 4);
+            NewOptions newOptions = new NewOptions(new List<OptionalRuleGroup>(), 4, 4, false);
 
             List<TextEditInfo> textEdits = featureContainer.Formatter.Format(new SourceText(new StringReader(original)), range, newOptions);
 

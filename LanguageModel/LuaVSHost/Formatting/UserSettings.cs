@@ -34,6 +34,40 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             }
         }
 
+        private uint indentSize = 4;
+        internal uint IndentSize
+        {
+            get
+            {
+                return this.indentSize;
+            }
+            set
+            {
+                if (this.tabSize != value)
+                {
+                    this.tabSize = value;
+                    this.RaisePropertyChangedEvent();
+                }
+            }
+        }
+
+        private bool usingTabs = false;
+        internal bool UsingTabs
+        {
+            get
+            {
+                return this.usingTabs;
+            }
+            set
+            {
+                if (this.usingTabs != value)
+                {
+                    this.usingTabs = value;
+                    this.RaisePropertyChangedEvent();
+                }
+            }
+        }
+
         private vsIndentStyle indentStyle = vsIndentStyle.vsIndentStyleDefault;
         internal vsIndentStyle IndentStyle
         {

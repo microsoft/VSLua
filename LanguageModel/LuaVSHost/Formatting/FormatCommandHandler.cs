@@ -254,7 +254,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 
             List<OptionalRuleGroup> disabledRuleGroups = this.GetDisabledRules(settings);
 
-            NewOptions newOptions = new NewOptions(disabledRuleGroups, settings.TabSize);
+            NewOptions newOptions = new NewOptions(disabledRuleGroups, settings.TabSize, settings.IndentSize, settings.UsingTabs);
 
             return newOptions;
         }
