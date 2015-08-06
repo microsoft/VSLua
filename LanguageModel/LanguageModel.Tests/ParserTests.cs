@@ -7,6 +7,7 @@ using LanguageModel.Tests.GeneratedTestFiles;
 using LanguageModel.Tests.TestGeneration;
 using LanguageModel.Tests;
 using System.IO;
+using System.Text;
 
 namespace LanguageService.Tests
 {
@@ -69,7 +70,7 @@ namespace LanguageService.Tests
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\FunctionDefError.lua");
             new FunctionDefError_Generated().Test(new Tester(tree));
         }
-        
+
         [Fact]
         public void SimpleTableGeneratedTest()
         {
@@ -115,207 +116,239 @@ get_zero = function() return 0 end", "LucaDemo");
         }
 
         [Fact]
+        public void EmptyProgramGeneratedTest()
+        {
+            SyntaxTree tree = SyntaxTree.CreateFromString("");
+            var generator = new TestGenerator();
+            generator.GenerateTestFromString("", "EmptyProgram");
+            new GrabKeyFromTable_Generated().Test(new Tester(tree));
+        }
+
+        [Fact]
         public void CheckForExceptionsFromListOfInvalidProgramsTest()
         {
+            var reader = new StreamReader(File.OpenRead(@"CorrectSampleLuaFiles\InvalidProgramsAsStrings.lua"));
+            while (!reader.EndOfStream)
+            {
+                char nextChar = (char)reader.Read();
+                var sb = new StringBuilder();
+
+                if(nextChar == '"')
+                    nextChar = (char)reader.Read();
+
+                while (nextChar != '"' && !reader.EndOfStream)
+                {
+                    sb.Append(nextChar);
+                    nextChar = (char)reader.Read();
+                }
+
+                var tree = SyntaxTree.CreateFromString(sb.ToString());
+
+                nextChar = (char)reader.Read();
+                while (nextChar != '"' && !reader.EndOfStream)
+                {
+                    nextChar = (char)reader.Read();
+                }
+            }
         }
 
         //[Fact]
         //public void SimpleTableGeneratedTest()
         //{
-        //    SyntaxTree tree = SyntaxTree.CreateFromString("1+1");
+        //    SyntaxTree tree = SyntaxTree.CreateFromString("1 +1");
         //    var generator = new TestGenerator();
         //    generator.GenerateTestFromString(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
         //    new SimpleTableError_Generated().Test(new Tester(tree));
         //}
 
-            //[Fact]
-            //public void FunctionDefErrorGeneratedTest()
-            //{
-            //    SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\FunctionDefError.lua");
-            //    var generator = new TestGenerator();
-            //    generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
-            //    new FunctionDefError_Generated().Test(new Tester(tree));
-            //}
+        //[Fact]
+        //public void FunctionDefErrorGeneratedTest()
+        //{
+        //    SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\FunctionDefError.lua");
+        //    var generator = new TestGenerator();
+        //    generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
+        //    new FunctionDefError_Generated().Test(new Tester(tree));
+        //}
 
-            //"-hello_world"
+        //"-hello_world"
 
-            //"+-*/"
+        //"+-*/"
 
-            //"x ==--[[ comment ]]y"
+        //"x ==--[[ comment ]]y"
 
-            //"x..y"
+        //"x..y"
 
-            //"x +1 == 2   x= 3 /2+4"
+        //"x +1 == 2   x= 3 /2+4"
 
-            //"
-            //x=
-            //1"
+        //"
+        //x=
+        //1"
 
-            //"1     +       2        =       x"
+        //"1     +       2        =       x"
 
-            //"
-            //1+1+
-            //1"
+        //"
+        //1+1+
+        //1"
 
-            //"
-            //1+1+
-            //1"
+        //"
+        //1+1+
+        //1"
 
-            //"1+"
+        //"1+"
 
-            //"t[1]"
+        //"t[1]"
 
-            //"}("
+        //"}("
 
-            //")("
+        //")("
 
-            //"]("
+        //"]("
 
-            //"t = [ 1--[[ comment ]]]"
+        //"t = [ 1--[[ comment ]]]"
 
-            //"foo = function (x, y, z, w) end"
+        //"foo = function (x, y, z, w) end"
 
-            //"t[\"this is a test that grabs this key in Lua\"]"
+        //"t[\"this is a test that grabs this key in Lua\"]"
 
-            //"t = {1, 3, 4, 5, 6, 7,}"
+        //"t = {1, 3, 4, 5, 6, 7,}"
 
-            //"
-            //t = {
-            //    1,
-            //    2,
-            //}"
+        //"
+        //t = {
+        //    1,
+        //    2,
+        //}"
 
-            //"
-            //foo = function(
-            //    a, b, c)"
+        //"
+        //foo = function(
+        //    a, b, c)"
 
-            //"
-            //t = [
-
-
-            //1
+        //"
+        //t = [
 
 
-            //]"
-
-            //"
-            //t :
-            //foo()
-            //t.
-            // bar ()"
-
-            //"
-            //foo = function()
-            //    return
-            //end"
-
-            //"
-            //foo = function()
-            //return
-            //end"
-
-            //"
-            //t1 = {
-            //1,
-            //}"
-
-            //"
-            //foo = function
-            //--[[comment]] return
-            //end"
-
-            //"
-            //foo = function
-            //bar = function
-            //end
-            //end"
-
-            //"
-            //t1 = {
-            //t2 = {
-            //x, y, z
-            //    }
-            //    t3 = {
-            //x
-            //}
-            //}"
-
-            //"
-            //foo = function()
-            //return--comment
-            //    end"
-
-            //"     foo"
-
-            //"
-
-            //foo = function()
-            //                  return
-            //end"
-
-            //"{
-            //       x"
-
-            //",x"
-
-            //"x,= 1"
-
-            //"{ x,,y }"
-
-            //",--[[ comment ]]x"
-
-            //"{ x,y,z }"
-
-            //"{ x,y, ,,,, },y32,,,s2,"
-
-            //"x,             y"
-
-            //"
-            //x,
-            //y = 1,2"
-
-            //"x,y = 1,2"
-
-            //"function foo(x,y,z)"
-
-            //"{ x, y,}"
-
-            //"x,y"
-
-            //"
-            //x
-
-            //x       "
-
-            //"
-            //x = 10           
-            //-- comment here
-            //--[[block
-            //comment
-            //here]]
-            //x = x + 1            "
-
-            //"x   
-            //    "
+        //1
 
 
+        //]"
+
+        //"
+        //t :
+        //foo()
+        //t.
+        // bar ()"
+
+        //"
+        //foo = function()
+        //    return
+        //end"
+
+        //"
+        //foo = function()
+        //return
+        //end"
+
+        //"
+        //t1 = {
+        //1,
+        //}"
+
+        //"
+        //foo = function
+        //--[[comment]] return
+        //end"
+
+        //"
+        //foo = function
+        //bar = function
+        //end
+        //end"
+
+        //"
+        //t1 = {
+        //t2 = {
+        //x, y, z
+        //    }
+        //    t3 = {
+        //x
+        //}
+        //}"
+
+        //"
+        //foo = function()
+        //return--comment
+        //    end"
+
+        //"     foo"
+
+        //"
+
+        //foo = function()
+        //                  return
+        //end"
+
+        //"{
+        //       x"
+
+        //",x"
+
+        //"x,= 1"
+
+        //"{ x,,y }"
+
+        //",--[[ comment ]]x"
+
+        //"{ x,y,z }"
+
+        //"{ x,y, ,,,, },y32,,,s2,"
+
+        //"x,             y"
+
+        //"
+        //x,
+        //y = 1,2"
+
+        //"x,y = 1,2"
+
+        //"function foo(x,y,z)"
+
+        //"{ x, y,}"
+
+        //"x,y"
+
+        //"
+        //x
+
+        //x       "
+
+        //"
+        //x = 10           
+        //-- comment here
+        //--[[block
+        //comment
+        //here]]
+        //x = x + 1            "
+
+        //"x   
+        //    "
 
 
-            //[Fact]
-            //public void FunctionDefErrorGeneratedTest()
-            //{
-            //    SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\FunctionDefError.lua");
-            //    var generator = new TestGenerator();
-            //    generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
-            //    new FunctionDefError_Generated().Test(new Tester(tree));
-            //}
 
-            //[Fact]
-            //public void AutoGenerateTests()
-            //{
-            //    var generator = new TestGenerator();
-            //    generator.GenerateTestsForAllFiles();
-            //}
+
+        //[Fact]
+        //public void FunctionDefErrorGeneratedTest()
+        //{
+        //    SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\FunctionDefError.lua");
+        //    var generator = new TestGenerator();
+        //    generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
+        //    new FunctionDefError_Generated().Test(new Tester(tree));
+        //}
+
+        //[Fact]
+        //public void AutoGenerateTests()
+        //{
+        //    var generator = new TestGenerator();
+        //    generator.GenerateTestsForAllFiles();
+        //}
 
         [Fact]
         public void DebugTreeEnumeratorMethod()
@@ -337,7 +370,7 @@ get_zero = function() return 0 end", "LucaDemo");
                 {
                     Debug.WriteLine(((SyntaxNode)node).Kind.ToString() + "\n");
                 }
-                
+
             }
 
             foreach (var error in tree.ErrorList)
