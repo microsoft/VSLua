@@ -46,11 +46,6 @@ namespace LanguageService.Formatting
                 tabsNeeded = (totalSpaces - spacesNeeded) / (int)globalOptions.TabSize;
             }
 
-            return Indenter.MakeIndentation(tabsNeeded, spacesNeeded);
-        }
-
-        private static string MakeIndentation(int tabsNeeded, int spacesNeeded)
-        {
             return new string('\t', tabsNeeded) + new string(' ', spacesNeeded);
         }
 
