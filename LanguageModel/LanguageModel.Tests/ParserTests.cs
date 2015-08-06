@@ -53,6 +53,9 @@ namespace LanguageService.Tests
         public void TableStatementsGeneratedTest()
         {
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\TableStatements.lua");
+
+            var generator = new TestGenerator();
+            generator.GenerateTestForFile(@"CorrectSampleLuaFiles\TableStatements.lua", "TableStatements");
             new TableStatements_Generated().Test(new Tester(tree));
         }
 
@@ -102,7 +105,7 @@ end
 get_zero = function() return 0 end", "LucaDemo");
             Debug.WriteLine(tree.ErrorList.Count);
 
-            new SimpleTableError_Generated().Test(new Tester(tree));
+            new LucaDemo_Generated().Test(new Tester(tree));
         }
 
         //[Fact]

@@ -18,20 +18,14 @@ namespace LanguageModel.Tests.GeneratedTestFiles
                         t.N(SyntaxKind.LocalKeyword);
                         t.N(SyntaxKind.NameList);
                         {
-                            t.N(SyntaxKind.SeparatedListElement);
-                            {
-                                t.N(SyntaxKind.Identifier);
-                            }
+                            t.N(SyntaxKind.Identifier);
                         }
                         t.N(SyntaxKind.AssignmentOperator);
                         t.N(SyntaxKind.ExpList);
                         {
-                            t.N(SyntaxKind.SeparatedListElement);
+                            t.N(SyntaxKind.SimpleExpression);
                             {
-                                t.N(SyntaxKind.SimpleExpression);
-                                {
-                                    t.N(SyntaxKind.Number);
-                                }
+                                t.N(SyntaxKind.Number);
                             }
                         }
                     }
@@ -65,21 +59,18 @@ namespace LanguageModel.Tests.GeneratedTestFiles
                                     t.N(SyntaxKind.OpenParen);
                                     t.N(SyntaxKind.ExpList);
                                     {
-                                        t.N(SyntaxKind.SeparatedListElement);
+                                        t.N(SyntaxKind.SquareBracketVar);
                                         {
-                                            t.N(SyntaxKind.SquareBracketVar);
+                                            t.N(SyntaxKind.NameVar);
                                             {
-                                                t.N(SyntaxKind.NameVar);
-                                                {
-                                                    t.N(SyntaxKind.Identifier);
-                                                }
-                                                t.N(SyntaxKind.OpenBracket);
-                                                t.N(SyntaxKind.NameVar);
-                                                {
-                                                    t.N(SyntaxKind.Identifier);
-                                                }
-                                                t.N(SyntaxKind.CloseBracket);
+                                                t.N(SyntaxKind.Identifier);
                                             }
+                                            t.N(SyntaxKind.OpenBracket);
+                                            t.N(SyntaxKind.NameVar);
+                                            {
+                                                t.N(SyntaxKind.Identifier);
+                                            }
+                                            t.N(SyntaxKind.CloseBracket);
                                         }
                                     }
                                     t.N(SyntaxKind.CloseParen);
@@ -89,30 +80,24 @@ namespace LanguageModel.Tests.GeneratedTestFiles
                             {
                                 t.N(SyntaxKind.VarList);
                                 {
-                                    t.N(SyntaxKind.SeparatedListElement);
+                                    t.N(SyntaxKind.NameVar);
                                     {
-                                        t.N(SyntaxKind.NameVar);
-                                        {
-                                            t.N(SyntaxKind.Identifier);
-                                        }
+                                        t.N(SyntaxKind.Identifier);
                                     }
                                 }
                                 t.N(SyntaxKind.AssignmentOperator);
                                 t.N(SyntaxKind.ExpList);
                                 {
-                                    t.N(SyntaxKind.SeparatedListElement);
+                                    t.N(SyntaxKind.BinaryOperatorExpression);
                                     {
-                                        t.N(SyntaxKind.BinaryOperatorExpression);
+                                        t.N(SyntaxKind.NameVar);
                                         {
-                                            t.N(SyntaxKind.NameVar);
-                                            {
-                                                t.N(SyntaxKind.Identifier);
-                                            }
-                                            t.N(SyntaxKind.PlusOperator);
-                                            t.N(SyntaxKind.SimpleExpression);
-                                            {
-                                                t.N(SyntaxKind.Number);
-                                            }
+                                            t.N(SyntaxKind.Identifier);
+                                        }
+                                        t.N(SyntaxKind.PlusOperator);
+                                        t.N(SyntaxKind.SimpleExpression);
+                                        {
+                                            t.N(SyntaxKind.Number);
                                         }
                                     }
                                 }

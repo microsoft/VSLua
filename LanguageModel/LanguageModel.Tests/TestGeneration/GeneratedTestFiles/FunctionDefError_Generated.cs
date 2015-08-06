@@ -17,40 +17,34 @@ namespace LanguageModel.Tests.GeneratedTestFiles
                     {
                         t.N(SyntaxKind.VarList);
                         {
-                            t.N(SyntaxKind.SeparatedListElement);
+                            t.N(SyntaxKind.NameVar);
                             {
-                                t.N(SyntaxKind.NameVar);
-                                {
-                                    t.N(SyntaxKind.Identifier);
-                                }
+                                t.N(SyntaxKind.Identifier);
                             }
                         }
                         t.N(SyntaxKind.AssignmentOperator);
                         t.N(SyntaxKind.ExpList);
                         {
-                            t.N(SyntaxKind.SeparatedListElement);
+                            t.N(SyntaxKind.FunctionDef);
                             {
-                                t.N(SyntaxKind.FunctionDef);
+                                t.N(SyntaxKind.FunctionKeyword);
+                                t.N(SyntaxKind.FuncBodyNode);
                                 {
-                                    t.N(SyntaxKind.FunctionKeyword);
-                                    t.N(SyntaxKind.FuncBodyNode);
+                                    t.N(SyntaxKind.MissingToken);
+                                    t.N(SyntaxKind.NameListPar);
                                     {
-                                        t.N(SyntaxKind.MissingToken);
-                                        t.N(SyntaxKind.NameListPar);
-                                        {
-                                            t.N(SyntaxKind.NameList);
-                                        }
-                                        t.N(SyntaxKind.MissingToken);
-                                        t.N(SyntaxKind.BlockNode);
-                                        {
-                                            t.N(SyntaxKind.ReturnStatementNode);
-                                            {
-                                                t.N(SyntaxKind.ReturnKeyword);
-                                                t.N(SyntaxKind.ExpList);
-                                            }
-                                        }
-                                        t.N(SyntaxKind.EndKeyword);
+                                        t.N(SyntaxKind.NameList);
                                     }
+                                    t.N(SyntaxKind.MissingToken);
+                                    t.N(SyntaxKind.BlockNode);
+                                    {
+                                        t.N(SyntaxKind.ReturnStatementNode);
+                                        {
+                                            t.N(SyntaxKind.ReturnKeyword);
+                                            t.N(SyntaxKind.ExpList);
+                                        }
+                                    }
+                                    t.N(SyntaxKind.EndKeyword);
                                 }
                             }
                         }

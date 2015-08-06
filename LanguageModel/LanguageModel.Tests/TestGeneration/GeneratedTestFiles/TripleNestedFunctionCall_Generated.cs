@@ -24,47 +24,39 @@ namespace LanguageModel.Tests.GeneratedTestFiles
                             t.N(SyntaxKind.OpenParen);
                             t.N(SyntaxKind.ExpList);
                             {
-                                t.N(SyntaxKind.SeparatedListElement);
+                                t.N(SyntaxKind.FunctionCallExp);
                                 {
-                                    t.N(SyntaxKind.FunctionCallExp);
+                                    t.N(SyntaxKind.NameVar);
                                     {
-                                        t.N(SyntaxKind.NameVar);
+                                        t.N(SyntaxKind.Identifier);
+                                    }
+                                    t.N(SyntaxKind.ParenArg);
+                                    {
+                                        t.N(SyntaxKind.OpenParen);
+                                        t.N(SyntaxKind.ExpList);
                                         {
-                                            t.N(SyntaxKind.Identifier);
-                                        }
-                                        t.N(SyntaxKind.ParenArg);
-                                        {
-                                            t.N(SyntaxKind.OpenParen);
-                                            t.N(SyntaxKind.ExpList);
+                                            t.N(SyntaxKind.FunctionCallExp);
                                             {
-                                                t.N(SyntaxKind.SeparatedListElement);
+                                                t.N(SyntaxKind.NameVar);
                                                 {
-                                                    t.N(SyntaxKind.FunctionCallExp);
+                                                    t.N(SyntaxKind.Identifier);
+                                                }
+                                                t.N(SyntaxKind.ParenArg);
+                                                {
+                                                    t.N(SyntaxKind.OpenParen);
+                                                    t.N(SyntaxKind.ExpList);
                                                     {
                                                         t.N(SyntaxKind.NameVar);
                                                         {
                                                             t.N(SyntaxKind.Identifier);
                                                         }
-                                                        t.N(SyntaxKind.ParenArg);
-                                                        {
-                                                            t.N(SyntaxKind.OpenParen);
-                                                            t.N(SyntaxKind.ExpList);
-                                                            {
-                                                                t.N(SyntaxKind.SeparatedListElement);
-                                                                {
-                                                                    t.N(SyntaxKind.NameVar);
-                                                                    {
-                                                                        t.N(SyntaxKind.Identifier);
-                                                                    }
-                                                                }
-                                                            }
-                                                            t.N(SyntaxKind.CloseParen);
-                                                        }
+
                                                     }
+                                                    t.N(SyntaxKind.CloseParen);
                                                 }
                                             }
-                                            t.N(SyntaxKind.CloseParen);
                                         }
+                                        t.N(SyntaxKind.CloseParen);
                                     }
                                 }
                             }
