@@ -7,20 +7,18 @@ namespace LanguageService.Formatting
 {
     internal class ParsedToken
     {
-        internal ParsedToken(Token token, int blockLevel, SyntaxNode statementNode, SyntaxNode functionDefOrTableConstructor)
+        internal ParsedToken(Token token, int blockLevel, SyntaxNode statementNode)
         {
             Requires.NotNull(token, nameof(token));
 
             this.Token = token;
             this.BlockLevel = blockLevel;
             this.StatementNode = statementNode;
-            this.FunctionDefOrTableConstructor = functionDefOrTableConstructor;
         }
 
         internal Token Token { get; }
         internal int BlockLevel { get; }
         internal SyntaxNode StatementNode { get; }
-        internal SyntaxNode FunctionDefOrTableConstructor { get;}
 
 
         private static readonly ImmutableHashSet<SyntaxKind> StatKinds = ImmutableHashSet.Create(
@@ -41,7 +39,7 @@ namespace LanguageService.Formatting
             SyntaxKind.LocalAssignmentStatementNode
         );
 
-        private static IEnumerable<ParsedToken> WalkTreeRangeKeepLevelAndParent(SyntaxNodeOrToken currentRoot, int blockLevel, SyntaxNode statementNode, SyntaxNode closeParent = null)
+        private static IEnumerable<ParsedToken> WalkTreeRangeKeepLevelAndParent(SyntaxNodeOrToken currentRoot, int blockLevel, SyntaxNode statementNode, Range range)
         {
             if (!SyntaxTree.IsLeafNode(currentRoot))
             {
@@ -56,13 +54,6 @@ namespace LanguageService.Formatting
                         nextStatementNode = statementNode;
                     }
 
-                    if (syntaxNode.Kind == SyntaxKind.FunctionDef ||
-                        syntaxNode.Kind == SyntaxKind.TableConstructorArg ||
-                        syntaxNode.Kind == SyntaxKind.TableConstructorExp)
-                    {
-                        closeParent = syntaxNode;
-                    }
-
                     if ((syntaxNode.Kind == SyntaxKind.BlockNode && nextStatementNode != null) ||
                          syntaxNode.Kind == SyntaxKind.FieldList)
                     {
@@ -71,7 +62,7 @@ namespace LanguageService.Formatting
 
                     foreach (ParsedToken parsedToken in WalkTreeRangeKeepLevelAndParent(node,
                         increaseBlockLevel ? blockLevel + 1 : blockLevel,
-                        nextStatementNode, closeParent))
+                        nextStatementNode, range))
                     {
                         yield return parsedToken;
                     }
@@ -80,16 +71,21 @@ namespace LanguageService.Formatting
             else
             {
                 Token token = currentRoot as Token;
-                if (token != null)
+
+                if (token != null && token.Start >= range.Start)
                 {
-                    yield return new ParsedToken(token, blockLevel, statementNode, closeParent);
+                    if (token.FullStart > range.End)
+                    {
+                        yield break;
+                    }
+                    yield return new ParsedToken(token, blockLevel, statementNode);
                 }
             }
         }
 
         internal static IEnumerable<ParsedToken> GetParsedTokens(SyntaxTree syntaxTree, Range range)
         {
-            return WalkTreeRangeKeepLevelAndParent(syntaxTree.Root, 0, null);
+            return WalkTreeRangeKeepLevelAndParent(syntaxTree.Root, 0, null, range);
         }
 
         //// This function wouldn't exist in the final version since instead of iterating
