@@ -39,6 +39,28 @@ namespace LanguageService.Formatting.Ruling
                 },
                 RuleAction.Space);
 
+        internal static readonly Rule SpaceAfterAssignmentOperatorInField =
+            new SimpleRule(
+                new RuleDescriptor(SyntaxKind.AssignmentOperator, TokenRange.AnyVisible),
+                new List<Func<FormattingContext, bool>>
+                {
+                    TokensAreOnSameLine,
+                    NoCommentsBetweenTokens,
+                    IsInATableConstructor(Side.Left)
+                },
+                RuleAction.Space);
+
+        internal static readonly Rule SpaceBeforeAssignmentOperatorInField =
+            new SimpleRule(
+                new RuleDescriptor(TokenRange.AnyVisible, SyntaxKind.AssignmentOperator),
+                new List<Func<FormattingContext, bool>>
+                {
+                    TokensAreOnSameLine,
+                    NoCommentsBetweenTokens,
+                    IsInATableConstructor(Side.Right)
+                },
+                RuleAction.Space);
+
         internal static readonly Rule SpaceAfterBinaryOperator =
             new SimpleRule(
                 new RuleDescriptor(TokenRange.BinaryOperators, TokenRange.AnyVisible),
@@ -135,12 +157,17 @@ namespace LanguageService.Formatting.Ruling
         internal static readonly ImmutableArray<Rule> AllRules = ImmutableArray.Create(
             NoSpaceAfterCommaInFor,
             SpaceAfterComma,
+
             SpaceAfterAssignmentOperatorInStatement,
             SpaceBeforeAssignmentOperatorInStatement,
             SpaceBeforeAssignmentOperatorInFor,
             SpaceAfterAssignmentOperatorInFor,
+            SpaceBeforeAssignmentOperatorInField,
+            SpaceAfterAssignmentOperatorInField,
+
             SpaceAfterBinaryOperator,
             SpaceBeforeBinaryOperator,
+
             SpaceAfterValueBeforeOpenParenthesis,
             SpaceBeforeValueAfterOpenParenthesis,
             SpaceBeforeValueAfterOpenSquareBracket,
@@ -148,11 +175,13 @@ namespace LanguageService.Formatting.Ruling
             SpaceAfterValueBeforeCloseParenthesis,
             SpaceAfterValueBeforeCloseSquareBracket,
             SpaceAfterValueBeforeCloseCurlyBrace,
-            DeleteSpaceBeforeEofToken,
+
             DeleteSpaceAfterValueBeforeDot,
             DeleteSpaceBeforeValueAfterDot,
             DeleteSpaceAfterValueBeforeColon,
             DeleteSpaceBeforeValueAfterColon,
+
+            DeleteSpaceBeforeEofToken,
             DeleteTrailingWhitespace
             );
 
@@ -177,7 +206,7 @@ namespace LanguageService.Formatting.Ruling
             Right
         }
 
-        private static Func<FormattingContext, bool> IsInAField(Side side)
+        private static Func<FormattingContext, bool> IsInATableConstructor(Side side)
         {
             return (FormattingContext formattingContext) =>
             {
@@ -185,9 +214,7 @@ namespace LanguageService.Formatting.Ruling
                     formattingContext.CurrentToken :
                     formattingContext.NextToken;
 
-                for (SyntaxNode syntaxNode in )
-
-                return true;
+                return parsedToken.InTableConstructor;
             };
         }
 

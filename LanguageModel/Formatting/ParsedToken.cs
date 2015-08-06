@@ -66,8 +66,7 @@ namespace LanguageService.Formatting
 
                     foreach (ParsedToken parsedToken in WalkTreeRangeKeepLevelAndParent(node,
                         increaseBlockLevel ? blockLevel + 1 : blockLevel,
-                        nextStatementNode,
-                        nowInTable ? true : inTableConstructor,
+                        nextStatementNode, nowInTable ? true : inTableConstructor,
                         range))
                     {
                         yield return parsedToken;

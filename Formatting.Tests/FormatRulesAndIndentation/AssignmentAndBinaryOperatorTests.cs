@@ -35,8 +35,8 @@ namespace Formatting.Tests
         [Fact]
         public void AssignmentTable()
         {
-            string original = "{ x=1, y=2 }";
-            string expected = "{ x = 1, y = 2 }";
+            string original = "t = { x=1, y=2 }";
+            string expected = "t = { x = 1, y = 2 }";
             GeneralTest(original, expected);
         }
 
@@ -86,16 +86,16 @@ x =
         [Fact]
         public void BasicBinaryOperator()
         {
-            string original = "1+1";
-            string expected = "1 + 1";
+            string original = "x = 1+1";
+            string expected = "x = 1 + 1";
             GeneralTest(original, expected);
         }
 
         [Fact]
         public void MutliOperators()
         {
-            string original = "1==1+2-4*10^6";
-            string expected = "1 == 1 + 2 - 4 * 10 ^ 6";
+            string original = "x = 1==1+2-4*10^6";
+            string expected = "x = 1 == 1 + 2 - 4 * 10 ^ 6";
             GeneralTest(original, expected);
         }
 
@@ -103,10 +103,10 @@ x =
         public void MutliLinedBinary()
         {
             string original = @"
-1+1+
+x = 1+1+
 1";
             string expected = @"
-1 + 1 +
+x = 1 + 1 +
 1";
             GeneralTest(original, expected);
         }
@@ -115,15 +115,15 @@ x =
         public void BinaryAdjecent()
         {
             string original = "+-*/";
-            string expected = "+ - * /";
+            string expected = "+-*/";
             GeneralTest(original, expected);
         }
 
         [Fact]
         public void TrailingBinary()
         {
-            string original = "1+";
-            string expected = "1 +";
+            string original = "x = 1+";
+            string expected = "x = 1 +";
             GeneralTest(original, expected);
         }
 
