@@ -215,6 +215,7 @@ namespace LanguageService
                         case SyntaxKind.OpenParen:
                         case SyntaxKind.OpenCurlyBrace:
                         case SyntaxKind.String:
+                        case SyntaxKind.Colon:
                             return ParseFunctionCallStatementNode(prefixExp);
                         default:
                             positionInTokenList = tempPosition;
@@ -230,10 +231,12 @@ namespace LanguageService
         private AssignmentStatementNode ParseAssignmentStatementNode()
         {
             var node = AssignmentStatementNode.CreateBuilder();
+            node.StartPosition = Peek().Start;
             node.Kind = SyntaxKind.AssignmentStatementNode;
             node.VarList = ParseVarList().ToBuilder();
             node.AssignmentOperator = GetExpectedToken(SyntaxKind.AssignmentOperator);
             node.ExpList = ParseExpList().ToBuilder();
+            node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
         }
 
@@ -490,7 +493,7 @@ namespace LanguageService
         {
             var node = ElseBlockNode.CreateBuilder();
             node.Kind = SyntaxKind.ElseBlockNode;
-            node.StartPosition = currentToken.Start;
+            node.StartPosition = Peek().Start;
             node.ElseKeyword = currentToken;
             node.Block = ParseBlock(ParsingContext.ElseBlock).ToBuilder();
             node.Length = currentToken.End - node.StartPosition;
@@ -514,7 +517,7 @@ namespace LanguageService
         {
             var node = ElseIfBlockNode.CreateBuilder();
             node.Kind = SyntaxKind.ElseIfBlockNode;
-            node.StartPosition = currentToken.Start;
+            node.StartPosition = Peek().Start;
             node.ElseIfKeyword = currentToken;
             node.Exp = ParseExpression().ToBuilder();
             node.ThenKeyword = GetExpectedToken(SyntaxKind.ThenKeyword);
@@ -537,7 +540,7 @@ namespace LanguageService
                 || ParseExpected(SyntaxKind.TildeUnOp))
             {
                 var node = UnaryOperatorExpression.CreateBuilder();
-                node.StartPosition = currentToken.Start;
+                node.StartPosition = Peek().Start;
                 node.UnaryOperator = currentToken;
                 node.Exp = ParseExpression().ToBuilder();
                 exp = node.ToImmutable();
@@ -739,7 +742,7 @@ namespace LanguageService
         {
             var node = ParenPrefixExp.CreateBuilder();
             node.Kind = SyntaxKind.ParenPrefixExp;
-            node.StartPosition = currentToken.Start;
+            node.StartPosition = Peek().Start;
             node.OpenParen = GetExpectedToken(SyntaxKind.OpenParen);
             node.Exp = ParseExpression().ToBuilder();
             node.CloseParen = GetExpectedToken(SyntaxKind.CloseParen);
@@ -827,6 +830,8 @@ namespace LanguageService
                         default:
                             return ParseNameVar();
                     }
+                case SyntaxKind.OpenParen:
+                    return ParsePotentialVarWithPrefixExp();
                 default:
                     ParseErrorAtCurrentPosition(ErrorMessages.InvalidVar);
 
@@ -873,7 +878,7 @@ namespace LanguageService
         {
             var node = StringArg.CreateBuilder();
             node.Kind = SyntaxKind.StringArg;
-            node.StartPosition = currentToken.Start;
+            node.StartPosition = Peek().Start;
             node.StringLiteral = GetExpectedToken(SyntaxKind.String);
             node.Length = currentToken.End - node.StartPosition;
             return node.ToImmutable();
@@ -883,7 +888,7 @@ namespace LanguageService
         {
             var node = TableContructorArg.CreateBuilder();
             node.Kind = SyntaxKind.TableConstructorArg;
-            node.StartPosition = currentToken.Start;
+            node.StartPosition = Peek().Start;
             node.OpenCurly = GetExpectedToken(SyntaxKind.OpenCurlyBrace);
             node.FieldList = ParseFieldList().ToBuilder();
             node.CloseCurly = GetExpectedToken(SyntaxKind.CloseCurlyBrace);

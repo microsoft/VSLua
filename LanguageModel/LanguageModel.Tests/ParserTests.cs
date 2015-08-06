@@ -130,8 +130,18 @@ get_zero = function() return 0 end", "LucaDemo");
             SyntaxTree tree = SyntaxTree.CreateFromString("}(");
             var generator = new TestGenerator();
             generator.GenerateTestFromString("}(", "BracketsError");
+            new BracketsError_Generated().Test(new Tester(tree));
         }
 
+        [Fact]
+        public void PrefixExpFirstGeneratedTest()
+        {
+            SyntaxTree tree = SyntaxTree.CreateFromString("(f)[s] = k");
+            var generator = new TestGenerator();
+            generator.GenerateTestFromString("(f)[s] = k", "PrefixExpFirst");
+            new PrefixExpFirst_Generated().Test(new Tester(tree));
+        }
+        
         [Fact]
         public void CheckForExceptionsFromListOfInvalidProgramsTest()
         {
