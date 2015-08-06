@@ -989,7 +989,17 @@ namespace LanguageService
         {
             get
             {
-                return SyntaxList.Cast<SyntaxNodeOrToken>().ToImmutableList();
+                var children = new List<SyntaxNodeOrToken>();
+
+                foreach(var listItem in syntaxList)
+                {
+                    foreach(var child in listItem.Children)
+                    {
+                        children.Add(child);
+                    }
+                }
+
+                return children.ToImmutableList();
             }
         }
 
@@ -1003,9 +1013,9 @@ namespace LanguageService
     public partial class SeparatedListElement : SyntaxNode
     {
         [Required]
-        readonly Token seperator;
-        [Required]
         readonly SyntaxNodeOrToken element;
+        [Required]
+        readonly Token seperator;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
@@ -1013,7 +1023,7 @@ namespace LanguageService
             {
                 if (seperator != null)
                 {
-                    return ImmutableList.Create<SyntaxNodeOrToken>(seperator, element);
+                    return ImmutableList.Create<SyntaxNodeOrToken>(element, seperator);
                 }
                 else
                 {

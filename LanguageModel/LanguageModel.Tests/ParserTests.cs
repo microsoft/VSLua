@@ -77,12 +77,40 @@ namespace LanguageService.Tests
             new SimpleTableError_Generated().Test(new Tester(tree));
         }
 
+        [Fact]
+        public void LucaDemoGeneratedTest()
+        {
+            SyntaxTree tree = SyntaxTree.CreateFromString(@"
+x= 1
+-- this is an add function
+add = function(x, y)
+    return x+y;-- adding
+end
+
+
+get_zero = function() return 0 end");
+
+            var generator = new TestGenerator();
+            generator.GenerateTestFromString(@"
+x= 1
+-- this is an add function
+add = function(x, y)
+    return x+y;-- adding
+end
+
+
+get_zero = function() return 0 end", "LucaDemo");
+            Debug.WriteLine(tree.ErrorList.Count);
+
+            new SimpleTableError_Generated().Test(new Tester(tree));
+        }
+
         //[Fact]
         //public void SimpleTableGeneratedTest()
         //{
         //    SyntaxTree tree = SyntaxTree.CreateFromString("1+1");
         //    var generator = new TestGenerator();
-        //    generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
+        //    generator.GenerateTestFromString(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
         //    new SimpleTableError_Generated().Test(new Tester(tree));
         //}
 
