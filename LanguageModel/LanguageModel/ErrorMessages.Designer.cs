@@ -97,11 +97,47 @@ namespace LanguageService.LanguageModel {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This token is not a valid in the current expression context..
+        /// </summary>
+        internal static string IncompleteExpression {
+            get {
+                return ResourceManager.GetString("IncompleteExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This token is not a valid in the current expression context..
+        /// </summary>
+        internal static string IncompletePrefixExp {
+            get {
+                return ResourceManager.GetString("IncompletePrefixExp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This token is not a valid in the current argument context..
+        /// </summary>
+        internal static string InvalidArgs {
+            get {
+                return ResourceManager.GetString("InvalidArgs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is not a complete statement. Expecting assignment operator: &quot;=&quot;.
         /// </summary>
         internal static string InvalidStatementWithoutAssignementOperator {
             get {
                 return ResourceManager.GetString("InvalidStatementWithoutAssignementOperator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This token is not a valid in the current variable context..
+        /// </summary>
+        internal static string InvalidVar {
+            get {
+                return ResourceManager.GetString("InvalidVar", resourceCulture);
             }
         }
         
@@ -138,15 +174,6 @@ namespace LanguageService.LanguageModel {
         internal static string StatementAfterReturnStatement {
             get {
                 return ResourceManager.GetString("StatementAfterReturnStatement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to test error message.
-        /// </summary>
-        internal static string test1 {
-            get {
-                return ResourceManager.GetString("test1", resourceCulture);
             }
         }
         

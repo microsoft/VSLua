@@ -141,13 +141,22 @@
   <data name="StatementAfterReturnStatement" xml:space="preserve">
     <value>Unreachable code detected.</value>
   </data>
-  <data name="test1" xml:space="preserve">
-    <value>test error message</value>
-  </data>
   <data name="VarListParseError" xml:space="preserve">
     <value>Unexpected token in variable list.</value>
   </data>
   <data name="InvalidStatementWithoutAssignementOperator" xml:space="preserve">
     <value>This is not a complete statement. Expecting assignment operator: "="</value>
+  </data>
+  <data name="IncompleteExpression" xml:space="preserve">
+    <value>This token is not a valid in the current expression context.</value>
+  </data>
+  <data name="IncompletePrefixExp" xml:space="preserve">
+    <value>This token is not a valid in the current expression context.</value>
+  </data>
+  <data name="InvalidArgs" xml:space="preserve">
+    <value>This token is not a valid in the current argument context.</value>
+  </data>
+  <data name="InvalidVar" xml:space="preserve">
+    <value>This token is not a valid in the current variable context.</value>
   </data>
 </root>

@@ -125,6 +125,14 @@ get_zero = function() return 0 end", "LucaDemo");
         }
 
         [Fact]
+        public void BracketsErrorGeneratedTest()
+        {
+            SyntaxTree tree = SyntaxTree.CreateFromString("}(");
+            var generator = new TestGenerator();
+            generator.GenerateTestFromString("}(", "BracketsError");
+        }
+
+        [Fact]
         public void CheckForExceptionsFromListOfInvalidProgramsTest()
         {
             var reader = new StreamReader(File.OpenRead(@"CorrectSampleLuaFiles\InvalidProgramsAsStrings.lua"));
