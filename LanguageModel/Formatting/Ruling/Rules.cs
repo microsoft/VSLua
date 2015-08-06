@@ -88,7 +88,21 @@ namespace LanguageService.Formatting.Ruling
 
         internal static readonly Rule DeleteTrailingWhitespace = new DeleteTrailingWhitespace();
 
+        internal static readonly Rule NoSpaceAfterCommaInFor =
+            new SimpleRule(new RuleDescriptor(SyntaxKind.Comma, TokenRange.AnyVisible),
+                new List<Func<FormattingContext, bool>>
+                {
+                    TokensAreOnSameLine,
+                    NoCommentsBetweenTokens,
+                    InSyntaxNode(Side.Left, new List<SyntaxKind> { SyntaxKind.SimpleForStatementNode })
+                        },
+
+                RuleAction.Delete);
+
+
+
         internal static readonly ImmutableArray<Rule> AllRules = ImmutableArray.Create(
+            NoSpaceAfterCommaInFor,
             SpaceAfterComma,
             SpaceAfterAssignmentOperator,
             SpaceBeforeAssignmentOperator,
@@ -123,5 +137,24 @@ namespace LanguageService.Formatting.Ruling
         {
             return !formattingContext.ContainsCommentsBetweenTokens();
         }
+
+        private enum Side
+        {
+            Left,
+            Right
+        }
+
+        private static Func<FormattingContext, bool> InSyntaxNode(Side side, List<SyntaxKind> statementKinds)
+        {
+            return (FormattingContext formattingContext) =>
+            {
+                ParsedToken parsedToken = (side == Side.Left) ?
+                    formattingContext.CurrentToken :
+                    formattingContext.NextToken;
+
+                return statementKinds.Contains(parsedToken.StatementNode.Kind);
+            };
+        }
+
     }
 }
