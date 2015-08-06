@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
+using LanguageService.Formatting.Options;
 using Validation;
 
 namespace LanguageService.Formatting
 {
     internal class Indenter
     {
-        internal static IEnumerable<TextEditInfo> GetIndentations(List<ParsedToken> parsedTokens)
+        internal static IEnumerable<TextEditInfo> GetIndentations(List<ParsedToken> parsedTokens, GlobalOptions globalOptions)
         {
             Requires.NotNull(parsedTokens, nameof(parsedTokens));
 
             foreach (ParsedToken parsedToken in parsedTokens)
             {
                 string indentationString =
-                        Indenter.GetIndentationStringFromBlockLevel(parsedToken.BlockLevel, null);
+                        Indenter.GetIndentationStringFromBlockLevel(parsedToken, globalOptions);
                 foreach (IndentInfo indentInfo in Indenter.GetIndentInformation(parsedToken))
                 {
                     yield return new TextEditInfo(indentInfo.Start, indentInfo.Length, indentationString);
@@ -32,17 +33,17 @@ namespace LanguageService.Formatting
             internal int Length { get; }
         }
 
-        private static string GetIndentationStringFromBlockLevel(int blockLevel, SyntaxNode syntaxNode)
+        private static string GetIndentationStringFromBlockLevel(ParsedToken parsedToken, GlobalOptions globalOptions)
         {
-            if (syntaxNode == null)
-            {
-                //throw new ArgumentNullException();
-            }
+            //if (syntaxNode == null)
+            //{
+            //    //throw new ArgumentNullException();
+            //}
 
             // Here I would put the calculation for the indentation string parts
             // how many tabs, spaces that I need. I would also check the options for
             // how tabs are setup.
-            return Indenter.MakeIndentation(blockLevel * 4);
+            return Indenter.MakeIndentation(parsedToken.BlockLevel * (int)globalOptions.IndentSize);
         }
 
 
