@@ -174,6 +174,7 @@ get_zero = function() return 0 end", "LucaDemo");
         public void SeriesOfStringsErrorTest()
         {
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\InvalidProgramsAsStrings.lua");
+            //SyntaxTree tree = SyntaxTree.Create(@"C:\Users\t-kevimi\Documents\LuaTests\Lua Files for Testing\InvalidProgramsMemoryException.lua");
         }
 
         [Fact]

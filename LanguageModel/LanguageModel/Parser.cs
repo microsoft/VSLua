@@ -142,7 +142,8 @@ namespace LanguageService
                 }
                 else
                 {
-                    AbortParsingListOrMoveToNextToken(context);
+                    if (AbortParsingListOrMoveToNextToken(context))
+                        break;
                 }
             }
 
@@ -992,8 +993,7 @@ namespace LanguageService
                     throw new InvalidOperationException();
             }
         }
-
-        //TODO: @ Cyrus... syntaxnodeortoken seems lose?
+        
         private SyntaxNodeOrToken ParseListElement(ParsingContext context)
         {
             switch (context)
@@ -1041,17 +1041,12 @@ namespace LanguageService
                     return tokenType == SyntaxKind.EndKeyword;
                 case ParsingContext.RepeatStatementBlock:
                     return tokenType == SyntaxKind.UntilKeyword;
-
-                ////////////////////// UNSURE /////////////////////////////////////
                 case ParsingContext.ExpList:
                     return tokenType == SyntaxKind.CloseParen || tokenType == SyntaxKind.Semicolon || tokenType == SyntaxKind.DoKeyword; //TODO: whatabout end of assignment statement context?
                 case ParsingContext.NameList:
                     return tokenType == SyntaxKind.InKeyword || tokenType == SyntaxKind.CloseParen || tokenType == SyntaxKind.AssignmentOperator; //TODO: whatabout end of assignment statement context?
                 case ParsingContext.FuncNameDotSeperatedNameList:
                     return tokenType == SyntaxKind.Colon || tokenType == SyntaxKind.OpenParen; //TODO: Confirm there is no concretely defined terminator...
-
-                ////////////////////// UNSURE /////////////////////////////////////
-
                 case ParsingContext.VarList:
                     return tokenType == SyntaxKind.AssignmentOperator;
                 case ParsingContext.FieldList:
@@ -1331,7 +1326,7 @@ namespace LanguageService
             var tokenWithAddedTrivia = new Token(Peek().Kind, Peek().Text, tempTriviaList, currentToken.FullStart, Peek().Start);
 
             tokenList.RemoveAt(positionInTokenList);
-            
+
             if (positionInTokenList > tokenList.Count)
             {
                 tokenList.Add(tokenWithAddedTrivia);
@@ -1343,101 +1338,94 @@ namespace LanguageService
 
             positionInTokenList--;
             currentToken = (positionInTokenList >= 0) ? currentToken = tokenList[positionInTokenList] : null;
-
-            //TODO: fix this
-            ParseErrorAtCurrentToken(ErrorMessages.SkippedToken + '"' + Peek().Text + '"');
         }
 
         private bool isInSomeParsingContext()
-{
-    var tempStack = new Stack<ParsingContext>(contextStack.Reverse());
-
-    while (contextStack.Count > 0)
-    {
-        if (IsListElementBeginner(contextStack.Peek(), Peek().Kind))
         {
-            return true;
+            var tempStack = new Stack<ParsingContext>(contextStack.Reverse());
+
+            while (contextStack.Count > 0)
+            {
+                if (IsListElementBeginner(contextStack.Peek(), Peek().Kind))
+                {
+                    return true;
+                }
+                else
+                {
+                    contextStack.Pop();
+                }
+            }
+
+            contextStack = tempStack;
+            return false;
         }
-        else
+
+        #endregion
+
+        #region Helper Methods
+
+        private bool IsBinop(SyntaxKind type)
         {
-            contextStack.Pop();
+            switch (type)
+            {
+                case SyntaxKind.PlusOperator:
+                case SyntaxKind.MinusOperator:
+                case SyntaxKind.MultiplyOperator:
+                case SyntaxKind.DivideOperator:
+                case SyntaxKind.FloorDivideOperator:
+                case SyntaxKind.ExponentOperator:
+                case SyntaxKind.ModulusOperator:
+                case SyntaxKind.TildeUnOp: //TODO: deal with ambiguity
+                case SyntaxKind.BitwiseAndOperator:
+                case SyntaxKind.BitwiseOrOperator:
+                case SyntaxKind.BitwiseRightOperator:
+                case SyntaxKind.BitwiseLeftOperator:
+                case SyntaxKind.NotEqualsOperator:
+                case SyntaxKind.LessOrEqualOperator:
+                case SyntaxKind.GreaterOrEqualOperator:
+                case SyntaxKind.EqualityOperator:
+                case SyntaxKind.StringConcatOperator:
+                case SyntaxKind.GreaterThanOperator:
+                case SyntaxKind.LessThanOperator:
+                case SyntaxKind.AndBinop:
+                case SyntaxKind.OrBinop:
+                    return true;
+                default:
+                    return false;
+            }
         }
-    }
 
-    contextStack = tempStack;
-    return false;
-}
+        private Var ParsePotentialVarWithPrefixExp()
+        {
+            var prefixExp = ParsePrefixExp(); //Skip to the end of the prefix exp before checking.
+            if (Peek().Kind == SyntaxKind.OpenBracket)
+            {
+                return ParseSquareBracketVar(prefixExp);
+            }
+            else
+            {
+                return ParseDotVar(prefixExp);
+            }
+        }
 
-#endregion
-
-#region Helper Methods
-
-private bool IsBinop(SyntaxKind type)
-{
-    switch (type)
-    {
-        case SyntaxKind.PlusOperator:
-        case SyntaxKind.MinusOperator:
-        case SyntaxKind.MultiplyOperator:
-        case SyntaxKind.DivideOperator:
-        case SyntaxKind.FloorDivideOperator:
-        case SyntaxKind.ExponentOperator:
-        case SyntaxKind.ModulusOperator:
-        case SyntaxKind.TildeUnOp: //TODO: deal with ambiguity
-        case SyntaxKind.BitwiseAndOperator:
-        case SyntaxKind.BitwiseOrOperator:
-        case SyntaxKind.BitwiseRightOperator:
-        case SyntaxKind.BitwiseLeftOperator:
-        case SyntaxKind.NotEqualsOperator:
-        case SyntaxKind.LessOrEqualOperator:
-        case SyntaxKind.GreaterOrEqualOperator:
-        case SyntaxKind.EqualityOperator:
-        case SyntaxKind.StringConcatOperator:
-        case SyntaxKind.GreaterThanOperator:
-        case SyntaxKind.LessThanOperator:
-        case SyntaxKind.AndBinop:
-        case SyntaxKind.OrBinop:
-            return true;
-        default:
-            return false;
-    }
-}
-
-private Var ParsePotentialVarWithPrefixExp()
-{
-    //int tempPosition = positionInTokenList;
-    var prefixExp = ParsePrefixExp(); //Skip to the end of the prefix exp before checking.
-    if (Peek().Kind == SyntaxKind.OpenBracket)
-    {
-        //positionInTokenList = tempPosition; //Restore tokenList to beginning of node
-        return ParseSquareBracketVar(prefixExp);
-    }
-    else
-    {
-        //This case has arbitrarily chosen DotVar as the default for incomplete Vars starting with prefixexps
-        //positionInTokenList = tempPosition; //Restore tokenList to beginning of node
-        return ParseDotVar(prefixExp);
-    }
-}
-
-private bool IsBlockContext(ParsingContext context)
-{
-    switch (context)
-    {
-        case ParsingContext.IfBlock:
-        case ParsingContext.ChunkNodeBlock:
-        case ParsingContext.ElseBlock:
-        case ParsingContext.ElseIfBlock:
-        case ParsingContext.DoStatementBlock:
-        case ParsingContext.FuncBodyBlock:
-        case ParsingContext.WhileBlock:
-        case ParsingContext.RepeatStatementBlock:
-        case ParsingContext.ForStatementBlock:
-            return true;
-        default:
-            return false;
-    }
-}
+        private bool IsBlockContext(ParsingContext context)
+        {
+            switch (context)
+            {
+                case ParsingContext.IfBlock:
+                case ParsingContext.ChunkNodeBlock:
+                case ParsingContext.ElseBlock:
+                case ParsingContext.ElseIfBlock:
+                case ParsingContext.DoStatementBlock:
+                case ParsingContext.FuncBodyBlock:
+                case ParsingContext.WhileBlock:
+                case ParsingContext.RepeatStatementBlock:
+                case ParsingContext.ForStatementBlock:
+                    return true;
+                default:
+                    return false;
+            }
+        }
 
         #endregion
     }
