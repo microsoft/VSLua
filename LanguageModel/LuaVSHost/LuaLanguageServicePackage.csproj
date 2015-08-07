@@ -53,9 +53,11 @@
   <ItemGroup>
     <Compile Include="Classifications\Tagger.cs" />
     <Compile Include="Classifications\TaggerProvider.cs" />
-    <Compile Include="Formatting\CommandFilter.cs" />
+    <Compile Include="Errors\ErrorTagger.cs" />
+    <Compile Include="Errors\ErrorTaggerProvider.cs" />
+    <Compile Include="Shared\CommandFilter.cs" />
     <Compile Include="Formatting\IFormatter.cs" />
-    <Compile Include="Formatting\IMiniCommandFilter.cs" />
+    <Compile Include="Shared\IMiniCommandFilter.cs" />
     <Compile Include="Formatting\FormatCommandHandler.cs" />
     <Compile Include="Formatting\OptionPages\BaseDialogPage.cs">
       <SubType>Component</SubType>
@@ -84,9 +86,9 @@
     <Compile Include="Formatting\OptionPages\WrappingAndNewLinePage.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Formatting\TextView.cs" />
+    <Compile Include="Text\TextView.cs" />
     <Compile Include="Formatting\UserSettings.cs" />
-    <Compile Include="Formatting\WpfTextViewConnectionListener.cs" />
+    <Compile Include="Text\WpfTextViewConnectionListener.cs" />
     <Compile Include="LuaLanguageServicePackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -100,13 +102,15 @@
     <Compile Include="Shared\GlobalEditorOptions.cs" />
     <Compile Include="Shared\Guids.cs" />
     <Compile Include="Shared\ISingletons.cs" />
-    <Compile Include="Shared\SourceTextCache.cs" />
+    <Compile Include="Text\SourceTextCache.cs" />
     <Compile Include="Shared\EditorUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
     <None Include="Key.snk" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>

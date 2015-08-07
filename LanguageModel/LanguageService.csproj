@@ -75,6 +75,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Diagnostics\DiagnosticsProvider.cs" />
+    <Compile Include="Diagnostics\IDiagnosticsProvider.cs" />
     <Compile Include="Formatting\Options\IndentStyle.cs" />
     <Compile Include="Formatting\Options\IndentStyleInfo.cs" />
     <Compile Include="Formatting\Options\OptionalRuleGroup.cs" />

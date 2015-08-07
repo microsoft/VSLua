@@ -2,7 +2,7 @@
 
 using OLECommandFlags = Microsoft.VisualStudio.OLE.Interop.OLECMDF;
 
-namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
     internal interface IMiniCommandFilter
     {
