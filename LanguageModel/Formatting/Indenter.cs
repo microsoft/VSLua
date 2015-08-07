@@ -35,7 +35,7 @@ namespace LanguageService.Formatting
 
         private static string GetIndentationStringFromBlockLevel(ParsedToken parsedToken, GlobalOptions globalOptions)
         {
-            int totalSpaces = parsedToken.BlockLevel * (int)globalOptions.IndentSize;
+            int totalSpaces = GetTotalNumberOfSpaces(parsedToken.BlockLevel, globalOptions);
 
             int spacesNeeded = totalSpaces;
             int tabsNeeded = 0;
@@ -47,6 +47,82 @@ namespace LanguageService.Formatting
             }
 
             return new string('\t', tabsNeeded) + new string(' ', spacesNeeded);
+        }
+
+        private static int GetTotalNumberOfSpaces(int level, GlobalOptions globalOptions)
+        {
+            return level * (int)globalOptions.IndentSize;
+        }
+
+
+        internal static int GetIndentationFromPosition(SyntaxTree syntaxTree, GlobalOptions globalOptions, int position)
+        {
+            int level = GetIndentLevelFromPosition(syntaxTree, position);
+            return GetTotalNumberOfSpaces(level, globalOptions);
+        }
+
+        private static int GetIndentLevelFromPosition(SyntaxTree syntaxTree, int position)
+        {
+            SyntaxNodeOrToken currentNode = syntaxTree.Root;
+            SyntaxNode parent = null;
+            int blockLevel = 0;
+
+            while (true)
+            {
+                if (currentNode as Token != null ||
+                    ((SyntaxNode)currentNode).Children == null ||
+                    ((SyntaxNode)currentNode).Children.Count == 0)
+                {
+                    break;
+                }
+
+                SyntaxNode syntaxNode = (SyntaxNode)currentNode;
+
+                if ((syntaxNode.Kind == SyntaxKind.BlockNode && parent.Kind != SyntaxKind.ChunkNode) ||
+                    syntaxNode.Kind == SyntaxKind.TableConstructorArg ||
+                    syntaxNode.Kind == SyntaxKind.TableConstructorExp)
+                {
+                    blockLevel++;
+                }
+
+                if (syntaxNode.Children.Count < 2)
+                {
+                    parent = (SyntaxNode)currentNode;
+                    currentNode = syntaxNode.Children[0];
+                    continue;
+                }
+
+                for (int i = 0; i < syntaxNode.Children.Count - 1; ++i)
+                {
+                    SyntaxNodeOrToken currentChild = syntaxNode.Children[i];
+                    SyntaxNodeOrToken nextChild = syntaxNode.Children[i + 1];
+
+                    int startCurrentChild = currentChild as SyntaxNode == null ?
+                        ((Token)currentChild).FullStart :
+                        ((SyntaxNode)currentChild).StartPosition;
+
+                    int startNextChild = nextChild as SyntaxNode == null ?
+                        ((Token)nextChild).Start :
+                        ((SyntaxNode)nextChild).StartPosition;
+
+                    if (position > startCurrentChild && position <= startNextChild)
+                    {
+                        parent = (SyntaxNode)currentNode;
+                        currentNode = currentChild;
+                        break;
+                    }
+
+                    if (i + 1 >= syntaxNode.Children.Count - 1)
+                    {
+                        parent = (SyntaxNode)currentNode;
+                        currentNode = nextChild;
+                        break;
+                    }
+
+                }
+            }
+
+            return blockLevel;
         }
 
         private static IEnumerable<IndentInfo> GetIndentInformation(ParsedToken parsedToken)

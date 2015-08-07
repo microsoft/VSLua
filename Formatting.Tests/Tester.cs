@@ -98,7 +98,7 @@ namespace Formatting.Tests
             var lineSnapshot = buffer.CurrentSnapshot.GetLineFromLineNumber(lineNumber);
             int position = lineSnapshot.Start.Position;
 
-            return featureContainer.Formatter.SmartIndent(new SourceText(new StreamReader(text)), position);
+            return featureContainer.Formatter.SmartIndent(new SourceText(new StringReader(text)), position);
         }
 
         internal static void GeneralTest(string original, string expected)

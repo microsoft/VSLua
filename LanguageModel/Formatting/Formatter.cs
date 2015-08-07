@@ -69,7 +69,8 @@ namespace LanguageService.Formatting
 
         public int SmartIndent(SourceText sourceText, int position)
         {
-            return 0;
+            SyntaxTree syntaxTree = this.parseTreeProvider.Get(sourceText);
+            return Indenter.GetIndentationFromPosition(syntaxTree, this.globalOptions, position);
         }
     }
 }
