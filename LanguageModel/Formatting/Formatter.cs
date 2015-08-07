@@ -66,5 +66,10 @@ namespace LanguageService.Formatting
 
             return textEdits;
         }
+
+        public int SmartIndent(SourceText sourceText, int position)
+        {
+            return 0;
+        }
     }
 }

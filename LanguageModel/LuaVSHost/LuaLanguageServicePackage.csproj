@@ -78,6 +78,8 @@
     <Compile Include="Formatting\OptionPages\WrappingAndNewLinePage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Formatting\SmartIndentation\SmartIndent.cs" />
+    <Compile Include="Formatting\SmartIndentation\SmartIndentProvider.cs" />
     <Compile Include="Formatting\TextView.cs" />
     <Compile Include="Formatting\UserSettings.cs" />
     <Compile Include="Formatting\WpfTextViewConnectionListener.cs" />
