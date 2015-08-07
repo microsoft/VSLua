@@ -34,12 +34,11 @@ namespace LanguageService
 
         public static Token CreateMissingToken(int position)
         {
-            return new Token(SyntaxKind.MissingToken, "", null, position, position);
+            return new Token(SyntaxKind.MissingToken, "", Enumerable.Empty<Trivia>().ToList(), position, position);
         }
 
         public override string ToString()
         {
-
             StringBuilder sb = new StringBuilder();
             sb.Append(this.Kind.ToString());
             sb.Append("\t");

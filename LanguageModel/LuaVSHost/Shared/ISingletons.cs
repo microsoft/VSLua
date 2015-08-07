@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.LanguageServices.Lua.Classifications;
 using Microsoft.VisualStudio.LanguageServices.Lua.Formatting;
+using Microsoft.VisualStudio.LanguageServices.Lua.Text;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {

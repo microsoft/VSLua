@@ -1,12 +1,8 @@
 ﻿using LanguageService;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace LanguageModel.Tests
 {
@@ -43,7 +39,7 @@ namespace LanguageModel.Tests
             }
         }
 
-        public void GenerateTestForFile(string filePath, string name)
+        public void GenerateTestFromFile(string filePath, string name)
         {
             SyntaxTree tree = SyntaxTree.Create(filePath);
             File.WriteAllText(GetGenFilePath(name), GenerateTest(tree, name + "_Generated"));
@@ -69,7 +65,7 @@ namespace LanguageModel.Tests
             sb.AppendLine("    {");
             sb.AppendLine("        [Fact]");
             sb.AppendLine("        public void Test(Tester t)");
-            sb.AppendLine("        {\r\n");
+            sb.AppendLine("        {");
 
             using (IndentingWriter.Indent())
             {

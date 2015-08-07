@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using Validation;
-using LanguageService;
 
 namespace LanguageService.Formatting.Options
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using Validation;
+﻿using Validation;
 
 namespace LanguageService.Formatting
 {

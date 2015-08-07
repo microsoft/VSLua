@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.Editor;
+using Microsoft.VisualStudio.LanguageServices.Lua.Formatting;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Differencing;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
-using Validation;
 
-namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
 {
     internal class TextView
     {

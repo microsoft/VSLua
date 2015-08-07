@@ -69,9 +69,7 @@ namespace LanguageService.Formatting
 
             while (true)
             {
-                if (currentNode as Token != null ||
-                    ((SyntaxNode)currentNode).Children == null ||
-                    ((SyntaxNode)currentNode).Children.Count == 0)
+                if (currentNode as Token != null)
                 {
                     break;
                 }
@@ -83,6 +81,11 @@ namespace LanguageService.Formatting
                     syntaxNode.Kind == SyntaxKind.TableConstructorExp)
                 {
                     blockLevel++;
+                }
+
+                if (syntaxNode.Children == null || syntaxNode.Children.Count == 0)
+                {
+                    break;
                 }
 
                 if (syntaxNode.Children.Count < 2)
@@ -105,7 +108,7 @@ namespace LanguageService.Formatting
                         ((Token)nextChild).Start :
                         ((SyntaxNode)nextChild).StartPosition;
 
-                    if (position > startCurrentChild && position <= startNextChild)
+                    if (position > startCurrentChild && position < startNextChild)
                     {
                         parent = (SyntaxNode)currentNode;
                         currentNode = currentChild;
