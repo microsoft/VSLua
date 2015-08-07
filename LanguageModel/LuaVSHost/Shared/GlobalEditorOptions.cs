@@ -14,7 +14,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         private AxHost.ConnectionPointCookie connectionPoint;
 
         [Import]
-        private ISingletons core;
+        private ISingletons singletons;
 
         internal event EventHandler<EventArgs> OnUpdateLanguagePreferences;
 
@@ -44,8 +44,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
             if (languagePreferences != null && languagePreferences.Length > 0 &&
                 Guid.Equals(languagePreferences[0].guidLang, Guids.Service))
             {
-                this.core.FormattingUserSettings.IndentStyle = languagePreferences[0].IndentStyle;
-                this.core.FormattingUserSettings.TabSize = languagePreferences[0].uTabSize;
+                this.singletons.FormattingUserSettings.IndentStyle = languagePreferences[0].IndentStyle;
+                this.singletons.FormattingUserSettings.TabSize = languagePreferences[0].uTabSize;
                 this.FireOnUpdateLanguagePreferences();
             }
         }

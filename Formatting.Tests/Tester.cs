@@ -68,12 +68,12 @@ namespace Formatting.Tests
         }
 
 
-        internal static string Format(string original, IndentStyle indentStyle)
+        internal static string Format(string original)
         {
             LuaFeatureContainer featureContainer = new LuaFeatureContainer();
             Range range = new Range(0, original.Length);
 
-            NewOptions newOptions = new NewOptions(new List<OptionalRuleGroup>(), 4, new IndentStyleInfo(indentStyle, indentStyle));
+            NewOptions newOptions = new NewOptions(new List<OptionalRuleGroup>(), 4);
 
             List<TextEditInfo> textEdits = featureContainer.Formatter.Format(new SourceText(new StringReader(original)), range, newOptions);
 
@@ -94,16 +94,16 @@ namespace Formatting.Tests
 
         internal static void GeneralTest(string original, string expected)
         {
-            string actual = Tester.Format(original, IndentStyle.Fixed);
+            string actual = Tester.Format(original);
             Assert.Equal(expected, actual);
         }
 
         internal static void GeneralTest(string original, string expected1, string expected2)
         {
-            string actual1 = Tester.Format(original, IndentStyle.Fixed);
-            string actual2 = Tester.Format(original, IndentStyle.Relative);
+            string actual1 = Tester.Format(original);
+            //string actual2 = Tester.Format(original, IndentStyle.Relative);
             Assert.Equal(expected1, actual1);
-            Assert.Equal(expected2, actual2);
+            //Assert.Equal(expected2, actual2);
         }
     }
 }
