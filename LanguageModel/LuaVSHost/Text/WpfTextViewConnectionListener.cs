@@ -2,12 +2,13 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
+using Microsoft.VisualStudio.LanguageServices.Lua.Text;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Differencing;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 
-namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
 {
     [Export(typeof(IWpfTextViewConnectionListener))]
     [ContentType(Constants.Language.Name)]
