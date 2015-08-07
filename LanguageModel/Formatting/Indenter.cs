@@ -77,8 +77,7 @@ namespace LanguageService.Formatting
                 SyntaxNode syntaxNode = (SyntaxNode)currentNode;
 
                 if ((syntaxNode.Kind == SyntaxKind.BlockNode && parent.Kind != SyntaxKind.ChunkNode) ||
-                    syntaxNode.Kind == SyntaxKind.TableConstructorArg ||
-                    syntaxNode.Kind == SyntaxKind.TableConstructorExp)
+                    syntaxNode.Kind == SyntaxKind.FieldList)
                 {
                     blockLevel++;
                 }
