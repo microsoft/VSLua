@@ -18,7 +18,7 @@ namespace LanguageService
         }
         public SyntaxKind Kind { get; private set; }
 
-        public IReadOnlyList<Trivia> LeadingTrivia { get; private set; } //TODO: change to Immutable List
+        public List<Trivia> LeadingTrivia { get; private set; } //TODO: change to Immutable List
         
         public Token(SyntaxKind kind, string text, List<Trivia> trivia, int fullStart, int start)
         {
