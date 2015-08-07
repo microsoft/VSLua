@@ -16,13 +16,16 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         [Import]
         private ISingletons singletons;
 
+        [Import]
+        private SVsServiceProvider serviceProvider;
+
         internal event EventHandler<EventArgs> OnUpdateLanguagePreferences;
 
-        [ImportingConstructor]
-        internal GlobalEditorOptions(SVsServiceProvider serviceProvider)
+        internal void Initialize()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            IVsTextManager2 textManager = (IVsTextManager2)serviceProvider.GetService(typeof(SVsTextManager));
+
+            IVsTextManager2 textManager = (IVsTextManager2)this.serviceProvider.GetService(typeof(SVsTextManager));
             VIEWPREFERENCES2[] viewPreferences = new VIEWPREFERENCES2[] { new VIEWPREFERENCES2() };
             LANGPREFERENCES2[] languagePreferences = new LANGPREFERENCES2[] { new LANGPREFERENCES2() { guidLang = Guids.Service } };
 

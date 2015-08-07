@@ -20,7 +20,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 
         public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
         {
-            return new Tagger(buffer, standardClassifications, singletons) as ITagger<T>;
+            return this.singletons.Tagger as ITagger<T>;
         }
     }
 }

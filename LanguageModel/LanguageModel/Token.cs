@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace LanguageService
@@ -25,7 +26,7 @@ namespace LanguageService
             this.Text = text;
             this.Kind = kind;
             this.Text = text;
-            this.LeadingTrivia = trivia;
+            this.LeadingTrivia = trivia == null ? new List<Trivia>() : trivia;
             this.FullStart = fullStart;
             this.Start = start;
             this.Length = Text.Length;

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LanguageService.Classification;
 using LanguageService.Formatting;
 
 namespace LanguageService
@@ -11,11 +7,13 @@ namespace LanguageService
     {
         internal ParseTreeCache ParseTreeCache { get; }
         public Formatter Formatter { get; }
+        public Colourizer Colourizer { get; }
 
         public LuaFeatureContainer()
         {
-            ParseTreeCache = new ParseTreeCache();
-            Formatter = new Formatter(ParseTreeCache);
+            this.ParseTreeCache = new ParseTreeCache();
+            this.Formatter = new Formatter(ParseTreeCache);
+            this.Colourizer = new Colourizer(ParseTreeCache);
         }
     }
 }

@@ -15,17 +15,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
     {
         public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
-        private ITextBuffer textBuffer;
         private IStandardClassificationService standardClassifications;
         private ISingletons singletons;
 
-        internal Tagger(ITextBuffer textBuffer, IStandardClassificationService standardClassifications, ISingletons singletons)
+        internal Tagger(IStandardClassificationService standardClassifications, ISingletons singletons)
         {
-            Requires.NotNull(textBuffer, nameof(textBuffer));
             Requires.NotNull(standardClassifications, nameof(standardClassifications));
             Requires.NotNull(singletons, nameof(singletons));
 
-            this.textBuffer = textBuffer;
             this.standardClassifications = standardClassifications;
             this.singletons = singletons;
         }
@@ -36,6 +33,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
             {
                 ITextSnapshot textSnapshot = span.Snapshot;
                 SourceText sourceText = this.singletons.SourceTextCache.Get(textSnapshot);
+
+                List<TagInfo>
 
                 // I don't think ColorEdits is a great name, I just use it because I can't think of anything better right now.
                 //
