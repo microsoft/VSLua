@@ -46,6 +46,7 @@ namespace LanguageService.Classification
 
             foreach (Token token in GetTokens(syntaxTree.Root))
             {
+                yield return new TagInfo(token.FullStart, token.Start - token.FullStart, Classification.Comment);
                 yield return new TagInfo(token.Start, token.Length, SyntaxKindClassifications[token.Kind]);
             }
         }

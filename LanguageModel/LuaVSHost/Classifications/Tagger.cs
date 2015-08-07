@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LanguageService;
+using LanguageService.Classification;
 using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
@@ -17,6 +19,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 
         private IStandardClassificationService standardClassifications;
         private ISingletons singletons;
+        private Dictionary<Classification, IClassificationType> VSClassifications;
 
         internal Tagger(IStandardClassificationService standardClassifications, ISingletons singletons)
         {
@@ -25,6 +28,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 
             this.standardClassifications = standardClassifications;
             this.singletons = singletons;
+            this.VSClassifications = this.InitializeDictionary(standardClassifications);
+
         }
 
         public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans)
@@ -34,22 +39,29 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
                 ITextSnapshot textSnapshot = span.Snapshot;
                 SourceText sourceText = this.singletons.SourceTextCache.Get(textSnapshot);
 
-                List<TagInfo>
+                foreach (TagInfo tagInfo in this.singletons.FeatureContainer.Colourizer.Colourize(sourceText))
+                {
+                    SnapshotSpan tokenSpan = new SnapshotSpan(textSnapshot, tagInfo.Start, tagInfo.Length);
+                    IClassificationType classification = this.standardClassifications.Other;
+                    this.VSClassifications.TryGetValue(tagInfo.Classification, out classification);
 
-                // I don't think ColorEdits is a great name, I just use it because I can't think of anything better right now.
-                //
-                // List<ColorEdit> colorEdits = this.core.FeatureContainer.Colorizer.Colorize(sourceText)
-                //
-                //foreach (ColorEdit colorEdit in colorEdits)
-                //{
-                //    ClassificationTag vsClassification = this.classifications[colorEdit.Classification];
-                //    SnapshotSpan tokenSpan = new SnapshotSpan(textSnapshot, colorEdit.Start, colorEdit.Length);
-
-                //    yield return TagSpan<ClassificationTag>(tokenSpan, vsClassification);
-                //}
-
-                yield break;
+                    yield return new TagSpan<ClassificationTag>(tokenSpan, new ClassificationTag(classification));
+                }
             }
+        }
+
+        private Dictionary<Classification, IClassificationType> InitializeDictionary(IStandardClassificationService standardClassifications)
+        {
+            var something = standardClassifications.Comment;
+            return new Dictionary<Classification, IClassificationType>()
+            {
+                {Classification.Comment, standardClassifications.Comment},
+                {Classification.Identifier, standardClassifications.Identifier},
+                {Classification.Keyword, standardClassifications.Keyword},
+                {Classification.Number, standardClassifications.NumberLiteral},
+                {Classification.Punctuation, standardClassifications.Operator},
+                {Classification.StringLiteral, standardClassifications.StringLiteral}
+            };
         }
     }
 }
