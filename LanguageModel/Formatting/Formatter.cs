@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using LanguageService;
 using LanguageService.Formatting.Options;
 using LanguageService.Formatting.Ruling;
 using LanguageService.Shared;

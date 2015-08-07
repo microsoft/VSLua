@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using LanguageService;
 using Microsoft.VisualStudio.Editor;
+using Microsoft.VisualStudio.LanguageServices.Lua.Text;
 using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.LanguageServices.Lua.Classifications;
 using Microsoft.VisualStudio.Shell;

@@ -75,6 +75,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Diagnostics\DiagnosticsProvider.cs" />
+    <Compile Include="Diagnostics\IDiagnosticsProvider.cs" />
     <Compile Include="Classification\Classification.cs" />
     <Compile Include="Classification\Colourizer.cs" />
     <Compile Include="Classification\TagInfo.cs" />
@@ -105,17 +107,14 @@
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="LanguageModel\IndentingTextWriter.cs" />
-    <Compile Include="LanguageModel\TreeVisitors\NodeWalker.cs" />
     <Compile Include="LuaFeatureContainer.cs" />
     <Compile Include="LanguageModel\Lexer.cs" />
     <Compile Include="LanguageModel\ParseContexts.cs" />
     <Compile Include="LanguageModel\ParseError.cs" />
     <Compile Include="LanguageModel\Parser.cs" />
-    <Compile Include="LanguageModel\StreamExtension.cs" />
     <Compile Include="LanguageModel\SyntaxTree.cs" />
     <Compile Include="LanguageModel\Token.cs" />
     <Compile Include="LanguageModel\TrackableTextReader.cs" />
-    <Compile Include="LanguageModel\TreeVisitors\StringWalker.cs" />
     <Compile Include="LanguageModel\Trivia.cs" />
     <Compile Include="ParseTreeCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

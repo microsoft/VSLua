@@ -110,7 +110,7 @@ foo = function (
     a, b, c)";
             string expected = @"
 foo = function (
-    a, b, c )";
+a, b, c )";
             GeneralTest(original, expected);
         }
 

@@ -130,7 +130,7 @@
     <value>Unexpected token found.</value>
   </data>
   <data name="MissingToken" xml:space="preserve">
-    <value>Expected Token: </value>
+    <value>Token Expected:</value>
   </data>
   <data name="NameListParseError" xml:space="preserve">
     <value>Unexpected token found.</value>

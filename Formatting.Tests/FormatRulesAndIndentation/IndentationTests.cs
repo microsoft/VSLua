@@ -141,9 +141,9 @@ end";
         [Fact]
         public void SimpleOverIndent()
         {
-            string original = @"{
+            string original = @"t = {
        x";
-            string expected1 = @"{
+            string expected1 = @"t = {
     x";
             string expected2 = @"{
  x";
