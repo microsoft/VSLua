@@ -107,7 +107,22 @@ namespace LanguageService.Formatting
                         ((Token)nextChild).Start :
                         ((SyntaxNode)nextChild).StartPosition;
 
-                    if (position > startCurrentChild && position < startNextChild)
+                    SyntaxKind currentSyntaxKind = currentChild as SyntaxNode == null ?
+                        ((Token)currentChild).Kind :
+                        ((SyntaxNode)currentChild).Kind;
+
+                    SyntaxKind nextSyntaxKind = nextChild as SyntaxNode == null ?
+                        ((Token)nextChild).Kind :
+                        ((SyntaxNode)nextChild).Kind;
+
+                    bool nextTokenIsMissing = nextChild as Token != null ?
+                        ((Token)nextChild).Kind == SyntaxKind.MissingToken :
+                        false;
+
+                    if (position > startCurrentChild && position < startNextChild ||
+                        ((currentSyntaxKind == SyntaxKind.BlockNode || currentSyntaxKind == SyntaxKind.FieldList)
+                        && nextTokenIsMissing) ||
+                        (position == startNextChild && nextSyntaxKind == SyntaxKind.EndOfFile))
                     {
                         parent = (SyntaxNode)currentNode;
                         currentNode = currentChild;
