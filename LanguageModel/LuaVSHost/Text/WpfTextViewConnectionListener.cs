@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
-using Microsoft.VisualStudio.LanguageServices.Lua.Text;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Differencing;
 using Microsoft.VisualStudio.Text.Editor;

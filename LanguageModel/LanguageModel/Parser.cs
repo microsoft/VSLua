@@ -102,7 +102,6 @@ namespace LanguageService
             else
             {
                 return tokenList[tokenList.Count - 1];
-                //return tokenList[tokenList.Count - lookaheadAmount];
             }
         }
         #endregion
@@ -993,7 +992,7 @@ namespace LanguageService
                     throw new InvalidOperationException();
             }
         }
-        
+
         private SyntaxNodeOrToken ParseListElement(ParsingContext context)
         {
             switch (context)

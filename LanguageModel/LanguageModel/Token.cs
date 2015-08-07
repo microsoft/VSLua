@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace LanguageService
@@ -17,7 +18,7 @@ namespace LanguageService
         }
         public SyntaxKind Kind { get; private set; }
 
-        public List<Trivia> LeadingTrivia { get; private set; } //TODO: change to Immutable List
+        public IReadOnlyList<Trivia> LeadingTrivia { get; private set; } //TODO: change to Immutable List
         
         public Token(SyntaxKind kind, string text, List<Trivia> trivia, int fullStart, int start)
         {
@@ -33,12 +34,11 @@ namespace LanguageService
 
         public static Token CreateMissingToken(int position)
         {
-            return new Token(SyntaxKind.MissingToken, "", null, position, position);
+            return new Token(SyntaxKind.MissingToken, "", Enumerable.Empty<Trivia>().ToList(), position, position);
         }
 
         public override string ToString()
         {
-
             StringBuilder sb = new StringBuilder();
             sb.Append(this.Kind.ToString());
             sb.Append("\t");

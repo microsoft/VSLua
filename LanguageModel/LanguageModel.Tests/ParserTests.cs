@@ -1,8 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LanguageService.LanguageModel.TreeVisitors;
 using System.Diagnostics;
 using Xunit;
-using Assert = Xunit.Assert;
 using LanguageModel.Tests.GeneratedTestFiles;
 using LanguageModel.Tests.TestGeneration;
 using LanguageModel.Tests;
@@ -171,10 +169,9 @@ get_zero = function() return 0 end", "LucaDemo");
         }
 
         [Fact]
-        public void SeriesOfStringsErrorTest()
+        public void SeriesOfStringsExceptionTest()
         {
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\InvalidProgramsAsStrings.lua");
-            //SyntaxTree tree = SyntaxTree.Create(@"C:\Users\t-kevimi\Documents\LuaTests\Lua Files for Testing\InvalidProgramsMemoryException.lua");
         }
 
         [Fact]
@@ -182,53 +179,6 @@ get_zero = function() return 0 end", "LucaDemo");
         {
             var generator = new TestGenerator();
             generator.GenerateTestsForAllFiles();
-        }
-
-        //[Fact]
-        //public void SimpleTableGeneratedTest()
-        //{
-        //    SyntaxTree tree = SyntaxTree.CreateFromString("1 +1");
-        //    var generator = new TestGenerator();
-        //    generator.GenerateTestFromString(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
-        //    new SimpleTableError_Generated().Test(new Tester(tree));
-        //}
-
-        //[Fact]
-        //public void FunctionDefErrorGeneratedTest()
-        //{
-        //    SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\FunctionDefError.lua");
-        //    var generator = new TestGenerator();
-        //    generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
-        //    new FunctionDefError_Generated().Test(new Tester(tree));
-        //}
-
-        [Fact]
-        public void DebugTreeEnumeratorMethod()
-        {
-            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\smallif.lua");
-
-            var visitor = new StringWalker();
-            tree.Root.Accept(visitor);
-
-            Debug.WriteLine(visitor.SyntaxTreeAsString());
-
-            foreach (var node in tree.Next(tree.Root))
-            {
-                if (node is Token)
-                {
-                    Debug.WriteLine(((Token)node).Kind.ToString() + "\n");
-                }
-                else
-                {
-                    Debug.WriteLine(((SyntaxNode)node).Kind.ToString() + "\n");
-                }
-
-            }
-
-            foreach (var error in tree.ErrorList)
-                Debug.WriteLine(error.Message);
-
-            Assert.Equal(0, tree.ErrorList.Count);
         }
     }
 }

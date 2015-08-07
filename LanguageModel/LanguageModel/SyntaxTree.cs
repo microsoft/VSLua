@@ -1,8 +1,6 @@
-﻿using LanguageService.LanguageModel.TreeVisitors;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.IO;
 
 namespace LanguageService
@@ -32,7 +30,6 @@ namespace LanguageService
 
         public IEnumerable<SyntaxNodeOrToken> Next(SyntaxNodeOrToken syntaxNodeOrToken)
         {
-            //TODO remove is-check once Immutable graph object bug is fixed. 
             if (syntaxNodeOrToken is SyntaxNode && ((SyntaxNode)syntaxNodeOrToken).Kind == SyntaxKind.ChunkNode)
             {
                 yield return syntaxNodeOrToken;

@@ -7,7 +7,6 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Differencing;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
-using Validation;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
 {
