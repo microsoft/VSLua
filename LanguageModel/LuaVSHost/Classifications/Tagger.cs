@@ -19,7 +19,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 
         private IStandardClassificationService standardClassifications;
         private ISingletons singletons;
-        private Dictionary<Classification, IClassificationType> VSClassifications;
+        private Dictionary<Classification, IClassificationType> vsClassifications;
 
         internal Tagger(IStandardClassificationService standardClassifications, ISingletons singletons)
         {
@@ -28,7 +28,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 
             this.standardClassifications = standardClassifications;
             this.singletons = singletons;
-            this.VSClassifications = this.InitializeDictionary(standardClassifications);
+            this.vsClassifications = this.InitializeDictionary(standardClassifications);
 
         }
 
@@ -43,7 +43,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
                 {
                     SnapshotSpan tokenSpan = new SnapshotSpan(textSnapshot, tagInfo.Start, tagInfo.Length);
                     IClassificationType classification = this.standardClassifications.Other;
-                    this.VSClassifications.TryGetValue(tagInfo.Classification, out classification);
+                    this.vsClassifications.TryGetValue(tagInfo.Classification, out classification);
 
                     yield return new TagSpan<ClassificationTag>(tokenSpan, new ClassificationTag(classification));
                 }
@@ -55,12 +55,12 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
             var something = standardClassifications.Comment;
             return new Dictionary<Classification, IClassificationType>()
             {
-                {Classification.Comment, standardClassifications.Comment},
-                {Classification.Identifier, standardClassifications.Identifier},
-                {Classification.Keyword, standardClassifications.Keyword},
-                {Classification.Number, standardClassifications.NumberLiteral},
-                {Classification.Punctuation, standardClassifications.Operator},
-                {Classification.StringLiteral, standardClassifications.StringLiteral}
+                { Classification.Comment, standardClassifications.Comment },
+                { Classification.Identifier, standardClassifications.Identifier },
+                { Classification.Keyword, standardClassifications.Keyword },
+                { Classification.Number, standardClassifications.NumberLiteral },
+                { Classification.Punctuation, standardClassifications.Operator },
+                { Classification.StringLiteral, standardClassifications.StringLiteral }
             };
         }
     }
