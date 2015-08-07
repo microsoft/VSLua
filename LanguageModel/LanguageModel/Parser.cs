@@ -148,7 +148,8 @@ namespace LanguageService
 
             node.Statements = children.ToImmutableList();
 
-            node.Length = currentToken.End - node.StartPosition;
+            node.Length = (currentToken != null) ? currentToken.End - node.StartPosition : Peek().End - node.StartPosition;
+
             contextStack.Pop();
             return node.ToImmutable();
         }
@@ -1327,100 +1328,116 @@ namespace LanguageService
                 tempTriviaList.Add(triv);
             }
 
-            tokenList[positionInTokenList + 1] = new Token(Peek().Kind, Peek().Text, tempTriviaList, currentToken.FullStart, Peek().Start);
-            ParseErrorAtCurrentToken(ErrorMessages.SkippedToken + '"' + currentToken.Text + '"');
-        }
+            var tokenWithAddedTrivia = new Token(Peek().Kind, Peek().Text, tempTriviaList, currentToken.FullStart, Peek().Start);
 
-        private bool isInSomeParsingContext()
-        {
-            var tempStack = new Stack<ParsingContext>(contextStack.Reverse());
-
-            while (contextStack.Count > 0)
+            tokenList.RemoveAt(positionInTokenList);
+            
+            if (positionInTokenList > tokenList.Count)
             {
-                if (IsListElementBeginner(contextStack.Peek(), Peek().Kind))
-                {
-                    return true;
-                }
-                else
-                {
-                    contextStack.Pop();
-                }
-            }
-
-            contextStack = tempStack;
-            return false;
-        }
-
-        #endregion
-
-        #region Helper Methods
-
-        private bool IsBinop(SyntaxKind type)
-        {
-            switch (type)
-            {
-                case SyntaxKind.PlusOperator:
-                case SyntaxKind.MinusOperator:
-                case SyntaxKind.MultiplyOperator:
-                case SyntaxKind.DivideOperator:
-                case SyntaxKind.FloorDivideOperator:
-                case SyntaxKind.ExponentOperator:
-                case SyntaxKind.ModulusOperator:
-                case SyntaxKind.TildeUnOp: //TODO: deal with ambiguity
-                case SyntaxKind.BitwiseAndOperator:
-                case SyntaxKind.BitwiseOrOperator:
-                case SyntaxKind.BitwiseRightOperator:
-                case SyntaxKind.BitwiseLeftOperator:
-                case SyntaxKind.NotEqualsOperator:
-                case SyntaxKind.LessOrEqualOperator:
-                case SyntaxKind.GreaterOrEqualOperator:
-                case SyntaxKind.EqualityOperator:
-                case SyntaxKind.StringConcatOperator:
-                case SyntaxKind.GreaterThanOperator:
-                case SyntaxKind.LessThanOperator:
-                case SyntaxKind.AndBinop:
-                case SyntaxKind.OrBinop:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        private Var ParsePotentialVarWithPrefixExp()
-        {
-            //int tempPosition = positionInTokenList;
-            var prefixExp = ParsePrefixExp(); //Skip to the end of the prefix exp before checking.
-            if (Peek().Kind == SyntaxKind.OpenBracket)
-            {
-                //positionInTokenList = tempPosition; //Restore tokenList to beginning of node
-                return ParseSquareBracketVar(prefixExp);
+                tokenList.Add(tokenWithAddedTrivia);
             }
             else
             {
-                //This case has arbitrarily chosen DotVar as the default for incomplete Vars starting with prefixexps
-                //positionInTokenList = tempPosition; //Restore tokenList to beginning of node
-                return ParseDotVar(prefixExp);
+                tokenList[positionInTokenList] = tokenWithAddedTrivia;
             }
+
+            positionInTokenList--;
+            currentToken = (positionInTokenList >= 0) ? currentToken = tokenList[positionInTokenList] : null;
+
+            //TODO: fix this
+            ParseErrorAtCurrentToken(ErrorMessages.SkippedToken + '"' + Peek().Text + '"');
         }
 
-        private bool IsBlockContext(ParsingContext context)
+        private bool isInSomeParsingContext()
+{
+    var tempStack = new Stack<ParsingContext>(contextStack.Reverse());
+
+    while (contextStack.Count > 0)
+    {
+        if (IsListElementBeginner(contextStack.Peek(), Peek().Kind))
         {
-            switch (context)
-            {
-                case ParsingContext.IfBlock:
-                case ParsingContext.ChunkNodeBlock:
-                case ParsingContext.ElseBlock:
-                case ParsingContext.ElseIfBlock:
-                case ParsingContext.DoStatementBlock:
-                case ParsingContext.FuncBodyBlock:
-                case ParsingContext.WhileBlock:
-                case ParsingContext.RepeatStatementBlock:
-                case ParsingContext.ForStatementBlock:
-                    return true;
-                default:
-                    return false;
-            }
+            return true;
         }
+        else
+        {
+            contextStack.Pop();
+        }
+    }
+
+    contextStack = tempStack;
+    return false;
+}
+
+#endregion
+
+#region Helper Methods
+
+private bool IsBinop(SyntaxKind type)
+{
+    switch (type)
+    {
+        case SyntaxKind.PlusOperator:
+        case SyntaxKind.MinusOperator:
+        case SyntaxKind.MultiplyOperator:
+        case SyntaxKind.DivideOperator:
+        case SyntaxKind.FloorDivideOperator:
+        case SyntaxKind.ExponentOperator:
+        case SyntaxKind.ModulusOperator:
+        case SyntaxKind.TildeUnOp: //TODO: deal with ambiguity
+        case SyntaxKind.BitwiseAndOperator:
+        case SyntaxKind.BitwiseOrOperator:
+        case SyntaxKind.BitwiseRightOperator:
+        case SyntaxKind.BitwiseLeftOperator:
+        case SyntaxKind.NotEqualsOperator:
+        case SyntaxKind.LessOrEqualOperator:
+        case SyntaxKind.GreaterOrEqualOperator:
+        case SyntaxKind.EqualityOperator:
+        case SyntaxKind.StringConcatOperator:
+        case SyntaxKind.GreaterThanOperator:
+        case SyntaxKind.LessThanOperator:
+        case SyntaxKind.AndBinop:
+        case SyntaxKind.OrBinop:
+            return true;
+        default:
+            return false;
+    }
+}
+
+private Var ParsePotentialVarWithPrefixExp()
+{
+    //int tempPosition = positionInTokenList;
+    var prefixExp = ParsePrefixExp(); //Skip to the end of the prefix exp before checking.
+    if (Peek().Kind == SyntaxKind.OpenBracket)
+    {
+        //positionInTokenList = tempPosition; //Restore tokenList to beginning of node
+        return ParseSquareBracketVar(prefixExp);
+    }
+    else
+    {
+        //This case has arbitrarily chosen DotVar as the default for incomplete Vars starting with prefixexps
+        //positionInTokenList = tempPosition; //Restore tokenList to beginning of node
+        return ParseDotVar(prefixExp);
+    }
+}
+
+private bool IsBlockContext(ParsingContext context)
+{
+    switch (context)
+    {
+        case ParsingContext.IfBlock:
+        case ParsingContext.ChunkNodeBlock:
+        case ParsingContext.ElseBlock:
+        case ParsingContext.ElseIfBlock:
+        case ParsingContext.DoStatementBlock:
+        case ParsingContext.FuncBodyBlock:
+        case ParsingContext.WhileBlock:
+        case ParsingContext.RepeatStatementBlock:
+        case ParsingContext.ForStatementBlock:
+            return true;
+        default:
+            return false;
+    }
+}
 
         #endregion
     }

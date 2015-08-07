@@ -171,7 +171,13 @@ get_zero = function() return 0 end", "LucaDemo");
         }
 
         [Fact]
-        public void ErrorsParsingValidLuaFilesTest()
+        public void SeriesOfStringsErrorTest()
+        {
+            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\InvalidProgramsAsStrings.lua");
+        }
+
+        [Fact]
+        public void CheckForErrorsParsingVariousLuaFilesTest()
         {
             var generator = new TestGenerator();
             generator.GenerateTestsForAllFiles();

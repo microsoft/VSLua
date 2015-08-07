@@ -43,7 +43,7 @@ namespace LanguageModel.Tests
             }
         }
 
-        public void GenerateTestForFile(string filePath, string name)
+        public void GenerateTestFromFile(string filePath, string name)
         {
             SyntaxTree tree = SyntaxTree.Create(filePath);
             File.WriteAllText(GetGenFilePath(name), GenerateTest(tree, name + "_Generated"));

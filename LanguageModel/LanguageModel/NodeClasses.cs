@@ -9,6 +9,8 @@ using System.Linq;
 
 namespace LanguageService
 {
+    //[GenerateImmutable(GenerateBuilder = true)]
+    public abstract class SyntaxNodeOrToken { }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public abstract partial class SyntaxNode : SyntaxNodeOrToken
