@@ -178,7 +178,47 @@ get_zero = function() return 0 end", "LucaDemo");
         public void CheckForErrorsParsingVariousLuaFilesTest()
         {
             var generator = new TestGenerator();
-            generator.GenerateTestsForAllFiles();
+            var treeList = generator.GenerateTestsForAllTestFiles();
+
+            int fileNumber = 0;
+
+            new Generated_0().Test(new Tester(treeList[fileNumber++]));
+            new Generated_1().Test(new Tester(treeList[fileNumber++]));
+            new Generated_2().Test(new Tester(treeList[fileNumber++]));
+            new Generated_3().Test(new Tester(treeList[fileNumber++]));
+            new Generated_4().Test(new Tester(treeList[fileNumber++]));
+            new Generated_5().Test(new Tester(treeList[fileNumber++]));
+            new Generated_6().Test(new Tester(treeList[fileNumber++]));
+            new Generated_7().Test(new Tester(treeList[fileNumber++]));
+            new Generated_8().Test(new Tester(treeList[fileNumber++]));
+            new Generated_9().Test(new Tester(treeList[fileNumber++]));
+            new Generated_10().Test(new Tester(treeList[fileNumber++]));
+            new Generated_11().Test(new Tester(treeList[fileNumber++]));
+            new Generated_12().Test(new Tester(treeList[fileNumber++]));
+            new Generated_13().Test(new Tester(treeList[fileNumber++]));
+            new Generated_14().Test(new Tester(treeList[fileNumber++]));
+            new Generated_15().Test(new Tester(treeList[fileNumber++]));
+            new Generated_16().Test(new Tester(treeList[fileNumber++]));
+            new Generated_17().Test(new Tester(treeList[fileNumber++]));
+            new Generated_18().Test(new Tester(treeList[fileNumber++]));
+            new Generated_19().Test(new Tester(treeList[fileNumber++]));
+            new Generated_20().Test(new Tester(treeList[fileNumber++]));
+            new Generated_21().Test(new Tester(treeList[fileNumber++]));
+            new Generated_22().Test(new Tester(treeList[fileNumber++]));
+            new Generated_23().Test(new Tester(treeList[fileNumber++]));
+            new Generated_24().Test(new Tester(treeList[fileNumber++]));
+            new Generated_25().Test(new Tester(treeList[fileNumber++]));
+            new Generated_26().Test(new Tester(treeList[fileNumber++]));
+            new Generated_27().Test(new Tester(treeList[fileNumber++]));
+            new Generated_28().Test(new Tester(treeList[fileNumber++]));
+            new Generated_29().Test(new Tester(treeList[fileNumber++]));
+            new Generated_31().Test(new Tester(treeList[fileNumber++]));
+            new Generated_32().Test(new Tester(treeList[fileNumber++]));
+            new Generated_33().Test(new Tester(treeList[fileNumber++]));
+            new Generated_34().Test(new Tester(treeList[fileNumber++]));
+            new Generated_35().Test(new Tester(treeList[fileNumber++]));
+            new Generated_36().Test(new Tester(treeList[fileNumber++]));
+            new Generated_37().Test(new Tester(treeList[fileNumber++]));
         }
     }
 }

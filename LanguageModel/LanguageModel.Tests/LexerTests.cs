@@ -276,9 +276,6 @@ namespace LanguageService.Tests
             Assert.Equal(SyntaxKind.EndOfFile, tokenList[tokenIndex++].Kind);
         }
 
-        {
-        //
-
         [Fact]
         public void IdentifyTabsTokenTypes()
         {
