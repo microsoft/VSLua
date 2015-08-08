@@ -203,7 +203,7 @@ namespace LanguageService
             //TODO: re-write without regex
             Regex closeBracketPattern = new Regex(@"\]={" + level.ToString() + @"}\]");
 
-            while (!closeBracketPattern.IsMatch(commentSoFar))
+            while (!closeBracketPattern.IsMatch(commentSoFar) && !stream.EndOfStream())
             {
                 commentSoFar += stream.ReadChar();
             }
