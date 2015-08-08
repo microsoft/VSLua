@@ -13,6 +13,7 @@ namespace LanguageService
         private Token currentToken;
         private List<Token> tokenList;
         private int positionInTokenList;
+        private int textPosition;
         private List<ParseError> errorList;
 
         public Parser()
@@ -42,6 +43,7 @@ namespace LanguageService
             if (positionInTokenList + 1 < tokenList.Count)
             {
                 currentToken = tokenList[++positionInTokenList];
+                this.textPosition = currentToken.Start - currentToken.FullStart + currentToken.Length;
             }
             return currentToken;
         }
@@ -81,23 +83,11 @@ namespace LanguageService
             }
         }
 
-        private Token Peek()
+        private Token Peek(int forwardAmount = 1)
         {
-            if (positionInTokenList + 1 < tokenList.Count)
+            if (positionInTokenList + forwardAmount < tokenList.Count)
             {
-                return tokenList[positionInTokenList + 1];
-            }
-            else
-            {
-                return tokenList[tokenList.Count - 1];
-            }
-        }
-
-        private Token Peek(int lookaheadAmount)
-        {
-            if (positionInTokenList + lookaheadAmount < tokenList.Count)
-            {
-                return tokenList[positionInTokenList + lookaheadAmount];
+                return tokenList[positionInTokenList + forwardAmount];
             }
             else
             {
@@ -1217,13 +1207,13 @@ namespace LanguageService
         {
             var node = FuncBodyNode.CreateBuilder();
             node.Kind = SyntaxKind.FuncBodyNode;
-            node.StartPosition = Peek().Start;
+            node.StartPosition = currentToken.Start + currentToken.Length;
             node.OpenParen = GetExpectedToken(SyntaxKind.OpenParen);
             node.ParameterList = ParseParList().ToBuilder();
             node.CloseParen = GetExpectedToken(SyntaxKind.CloseParen);
             node.Block = ParseBlock(ParsingContext.FuncBodyBlock).ToBuilder();
             node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
-            node.Length = Peek().FullStart - node.StartPosition - 1;
+            node.Length = Peek().Start - node.StartPosition - 1;
             return node.ToImmutable();
         }
 
