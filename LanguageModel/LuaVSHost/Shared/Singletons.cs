@@ -68,5 +68,13 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
                 return this.userSettings;
             }
         }
+
+        public IServiceProvider ServiceProvider
+        {
+            get
+            {
+                return this.serviceProvider;
+            }
+        }
     }
 }

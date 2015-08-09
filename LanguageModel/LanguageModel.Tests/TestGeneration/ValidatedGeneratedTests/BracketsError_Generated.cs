@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LanguageModel.Tests.TestGeneration.GeneratedTestFiles
+﻿namespace LanguageModel.Tests.TestGeneration.GeneratedTestFiles
 {
     class BracketsError_Generated
     {

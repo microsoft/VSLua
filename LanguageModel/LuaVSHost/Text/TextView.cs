@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.Editor;
+using Microsoft.VisualStudio.LanguageServices.Lua.Errors;
 using Microsoft.VisualStudio.LanguageServices.Lua.Formatting;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.OLE.Interop;
@@ -26,6 +27,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
 
         private IVsEditorAdaptersFactoryService editorAdaptersService;
         private ISingletons core;
+        private ErrorListPresenter errorListPresenter;
 
         public TextView(IWpfTextView wpfTextView, ISingletons core)
         {
@@ -48,7 +50,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
 
             this.TextBuffer = textBuffer;
             CommandFilter filter = this.CreateCommandFilter(textBuffer);
+            this.errorListPresenter = new ErrorListPresenter(this.WpfTextView, this.core);
         }
+
+        //TODO: add disconnect
 
         protected CommandFilter CreateCommandFilter(ITextBuffer textBuffer)
         {
