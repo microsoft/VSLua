@@ -70,7 +70,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Errors
 
         protected override void DisposeManagedResources()
         {
-            //Note: Not sure???
+            //is this implementation correct? Do I just need to call this method.
             if (this.textView.TextBuffer != null)
             {
                 this.textView.TextBuffer.Changed -= this.OnBufferChanged;

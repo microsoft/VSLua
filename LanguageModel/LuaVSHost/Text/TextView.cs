@@ -53,7 +53,12 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
             this.errorListPresenter = new ErrorListPresenter(this.WpfTextView, this.core);
         }
 
-        //TODO: add disconnect
+        internal void Disconnect(ITextBuffer textBuffer)
+        {
+            Requires.NotNull(textBuffer, nameof(textBuffer));
+
+            this.errorListPresenter.DisposeManagedResources();
+        }
 
         protected CommandFilter CreateCommandFilter(ITextBuffer textBuffer)
         {

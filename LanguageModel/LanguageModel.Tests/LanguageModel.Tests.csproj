@@ -87,7 +87,6 @@
     <Compile Include="TestGeneration\UnvalidatedGeneratedTests\*_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\Assignments_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\BracketError_Generator.cs" />
-    <Compile Include="TestGeneration\ValidatedGeneratedTests\BracketsError_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\ComplexTableConstructor_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\EmptyProgram_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\FunctionDefError_Generated.cs" />

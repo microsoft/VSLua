@@ -8,7 +8,6 @@ namespace LanguageModel.Tests.GeneratedTestFiles
         [Fact]
         public void Test(Tester t)
         {
-
             t.N(SyntaxKind.ChunkNode);
             {
                 t.N(SyntaxKind.BlockNode);
