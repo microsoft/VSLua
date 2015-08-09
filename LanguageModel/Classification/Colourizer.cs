@@ -47,7 +47,12 @@ namespace LanguageService.Classification
             foreach (Token token in GetTokens(syntaxTree.Root))
             {
                 yield return new TagInfo(token.FullStart, token.Start - token.FullStart, Classification.Comment);
-                yield return new TagInfo(token.Start, token.Length, SyntaxKindClassifications[token.Kind]);
+
+                Classification classification = Classification.Keyword;
+                SyntaxKindClassifications.TryGetValue(token.Kind, out classification);
+
+
+                yield return new TagInfo(token.Start, token.Length, classification);
             }
         }
 
@@ -111,7 +116,7 @@ namespace LanguageService.Classification
                 {SyntaxKind.TrueKeyValue, Classification.Keyword},
                 {SyntaxKind.UnterminatedString, Classification.StringLiteral},
                 {SyntaxKind.UntilKeyword, Classification.Keyword},
-                {SyntaxKind.WhileKeyword, Classification.Keyword}
+                {SyntaxKind.WhileKeyword, Classification.Keyword},
             }.ToImmutableDictionary();
 
     }

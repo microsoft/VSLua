@@ -111,7 +111,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Errors
         {
             Task.Run(async () =>
             {
-                await Task.Delay(ErrorTagger.UIUpdateDelay, token);
+                await Task.Delay(ErrorTagger.UIUpdateDelay);
 
                 if (token.IsCancellationRequested)
                 {
