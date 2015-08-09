@@ -81,23 +81,23 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Errors
 
         private void OnErrorListItemNavigate(object sender, EventArgs e)
         {
-            //var errorListItem = sender as ErrorListItem;
+            var errorListItem = sender as ErrorListItem;
 
-            //if (errorListItem != null)
-            //{
-            //    IDocumentOperations docOperations = singletons.ServiceProvider.DocumentOperations;
-            //    IWpfTextView targetTextView;
-            //    bool isAlreadyOpen;
+            if (errorListItem != null)
+            {
+                IDocumentOperations docOperations = this.singletons.DocumentOperations;
+                IWpfTextView targetTextView;
+                bool isAlreadyOpen;
 
-            //    if (!docOperations.OpenDocument(errorListItem.Document, out isAlreadyOpen, out targetTextView))
-            //    {
-            //        return;
-            //    }
+                if (!docOperations.OpenDocument(errorListItem.Document, out isAlreadyOpen, out targetTextView))
+                {
+                    return;
+                }
 
-            //    Debug.Assert(isAlreadyOpen, "We do not show errors for closed files.  Somehow we opened a closed file with errors in the error list.");
+                Debug.Assert(isAlreadyOpen, "We do not show errors for closed files.  Somehow we opened a closed file with errors in the error list.");
 
-            //    docOperations.NavigateTo(targetTextView, errorListItem.ErrorSpan.Span, selectSpan: true, deferNavigationWithOutlining: false);
-            //}
+                docOperations.NavigateTo(targetTextView, errorListItem.ErrorSpan.Span, selectSpan: true, deferNavigationWithOutlining: false);
+            }
         }
 
         private void OnBufferChanged(object sender, TextContentChangedEventArgs e)
