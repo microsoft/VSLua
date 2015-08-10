@@ -55,8 +55,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
                 { Classification.Comment, standardClassifications.Comment },
                 { Classification.Identifier, standardClassifications.Identifier },
                 { Classification.Keyword, standardClassifications.Keyword },
+                { Classification.KeyValue, standardClassifications.Literal },
+                { Classification.Operator, standardClassifications.Operator },
                 { Classification.Number, standardClassifications.NumberLiteral },
-                { Classification.Punctuation, standardClassifications.Operator },
+                { Classification.Punctuation, standardClassifications.SymbolDefinition },
                 { Classification.StringLiteral, standardClassifications.StringLiteral }
             };
         }

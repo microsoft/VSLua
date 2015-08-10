@@ -14,23 +14,27 @@ namespace LanguageService.Formatting
             {
                 string indentationString =
                                   Indenter.GetIndentationStringFromBlockLevel(parsedToken, globalOptions);
+
                 foreach (IndentInfo indentInfo in Indenter.GetIndentInformation(parsedToken))
                 {
-                    yield return new TextEditInfo(indentInfo.Start, indentInfo.Length, indentationString);
+                    yield return new TextEditInfo(indentInfo.Start, indentInfo.Length,
+                        indentInfo.IsBeforeText ? indentationString : string.Empty);
                 }
             }
         }
 
         private struct IndentInfo
         {
-            internal IndentInfo(int start, int length)
+            internal IndentInfo(int start, int length, bool isBeforeText)
             {
                 this.Start = start;
                 this.Length = length;
+                this.IsBeforeText = isBeforeText;
             }
 
             internal int Start { get; }
             internal int Length { get; }
+            internal bool IsBeforeText { get; }
         }
 
         private static string GetIndentationStringFromBlockLevel(ParsedToken parsedToken, GlobalOptions globalOptions)
@@ -155,7 +159,8 @@ namespace LanguageService.Formatting
 
             if (parsedToken.Token.FullStart == 0 && leadingTrivia[0].Type == SyntaxKind.Whitespace)
             {
-                yield return new IndentInfo(parsedToken.Token.FullStart, leadingTrivia[0].Text.Length);
+                // First token on first line must have no indentation
+                yield return new IndentInfo(parsedToken.Token.FullStart, leadingTrivia[0].Text.Length, isBeforeText: false);
             }
 
             int start = parsedToken.Token.FullStart;
@@ -170,17 +175,20 @@ namespace LanguageService.Formatting
                     continue;
                 }
 
-                if (i + 1 >= leadingTrivia.Count ||
+                bool isAtEndOfTrivia = i + 1 >= leadingTrivia.Count;
+                if (isAtEndOfTrivia ||
                            leadingTrivia[i + 1].Type != SyntaxKind.Whitespace)
                 {
-                    yield return new IndentInfo(start, 0);
+                    yield return new IndentInfo(start, 0, isBeforeText: true);
                 }
                 else
                 {
                     Trivia nextTrivia = leadingTrivia[i + 1];
                     if (nextTrivia.Type == SyntaxKind.Whitespace)
                     {
-                        yield return new IndentInfo(start, nextTrivia.Text.Length);
+                        bool isBeforeText = i + 1 == leadingTrivia.Count - 1 ||
+                            (i + 2 < leadingTrivia.Count && leadingTrivia[i + 2].Type == SyntaxKind.Comment);
+                        yield return new IndentInfo(start, nextTrivia.Text.Length, isBeforeText);
                     }
                 }
             }

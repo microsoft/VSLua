@@ -97,7 +97,7 @@ namespace LanguageService
 
                 if (trackableTextReader.EndOfStream() && nextToken.Kind != SyntaxKind.EndOfFile)
                 {
-                    nextToken = new Token(SyntaxKind.EndOfFile, "", new List<Trivia>(), fullStart, (int)trackableTextReader.Position);
+                    nextToken = new Token(SyntaxKind.EndOfFile, string.Empty, new List<Trivia>(), nextToken.End, nextToken.End);
                     tokenList.Add(nextToken);
                 }
             }
@@ -105,7 +105,7 @@ namespace LanguageService
             if (tokenList.Count == 0)
             {
                 //If there is an empty program send back an end of file token.
-                tokenList.Add(new Token(SyntaxKind.EndOfFile, "", new List<Trivia>(), 0, (int)trackableTextReader.Position));
+                tokenList.Add(new Token(SyntaxKind.EndOfFile, "", new List<Trivia>(), 0, 0));
             }
 
             return tokenList;
