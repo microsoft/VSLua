@@ -78,6 +78,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Errors
 
             this.ClearErrors();
 
+            this.errorListProvider.Dispose();
+            this.errorListProvider = null;
+
             base.DisposeManagedResources();
         }
 
@@ -113,7 +116,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Errors
             this.UpdateErrorsWithDelay(e.After, this.cancellationTokenSource.Token);
         }
 
-        private void UpdateErrorList(ITextSnapshot snapshot)
+        internal void UpdateErrorList(ITextSnapshot snapshot)
         {
             if (this.errorListProvider == null)
             {

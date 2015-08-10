@@ -18,8 +18,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
         private ErrorListPresenter errorListPresenter;
         private CommandFilter filter;
 
-        private static Dictionary<IWpfTextView, TextView> viewMap = new Dictionary<IWpfTextView, TextView>();
-
         protected IWpfTextView WpfTextView { get; }
 
         protected IVsTextView VsTextView { get; set; }
@@ -41,7 +39,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
             set
             {
                 this.errorListPresenter = value;
-                //this.errorListPresenter.QueueUpdateErrors(this.primarySourceProvider, this.PostUIUpdateRequest);
+                this.errorListPresenter.UpdateErrorList(this.TextBuffer.CurrentSnapshot);
             }
         }
 
@@ -56,8 +54,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
             this.WpfTextView = wpfTextView;
             this.VsTextView = this.editorAdaptersService.GetViewAdapter(this.WpfTextView);
             this.IsReadOnly = wpfTextView.Roles.Contains(DifferenceViewerRoles.LeftViewTextViewRole);
-
-            viewMap.Add(this.WpfTextView, this);
         }
 
         internal void Connect(ITextBuffer textBuffer)
@@ -66,7 +62,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
 
             this.TextBuffer = textBuffer;
             this.filter = this.CreateCommandFilter(textBuffer);
-            this.errorListPresenter = new ErrorListPresenter(this.WpfTextView, this.core);
+            this.ErrorListPresenter = new ErrorListPresenter(this.WpfTextView, this.core);
         }
 
         internal void Disconnect(ITextBuffer textBuffer)
@@ -95,13 +91,5 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
 
             return filter;
         }
-
-        //private void PostUIUpdateRequest()
-        //{
-        //    if (!this.IsClosed && !this.IsClosing)
-        //    {
-        //        this.uiUpdateTimer.PostCallback(Constants.UpdateUIDelay, timer => this.UpdateUI());
-        //    }
-        //}
     }
 }

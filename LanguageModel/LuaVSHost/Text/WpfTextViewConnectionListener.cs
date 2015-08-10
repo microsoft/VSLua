@@ -17,7 +17,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
         [Import]
         private ISingletons singletons;
 
-        private TextView internalTextView;
+        private static readonly Dictionary<IWpfTextView, TextView> viewMap = new Dictionary<IWpfTextView, TextView>();
 
         public void SubjectBuffersConnected(IWpfTextView textView, ConnectionReason reason, Collection<ITextBuffer> subjectBuffers)
         {
@@ -30,8 +30,12 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
                 return;
             }
 
-            internalTextView = new TextView(textView, this.singletons);
-            internalTextView.Connect(textBuffers[0]);
+            if (!viewMap.ContainsKey(textView))
+            {
+                TextView internalTextView = new TextView(textView, this.singletons);
+                viewMap.Add(textView, internalTextView);
+                internalTextView.Connect(textBuffers[0]);
+            }
         }
 
         private static List<ITextBuffer> IgnoreLeftTextBufferInInlineDiffView(IWpfTextView textView, Collection<ITextBuffer> subjectBuffers)
@@ -62,9 +66,12 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
                 return;
             }
 
-            ////////////// ???? /////////////////
-            //TextView internalTextView = new TextView(textView, this.singletons);
-            internalTextView.Disconnect(textBuffers[0]);
+            TextView internalTextView;
+            if (viewMap.TryGetValue(textView, out internalTextView))
+            {
+                internalTextView.Disconnect(textBuffers[0]);
+                viewMap.Remove(textView);
+            }
         }
     }
 }
