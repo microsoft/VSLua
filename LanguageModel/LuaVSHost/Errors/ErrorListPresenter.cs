@@ -76,6 +76,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Errors
                 this.textView.TextBuffer.Changed -= this.OnBufferChanged;
             }
 
+            this.ClearErrors();
+
             base.DisposeManagedResources();
         }
 

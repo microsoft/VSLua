@@ -17,6 +17,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
         [Import]
         private ISingletons singletons;
 
+        private TextView internalTextView;
+
         public void SubjectBuffersConnected(IWpfTextView textView, ConnectionReason reason, Collection<ITextBuffer> subjectBuffers)
         {
             Validation.Requires.NotNull(subjectBuffers, nameof(subjectBuffers));
@@ -28,7 +30,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
                 return;
             }
 
-            TextView internalTextView = new TextView(textView, this.singletons);
+            internalTextView = new TextView(textView, this.singletons);
             internalTextView.Connect(textBuffers[0]);
         }
 
@@ -60,8 +62,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
                 return;
             }
 
-            //////////// ???? /////////////////
-            TextView internalTextView = new TextView(textView, this.singletons);
+            ////////////// ???? /////////////////
+            //TextView internalTextView = new TextView(textView, this.singletons);
             internalTextView.Disconnect(textBuffers[0]);
         }
     }
