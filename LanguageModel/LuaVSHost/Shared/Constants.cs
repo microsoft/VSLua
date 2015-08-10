@@ -2,6 +2,12 @@
 {
     internal sealed class Constants
     {
+        // Wait 2 seconds after last buffer change to actually update the UI
+        // If changes come up during the way, cancel the current update task
+        // and queue another.
+        internal const int UIUpdateDelay = 2000;
+        internal const int MaximumErrorsPerFile = 25;
+
         internal sealed class Language
         {
             internal const string Name = "Lua";

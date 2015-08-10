@@ -1,8 +1,9 @@
 ﻿using LanguageService;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Xunit;
+using System.Collections.Generic;
 
 namespace LanguageModel.Tests
 {
@@ -14,29 +15,35 @@ namespace LanguageModel.Tests
         private static readonly string BasePath = Environment.ExpandEnvironmentVariables(@"%UserProfile%\\Documents\\LuaTests");
         private static readonly string GenPath = Path.Combine(BasePath, "Generated Test Files");
         private static readonly string GenFileFormat = "{0}_Generated.cs";
+        private static readonly string GenFileName = "Generated_{0}";
 
         private string GetGenFilePath(string fileName)
         {
             return Path.Combine(GenPath, string.Format(GenFileFormat, fileName));
         }
 
-        public void GenerateTestsForAllFiles()
+        public List<SyntaxTree> GenerateTestsForAllTestFiles()
         {
             if (!Directory.Exists(GenPath))
                 Directory.CreateDirectory(GenPath);
+
+            var treeList = new List<SyntaxTree>();
 
             int fileNumber = 0;
 
             foreach (string file in Directory.EnumerateFiles(Path.Combine(BasePath, "Lua Files for Testing"), "*.lua"))
             {
                 SyntaxTree tree = SyntaxTree.Create(file);
-                File.WriteAllText(GetGenFilePath(fileNumber.ToString()), string.Format(@"//{0}\r\n{1}", file, GenerateTest(tree, fileNumber.ToString())));
+                File.WriteAllText(GetGenFilePath(fileNumber.ToString()), string.Format(@"//{0}\r\n{1}", file, GenerateTest(tree, string.Format(GenFileName, fileNumber.ToString()))));
 
-                foreach (var error in tree.ErrorList)
-                    Debug.WriteLine(error.Message);
+                Assert.Equal(0, tree.ErrorList.Count);
 
+                treeList.Add(tree);
+                
                 fileNumber++;
             }
+
+            return treeList;
         }
 
         public void GenerateTestFromFile(string filePath, string name)

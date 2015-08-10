@@ -14,11 +14,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Errors
 {
     internal sealed class ErrorTagger : DisposableObject, ITagger<ErrorTag>
     {
-        // Wait 2 seconds after last buffer change to actually update the UI
-        // If changes come up during the way, cancel the current update task
-        // and queue another.
-        private const int UIUpdateDelay = 2000;
-
         private ITextBuffer buffer;
         private CancellationTokenSource cancellationTokenSource;
         private ISingletons singletons;
@@ -111,7 +106,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Errors
         {
             Task.Run(async () =>
             {
-                await Task.Delay(ErrorTagger.UIUpdateDelay);
+                await Task.Delay(Constants.UIUpdateDelay);
 
                 if (token.IsCancellationRequested)
                 {
