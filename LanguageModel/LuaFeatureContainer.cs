@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LanguageService.Diagnostics;
+using LanguageService.Classification;
 using LanguageService.Formatting;
 
 namespace LanguageService
 {
     public sealed class LuaFeatureContainer
     {
-        internal ParseTreeCache ParseTreeCache { get; }
+        private ParseTreeCache parseTreeCache;
+
+        public IDiagnosticsProvider DiagnosticsProvider { get; }
         public Formatter Formatter { get; }
+        public Colourizer Colourizer { get; }
 
         public LuaFeatureContainer()
         {
-            ParseTreeCache = new ParseTreeCache();
-            Formatter = new Formatter(ParseTreeCache);
+            this.parseTreeCache = new ParseTreeCache();
+            this.Formatter = new Formatter(this.parseTreeCache);
+            this.Colourizer = new Colourizer(this.parseTreeCache);
+            this.DiagnosticsProvider = new DiagnosticsProvider(this.parseTreeCache);
         }
     }
 }

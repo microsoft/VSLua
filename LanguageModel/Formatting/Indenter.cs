@@ -13,45 +13,137 @@ namespace LanguageService.Formatting
             foreach (ParsedToken parsedToken in parsedTokens)
             {
                 string indentationString =
-                        Indenter.GetIndentationStringFromBlockLevel(parsedToken, globalOptions);
+                                  Indenter.GetIndentationStringFromBlockLevel(parsedToken, globalOptions);
+
                 foreach (IndentInfo indentInfo in Indenter.GetIndentInformation(parsedToken))
                 {
-                    yield return new TextEditInfo(indentInfo.Start, indentInfo.Length, indentationString);
+                    yield return new TextEditInfo(indentInfo.Start, indentInfo.Length,
+                        indentInfo.IsBeforeText ? indentationString : string.Empty);
                 }
             }
         }
 
         private struct IndentInfo
         {
-            internal IndentInfo(int start, int length)
+            internal IndentInfo(int start, int length, bool isBeforeText)
             {
                 this.Start = start;
                 this.Length = length;
+                this.IsBeforeText = isBeforeText;
             }
 
             internal int Start { get; }
             internal int Length { get; }
+            internal bool IsBeforeText { get; }
         }
 
         private static string GetIndentationStringFromBlockLevel(ParsedToken parsedToken, GlobalOptions globalOptions)
         {
-            //if (syntaxNode == null)
-            //{
-            //    //throw new ArgumentNullException();
-            //}
+            int totalSpaces = GetTotalNumberOfSpaces(parsedToken.BlockLevel, globalOptions);
 
-            // Here I would put the calculation for the indentation string parts
-            // how many tabs, spaces that I need. I would also check the options for
-            // how tabs are setup.
-            return Indenter.MakeIndentation(parsedToken.BlockLevel * (int)globalOptions.IndentSize);
+            int spacesNeeded = totalSpaces;
+            int tabsNeeded = 0;
+
+            if (globalOptions.UsingTabs && globalOptions.TabSize > 0)
+            {
+                spacesNeeded = totalSpaces % (int)globalOptions.TabSize;
+                tabsNeeded = (totalSpaces - spacesNeeded) / (int)globalOptions.TabSize;
+            }
+
+            return new string('\t', tabsNeeded) + new string(' ', spacesNeeded);
+        }
+
+        private static int GetTotalNumberOfSpaces(int level, GlobalOptions globalOptions)
+        {
+            return level * (int)globalOptions.IndentSize;
         }
 
 
-        // This is for the actual construction of the indentation, the actual string.
-        // For now the parameter just takes how many spaces are needed.
-        private static string MakeIndentation(int amount)
+        internal static int GetIndentationFromPosition(SyntaxTree syntaxTree, GlobalOptions globalOptions, int position)
         {
-            return new string(' ', amount);
+            int level = GetIndentLevelFromPosition(syntaxTree, position);
+            return GetTotalNumberOfSpaces(level, globalOptions);
+        }
+
+        private static int GetIndentLevelFromPosition(SyntaxTree syntaxTree, int position)
+        {
+            SyntaxNodeOrToken currentNode = syntaxTree.Root;
+            SyntaxNode parent = null;
+            int blockLevel = 0;
+
+            while (true)
+            {
+                if (currentNode as Token != null)
+                {
+                    break;
+                }
+
+                SyntaxNode syntaxNode = (SyntaxNode)currentNode;
+
+                if ((syntaxNode.Kind == SyntaxKind.BlockNode && parent.Kind != SyntaxKind.ChunkNode) ||
+                    syntaxNode.Kind == SyntaxKind.FieldList)
+                {
+                    blockLevel++;
+                }
+
+                if (syntaxNode.Children == null || syntaxNode.Children.Count == 0)
+                {
+                    break;
+                }
+
+                if (syntaxNode.Children.Count < 2)
+                {
+                    parent = (SyntaxNode)currentNode;
+                    currentNode = syntaxNode.Children[0];
+                    continue;
+                }
+
+                for (int i = 0; i < syntaxNode.Children.Count - 1; ++i)
+                {
+                    SyntaxNodeOrToken currentChild = syntaxNode.Children[i];
+                    SyntaxNodeOrToken nextChild = syntaxNode.Children[i + 1];
+
+                    int startCurrentChild = currentChild as SyntaxNode == null ?
+                        ((Token)currentChild).FullStart :
+                        ((SyntaxNode)currentChild).StartPosition;
+
+                    int startNextChild = nextChild as SyntaxNode == null ?
+                        ((Token)nextChild).Start :
+                        ((SyntaxNode)nextChild).StartPosition;
+
+                    SyntaxKind currentSyntaxKind = currentChild as SyntaxNode == null ?
+                        ((Token)currentChild).Kind :
+                        ((SyntaxNode)currentChild).Kind;
+
+                    SyntaxKind nextSyntaxKind = nextChild as SyntaxNode == null ?
+                        ((Token)nextChild).Kind :
+                        ((SyntaxNode)nextChild).Kind;
+
+                    bool nextTokenIsMissing = nextChild as Token != null ?
+                        ((Token)nextChild).Kind == SyntaxKind.MissingToken :
+                        false;
+
+                    if (position > startCurrentChild && position < startNextChild ||
+                        ((currentSyntaxKind == SyntaxKind.BlockNode || currentSyntaxKind == SyntaxKind.FieldList)
+                        && nextTokenIsMissing) ||
+                        (position == startNextChild && nextSyntaxKind == SyntaxKind.EndOfFile))
+                    {
+                        parent = (SyntaxNode)currentNode;
+                        currentNode = currentChild;
+                        break;
+                    }
+
+                    if (i + 1 >= syntaxNode.Children.Count - 1)
+                    {
+                        parent = (SyntaxNode)currentNode;
+                        currentNode = nextChild;
+                        break;
+                    }
+
+                }
+            }
+
+            return blockLevel;
         }
 
         private static IEnumerable<IndentInfo> GetIndentInformation(ParsedToken parsedToken)
@@ -67,7 +159,8 @@ namespace LanguageService.Formatting
 
             if (parsedToken.Token.FullStart == 0 && leadingTrivia[0].Type == SyntaxKind.Whitespace)
             {
-                yield return new IndentInfo(parsedToken.Token.FullStart, leadingTrivia[0].Text.Length);
+                // First token on first line must have no indentation
+                yield return new IndentInfo(parsedToken.Token.FullStart, leadingTrivia[0].Text.Length, isBeforeText: false);
             }
 
             int start = parsedToken.Token.FullStart;
@@ -82,17 +175,21 @@ namespace LanguageService.Formatting
                     continue;
                 }
 
-                if (i + 1 >= leadingTrivia.Count ||
-                    leadingTrivia[i + 1].Type != SyntaxKind.Whitespace)
+                bool isAtEndOfTrivia = i + 1 >= leadingTrivia.Count;
+                if (isAtEndOfTrivia ||
+                           (leadingTrivia[i + 1].Type != SyntaxKind.Whitespace &&
+                           leadingTrivia[i+1].Type !=  SyntaxKind.Newline))
                 {
-                    yield return new IndentInfo(start, 0);
+                    yield return new IndentInfo(start, 0, isBeforeText: true);
                 }
                 else
                 {
                     Trivia nextTrivia = leadingTrivia[i + 1];
                     if (nextTrivia.Type == SyntaxKind.Whitespace)
                     {
-                        yield return new IndentInfo(start, nextTrivia.Text.Length);
+                        bool isBeforeText = i + 1 == leadingTrivia.Count - 1 ||
+                            (i + 2 < leadingTrivia.Count && leadingTrivia[i + 2].Type == SyntaxKind.Comment);
+                        yield return new IndentInfo(start, nextTrivia.Text.Length, isBeforeText);
                     }
                 }
             }

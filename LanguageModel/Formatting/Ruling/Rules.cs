@@ -17,15 +17,57 @@ namespace LanguageService.Formatting.Ruling
                 new RuleDescriptor(SyntaxKind.Comma, TokenRange.AnyVisible),
                 defaultFilters, RuleAction.Space);
 
-        internal static readonly Rule SpaceAfterAssignmentOperator =
+        internal static readonly Rule SpaceAfterAssignmentOperatorInStatement =
             new SimpleRule(
                 new RuleDescriptor(SyntaxKind.AssignmentOperator, TokenRange.AnyVisible),
-                defaultFilters, RuleAction.Space);
+                new List<Func<FormattingContext, bool>>
+                {
+                    TokensAreOnSameLine,
+                    NoCommentsBetweenTokens,
+                    InSyntaxNode(Side.Left, new List<SyntaxKind>
+                    {
+                        SyntaxKind.AssignmentStatementNode,
+                        SyntaxKind.LocalAssignmentStatementNode
+                    })
+                },
+                RuleAction.Space);
 
-        internal static readonly Rule SpaceBeforeAssignmentOperator =
+        internal static readonly Rule SpaceBeforeAssignmentOperatorInStatement =
             new SimpleRule(
                 new RuleDescriptor(TokenRange.AnyVisible, SyntaxKind.AssignmentOperator),
-                defaultFilters, RuleAction.Space);
+                new List<Func<FormattingContext, bool>>
+                {
+                    TokensAreOnSameLine,
+                    NoCommentsBetweenTokens,
+                    InSyntaxNode(Side.Right, new List<SyntaxKind>
+                    {
+                        SyntaxKind.AssignmentStatementNode,
+                        SyntaxKind.LocalAssignmentStatementNode
+                    })
+                },
+                RuleAction.Space);
+
+        internal static readonly Rule SpaceAfterAssignmentOperatorInField =
+            new SimpleRule(
+                new RuleDescriptor(SyntaxKind.AssignmentOperator, TokenRange.AnyVisible),
+                new List<Func<FormattingContext, bool>>
+                {
+                    TokensAreOnSameLine,
+                    NoCommentsBetweenTokens,
+                    IsInATableConstructor(Side.Left)
+                },
+                RuleAction.Space);
+
+        internal static readonly Rule SpaceBeforeAssignmentOperatorInField =
+            new SimpleRule(
+                new RuleDescriptor(TokenRange.AnyVisible, SyntaxKind.AssignmentOperator),
+                new List<Func<FormattingContext, bool>>
+                {
+                    TokensAreOnSameLine,
+                    NoCommentsBetweenTokens,
+                    IsInATableConstructor(Side.Right)
+                },
+                RuleAction.Space);
 
         internal static readonly Rule SpaceAfterBinaryOperator =
             new SimpleRule(
@@ -88,12 +130,52 @@ namespace LanguageService.Formatting.Ruling
 
         internal static readonly Rule DeleteTrailingWhitespace = new DeleteTrailingWhitespace();
 
+        internal static readonly Rule NoSpaceAfterCommaInFor =
+            new SimpleRule(new RuleDescriptor(SyntaxKind.Comma, TokenRange.AnyVisible),
+                new List<Func<FormattingContext, bool>>
+                {
+                    TokensAreOnSameLine,
+                    NoCommentsBetweenTokens,
+                    InSyntaxNode(Side.Left, new List<SyntaxKind> { SyntaxKind.SimpleForStatementNode })
+                },
+                RuleAction.Delete);
+
+        internal static readonly Rule SpaceBeforeAssignmentOperatorInFor =
+            new SimpleRule(new RuleDescriptor(TokenRange.AnyVisible, SyntaxKind.AssignmentOperator),
+                new List<Func<FormattingContext, bool>>
+                {
+                    TokensAreNotOnSameLine,
+                    NoCommentsBetweenTokens,
+                    InSyntaxNode(Side.Right, new List<SyntaxKind> { SyntaxKind.SimpleForStatementNode })
+                },
+                RuleAction.Space);
+
+        internal static readonly Rule SpaceAfterAssignmentOperatorInFor =
+            new SimpleRule(new RuleDescriptor(SyntaxKind.AssignmentOperator, TokenRange.AnyVisible),
+                new List<Func<FormattingContext, bool>>
+                {
+                    TokensAreNotOnSameLine,
+                    NoCommentsBetweenTokens,
+                    InSyntaxNode(Side.Left, new List<SyntaxKind> { SyntaxKind.SimpleForStatementNode })
+                },
+                RuleAction.Space);
+
+
+
         internal static readonly ImmutableArray<Rule> AllRules = ImmutableArray.Create(
+            NoSpaceAfterCommaInFor,
             SpaceAfterComma,
-            SpaceAfterAssignmentOperator,
-            SpaceBeforeAssignmentOperator,
+
+            SpaceAfterAssignmentOperatorInStatement,
+            SpaceBeforeAssignmentOperatorInStatement,
+            SpaceBeforeAssignmentOperatorInFor,
+            SpaceAfterAssignmentOperatorInFor,
+            SpaceBeforeAssignmentOperatorInField,
+            SpaceAfterAssignmentOperatorInField,
+
             SpaceAfterBinaryOperator,
             SpaceBeforeBinaryOperator,
+
             SpaceAfterValueBeforeOpenParenthesis,
             SpaceBeforeValueAfterOpenParenthesis,
             SpaceBeforeValueAfterOpenSquareBracket,
@@ -101,11 +183,13 @@ namespace LanguageService.Formatting.Ruling
             SpaceAfterValueBeforeCloseParenthesis,
             SpaceAfterValueBeforeCloseSquareBracket,
             SpaceAfterValueBeforeCloseCurlyBrace,
-            DeleteSpaceBeforeEofToken,
+
             DeleteSpaceAfterValueBeforeDot,
             DeleteSpaceBeforeValueAfterDot,
             DeleteSpaceAfterValueBeforeColon,
             DeleteSpaceBeforeValueAfterColon,
+
+            DeleteSpaceBeforeEofToken,
             DeleteTrailingWhitespace
             );
 
@@ -123,5 +207,54 @@ namespace LanguageService.Formatting.Ruling
         {
             return !formattingContext.ContainsCommentsBetweenTokens();
         }
+
+        private enum Side
+        {
+            Left,
+            Right
+        }
+
+        private static ParsedToken GetTokenOn(Side side, FormattingContext formattingContext)
+        {
+            return (side == Side.Left) ?
+                    formattingContext.CurrentToken :
+                    formattingContext.NextToken;
+        }
+
+        private static Func<FormattingContext, bool> IsInATableConstructor(Side side)
+        {
+            return (FormattingContext formattingContext) =>
+            {
+                ParsedToken parsedToken = GetTokenOn(side, formattingContext);
+
+                return parsedToken.InTableConstructor;
+            };
+        }
+
+        private static Func<FormattingContext, bool> InSyntaxNode(Side side, List<SyntaxKind> statementKinds)
+        {
+            return (FormattingContext formattingContext) =>
+            {
+                ParsedToken parsedToken = GetTokenOn(side, formattingContext);
+
+                return statementKinds.Contains(parsedToken.StatementNode.Kind);
+            };
+        }
+
+        private static Func<FormattingContext, bool> IsStartOfStatement(Side side)
+        {
+            return (FormattingContext formattingContext) =>
+            {
+                ParsedToken parsedToken = GetTokenOn(side, formattingContext);
+
+                return parsedToken.Token.Start == parsedToken.StatementNode.StartPosition;
+            };
+        }
+
+        //private static bool StatementOnOneLine(FormattingContext formattingContext)
+        //{
+        //    return formattingContext.CurrentToken.StatementNode.
+        //}
+
     }
 }

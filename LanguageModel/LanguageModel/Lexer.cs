@@ -1,5 +1,4 @@
-﻿//using Microsoft.Internal.VisualStudio.Shell;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -78,7 +77,7 @@ namespace LanguageService
         private static readonly char[] longCommentID1 = { '-', '[', '[' };
         private static readonly char[] longCommentID2 = { '-', '[', '=' }; //TODO: flawed approach? what if --[=asdfadf]?
 
-        public static List<Token> Tokenize(TextReader textReader) //TODO: Return a bool based on if this is a new copy of the lexer or not
+        public static List<Token> Tokenize(TextReader textReader)
         {
             Validation.Requires.NotNull(textReader, nameof(textReader));
 
@@ -98,10 +97,17 @@ namespace LanguageService
 
                 if (trackableTextReader.EndOfStream() && nextToken.Kind != SyntaxKind.EndOfFile)
                 {
-                    nextToken = new Token(SyntaxKind.EndOfFile, "", new List<Trivia>(), fullStart, (int)trackableTextReader.Position);
+                    nextToken = new Token(SyntaxKind.EndOfFile, string.Empty, new List<Trivia>(), nextToken.End, nextToken.End);
                     tokenList.Add(nextToken);
                 }
             }
+
+            if (tokenList.Count == 0)
+            {
+                //If there is an empty program send back an end of file token.
+                tokenList.Add(new Token(SyntaxKind.EndOfFile, "", new List<Trivia>(), 0, 0));
+            }
+
             return tokenList;
         }
 
@@ -129,7 +135,7 @@ namespace LanguageService
                         triviaList.Add(newLineTrivia);
                         break;
 
-                    case '\r': //TODO: Is this is just completely redundant IMO.
+                    case '\r':
                         isTrivia = true;
                         stream.ReadChar();
                         next = stream.Peek();
@@ -189,7 +195,6 @@ namespace LanguageService
 
         private static Trivia ReadLongComment(TrackableTextReader stream, string commentSoFar, int? level)
         {
-            // Validation doesn't seem to work here.
             if (level == null)
             {
                 throw new ArgumentNullException(nameof(level));
@@ -198,7 +203,7 @@ namespace LanguageService
             //TODO: re-write without regex
             Regex closeBracketPattern = new Regex(@"\]={" + level.ToString() + @"}\]");
 
-            while (!closeBracketPattern.IsMatch(commentSoFar))
+            while (!closeBracketPattern.IsMatch(commentSoFar) && !stream.EndOfStream())
             {
                 commentSoFar += stream.ReadChar();
             }
@@ -329,8 +334,8 @@ namespace LanguageService
             {
                 case '"':
                 case '\'':
-                        fullString.Append(stream.ReadChar());
-                        nextChar = stream.Peek();
+                    fullString.Append(stream.ReadChar());
+                    nextChar = stream.Peek();
                     bool terminateString = false;
                     while ((nextChar != stringDelimiter) && !stream.EndOfStream() && !terminateString)
                     {
@@ -338,38 +343,38 @@ namespace LanguageService
                         nextChar = stream.Peek();
 
                         if (nextChar == '\r' || nextChar == '\n')
-                    {
+                        {
                             type = SyntaxKind.UnterminatedString;
                             terminateString = true;
-                    }
                         }
+                    }
 
                     if (nextChar == stringDelimiter || terminateString)
-                            {
-                                    fullString.Append(stream.ReadChar());
+                    {
+                        fullString.Append(stream.ReadChar());
                         return new Token(type, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
-                                    }
-                                    else
-                                    {
+                    }
+                    else
+                    {
                         return new Token(SyntaxKind.EndOfFile, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition); //TODO bug... should return a string then a EOF token right?
-                                    }
+                    }
 
                 case '[':
-                                    fullString.Append(stream.ReadChar());
+                    fullString.Append(stream.ReadChar());
                     int bracketLevel = 0;
-                                    nextChar = stream.Peek();
+                    nextChar = stream.Peek();
 
                     bracketLevel = CountLevels(false, nextChar, 0, stream, fullString);
-                            nextChar = stream.Peek();
+                    nextChar = stream.Peek();
 
                     if (nextChar == '[')
-                            {
-                                fullString.Append(stream.ReadChar());
-                                nextChar = stream.Peek();
+                    {
+                        fullString.Append(stream.ReadChar());
+                        nextChar = stream.Peek();
 
                         //Lua ignores a new line directly after the opening delimiter of a string.
                         if (nextChar == '\r' || nextChar == '\n')
-                            {
+                        {
                             if (nextChar == '\r')
                                 stream.ReadChar();
                             if (stream.Peek() == '\n')
@@ -378,44 +383,44 @@ namespace LanguageService
                         }
 
                         while (!stream.EndOfStream())
-                                {
-                                    if (nextChar == ']')
-                                    {
-                                        fullString.Append(stream.ReadChar());
-                                        nextChar = stream.Peek();
+                        {
+                            if (nextChar == ']')
+                            {
+                                fullString.Append(stream.ReadChar());
+                                nextChar = stream.Peek();
                                 int currentLevel = bracketLevel;
 
                                 currentLevel = CountLevels(true, nextChar, currentLevel, stream, fullString);
-                                            nextChar = stream.Peek();
+                                nextChar = stream.Peek();
 
                                 if ((nextChar == ']') && (currentLevel == 0))
-                                        {
-                                            fullString.Append(stream.ReadChar());
+                                {
+                                    fullString.Append(stream.ReadChar());
                                     return new Token(type, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        fullString.Append(stream.ReadChar());
-                                    }
-                                    nextChar = stream.Peek();
                                 }
-
-                        return new Token(SyntaxKind.UnterminatedString, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                             }
                             else
                             {
+                                fullString.Append(stream.ReadChar());
+                            }
+                            nextChar = stream.Peek();
+                        }
+
+                        return new Token(SyntaxKind.UnterminatedString, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
+                    }
+                    else
+                    {
                         if (bracketLevel == 0)
                         {
                             return new Token(SyntaxKind.OpenBracket, nextChar.ToString(), leadingTrivia, fullStart, tokenStartPosition);
                         }
                         else
                         {
-                                // Error, not valid syntax
+                            // Error, not valid syntax
                             return new Token(SyntaxKind.Unknown, fullString.ToString(), leadingTrivia, fullStart, tokenStartPosition);
-                            }
+                        }
                     }
-                        default:
+                default:
                     throw new ArgumentOutOfRangeException(nameof(stringDelimiter), "Unrecognized String delimiter");
             }
         }
@@ -536,7 +541,7 @@ namespace LanguageService
 
         private static Trivia ReadLineComment(TrackableTextReader stream, char[] commentRead)
         {
-            string comment = "-" + new string(commentRead);
+            string comment = new string(commentRead);
 
             while (stream.Peek() != '\n' && stream.Peek() != '\r' && stream.Peek() != Eof) // Todo: maybe not the safest way of checking for newline
             {
@@ -593,7 +598,7 @@ namespace LanguageService
                 else
                 {
                     levelCount++;
-        }
+                }
 
                 character = stream.Peek();
             }

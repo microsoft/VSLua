@@ -291,13 +291,13 @@ namespace LanguageService.Tests
         public void IdentifyNewLinesTokenTypes()
         {
             TextReader testProgramStream = File.OpenText(@"CorrectSampleLuaFiles\newlines.lua");
-                List<Token> tokenList = Lexer.Tokenize(testProgramStream);
-                for (int triviaIndex = 0; triviaIndex < 8; triviaIndex++)
-                {
-                    Assert.Equal(SyntaxKind.Newline, tokenList[0].LeadingTrivia[triviaIndex].Type);
-                }
-                Assert.Equal(SyntaxKind.EndOfFile, tokenList[0].Kind);
+            List<Token> tokenList = Lexer.Tokenize(testProgramStream);
+            for (int triviaIndex = 0; triviaIndex < 8; triviaIndex++)
+            {
+                Assert.Equal(SyntaxKind.Newline, tokenList[0].LeadingTrivia[triviaIndex].Type);
             }
+            Assert.Equal(SyntaxKind.EndOfFile, tokenList[0].Kind);
+        }
 
         public void TestSampleProgram()
         {

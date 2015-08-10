@@ -9,8 +9,10 @@ namespace LanguageService.Formatting.Options
         internal GlobalOptions(NewOptions options)
         {
             Requires.NotNull(options, nameof(options));
-            IndentSize = options.IndentSize;
-            OptionalRuleMap = new OptionalRuleMap(options.RuleGroupsToDisable);
+            this.IndentSize = options.IndentSize;
+            this.TabSize = options.TabSize;
+            this.UsingTabs = options.UsingTabs;
+            this.OptionalRuleMap = new OptionalRuleMap(options.RuleGroupsToDisable);
         }
 
         internal GlobalOptions()
@@ -20,6 +22,8 @@ namespace LanguageService.Formatting.Options
         }
 
         internal uint IndentSize { get; }
+		internal uint TabSize { get; }
+		internal bool UsingTabs { get; }
         internal OptionalRuleMap OptionalRuleMap { get; }
     }
 }

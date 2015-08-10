@@ -1,8 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LanguageService.LanguageModel.TreeVisitors;
 using System.Diagnostics;
 using Xunit;
-using Assert = Xunit.Assert;
 using LanguageModel.Tests.GeneratedTestFiles;
 using LanguageModel.Tests.TestGeneration;
 using LanguageModel.Tests;
@@ -121,7 +119,7 @@ get_zero = function() return 0 end", "LucaDemo");
             SyntaxTree tree = SyntaxTree.CreateFromString("");
             var generator = new TestGenerator();
             generator.GenerateTestFromString("", "EmptyProgram");
-            new GrabKeyFromTable_Generated().Test(new Tester(tree));
+            new EmptyProgram_Generated().Test(new Tester(tree));
         }
 
         [Fact]
@@ -130,8 +128,18 @@ get_zero = function() return 0 end", "LucaDemo");
             SyntaxTree tree = SyntaxTree.CreateFromString("}(");
             var generator = new TestGenerator();
             generator.GenerateTestFromString("}(", "BracketsError");
+            new BracketsError_Generated().Test(new Tester(tree));
         }
 
+        [Fact]
+        public void PrefixExpFirstGeneratedTest()
+        {
+            SyntaxTree tree = SyntaxTree.CreateFromString("(f)[s] = k");
+            var generator = new TestGenerator();
+            generator.GenerateTestFromString("(f)[s] = k", "PrefixExpFirst");
+            new PrefixExpFirst_Generated().Test(new Tester(tree));
+        }
+        
         [Fact]
         public void CheckForExceptionsFromListOfInvalidProgramsTest()
         {
@@ -160,231 +168,57 @@ get_zero = function() return 0 end", "LucaDemo");
             }
         }
 
-        //[Fact]
-        //public void SimpleTableGeneratedTest()
-        //{
-        //    SyntaxTree tree = SyntaxTree.CreateFromString("1 +1");
-        //    var generator = new TestGenerator();
-        //    generator.GenerateTestFromString(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
-        //    new SimpleTableError_Generated().Test(new Tester(tree));
-        //}
-
-        //[Fact]
-        //public void FunctionDefErrorGeneratedTest()
-        //{
-        //    SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\FunctionDefError.lua");
-        //    var generator = new TestGenerator();
-        //    generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
-        //    new FunctionDefError_Generated().Test(new Tester(tree));
-        //}
-
-        //"-hello_world"
-
-        //"+-*/"
-
-        //"x ==--[[ comment ]]y"
-
-        //"x..y"
-
-        //"x +1 == 2   x= 3 /2+4"
-
-        //"
-        //x=
-        //1"
-
-        //"1     +       2        =       x"
-
-        //"
-        //1+1+
-        //1"
-
-        //"
-        //1+1+
-        //1"
-
-        //"1+"
-
-        //"t[1]"
-
-        //"}("
-
-        //")("
-
-        //"]("
-
-        //"t = [ 1--[[ comment ]]]"
-
-        //"foo = function (x, y, z, w) end"
-
-        //"t[\"this is a test that grabs this key in Lua\"]"
-
-        //"t = {1, 3, 4, 5, 6, 7,}"
-
-        //"
-        //t = {
-        //    1,
-        //    2,
-        //}"
-
-        //"
-        //foo = function(
-        //    a, b, c)"
-
-        //"
-        //t = [
-
-
-        //1
-
-
-        //]"
-
-        //"
-        //t :
-        //foo()
-        //t.
-        // bar ()"
-
-        //"
-        //foo = function()
-        //    return
-        //end"
-
-        //"
-        //foo = function()
-        //return
-        //end"
-
-        //"
-        //t1 = {
-        //1,
-        //}"
-
-        //"
-        //foo = function
-        //--[[comment]] return
-        //end"
-
-        //"
-        //foo = function
-        //bar = function
-        //end
-        //end"
-
-        //"
-        //t1 = {
-        //t2 = {
-        //x, y, z
-        //    }
-        //    t3 = {
-        //x
-        //}
-        //}"
-
-        //"
-        //foo = function()
-        //return--comment
-        //    end"
-
-        //"     foo"
-
-        //"
-
-        //foo = function()
-        //                  return
-        //end"
-
-        //"{
-        //       x"
-
-        //",x"
-
-        //"x,= 1"
-
-        //"{ x,,y }"
-
-        //",--[[ comment ]]x"
-
-        //"{ x,y,z }"
-
-        //"{ x,y, ,,,, },y32,,,s2,"
-
-        //"x,             y"
-
-        //"
-        //x,
-        //y = 1,2"
-
-        //"x,y = 1,2"
-
-        //"function foo(x,y,z)"
-
-        //"{ x, y,}"
-
-        //"x,y"
-
-        //"
-        //x
-
-        //x       "
-
-        //"
-        //x = 10           
-        //-- comment here
-        //--[[block
-        //comment
-        //here]]
-        //x = x + 1            "
-
-        //"x   
-        //    "
-
-
-
-
-        //[Fact]
-        //public void FunctionDefErrorGeneratedTest()
-        //{
-        //    SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\FunctionDefError.lua");
-        //    var generator = new TestGenerator();
-        //    generator.GenerateTestForFile(@"CorrectSampleLuaFiles\FunctionDefError.lua", "FunctionDefError");
-        //    new FunctionDefError_Generated().Test(new Tester(tree));
-        //}
-
-        //[Fact]
-        //public void AutoGenerateTests()
-        //{
-        //    var generator = new TestGenerator();
-        //    generator.GenerateTestsForAllFiles();
-        //}
+        [Fact]
+        public void SeriesOfStringsExceptionTest()
+        {
+            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\InvalidProgramsAsStrings.lua");
+        }
 
         [Fact]
-        public void DebugTreeEnumeratorMethod()
+        public void CheckForErrorsParsingVariousLuaFilesTest()
         {
-            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\smallif.lua");
+            var generator = new TestGenerator();
+            var treeList = generator.GenerateTestsForAllTestFiles();
 
-            var visitor = new StringWalker();
-            tree.Root.Accept(visitor);
+            int fileNumber = 0;
 
-            Debug.WriteLine(visitor.SyntaxTreeAsString());
-
-            foreach (var node in tree.Next(tree.Root))
-            {
-                if (node is Token)
-                {
-                    Debug.WriteLine(((Token)node).Kind.ToString() + "\n");
-                }
-                else
-                {
-                    Debug.WriteLine(((SyntaxNode)node).Kind.ToString() + "\n");
-                }
-
-            }
-
-            foreach (var error in tree.ErrorList)
-                Debug.WriteLine(error.Message);
-
-            Assert.Equal(0, tree.ErrorList.Count);
+            new Generated_0().Test(new Tester(treeList[fileNumber++]));
+            new Generated_1().Test(new Tester(treeList[fileNumber++]));
+            new Generated_2().Test(new Tester(treeList[fileNumber++]));
+            new Generated_3().Test(new Tester(treeList[fileNumber++]));
+            new Generated_4().Test(new Tester(treeList[fileNumber++]));
+            new Generated_5().Test(new Tester(treeList[fileNumber++]));
+            new Generated_6().Test(new Tester(treeList[fileNumber++]));
+            new Generated_7().Test(new Tester(treeList[fileNumber++]));
+            new Generated_8().Test(new Tester(treeList[fileNumber++]));
+            new Generated_9().Test(new Tester(treeList[fileNumber++]));
+            new Generated_10().Test(new Tester(treeList[fileNumber++]));
+            new Generated_11().Test(new Tester(treeList[fileNumber++]));
+            new Generated_12().Test(new Tester(treeList[fileNumber++]));
+            new Generated_13().Test(new Tester(treeList[fileNumber++]));
+            new Generated_14().Test(new Tester(treeList[fileNumber++]));
+            new Generated_15().Test(new Tester(treeList[fileNumber++]));
+            new Generated_16().Test(new Tester(treeList[fileNumber++]));
+            new Generated_17().Test(new Tester(treeList[fileNumber++]));
+            new Generated_18().Test(new Tester(treeList[fileNumber++]));
+            new Generated_19().Test(new Tester(treeList[fileNumber++]));
+            new Generated_20().Test(new Tester(treeList[fileNumber++]));
+            new Generated_21().Test(new Tester(treeList[fileNumber++]));
+            new Generated_22().Test(new Tester(treeList[fileNumber++]));
+            new Generated_23().Test(new Tester(treeList[fileNumber++]));
+            new Generated_24().Test(new Tester(treeList[fileNumber++]));
+            new Generated_25().Test(new Tester(treeList[fileNumber++]));
+            new Generated_26().Test(new Tester(treeList[fileNumber++]));
+            new Generated_27().Test(new Tester(treeList[fileNumber++]));
+            new Generated_28().Test(new Tester(treeList[fileNumber++]));
+            new Generated_29().Test(new Tester(treeList[fileNumber++]));
+            new Generated_31().Test(new Tester(treeList[fileNumber++]));
+            new Generated_32().Test(new Tester(treeList[fileNumber++]));
+            new Generated_33().Test(new Tester(treeList[fileNumber++]));
+            new Generated_34().Test(new Tester(treeList[fileNumber++]));
+            new Generated_35().Test(new Tester(treeList[fileNumber++]));
+            new Generated_36().Test(new Tester(treeList[fileNumber++]));
+            new Generated_37().Test(new Tester(treeList[fileNumber++]));
         }
     }
 }

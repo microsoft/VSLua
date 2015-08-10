@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LanguageService
+﻿namespace LanguageService
 {
-    //TODO: Is this the best place for this?
-    public class SyntaxNodeOrToken { }
-
     public enum SyntaxKind
     {
         //Token Types

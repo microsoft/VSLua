@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Validation;
 
 namespace LanguageService
 {
@@ -10,10 +6,7 @@ namespace LanguageService
     {
         public ParseError(string message, int start, int end)
         {
-            if(message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
+            Requires.NotNull(message, nameof(message));
 
             this.Message = message;
             this.Start = start;
@@ -23,5 +16,10 @@ namespace LanguageService
         public string Message { get; }
         public int Start { get; }
         public int End { get; }
+
+        public int Length
+        {
+            get { return this.End - this.Start; }
+        }
     }
 }

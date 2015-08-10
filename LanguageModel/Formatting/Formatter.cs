@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using LanguageService;
 using LanguageService.Formatting.Options;
 using LanguageService.Formatting.Ruling;
 using LanguageService.Shared;
@@ -58,13 +57,22 @@ namespace LanguageService.Formatting
 
                 if (rule != null)
                 {
-                    textEdits.AddRange(rule.Apply(formattingContext));
+                    foreach (TextEditInfo edit in rule.Apply(formattingContext))
+                    {
+                        textEdits.Add(edit);
+                    }
                 }
             }
 
             textEdits.AddRange(Indenter.GetIndentations(parsedTokens, globalOptions));
 
             return textEdits;
+        }
+
+        public int SmartIndent(SourceText sourceText, int position)
+        {
+            SyntaxTree syntaxTree = this.parseTreeProvider.Get(sourceText);
+            return Indenter.GetIndentationFromPosition(syntaxTree, this.globalOptions, position);
         }
     }
 }

@@ -12,6 +12,9 @@ namespace Formatting.Tests
 {
     internal static class Tester
     {
+        private static EditorUtils.EditorHostFactory factory = new EditorUtils.EditorHostFactory();
+        private static EditorUtils.EditorHost host = factory.CreateEditorHost();
+
         private static Stream GenerateStreamFromString(string s)
         {
             MemoryStream stream = new MemoryStream();
@@ -38,9 +41,6 @@ namespace Formatting.Tests
 
         internal static string FormatOnPaste(string original, PasteInfo pasteInfo)
         {
-            var factory = new EditorUtils.EditorHostFactory();
-            var host = factory.CreateEditorHost();
-
             var buffer = host.CreateTextBuffer(original);
             var prePastSnapshot = buffer.CurrentSnapshot;
             var bufferEdit = buffer.CreateEdit();
@@ -73,12 +73,10 @@ namespace Formatting.Tests
             LuaFeatureContainer featureContainer = new LuaFeatureContainer();
             Range range = new Range(0, original.Length);
 
-            NewOptions newOptions = new NewOptions(new List<OptionalRuleGroup>(), 4);
+            NewOptions newOptions = new NewOptions(new List<OptionalRuleGroup>(), 4, 4, false);
 
             List<TextEditInfo> textEdits = featureContainer.Formatter.Format(new SourceText(new StringReader(original)), range, newOptions);
 
-            var factory = new EditorUtils.EditorHostFactory();
-            var host = factory.CreateEditorHost();
             var buffer = host.CreateTextBuffer(original);
             var edit = buffer.CreateEdit();
 
@@ -90,6 +88,17 @@ namespace Formatting.Tests
             var applied = edit.Apply();
 
             return applied.GetText();
+        }
+
+        internal static int SmartIndent(string text, int lineNumber)
+        {
+            LuaFeatureContainer featureContainer = new LuaFeatureContainer();
+
+            var buffer = host.CreateTextBuffer(text);
+            var lineSnapshot = buffer.CurrentSnapshot.GetLineFromLineNumber(lineNumber);
+            int position = lineSnapshot.Start.Position;
+
+            return featureContainer.Formatter.SmartIndent(new SourceText(new StringReader(text)), position);
         }
 
         internal static void GeneralTest(string original, string expected)
@@ -104,6 +113,12 @@ namespace Formatting.Tests
             //string actual2 = Tester.Format(original, IndentStyle.Relative);
             Assert.Equal(expected1, actual1);
             //Assert.Equal(expected2, actual2);
+        }
+
+        internal static void GeneralSmartIndentTest(string text, int lineNumber, int expectedIndent)
+        {
+            int actualIndent = Tester.SmartIndent(text, lineNumber);
+            Assert.Equal(expectedIndent, actualIndent);
         }
     }
 }

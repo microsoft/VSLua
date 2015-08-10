@@ -142,7 +142,7 @@ namespace LanguageService.LanguageModel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expected Token: .
+        ///   Looks up a localized string similar to Token Expected:.
         /// </summary>
         internal static string MissingToken {
             get {

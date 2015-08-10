@@ -78,9 +78,19 @@ namespace LanguageService.Formatting.Options
 
         // TODO: This Rule Group expands after the parser implemented, check OptionalRuleGroup enum
         //   for the rest
-        private static ImmutableArray<Rule> SpaceBeforeAndAfterAssignment = ImmutableArray.Create(
-            Rules.SpaceAfterAssignmentOperator,
-            Rules.SpaceBeforeAssignmentOperator
+        private static ImmutableArray<Rule> SpaceBeforeAndAfterAssignmentInStatement = ImmutableArray.Create(
+            Rules.SpaceAfterAssignmentOperatorInStatement,
+            Rules.SpaceBeforeAssignmentOperatorInStatement
+            );
+
+        private static ImmutableArray<Rule> SpaceBeforeAndAfterAssignmentInFor = ImmutableArray.Create(
+            Rules.SpaceBeforeAssignmentOperatorInFor,
+            Rules.SpaceAfterAssignmentOperatorInFor
+            );
+
+        private static ImmutableArray<Rule> SpaceBeforeAfterAssignmentInField = ImmutableArray.Create(
+            Rules.SpaceBeforeAssignmentOperatorInField,
+            Rules.SpaceAfterAssignmentOperatorInField
             );
 
         private static Dictionary<OptionalRuleGroup, IEnumerable<Rule>> optionalRuleGroups = new Dictionary<OptionalRuleGroup, IEnumerable<Rule>>
@@ -91,7 +101,9 @@ namespace LanguageService.Formatting.Options
             {OptionalRuleGroup.SpaceOnInsideOfSquareBrackets, SpaceOnInsideOfSquareBrackets},
             {OptionalRuleGroup.SpaceAfterCommas, SpaceAfterCommas},
             {OptionalRuleGroup.SpaceBeforeAndAfterBinaryOperations, SpaceBeforeAndAfterBinaryOperations},
-            {OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForStatement, SpaceBeforeAndAfterAssignment}
+            {OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForStatement, SpaceBeforeAndAfterAssignmentInStatement},
+            {OptionalRuleGroup.NoSpaceBeforeAndAfterIndiciesInForLoopHeader, SpaceBeforeAndAfterAssignmentInFor},
+            {OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForField, SpaceBeforeAfterAssignmentInField}
         };
     }
 }

@@ -93,6 +93,7 @@
     <Compile Include="FormatRulesAndIndentation\LeftCommaTests.cs" />
     <Compile Include="FormatRulesAndIndentation\MixedTests.cs" />
     <Compile Include="FormatRulesAndIndentation\NewlineRuleTesting.cs" />
+    <Compile Include="SmartIndent\SmartIndentTests.cs" />
     <Compile Include="Tester.cs" />
     <Compile Include="FormatRulesAndIndentation\TrailingWhitespaceTests.cs" />
     <Compile Include="FormatRulesAndIndentation\WrappingTests.cs" />
@@ -118,6 +119,7 @@
       <Name>VSLua</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
