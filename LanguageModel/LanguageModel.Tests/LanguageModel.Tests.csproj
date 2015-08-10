@@ -81,25 +81,26 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="TestGeneration\GeneratedTestFiles\PrefixExpFirst_Generated.cs" />
-    <Compile Include="TestGeneration\GeneratedTestFiles\Assignments_Generated.cs" />
-    <Compile Include="TestGeneration\GeneratedTestFiles\BracketError_Generator.cs" />
-    <Compile Include="TestGeneration\GeneratedTestFiles\ComplexTableConstructor_Generated.cs" />
-    <Compile Include="TestGeneration\GeneratedTestFiles\EmptyProgram_Generated.cs" />
-    <Compile Include="TestGeneration\GeneratedTestFiles\FunctionDefError_Generated.cs" />
-    <Compile Include="TestGeneration\GeneratedTestFiles\GrabKeyFromTable_Generated.cs" />
-    <Compile Include="TestGeneration\GeneratedTestFiles\MultipleTypeAssignment_Generated.cs" />
-    <Compile Include="TestGeneration\GeneratedTestFiles\SimpleTableError_Generated.cs" />
-    <Compile Include="TestGeneration\GeneratedTestFiles\SmallIf_Generated.cs" />
     <Compile Include="LexerTests.cs" />
     <Compile Include="ParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestGeneration\GeneratedTestFiles\TableStatements_Generated.cs" />
-    <Compile Include="TestGeneration\GeneratedTestFiles\TripleNestedFunctionCall_Generated.cs" />
-    <Compile Include="TestGeneration\GeneratedTestFiles\LucaDemo_Generated.cs" />
+    <Compile Include="TestGeneration\UnvalidatedGeneratedTests\*_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\Assignments_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\BracketError_Generator.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\ComplexTableConstructor_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\EmptyProgram_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\FunctionDefError_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\GrabKeyFromTable_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\LucaDemo_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\MultipleTypeAssignment_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\PrefixExpFirst_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\SimpleTableError_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\SmallIf_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\TableStatements_Generated.cs" />
     <Compile Include="TestGeneration\Tester.cs" />
     <Compile Include="TestGeneration\TestGenerator.cs" />
-    <Compile Include="TestGeneration\GeneratedTestFiles\WhileStatement_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\TripleNestedFunctionCall_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\WhileStatement_Generated.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CorrectSampleLuaFiles\assignment.lua">
@@ -148,6 +149,7 @@
       <Name>LanguageService</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

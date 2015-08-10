@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.Editor;
+using Microsoft.VisualStudio.LanguageServices.Lua.Errors;
 using Microsoft.VisualStudio.LanguageServices.Lua.Formatting;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.OLE.Interop;
@@ -12,20 +13,37 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
 {
     internal class TextView
     {
+        private IVsEditorAdaptersFactoryService editorAdaptersService;
+        private ISingletons core;
+        private ErrorListPresenter errorListPresenter;
+        private CommandFilter filter;
+
         private static Dictionary<IWpfTextView, TextView> viewMap = new Dictionary<IWpfTextView, TextView>();
 
-        protected IWpfTextView WpfTextView { get; private set; }
+        protected IWpfTextView WpfTextView { get; }
 
         protected IVsTextView VsTextView { get; set; }
 
         protected ITextBuffer TextBuffer { get; set; }
 
-        protected bool IsReadOnly { get; private set; }
+        protected bool IsReadOnly { get; }
 
-        protected bool IsClosed { get; private set; }
+        protected bool IsClosed { get; }
 
-        private IVsEditorAdaptersFactoryService editorAdaptersService;
-        private ISingletons core;
+        public bool IsClosing { get; private set; }
+
+        public ErrorListPresenter ErrorListPresenter
+        {
+            get
+            {
+                return this.errorListPresenter;
+            }
+            set
+            {
+                this.errorListPresenter = value;
+                //this.errorListPresenter.QueueUpdateErrors(this.primarySourceProvider, this.PostUIUpdateRequest);
+            }
+        }
 
         public TextView(IWpfTextView wpfTextView, ISingletons core)
         {
@@ -47,7 +65,18 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
             Requires.NotNull(textBuffer, nameof(textBuffer));
 
             this.TextBuffer = textBuffer;
-            CommandFilter filter = this.CreateCommandFilter(textBuffer);
+            this.filter = this.CreateCommandFilter(textBuffer);
+            this.errorListPresenter = new ErrorListPresenter(this.WpfTextView, this.core);
+        }
+
+        internal void Disconnect(ITextBuffer textBuffer)
+        {
+            Requires.NotNull(textBuffer, nameof(textBuffer));
+
+            this.filter?.Close();
+
+            this.errorListPresenter?.Dispose();
+            this.errorListPresenter = null;
         }
 
         protected CommandFilter CreateCommandFilter(ITextBuffer textBuffer)
@@ -66,5 +95,13 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
 
             return filter;
         }
+
+        //private void PostUIUpdateRequest()
+        //{
+        //    if (!this.IsClosed && !this.IsClosing)
+        //    {
+        //        this.uiUpdateTimer.PostCallback(Constants.UpdateUIDelay, timer => this.UpdateUI());
+        //    }
+        //}
     }
 }

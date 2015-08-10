@@ -1,14 +1,14 @@
-﻿using LanguageModel.Tests.TestGeneration;
+//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\TableStatements.lua\r\nusing LanguageModel.Tests.TestGeneration;
 using LanguageService;
+using LanguageModel.Tests.TestGeneration;
 using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
-    class TableStatements_Generated
+    class Generated_33
     {
         [Fact]
         public void Test(Tester t)
         {
-
             t.N(SyntaxKind.ChunkNode);
             {
                 t.N(SyntaxKind.BlockNode);

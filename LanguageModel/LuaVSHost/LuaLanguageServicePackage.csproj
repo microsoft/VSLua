@@ -53,10 +53,16 @@
   <ItemGroup>
     <Compile Include="Classifications\Tagger.cs" />
     <Compile Include="Classifications\TaggerProvider.cs" />
+    <Compile Include="Errors\ErrorListItem.cs" />
+    <Compile Include="Errors\ErrorListPresenter.cs" />
     <Compile Include="Errors\ErrorTagger.cs" />
     <Compile Include="Errors\ErrorTaggerProvider.cs" />
+    <Compile Include="Navigation\IEditorOperationsFactoryService.cs" />
+    <Compile Include="Shared\BufferExtensions.cs" />
     <Compile Include="Shared\CommandFilter.cs" />
     <Compile Include="Formatting\IFormatter.cs" />
+    <Compile Include="Navigation\DocumentOperations.cs" />
+    <Compile Include="Navigation\IDocumentOperations.cs" />
     <Compile Include="Shared\IMiniCommandFilter.cs" />
     <Compile Include="Formatting\FormatCommandHandler.cs" />
     <Compile Include="Formatting\OptionPages\BaseDialogPage.cs">

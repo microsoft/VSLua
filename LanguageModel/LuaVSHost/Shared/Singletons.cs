@@ -7,12 +7,16 @@ using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.LanguageServices.Lua.Classifications;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Text.Operations;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
     [Export(typeof(ISingletons))]
     internal class Singletons : ISingletons
     {
+        [Import]
+        private IEditorOperationsFactoryService editorOperationsFactory;
+
         [Import]
         private IVsEditorAdaptersFactoryService editorAdaptersFactory;
 
@@ -28,12 +32,40 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         private SourceTextCache sourceTextCache;
         private LuaFeatureContainer featureContainer;
         private Formatting.UserSettings userSettings;
+        private IDocumentOperations documentOperations;
 
         public IVsEditorAdaptersFactoryService EditorAdaptersFactory
         {
             get
             {
                 return this.editorAdaptersFactory;
+            }
+        }
+
+        public IEditorOperationsFactoryService EditorOperationsFactory
+        {
+            get
+            {
+                return this.editorOperationsFactory;
+            }
+        }
+
+        public IDocumentOperations DocumentOperations
+        {
+            get
+            {
+                if (this.documentOperations == null)
+                {
+                    this.documentOperations = new DocumentOperations(this);
+                }
+
+                return this.documentOperations;
+            }
+
+            internal set
+            {
+                // Used in unit-tests
+                this.documentOperations = value;
             }
         }
 
@@ -89,6 +121,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
                 }
 
                 return this.tagger;
+            }
+        }
+
+        public IServiceProvider ServiceProvider
+        {
+            get
+            {
+                return this.serviceProvider;
             }
         }
     }
