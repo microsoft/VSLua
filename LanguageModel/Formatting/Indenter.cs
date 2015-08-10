@@ -177,7 +177,8 @@ namespace LanguageService.Formatting
 
                 bool isAtEndOfTrivia = i + 1 >= leadingTrivia.Count;
                 if (isAtEndOfTrivia ||
-                           leadingTrivia[i + 1].Type != SyntaxKind.Whitespace)
+                           (leadingTrivia[i + 1].Type != SyntaxKind.Whitespace &&
+                           leadingTrivia[i+1].Type !=  SyntaxKind.Newline))
                 {
                     yield return new IndentInfo(start, 0, isBeforeText: true);
                 }

@@ -77,9 +77,9 @@ namespace LanguageService.Formatting
             {
                 Token token = currentRoot as Token;
 
-                if (token != null && token.Start >= range.Start)
+                if (token != null && token.Kind != SyntaxKind.MissingToken && token.Start >= range.Start)
                 {
-                    if (token.FullStart > range.End)
+                    if (token.Start > range.End)
                     {
                         yield break;
                     }
