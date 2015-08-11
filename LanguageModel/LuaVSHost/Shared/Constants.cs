@@ -23,7 +23,6 @@
                 internal const string Spacing = "Spacing";
                 internal const string Indentation = "Indentation";
                 internal const string WrappingAndNewLines = "WrappingNewLines";
-                //internal const string NewLines = "NewLines";
             }
         }
     }
