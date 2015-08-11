@@ -155,6 +155,12 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         {
             int caretPos = this.textView.Caret.Position.BufferPosition.Position;
 
+            SourceText sourceText = this.core.SourceTextCache.Get(this.textView.TextBuffer.CurrentSnapshot);
+            if (!this.core.FeatureContainer.Formatter.PositionInSyntaxKind(sourceText, caretPos, SyntaxKind.NameListPar))
+            {
+                return;
+            }
+
             double caretdouble = this.textView.Caret.Right;
 
             var textBuffer = this.textView.TextBuffer;

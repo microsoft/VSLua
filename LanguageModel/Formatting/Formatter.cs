@@ -37,7 +37,7 @@ namespace LanguageService.Formatting
         public List<TextEditInfo> Format(SourceText sourceText, Range range, NewOptions newOptions)
         {
             if (newOptions != null)
-        {
+            {
                 this.globalOptions = new GlobalOptions(newOptions);
                 this.ruleMap = RuleMap.Create(globalOptions.OptionalRuleMap);
             }
@@ -73,6 +73,64 @@ namespace LanguageService.Formatting
         {
             SyntaxTree syntaxTree = this.parseTreeProvider.Get(sourceText);
             return Indenter.GetIndentationFromPosition(syntaxTree, this.globalOptions, position);
+        }
+
+        public bool PositionInSyntaxKind(SourceText sourceText, int position, SyntaxKind syntaxKind)
+        {
+            SyntaxNodeOrToken currentNode = this.parseTreeProvider.Get(sourceText).Root;
+
+            while (true)
+            {
+                if (currentNode as Token != null)
+                {
+                    return ((Token)currentNode).Kind == syntaxKind;
+                }
+
+                SyntaxNode syntaxNode = (SyntaxNode)currentNode;
+
+                if (syntaxNode.Kind == syntaxKind)
+                {
+                    return true;
+                }
+
+                if (syntaxNode.Children == null || syntaxNode.Children.Count == 0)
+                {
+                    return syntaxNode.Kind == syntaxKind;
+                }
+
+                if (syntaxNode.Children.Count < 2)
+                {
+                    currentNode = syntaxNode.Children[0];
+                    continue;
+                }
+
+                for (int i = 0; i < syntaxNode.Children.Count - 1; ++i)
+                {
+                    SyntaxNodeOrToken currentChild = syntaxNode.Children[i];
+                    SyntaxNodeOrToken nextChild = syntaxNode.Children[i + 1];
+
+                    int startCurrentChild = currentChild as SyntaxNode == null ?
+                        ((Token)currentChild).FullStart :
+                        ((SyntaxNode)currentChild).StartPosition;
+
+                    int startNextChild = nextChild as SyntaxNode == null ?
+                        ((Token)nextChild).Start :
+                        ((SyntaxNode)nextChild).StartPosition;
+
+                    if (position > startCurrentChild && position < startNextChild)
+                    {
+                        currentNode = currentChild;
+                        break;
+                    }
+
+                    if (i + 1 >= syntaxNode.Children.Count - 1)
+                    {
+                        currentNode = nextChild;
+                        break;
+                    }
+
+                }
+            }
         }
     }
 }
