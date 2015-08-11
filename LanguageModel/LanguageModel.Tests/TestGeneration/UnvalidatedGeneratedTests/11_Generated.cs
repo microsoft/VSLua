@@ -1,6 +1,6 @@
-//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\FunctionAssignment.lua\r\nusing LanguageModel.Tests.TestGeneration;
-using LanguageService;
+//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\FunctionAssignment.lua
 using LanguageModel.Tests.TestGeneration;
+using LanguageService;
 using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
@@ -82,7 +82,7 @@ namespace LanguageModel.Tests.GeneratedTestFiles
                                             t.N(SyntaxKind.EndKeyword);
                                         }
                                     }
-                                    t.N(SyntaxKind.MissingToken);
+                                    t.N(SyntaxKind.EndKeyword);
                                 }
                             }
                         }

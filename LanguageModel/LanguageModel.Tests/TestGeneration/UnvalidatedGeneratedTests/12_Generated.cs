@@ -1,6 +1,6 @@
-//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\FunctionCallChainingStatement.lua\r\nusing LanguageModel.Tests.TestGeneration;
-using LanguageService;
+//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\FunctionCallStatement.lua
 using LanguageModel.Tests.TestGeneration;
+using LanguageService;
 using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
@@ -13,19 +13,6 @@ namespace LanguageModel.Tests.GeneratedTestFiles
             {
                 t.N(SyntaxKind.BlockNode);
                 {
-                    t.N(SyntaxKind.FunctionCallStatementNode);
-                    {
-                        t.N(SyntaxKind.NameVar);
-                        {
-                            t.N(SyntaxKind.Identifier);
-                        }
-                        t.N(SyntaxKind.ParenArg);
-                        {
-                            t.N(SyntaxKind.OpenParen);
-                            t.N(SyntaxKind.ExpList);
-                            t.N(SyntaxKind.CloseParen);
-                        }
-                    }
                     t.N(SyntaxKind.FunctionCallStatementNode);
                     {
                         t.N(SyntaxKind.NameVar);
