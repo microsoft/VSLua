@@ -420,6 +420,10 @@ namespace LanguageService
             node.StartPosition = this.textPosition;
             node.ReturnKeyword = GetExpectedToken(SyntaxKind.ReturnKeyword);
             node.ExpList = ParseExpList().ToBuilder();
+
+            if (ParseExpected(SyntaxKind.Semicolon))
+                node.SemiColon = currentToken;
+
             node.Length = this.textPosition - node.StartPosition;
             return node.ToImmutable();
         }
@@ -485,7 +489,7 @@ namespace LanguageService
             var node = ElseBlockNode.CreateBuilder();
             node.Kind = SyntaxKind.ElseBlockNode;
             node.StartPosition = this.textPosition;
-            node.ElseKeyword = currentToken;
+            node.ElseKeyword = GetExpectedToken(SyntaxKind.ElseKeyword);
             node.Block = ParseBlock(ParsingContext.ElseBlock).ToBuilder();
             node.Length = this.textPosition - node.StartPosition;
             return node.ToImmutable();
@@ -496,7 +500,7 @@ namespace LanguageService
             //TODO change parse logic.
             var elseIfList = new List<ElseIfBlockNode>();
 
-            while (ParseExpected(SyntaxKind.ElseIfKeyword))
+            while (Peek().Kind == SyntaxKind.ElseIfKeyword)
             {
                 elseIfList.Add(ParseElseIfBlock());
             }
@@ -509,7 +513,7 @@ namespace LanguageService
             var node = ElseIfBlockNode.CreateBuilder();
             node.Kind = SyntaxKind.ElseIfBlockNode;
             node.StartPosition = this.textPosition;
-            node.ElseIfKeyword = currentToken;
+            node.ElseIfKeyword = GetExpectedToken(SyntaxKind.ElseIfKeyword);
             node.Exp = ParseExpression().ToBuilder();
             node.ThenKeyword = GetExpectedToken(SyntaxKind.ThenKeyword);
             node.Block = ParseBlock(ParsingContext.ElseIfBlock).ToBuilder();
@@ -560,7 +564,7 @@ namespace LanguageService
                         break;
                     case SyntaxKind.Identifier:
                         PrefixExp prefixExp = ParsePrefixExp();
-                        switch(Peek().Kind)
+                        switch (Peek().Kind)
                         {
                             case SyntaxKind.OpenBracket:
                                 exp = ParseSquareBracketVar(prefixExp);
