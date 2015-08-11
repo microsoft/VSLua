@@ -14,11 +14,16 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
     [TagType(typeof(ClassificationTag))]
     internal class TaggerProvider : ITaggerProvider
     {
+
+#pragma warning disable 0169, 0649
+
         [Import]
         private IStandardClassificationService standardClassifications;
 
         [Import]
         private ISingletons singletons;
+
+#pragma warning restore 0169, 0649
 
         public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
         {

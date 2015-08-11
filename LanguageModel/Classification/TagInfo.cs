@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LanguageService.Classification
+﻿namespace LanguageService.Classification
 {
     public class TagInfo
     {
@@ -16,7 +10,10 @@ namespace LanguageService.Classification
         }
 
         public int Start { get; }
+
         public int Length { get; }
+
         public Classification Classification { get; }
+
     }
 }

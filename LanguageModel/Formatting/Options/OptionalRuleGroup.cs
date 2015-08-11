@@ -2,6 +2,9 @@
 {
     public enum OptionalRuleGroup
     {
+        /// <summary>
+        /// The set of rules that 
+        /// </summary>
         WrappingOneLineForFors,
         WrappingOneLineForFunctions,
         WrappingOneLineForTableConstructors,
