@@ -1,6 +1,6 @@
-//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\FunctionCallStatement.lua\r\nusing LanguageModel.Tests.TestGeneration;
-using LanguageService;
+//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\FunctionCallWithStringLiteral.lua
 using LanguageModel.Tests.TestGeneration;
+using LanguageService;
 using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
@@ -19,22 +19,9 @@ namespace LanguageModel.Tests.GeneratedTestFiles
                         {
                             t.N(SyntaxKind.Identifier);
                         }
-                        t.N(SyntaxKind.ParenArg);
+                        t.N(SyntaxKind.StringArg);
                         {
-                            t.N(SyntaxKind.OpenParen);
-                            t.N(SyntaxKind.ExpList);
-                            {
-                                t.N(SyntaxKind.SimpleExpression);
-                                {
-                                    t.N(SyntaxKind.TrueKeyValue);
-                                }
-                                t.N(SyntaxKind.Comma);
-                                t.N(SyntaxKind.SimpleExpression);
-                                {
-                                    t.N(SyntaxKind.Number);
-                                }
-                            }
-                            t.N(SyntaxKind.CloseParen);
+                            t.N(SyntaxKind.String);
                         }
                     }
                 }

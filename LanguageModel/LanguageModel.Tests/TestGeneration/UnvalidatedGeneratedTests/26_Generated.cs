@@ -1,6 +1,6 @@
-//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\NestedFunctionDef.lua\r\nusing LanguageModel.Tests.TestGeneration;
-using LanguageService;
+//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\ReturnStatementInFunction.lua
 using LanguageModel.Tests.TestGeneration;
+using LanguageService;
 using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
@@ -27,9 +27,6 @@ namespace LanguageModel.Tests.GeneratedTestFiles
                             t.N(SyntaxKind.NameListPar);
                             {
                                 t.N(SyntaxKind.NameList);
-                                {
-                                    t.N(SyntaxKind.Identifier);
-                                }
                             }
                             t.N(SyntaxKind.CloseParen);
                             t.N(SyntaxKind.BlockNode);
@@ -38,74 +35,7 @@ namespace LanguageModel.Tests.GeneratedTestFiles
                                 {
                                     t.N(SyntaxKind.ReturnKeyword);
                                     t.N(SyntaxKind.ExpList);
-                                    {
-                                        t.N(SyntaxKind.FunctionCallExp);
-                                        {
-                                            t.N(SyntaxKind.NameVar);
-                                            {
-                                                t.N(SyntaxKind.Identifier);
-                                            }
-                                            t.N(SyntaxKind.TableConstructorArg);
-                                            {
-                                                t.N(SyntaxKind.OpenCurlyBrace);
-                                                t.N(SyntaxKind.FieldList);
-                                                {
-                                                    t.N(SyntaxKind.AssignmentField);
-                                                    {
-                                                        t.N(SyntaxKind.Identifier);
-                                                        t.N(SyntaxKind.AssignmentOperator);
-                                                        t.N(SyntaxKind.NameVar);
-                                                        {
-                                                            t.N(SyntaxKind.Identifier);
-                                                        }
-                                                    }
-                                                    t.N(SyntaxKind.Comma);
-                                                    t.N(SyntaxKind.AssignmentField);
-                                                    {
-                                                        t.N(SyntaxKind.Identifier);
-                                                        t.N(SyntaxKind.AssignmentOperator);
-                                                        t.N(SyntaxKind.FunctionDef);
-                                                        {
-                                                            t.N(SyntaxKind.FunctionKeyword);
-                                                            t.N(SyntaxKind.FuncBodyNode);
-                                                            {
-                                                                t.N(SyntaxKind.OpenParen);
-                                                                t.N(SyntaxKind.NameListPar);
-                                                                {
-                                                                    t.N(SyntaxKind.NameList);
-                                                                }
-                                                                t.N(SyntaxKind.CloseParen);
-                                                                t.N(SyntaxKind.BlockNode);
-                                                                {
-                                                                    t.N(SyntaxKind.FunctionCallStatementNode);
-                                                                    {
-                                                                        t.N(SyntaxKind.NameVar);
-                                                                        {
-                                                                            t.N(SyntaxKind.Identifier);
-                                                                        }
-                                                                        t.N(SyntaxKind.ParenArg);
-                                                                        {
-                                                                            t.N(SyntaxKind.OpenParen);
-                                                                            t.N(SyntaxKind.ExpList);
-                                                                            {
-                                                                                t.N(SyntaxKind.NameVar);
-                                                                                {
-                                                                                    t.N(SyntaxKind.Identifier);
-                                                                                }
-                                                                            }
-                                                                            t.N(SyntaxKind.CloseParen);
-                                                                        }
-                                                                    }
-                                                                }
-                                                                t.N(SyntaxKind.EndKeyword);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                t.N(SyntaxKind.CloseCurlyBrace);
-                                            }
-                                        }
-                                    }
+                                    t.N(SyntaxKind.Semicolon);
                                 }
                             }
                             t.N(SyntaxKind.EndKeyword);

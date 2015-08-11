@@ -1,6 +1,6 @@
-//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\IfStatement.lua\r\nusing LanguageModel.Tests.TestGeneration;
-using LanguageService;
+//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\LocalAssignments.lua
 using LanguageModel.Tests.TestGeneration;
+using LanguageService;
 using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
@@ -13,52 +13,149 @@ namespace LanguageModel.Tests.GeneratedTestFiles
             {
                 t.N(SyntaxKind.BlockNode);
                 {
-                    t.N(SyntaxKind.IfStatementNode);
+                    t.N(SyntaxKind.LocalAssignmentStatementNode);
                     {
-                        t.N(SyntaxKind.IfKeyword);
-                        t.N(SyntaxKind.BinaryOperatorExpression);
+                        t.N(SyntaxKind.LocalKeyword);
+                        t.N(SyntaxKind.NameList);
                         {
-                            t.N(SyntaxKind.NameVar);
+                            t.N(SyntaxKind.Identifier);
+                        }
+                        t.N(SyntaxKind.AssignmentOperator);
+                        t.N(SyntaxKind.ExpList);
+                        {
+                            t.N(SyntaxKind.BinaryOperatorExpression);
                             {
-                                t.N(SyntaxKind.Identifier);
+                                t.N(SyntaxKind.SimpleExpression);
+                                {
+                                    t.N(SyntaxKind.Number);
+                                }
+                                t.N(SyntaxKind.MultiplyOperator);
+                                t.N(SyntaxKind.NameVar);
+                                {
+                                    t.N(SyntaxKind.Identifier);
+                                }
                             }
-                            t.N(SyntaxKind.EqualityOperator);
+                        }
+                    }
+                    t.N(SyntaxKind.LocalAssignmentStatementNode);
+                    {
+                        t.N(SyntaxKind.LocalKeyword);
+                        t.N(SyntaxKind.NameList);
+                        {
+                            t.N(SyntaxKind.Identifier);
+                        }
+                        t.N(SyntaxKind.AssignmentOperator);
+                        t.N(SyntaxKind.ExpList);
+                        {
+                            t.N(SyntaxKind.FunctionCallExp);
+                            {
+                                t.N(SyntaxKind.NameVar);
+                                {
+                                    t.N(SyntaxKind.Identifier);
+                                }
+                                t.N(SyntaxKind.ParenArg);
+                                {
+                                    t.N(SyntaxKind.OpenParen);
+                                    t.N(SyntaxKind.ExpList);
+                                    {
+                                        t.N(SyntaxKind.BinaryOperatorExpression);
+                                        {
+                                            t.N(SyntaxKind.NameVar);
+                                            {
+                                                t.N(SyntaxKind.Identifier);
+                                            }
+                                            t.N(SyntaxKind.ExponentOperator);
+                                            t.N(SyntaxKind.BinaryOperatorExpression);
+                                            {
+                                                t.N(SyntaxKind.SimpleExpression);
+                                                {
+                                                    t.N(SyntaxKind.Number);
+                                                }
+                                                t.N(SyntaxKind.MinusOperator);
+                                                t.N(SyntaxKind.BinaryOperatorExpression);
+                                                {
+                                                    t.N(SyntaxKind.SimpleExpression);
+                                                    {
+                                                        t.N(SyntaxKind.Number);
+                                                    }
+                                                    t.N(SyntaxKind.MultiplyOperator);
+                                                    t.N(SyntaxKind.BinaryOperatorExpression);
+                                                    {
+                                                        t.N(SyntaxKind.NameVar);
+                                                        {
+                                                            t.N(SyntaxKind.Identifier);
+                                                        }
+                                                        t.N(SyntaxKind.MultiplyOperator);
+                                                        t.N(SyntaxKind.NameVar);
+                                                        {
+                                                            t.N(SyntaxKind.Identifier);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    t.N(SyntaxKind.CloseParen);
+                                }
+                            }
+                        }
+                    }
+                    t.N(SyntaxKind.LocalAssignmentStatementNode);
+                    {
+                        t.N(SyntaxKind.LocalKeyword);
+                        t.N(SyntaxKind.NameList);
+                        {
+                            t.N(SyntaxKind.Identifier);
+                        }
+                        t.N(SyntaxKind.AssignmentOperator);
+                        t.N(SyntaxKind.ExpList);
+                        {
+                            t.N(SyntaxKind.BinaryOperatorExpression);
+                            {
+                                t.N(SyntaxKind.ParenPrefixExp);
+                                {
+                                    t.N(SyntaxKind.OpenParen);
+                                    t.N(SyntaxKind.EndKeyword);
+                                    {
+                                        t.N(SyntaxKind.MinusOperator);
+                                        t.N(SyntaxKind.BinaryOperatorExpression);
+                                        {
+                                            t.N(SyntaxKind.NameVar);
+                                            {
+                                                t.N(SyntaxKind.Identifier);
+                                            }
+                                            t.N(SyntaxKind.PlusOperator);
+                                            t.N(SyntaxKind.NameVar);
+                                            {
+                                                t.N(SyntaxKind.Identifier);
+                                            }
+                                        }
+                                    }
+                                    t.N(SyntaxKind.CloseParen);
+                                }
+                                t.N(SyntaxKind.DivideOperator);
+                                t.N(SyntaxKind.NameVar);
+                                {
+                                    t.N(SyntaxKind.Identifier);
+                                }
+                            }
+                        }
+                    }
+                    t.N(SyntaxKind.LocalAssignmentStatementNode);
+                    {
+                        t.N(SyntaxKind.LocalKeyword);
+                        t.N(SyntaxKind.NameList);
+                        {
+                            t.N(SyntaxKind.Identifier);
+                        }
+                        t.N(SyntaxKind.AssignmentOperator);
+                        t.N(SyntaxKind.ExpList);
+                        {
                             t.N(SyntaxKind.SimpleExpression);
                             {
-                                t.N(SyntaxKind.String);
+                                t.N(SyntaxKind.Number);
                             }
                         }
-                        t.N(SyntaxKind.ThenKeyword);
-                        t.N(SyntaxKind.BlockNode);
-                        {
-                            t.N(SyntaxKind.AssignmentStatementNode);
-                            {
-                                t.N(SyntaxKind.VarList);
-                                {
-                                    t.N(SyntaxKind.NameVar);
-                                    {
-                                        t.N(SyntaxKind.Identifier);
-                                    }
-                                }
-                                t.N(SyntaxKind.AssignmentOperator);
-                                t.N(SyntaxKind.ExpList);
-                                {
-                                    t.N(SyntaxKind.BinaryOperatorExpression);
-                                    {
-                                        t.N(SyntaxKind.NameVar);
-                                        {
-                                            t.N(SyntaxKind.Identifier);
-                                        }
-                                        t.N(SyntaxKind.PlusOperator);
-                                        t.N(SyntaxKind.NameVar);
-                                        {
-                                            t.N(SyntaxKind.Identifier);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        t.N(SyntaxKind.EndKeyword);
                     }
                 }
                 t.N(SyntaxKind.EndOfFile);

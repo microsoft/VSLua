@@ -34,7 +34,7 @@ namespace LanguageModel.Tests
             foreach (string file in Directory.EnumerateFiles(Path.Combine(BasePath, "Lua Files for Testing"), "*.lua"))
             {
                 SyntaxTree tree = SyntaxTree.Create(file);
-                File.WriteAllText(GetGenFilePath(fileNumber.ToString()), string.Format(@"//{0}\r\n{1}", file, GenerateTest(tree, string.Format(GenFileName, fileNumber.ToString()))));
+                File.WriteAllText(GetGenFilePath(fileNumber.ToString()), string.Format(@"//{0}{1}", file, GenerateTest(tree, string.Format(GenFileName, fileNumber.ToString()))));
 
                 Assert.Equal(0, tree.ErrorList.Count);
 
@@ -63,6 +63,7 @@ namespace LanguageModel.Tests
             IndentingWriter = IndentingTextWriter.Get(new StringWriter());
             sb = new StringBuilder();
 
+            sb.AppendLine();
             sb.AppendLine("using LanguageModel.Tests.TestGeneration;");
             sb.AppendLine("using LanguageService;");
             sb.AppendLine("using Xunit;");

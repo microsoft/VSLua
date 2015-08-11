@@ -78,9 +78,6 @@ namespace LanguageModel.Tests.GeneratedTestFiles
                                                     }
                                                 }
                                             }
-                                        }
-                                        t.N(SyntaxKind.SemiColonStatementNode);
-                                        {
                                             t.N(SyntaxKind.Semicolon);
                                         }
                                     }

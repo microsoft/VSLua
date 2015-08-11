@@ -39,10 +39,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                 switch ((VSConstants.VSStd2KCmdID)commandId)
                 {
                     case VSConstants.VSStd2KCmdID.FORMATDOCUMENT:
-                        {
-                            this.FormatDocument();
-                            return true;
-                        }
+                {
+                    this.FormatDocument();
+                    return true;
+                }
 
                     case VSConstants.VSStd2KCmdID.FORMATSELECTION:
                         {
@@ -61,7 +61,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                         }
 
                         break;
-                }
+            }
             }
 
             return false;
@@ -112,11 +112,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                 switch ((VSConstants.VSStd2KCmdID)commandId)
                 {
                     case VSConstants.VSStd2KCmdID.FORMATDOCUMENT:
-                        if (this.CanFormatDocument())
-                        {
-                            commandStatus = OLECommandFlags.OLECMDF_ENABLED | OLECommandFlags.OLECMDF_SUPPORTED;
-                            return true;
-                        }
+                    if (this.CanFormatDocument())
+                    {
+                        commandStatus = OLECommandFlags.OLECMDF_ENABLED | OLECommandFlags.OLECMDF_SUPPORTED;
+                        return true;
+                    }
 
                         break;
 
@@ -127,10 +127,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                             if (!this.textView.Selection.IsEmpty)
                             {
                                 commandStatus |= OLECommandFlags.OLECMDF_ENABLED;
-                            }
+                }
 
                             return true;
-                        }
+            }
 
                         break;
                 }

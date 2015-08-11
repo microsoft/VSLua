@@ -1,6 +1,6 @@
-//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\ForStatementWithVariables.lua\r\nusing LanguageModel.Tests.TestGeneration;
-using LanguageService;
+//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\ForStatementWithVariables.lua
 using LanguageModel.Tests.TestGeneration;
+using LanguageService;
 using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
@@ -35,17 +35,22 @@ namespace LanguageModel.Tests.GeneratedTestFiles
                         t.N(SyntaxKind.DoKeyword);
                         t.N(SyntaxKind.BlockNode);
                         {
-                            t.N(SyntaxKind.AssignmentStatementNode);
+                            t.N(SyntaxKind.FunctionCallStatementNode);
                             {
-                                t.N(SyntaxKind.VarList);
+                                t.N(SyntaxKind.NameVar);
                                 {
-                                    t.N(SyntaxKind.NameVar);
-                                    {
-                                        t.N(SyntaxKind.Identifier);
-                                    }
+                                    t.N(SyntaxKind.Identifier);
                                 }
-                                t.N(SyntaxKind.MissingToken);
-                                t.N(SyntaxKind.ExpList);
+                                t.N(SyntaxKind.ParenArg);
+                                {
+                                    t.N(SyntaxKind.OpenParen);
+                                    t.N(SyntaxKind.ExpList);
+                                    t.N(SyntaxKind.CloseParen);
+                                }
+                            }
+                            t.N(SyntaxKind.SemiColonStatementNode);
+                            {
+                                t.N(SyntaxKind.Semicolon);
                             }
                         }
                         t.N(SyntaxKind.EndKeyword);

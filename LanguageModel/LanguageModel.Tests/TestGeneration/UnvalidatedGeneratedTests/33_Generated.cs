@@ -1,6 +1,6 @@
-//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\TableStatements.lua\r\nusing LanguageModel.Tests.TestGeneration;
-using LanguageService;
+//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\WhileStatement.lua
 using LanguageModel.Tests.TestGeneration;
+using LanguageService;
 using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
@@ -13,61 +13,12 @@ namespace LanguageModel.Tests.GeneratedTestFiles
             {
                 t.N(SyntaxKind.BlockNode);
                 {
-                    t.N(SyntaxKind.AssignmentStatementNode);
+                    t.N(SyntaxKind.LocalAssignmentStatementNode);
                     {
-                        t.N(SyntaxKind.VarList);
+                        t.N(SyntaxKind.LocalKeyword);
+                        t.N(SyntaxKind.NameList);
                         {
-                            t.N(SyntaxKind.NameVar);
-                            {
-                                t.N(SyntaxKind.Identifier);
-                            }
-                        }
-                        t.N(SyntaxKind.AssignmentOperator);
-                        t.N(SyntaxKind.ExpList);
-                        {
-                            t.N(SyntaxKind.TableConstructorExp);
-                            {
-                                t.N(SyntaxKind.OpenCurlyBrace);
-                                t.N(SyntaxKind.FieldList);
-                                t.N(SyntaxKind.CloseCurlyBrace);
-                            }
-                        }
-                    }
-                    t.N(SyntaxKind.AssignmentStatementNode);
-                    {
-                        t.N(SyntaxKind.VarList);
-                        {
-                            t.N(SyntaxKind.NameVar);
-                            {
-                                t.N(SyntaxKind.Identifier);
-                            }
-                        }
-                        t.N(SyntaxKind.AssignmentOperator);
-                        t.N(SyntaxKind.ExpList);
-                        {
-                            t.N(SyntaxKind.SimpleExpression);
-                            {
-                                t.N(SyntaxKind.String);
-                            }
-                        }
-                    }
-                    t.N(SyntaxKind.AssignmentStatementNode);
-                    {
-                        t.N(SyntaxKind.VarList);
-                        {
-                            t.N(SyntaxKind.SquareBracketVar);
-                            {
-                                t.N(SyntaxKind.NameVar);
-                                {
-                                    t.N(SyntaxKind.Identifier);
-                                }
-                                t.N(SyntaxKind.OpenBracket);
-                                t.N(SyntaxKind.NameVar);
-                                {
-                                    t.N(SyntaxKind.Identifier);
-                                }
-                                t.N(SyntaxKind.CloseBracket);
-                            }
+                            t.N(SyntaxKind.Identifier);
                         }
                         t.N(SyntaxKind.AssignmentOperator);
                         t.N(SyntaxKind.ExpList);
@@ -78,178 +29,81 @@ namespace LanguageModel.Tests.GeneratedTestFiles
                             }
                         }
                     }
-                    t.N(SyntaxKind.AssignmentStatementNode);
+                    t.N(SyntaxKind.WhileStatementNode);
                     {
-                        t.N(SyntaxKind.VarList);
-                        {
-                            t.N(SyntaxKind.SquareBracketVar);
-                            {
-                                t.N(SyntaxKind.NameVar);
-                                {
-                                    t.N(SyntaxKind.Identifier);
-                                }
-                                t.N(SyntaxKind.OpenBracket);
-                                t.N(SyntaxKind.SimpleExpression);
-                                {
-                                    t.N(SyntaxKind.Number);
-                                }
-                                t.N(SyntaxKind.CloseBracket);
-                            }
-                        }
-                        t.N(SyntaxKind.AssignmentOperator);
-                        t.N(SyntaxKind.ExpList);
-                        {
-                            t.N(SyntaxKind.SimpleExpression);
-                            {
-                                t.N(SyntaxKind.String);
-                            }
-                        }
-                    }
-                    t.N(SyntaxKind.FunctionCallStatementNode);
-                    {
-                        t.N(SyntaxKind.NameVar);
-                        {
-                            t.N(SyntaxKind.Identifier);
-                        }
-                        t.N(SyntaxKind.ParenArg);
-                        {
-                            t.N(SyntaxKind.OpenParen);
-                            t.N(SyntaxKind.ExpList);
-                            {
-                                t.N(SyntaxKind.SquareBracketVar);
-                                {
-                                    t.N(SyntaxKind.NameVar);
-                                    {
-                                        t.N(SyntaxKind.Identifier);
-                                    }
-                                    t.N(SyntaxKind.OpenBracket);
-                                    t.N(SyntaxKind.SimpleExpression);
-                                    {
-                                        t.N(SyntaxKind.String);
-                                    }
-                                    t.N(SyntaxKind.CloseBracket);
-                                }
-                            }
-                            t.N(SyntaxKind.CloseParen);
-                        }
-                    }
-                    t.N(SyntaxKind.AssignmentStatementNode);
-                    {
-                        t.N(SyntaxKind.VarList);
+                        t.N(SyntaxKind.WhileKeyword);
+                        t.N(SyntaxKind.SquareBracketVar);
                         {
                             t.N(SyntaxKind.NameVar);
                             {
                                 t.N(SyntaxKind.Identifier);
                             }
-                        }
-                        t.N(SyntaxKind.AssignmentOperator);
-                        t.N(SyntaxKind.ExpList);
-                        {
-                            t.N(SyntaxKind.SimpleExpression);
+                            t.N(SyntaxKind.OpenBracket);
+                            t.N(SyntaxKind.NameVar);
                             {
-                                t.N(SyntaxKind.Number);
+                                t.N(SyntaxKind.Identifier);
                             }
+                            t.N(SyntaxKind.CloseBracket);
                         }
-                    }
-                    t.N(SyntaxKind.FunctionCallStatementNode);
-                    {
-                        t.N(SyntaxKind.NameVar);
+                        t.N(SyntaxKind.DoKeyword);
+                        t.N(SyntaxKind.BlockNode);
                         {
-                            t.N(SyntaxKind.Identifier);
-                        }
-                        t.N(SyntaxKind.ParenArg);
-                        {
-                            t.N(SyntaxKind.OpenParen);
-                            t.N(SyntaxKind.ExpList);
-                            {
-                                t.N(SyntaxKind.SquareBracketVar);
-                                {
-                                    t.N(SyntaxKind.NameVar);
-                                    {
-                                        t.N(SyntaxKind.Identifier);
-                                    }
-                                    t.N(SyntaxKind.OpenBracket);
-                                    t.N(SyntaxKind.NameVar);
-                                    {
-                                        t.N(SyntaxKind.Identifier);
-                                    }
-                                    t.N(SyntaxKind.CloseBracket);
-                                }
-                            }
-                            t.N(SyntaxKind.CloseParen);
-                        }
-                    }
-                    t.N(SyntaxKind.AssignmentStatementNode);
-                    {
-                        t.N(SyntaxKind.VarList);
-                        {
-                            t.N(SyntaxKind.SquareBracketVar);
+                            t.N(SyntaxKind.FunctionCallStatementNode);
                             {
                                 t.N(SyntaxKind.NameVar);
                                 {
                                     t.N(SyntaxKind.Identifier);
                                 }
-                                t.N(SyntaxKind.OpenBracket);
-                                t.N(SyntaxKind.SimpleExpression);
+                                t.N(SyntaxKind.ParenArg);
                                 {
-                                    t.N(SyntaxKind.String);
+                                    t.N(SyntaxKind.OpenParen);
+                                    t.N(SyntaxKind.ExpList);
+                                    {
+                                        t.N(SyntaxKind.SquareBracketVar);
+                                        {
+                                            t.N(SyntaxKind.NameVar);
+                                            {
+                                                t.N(SyntaxKind.Identifier);
+                                            }
+                                            t.N(SyntaxKind.OpenBracket);
+                                            t.N(SyntaxKind.NameVar);
+                                            {
+                                                t.N(SyntaxKind.Identifier);
+                                            }
+                                            t.N(SyntaxKind.CloseBracket);
+                                        }
+                                    }
+                                    t.N(SyntaxKind.CloseParen);
                                 }
-                                t.N(SyntaxKind.CloseBracket);
                             }
-                        }
-                        t.N(SyntaxKind.AssignmentOperator);
-                        t.N(SyntaxKind.ExpList);
-                        {
-                            t.N(SyntaxKind.BinaryOperatorExpression);
+                            t.N(SyntaxKind.AssignmentStatementNode);
                             {
-                                t.N(SyntaxKind.SquareBracketVar);
+                                t.N(SyntaxKind.VarList);
                                 {
                                     t.N(SyntaxKind.NameVar);
                                     {
                                         t.N(SyntaxKind.Identifier);
                                     }
-                                    t.N(SyntaxKind.OpenBracket);
-                                    t.N(SyntaxKind.SimpleExpression);
-                                    {
-                                        t.N(SyntaxKind.String);
-                                    }
-                                    t.N(SyntaxKind.CloseBracket);
                                 }
-                                t.N(SyntaxKind.PlusOperator);
-                                t.N(SyntaxKind.SimpleExpression);
+                                t.N(SyntaxKind.AssignmentOperator);
+                                t.N(SyntaxKind.ExpList);
                                 {
-                                    t.N(SyntaxKind.Number);
+                                    t.N(SyntaxKind.BinaryOperatorExpression);
+                                    {
+                                        t.N(SyntaxKind.NameVar);
+                                        {
+                                            t.N(SyntaxKind.Identifier);
+                                        }
+                                        t.N(SyntaxKind.PlusOperator);
+                                        t.N(SyntaxKind.SimpleExpression);
+                                        {
+                                            t.N(SyntaxKind.Number);
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
-                    t.N(SyntaxKind.FunctionCallStatementNode);
-                    {
-                        t.N(SyntaxKind.NameVar);
-                        {
-                            t.N(SyntaxKind.Identifier);
-                        }
-                        t.N(SyntaxKind.ParenArg);
-                        {
-                            t.N(SyntaxKind.OpenParen);
-                            t.N(SyntaxKind.ExpList);
-                            {
-                                t.N(SyntaxKind.SquareBracketVar);
-                                {
-                                    t.N(SyntaxKind.NameVar);
-                                    {
-                                        t.N(SyntaxKind.Identifier);
-                                    }
-                                    t.N(SyntaxKind.OpenBracket);
-                                    t.N(SyntaxKind.SimpleExpression);
-                                    {
-                                        t.N(SyntaxKind.String);
-                                    }
-                                    t.N(SyntaxKind.CloseBracket);
-                                }
-                            }
-                            t.N(SyntaxKind.CloseParen);
-                        }
+                        t.N(SyntaxKind.EndKeyword);
                     }
                 }
                 t.N(SyntaxKind.EndOfFile);
