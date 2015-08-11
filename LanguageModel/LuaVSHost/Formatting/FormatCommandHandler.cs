@@ -39,10 +39,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                 switch ((VSConstants.VSStd2KCmdID)commandId)
                 {
                     case VSConstants.VSStd2KCmdID.FORMATDOCUMENT:
-                {
-                    this.FormatDocument();
-                    return true;
-                }
+                        {
+                            this.FormatDocument();
+                            return true;
+                        }
 
                     case VSConstants.VSStd2KCmdID.FORMATSELECTION:
                         {
@@ -61,7 +61,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                         }
 
                         break;
-            }
+                }
             }
 
             return false;
@@ -73,6 +73,15 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             {
                 switch ((VSConstants.VSStd2KCmdID)commandId)
                 {
+                    case VSConstants.VSStd2KCmdID.TYPECHAR:
+                        char ch = CommandFilter.GetTypedChar(variantIn);
+
+                        if (ch == '(')
+                        {
+                            this.AddEndKeyword();
+                        }
+                        break;
+
                     case VSConstants.VSStd2KCmdID.RETURN:
                         this.FormatOnEnter();
                         break;
@@ -103,11 +112,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                 switch ((VSConstants.VSStd2KCmdID)commandId)
                 {
                     case VSConstants.VSStd2KCmdID.FORMATDOCUMENT:
-                    if (this.CanFormatDocument())
-                    {
-                        commandStatus = OLECommandFlags.OLECMDF_ENABLED | OLECommandFlags.OLECMDF_SUPPORTED;
-                        return true;
-                    }
+                        if (this.CanFormatDocument())
+                        {
+                            commandStatus = OLECommandFlags.OLECMDF_ENABLED | OLECommandFlags.OLECMDF_SUPPORTED;
+                            return true;
+                        }
 
                         break;
 
@@ -118,10 +127,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                             if (!this.textView.Selection.IsEmpty)
                             {
                                 commandStatus |= OLECommandFlags.OLECMDF_ENABLED;
-                }
+                            }
 
                             return true;
-            }
+                        }
 
                         break;
                 }
@@ -140,6 +149,25 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             // I would do stuff here when the FormattingCloses, which is when the textview also closes
 
             this.isClosed = true;
+        }
+
+        private void AddEndKeyword()
+        {
+            int caretPos = this.textView.Caret.Position.BufferPosition.Position;
+
+            double caretdouble = this.textView.Caret.Right;
+
+            var textBuffer = this.textView.TextBuffer;
+
+            string addedEnd = ") end";
+
+            using (var editBuffer = textBuffer.CreateEdit())
+            {
+                editBuffer.Replace(caretPos, 0, addedEnd);
+                var applied = editBuffer.Apply();
+            }
+
+            this.textView.Caret.MoveTo(this.textView.Caret.ContainingTextViewLine, caretdouble);
         }
 
         private bool CanFormatDocument()

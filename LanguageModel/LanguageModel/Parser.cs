@@ -43,7 +43,7 @@ namespace LanguageService
             if (positionInTokenList + 1 < tokenList.Count)
             {
                 currentToken = tokenList[++positionInTokenList];
-                this.textPosition = currentToken.Start - currentToken.FullStart + currentToken.Length;
+                this.textPosition += currentToken.Start - currentToken.FullStart + currentToken.Length;
             }
             return currentToken;
         }

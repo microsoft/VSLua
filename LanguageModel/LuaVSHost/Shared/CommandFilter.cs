@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.OLE.Interop;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
@@ -14,6 +15,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         public IOleCommandTarget Next { get; set; }
 
         public IList<IMiniCommandFilter> MiniFilters { get; private set; }
+
+        internal static char GetTypedChar(IntPtr pvaIn)
+        {
+            return (char)(ushort)Marshal.GetObjectForNativeVariant(pvaIn);
+        }
 
         public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
