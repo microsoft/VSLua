@@ -114,7 +114,12 @@ namespace LanguageService.Formatting
                         ((Token)nextChild).Start :
                         ((SyntaxNode)nextChild).StartPosition;
 
-                    if (position > startCurrentChild && position < startNextChild)
+                    SyntaxKind nextSyntaxKind = nextChild as SyntaxNode == null ?
+                        ((Token)nextChild).Kind :
+                        ((SyntaxNode)nextChild).Kind;
+
+                    if ((position > startCurrentChild && position < startNextChild) ||
+                        (position == startNextChild && nextSyntaxKind == SyntaxKind.EndOfFile))
                     {
                         currentNode = currentChild;
                         break;

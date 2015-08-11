@@ -153,10 +153,16 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 
         private void AddEndKeyword()
         {
+
+            if (true)
+            {
+                return;
+            }
+
             int caretPos = this.textView.Caret.Position.BufferPosition.Position;
 
             SourceText sourceText = this.core.SourceTextCache.Get(this.textView.TextBuffer.CurrentSnapshot);
-            if (!this.core.FeatureContainer.Formatter.PositionInSyntaxKind(sourceText, caretPos, SyntaxKind.NameListPar))
+            if (!this.core.FeatureContainer.Formatter.PositionInSyntaxKind(sourceText, caretPos, SyntaxKind.FuncBodyNode))
             {
                 return;
             }
