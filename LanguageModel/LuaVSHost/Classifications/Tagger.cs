@@ -55,11 +55,12 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
                 { Classification.Comment, standardClassifications.Comment },
                 { Classification.Identifier, standardClassifications.Identifier },
                 { Classification.Keyword, standardClassifications.Keyword },
-                { Classification.KeyValue, standardClassifications.Literal },
+                { Classification.KeyValue, standardClassifications.NumberLiteral },
                 { Classification.Operator, standardClassifications.Operator },
                 { Classification.Number, standardClassifications.NumberLiteral },
-                { Classification.Punctuation, standardClassifications.SymbolDefinition },
-                { Classification.StringLiteral, standardClassifications.StringLiteral }
+                { Classification.Punctuation, standardClassifications.Other },
+                { Classification.StringLiteral, standardClassifications.StringLiteral },
+                { Classification.Bracket, standardClassifications.SymbolDefinition }
             };
         }
     }
