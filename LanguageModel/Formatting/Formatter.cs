@@ -57,10 +57,7 @@ namespace LanguageService.Formatting
 
                 if (rule != null)
                 {
-                    foreach (TextEditInfo edit in rule.Apply(formattingContext))
-                    {
-                        textEdits.Add(edit);
-                    }
+                    textEdits.AddRange(rule.Apply(formattingContext));
                 }
             }
 

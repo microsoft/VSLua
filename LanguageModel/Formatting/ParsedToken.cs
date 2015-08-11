@@ -79,7 +79,7 @@ namespace LanguageService.Formatting
 
                 if (token != null && token.Kind != SyntaxKind.MissingToken && token.Start >= range.Start)
                 {
-                    if (token.Start > range.End)
+                    if (token.FullStart > range.End)
                     {
                         yield break;
                     }

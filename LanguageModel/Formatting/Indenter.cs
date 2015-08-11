@@ -178,7 +178,7 @@ namespace LanguageService.Formatting
                 bool isAtEndOfTrivia = i + 1 >= leadingTrivia.Count;
                 if (isAtEndOfTrivia ||
                            (leadingTrivia[i + 1].Type != SyntaxKind.Whitespace &&
-                           leadingTrivia[i+1].Type !=  SyntaxKind.Newline))
+                           leadingTrivia[i + 1].Type != SyntaxKind.Newline))
                 {
                     yield return new IndentInfo(start, 0, isBeforeText: true);
                 }
@@ -188,7 +188,9 @@ namespace LanguageService.Formatting
                     if (nextTrivia.Type == SyntaxKind.Whitespace)
                     {
                         bool isBeforeText = i + 1 == leadingTrivia.Count - 1 ||
-                            (i + 2 < leadingTrivia.Count && leadingTrivia[i + 2].Type == SyntaxKind.Comment);
+                            (i + 2 < leadingTrivia.Count &&
+                            (leadingTrivia[i + 2].Type != SyntaxKind.Newline ||
+                            leadingTrivia[i + 2].Type != SyntaxKind.Whitespace));
                         yield return new IndentInfo(start, nextTrivia.Text.Length, isBeforeText);
                     }
                 }
