@@ -11,7 +11,7 @@ namespace LanguageService
 {
     internal class ParseTreeCache
     {
-        private readonly ConditionalWeakTable<SourceText, SyntaxTree> sources = 
+        private readonly ConditionalWeakTable<SourceText, SyntaxTree> sources =
             new ConditionalWeakTable<SourceText, SyntaxTree>();
 
         internal SyntaxTree Get(SourceText sourceText)
