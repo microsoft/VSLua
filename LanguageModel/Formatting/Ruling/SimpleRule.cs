@@ -49,6 +49,5 @@ namespace LanguageService.Formatting.Ruling
                     return string.Empty;
             }
         }
-
     }
 }
