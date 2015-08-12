@@ -10,14 +10,14 @@ namespace Formatting.Tests
     public class IndentSpacesTests
     {
         private static string testStringOneIndent = @"f = function ()
-return
-end";
+    return
+    end";
 
         private static string testStringTwoIndents = @"f = function ()
     g = function ()
-return
+    return
     end
-end";
+    end";
 
         private static void GeneralOneIndent(uint tabSize, uint indentSize, int expectedTabs, int expectedSpaces, bool usingTabs)
         {

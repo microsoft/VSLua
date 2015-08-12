@@ -68,12 +68,12 @@ namespace Formatting.Tests
         }
 
 
-        internal static string Format(string original)
+        internal static string Format(string original, uint tabSize = 4, uint indentSize = 4, bool usingTabs = false)
         {
             LuaFeatureContainer featureContainer = new LuaFeatureContainer();
             Range range = new Range(0, original.Length);
 
-            NewOptions newOptions = new NewOptions(new List<OptionalRuleGroup>(), 4, 4, false);
+            NewOptions newOptions = new NewOptions(new List<OptionalRuleGroup>(), tabSize, indentSize, usingTabs);
 
             List<TextEditInfo> textEdits = featureContainer.Formatter.Format(new SourceText(new StringReader(original)), range, newOptions);
 
@@ -119,6 +119,37 @@ namespace Formatting.Tests
         {
             int actualIndent = Tester.SmartIndent(text, lineNumber);
             Assert.Equal(expectedIndent, actualIndent);
+        }
+
+        internal static void GeneralIndentAmountTest(string text, uint tabSize, uint indentSize, int expectedTabs, int expectedSpaces, bool usingTabs)
+        {
+            string formatted = Tester.Format(text, tabSize, indentSize, usingTabs);
+
+            string[] splits = formatted.Split(')');
+            string split = splits[splits.Length - 1];
+            split = split.Substring(2);
+            int spaces = 0;
+            int tabs = 0;
+            foreach (char c in split)
+            {
+                if (c == ' ' || c == '\t')
+                {
+                    if (c == ' ')
+                    {
+                        spaces++;
+                    }
+                    else
+                    {
+                        tabs++;
+                    }
+
+                    continue;
+                }
+                break;
+            }
+
+            Assert.Equal(expectedSpaces, spaces);
+            Assert.Equal(expectedTabs, tabs);
         }
     }
 }
