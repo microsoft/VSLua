@@ -144,7 +144,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             }
 
             // I would do stuff here when the FormattingCloses, which is when the textview also closes
-
             this.isClosed = true;
         }
 
