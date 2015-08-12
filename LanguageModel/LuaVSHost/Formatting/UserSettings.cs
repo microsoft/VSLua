@@ -26,12 +26,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         public event PropertyChangedEventHandler PropertyChanged;
 
         private uint tabSize = 4;
+
         internal uint TabSize
         {
             get
             {
                 return this.tabSize;
             }
+
             set
             {
                 if (this.tabSize != value)
@@ -43,12 +45,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private uint indentSize = 4;
+
         internal uint IndentSize
         {
             get
             {
                 return this.indentSize;
             }
+
             set
             {
                 if (this.tabSize != value)
@@ -60,12 +64,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool usingTabs = false;
+
         internal bool UsingTabs
         {
             get
             {
                 return this.usingTabs;
             }
+
             set
             {
                 if (this.usingTabs != value)
@@ -77,12 +83,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private vsIndentStyle indentStyle = vsIndentStyle.vsIndentStyleDefault;
+
         internal vsIndentStyle IndentStyle
         {
             get
             {
                 return this.indentStyle;
             }
+
             set
             {
                 if (this.indentStyle != value)
@@ -94,12 +102,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? formatOnEnter = true;
+
         public bool? FormatOnEnter
         {
             get
             {
                 return this.formatOnEnter;
             }
+
             set
             {
                 if (this.formatOnEnter != value)
@@ -111,12 +121,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? formatOnPaste = true;
+
         public bool? FormatOnPaste
         {
             get
             {
                 return this.formatOnPaste;
             }
+
             set
             {
                 if (this.formatOnPaste != value)
@@ -128,12 +140,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? formatOnBlock = true;
+
         public bool? FormatOnBlock
         {
             get
             {
                 return this.formatOnBlock;
             }
+
             set
             {
                 if (this.formatOnBlock != value)
@@ -145,12 +159,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? spaceAfterCommas = true;
+
         public bool? SpaceAfterCommas
         {
             get
             {
                 return this.spaceAfterCommas;
             }
+
             set
             {
                 if (this.spaceAfterCommas != value)
@@ -162,12 +178,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? spaceBeforeAndAfterBinaryOperations = true;
+
         public bool? SpaceBeforeAndAfterBinaryOperations
         {
             get
             {
                 return this.spaceBeforeAndAfterBinaryOperations;
             }
+
             set
             {
                 if (this.spaceBeforeAndAfterBinaryOperations != value)
@@ -179,12 +197,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? spaceBeforeAndAfterAssignmentOperatorOnField = true;
+
         public bool? SpaceBeforeAndAfterAssignmentOperatorOnField
         {
             get
             {
                 return this.spaceBeforeAndAfterAssignmentOperatorOnField;
             }
+
             set
             {
                 if (this.spaceBeforeAndAfterAssignmentOperatorOnField != value)
@@ -196,12 +216,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? spaceBeforeAndAfterAssignmentInStatement = true;
+
         public bool? SpaceBeforeAndAfterAssignmentInStatement
         {
             get
             {
                 return this.spaceBeforeAndAfterAssignmentInStatement;
             }
+
             set
             {
                 if (this.spaceBeforeAndAfterAssignmentInStatement != value)
@@ -213,12 +235,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? forLoopAssignmentSpacing = false;
+
         public bool? ForLoopAssignmentSpacing
         {
             get
             {
                 return this.forLoopAssignmentSpacing;
             }
+
             set
             {
                 if (this.forLoopAssignmentSpacing != value)
@@ -230,12 +254,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? forLoopIndexSpacing = false;
+
         public bool? ForLoopIndexSpacing
         {
             get
             {
                 return this.forLoopIndexSpacing;
             }
+
             set
             {
                 if (this.forLoopIndexSpacing != value)
@@ -247,12 +273,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? spaceBetweenFunctionAndParenthesis = true;
+
         public bool? SpaceBetweenFunctionAndParenthesis
         {
             get
             {
                 return this.spaceBetweenFunctionAndParenthesis;
             }
+
             set
             {
                 if (this.spaceBetweenFunctionAndParenthesis != value)
@@ -264,12 +292,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? addSpacesOnInsideOfParenthesis = false;
+
         public bool? AddSpacesOnInsideOfParenthesis
         {
             get
             {
                 return this.addSpacesOnInsideOfParenthesis;
             }
+
             set
             {
                 if (this.addSpacesOnInsideOfParenthesis != value)
@@ -281,12 +311,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? addSpacesOnInsideOfCurlyBraces = true;
+
         public bool? AddSpacesOnInsideOfCurlyBraces
         {
             get
             {
                 return this.addSpacesOnInsideOfCurlyBraces;
             }
+
             set
             {
                 if (this.addSpacesOnInsideOfCurlyBraces != value)
@@ -298,12 +330,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? addSpacesOnInsideOfSquareBrackets = false;
+
         public bool? AddSpacesOnInsideOfSquareBrackets
         {
             get
             {
                 return this.addSpacesOnInsideOfSquareBrackets;
             }
+
             set
             {
                 if (this.addSpacesOnInsideOfSquareBrackets != value)
@@ -315,12 +349,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? wrapSingleLineFunctions = false;
+
         public bool? WrapSingleLineFunctions
         {
             get
             {
                 return this.wrapSingleLineFunctions;
             }
+
             set
             {
                 if (this.wrapSingleLineFunctions != value)
@@ -332,12 +368,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? wrapSingleLineForLoops = false;
+
         public bool? WrapSingleLineForLoops
         {
             get
             {
                 return this.wrapSingleLineForLoops;
             }
+
             set
             {
                 if (this.wrapSingleLineForLoops != value)
@@ -349,12 +387,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? wrapSingleLineTableConstructors = false;
+
         public bool? WrapSingleLineTableConstructors
         {
             get
             {
                 return this.wrapSingleLineTableConstructors;
             }
+
             set
             {
                 if (this.wrapSingleLineTableConstructors != value)
@@ -366,12 +406,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         }
 
         private bool? addNewLinesToMultilineTableConstructors = false;
+
         public bool? AddNewLinesToMultilineTableConstructors
         {
             get
             {
                 return this.addNewLinesToMultilineTableConstructors;
             }
+
             set
             {
                 if (this.addNewLinesToMultilineTableConstructors != value)

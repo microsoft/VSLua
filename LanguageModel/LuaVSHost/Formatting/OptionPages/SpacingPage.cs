@@ -16,6 +16,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages
     internal class SpacingPage : BaseDialogPage
     {
         private SpacingUserControl spacingUserControl;
+
         protected override UIElement Child
         {
             get

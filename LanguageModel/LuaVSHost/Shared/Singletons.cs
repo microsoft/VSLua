@@ -113,6 +113,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         }
 
         private Tagger tagger;
+
         public Tagger Tagger
         {
             get

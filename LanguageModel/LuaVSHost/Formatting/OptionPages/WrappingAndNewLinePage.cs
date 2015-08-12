@@ -16,6 +16,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages
     internal class WrappingAndNewLinePage : BaseDialogPage
     {
         private WrappingAndNewLineUserControl wrappingAndNewLineUserControl;
+
         protected override UIElement Child
         {
             get

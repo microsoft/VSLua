@@ -17,6 +17,7 @@
         internal sealed class Formatting
         {
             internal const string Category = "Formatting";
+
             internal sealed class Pages
             {
                 internal const string General = "General";

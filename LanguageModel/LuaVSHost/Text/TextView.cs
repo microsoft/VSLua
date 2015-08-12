@@ -36,6 +36,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
             {
                 return this.errorListPresenter;
             }
+
             set
             {
                 this.errorListPresenter = value;

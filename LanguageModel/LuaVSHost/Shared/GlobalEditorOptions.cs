@@ -10,7 +10,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
     internal sealed class GlobalEditorOptions : IVsTextManagerEvents2
     {
         internal vsIndentStyle IndentStyle { get; private set; }
+
         internal uint TabSize { get; private set; }
+
         private AxHost.ConnectionPointCookie connectionPoint;
 
 #pragma warning disable 0169, 0649

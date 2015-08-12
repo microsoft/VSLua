@@ -11,12 +11,19 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
     internal interface ISingletons
     {
         IDocumentOperations DocumentOperations { get; }
+
         IEditorOperationsFactoryService EditorOperationsFactory { get; }
+
         IVsEditorAdaptersFactoryService EditorAdaptersFactory { get; }
+
         LuaFeatureContainer FeatureContainer { get; }
+
         UserSettings FormattingUserSettings { get; }
+
         IServiceProvider ServiceProvider { get; }
+
         SourceTextCache SourceTextCache { get; }
+
         Tagger Tagger { get; }
     }
 }
