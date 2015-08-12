@@ -2,9 +2,9 @@
 using System.ComponentModel.Composition;
 using LanguageService;
 using Microsoft.VisualStudio.Editor;
-using Microsoft.VisualStudio.LanguageServices.Lua.Text;
 using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.LanguageServices.Lua.Classifications;
+using Microsoft.VisualStudio.LanguageServices.Lua.Text;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text.Operations;
@@ -14,6 +14,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
     [Export(typeof(ISingletons))]
     internal class Singletons : ISingletons
     {
+#pragma warning disable 0169, 0649
         [Import]
         private IEditorOperationsFactoryService editorOperationsFactory;
 
@@ -28,6 +29,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 
         [Import]
         private Lazy<IStandardClassificationService> standardClassifications;
+#pragma warning restore 0169, 0649
 
         private SourceTextCache sourceTextCache;
         private LuaFeatureContainer featureContainer;

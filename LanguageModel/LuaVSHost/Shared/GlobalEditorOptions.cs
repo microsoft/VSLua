@@ -13,11 +13,13 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         internal uint TabSize { get; private set; }
         private AxHost.ConnectionPointCookie connectionPoint;
 
+#pragma warning disable 0169, 0649
         [Import]
         private ISingletons singletons;
 
         [Import]
         private SVsServiceProvider serviceProvider;
+#pragma warning restore 0169, 0649
 
         internal event EventHandler<EventArgs> OnUpdateLanguagePreferences;
 

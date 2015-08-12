@@ -15,8 +15,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.SmartIndentatio
     [Name("LuaSmartIndentation")]
     internal class SmartIndentProvider : ISmartIndentProvider
     {
+#pragma warning disable 0169, 0649
         [Import]
         private ISingletons singletons;
+#pragma warning restore 0169, 0649
 
         public ISmartIndent CreateSmartIndent(ITextView textView)
         {

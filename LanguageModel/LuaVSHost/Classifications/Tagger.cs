@@ -26,7 +26,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
             this.standardClassifications = standardClassifications;
             this.singletons = singletons;
             this.vsClassifications = this.InitializeDictionary(standardClassifications);
-
         }
 
         public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans)
