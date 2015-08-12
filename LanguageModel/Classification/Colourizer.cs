@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using Validation;
 
 namespace LanguageService.Classification
 {
@@ -62,10 +63,9 @@ namespace LanguageService.Classification
                     start += trivia.Text.Length;
                 }
 
-                Classification classification = Classification.Keyword;
-                SyntaxKindClassifications.TryGetValue(token.Kind, out classification);
+                Classification classification;
 
-                if (token.Kind != SyntaxKind.EndOfFile && token.Start >= 0 && token.Length >= 0)
+                if (SyntaxKindClassifications.TryGetValue(token.Kind, out classification) && token.Kind != SyntaxKind.EndOfFile && token.Start >= 0 && token.Length >= 0)
                 {
                     yield return new TagInfo(token.Start, token.Length, classification);
                 }
@@ -104,7 +104,6 @@ namespace LanguageService.Classification
                 { SyntaxKind.GotoKeyword, Classification.Keyword },
                 { SyntaxKind.GreaterOrEqualOperator, Classification.Operator },
                 { SyntaxKind.GreaterThanOperator, Classification.Operator },
-                { SyntaxKind.Identifier, Classification.Identifier },
                 { SyntaxKind.IfKeyword, Classification.Keyword },
                 { SyntaxKind.InKeyword, Classification.Keyword },
                 { SyntaxKind.LengthUnop, Classification.Punctuation },

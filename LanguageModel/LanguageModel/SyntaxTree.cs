@@ -16,10 +16,16 @@ namespace LanguageService
         public ChunkNode Root { get; }
         public ImmutableList<ParseError> ErrorList { get; }
 
+        public static SyntaxTree Create(TextReader luaReader)
+        {
+            return new Parser().CreateSyntaxTree(luaReader);
+        }
+
+        // For testing
         public static SyntaxTree Create(string filename)
         {
-            TextReader luaStream = File.OpenText(filename);
-            return new Parser().CreateSyntaxTree(luaStream);
+            TextReader luaReader = File.OpenText(filename);
+            return new Parser().CreateSyntaxTree(luaReader);
         }
 
         public static SyntaxTree CreateFromString(string program)

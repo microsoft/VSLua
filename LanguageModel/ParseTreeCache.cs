@@ -24,7 +24,7 @@ namespace LanguageService
                 return syntaxTree;
             }
 
-            syntaxTree = new Parser().CreateSyntaxTree(sourceText.TextReader);
+            syntaxTree = SyntaxTree.Create(sourceText.TextReader);
             this.sources.Add(sourceText, syntaxTree);
 
             return syntaxTree;

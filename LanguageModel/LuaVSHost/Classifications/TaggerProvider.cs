@@ -21,13 +21,13 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
     [TagType(typeof(ClassificationTag))]
     internal class TaggerProvider : ITaggerProvider
     {
-#pragma warning disable 0169, 0649
+        #pragma warning disable 0169, 0649 // Supress the "not" initialized warning
         [Import]
         private IStandardClassificationService standardClassifications;
 
         [Import]
         private ISingletons singletons;
-#pragma warning restore 0169, 0649
+        #pragma warning restore 0169, 0649
 
         public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
         {
@@ -42,7 +42,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 
             // Taggers can be created for many reasons. In this case, it's fine to have a sinlge
             // tagger for a given buffer, so cache it on the buffer as a singleton property.
-            return buffer.Properties.GetOrCreateSingletonProperty<Tagger>(taggerCreator) as ITagger<T>;
+            return buffer.Properties.GetOrCreateSingletonProperty(taggerCreator) as ITagger<T>;
         }
     }
 }

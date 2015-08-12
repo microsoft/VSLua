@@ -6,17 +6,20 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using LanguageService;
 using LanguageService.Classification;
 using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 {
-    internal class Tagger : ITagger<ClassificationTag>
+    internal class Tagger : DisposableObject, ITagger<ClassificationTag>
     {
         public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
@@ -24,6 +27,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
         private ISingletons singletons;
         private Dictionary<Classification, IClassificationType> vsClassifications;
         private ITextBuffer buffer;
+        private CancellationTokenSource cancellationTokenSource;
 
         internal Tagger(ITextBuffer buffer, IStandardClassificationService standardClassifications, ISingletons singletons)
         {
@@ -37,7 +41,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
             this.singletons = singletons;
             this.vsClassifications = this.InitializeDictionary(standardClassifications);
 
-            //this.buffer.Changed += this.OnBufferChanged;
+            this.buffer.Changed += this.OnBufferChanged;
         }
 
         public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans)
@@ -58,13 +62,48 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
             }
         }
 
+        protected override void DisposeManagedResources()
+        {
+            if (this.buffer != null)
+            {
+                this.buffer.Changed -= this.OnBufferChanged;
+            }
+
+            base.DisposeManagedResources();
+        }
+
+        private void OnBufferChanged(object sender, TextContentChangedEventArgs e)
+        {
+            if (this.cancellationTokenSource != null)
+            {
+                this.cancellationTokenSource.Cancel();
+            }
+
+            this.cancellationTokenSource = new CancellationTokenSource();
+            this.UpdateParserRelatedClassifications(e.After, this.cancellationTokenSource.Token);
+        }
+
+        private void UpdateParserRelatedClassifications(ITextSnapshot snapshot, CancellationToken token)
+        {
+            Task.Run(async () =>
+            {
+                await Task.Delay(Constants.UIUpdateDelay);
+
+                if (token.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                this.TagsChanged?.Invoke(this, new SnapshotSpanEventArgs(new SnapshotSpan(snapshot, 0, snapshot.Length)));
+            }, token);
+        }
+
         private Dictionary<Classification, IClassificationType> InitializeDictionary(IStandardClassificationService standardClassifications)
         {
             var something = standardClassifications.Comment;
             return new Dictionary<Classification, IClassificationType>()
             {
                 { Classification.Comment, standardClassifications.Comment },
-                { Classification.Identifier, standardClassifications.Identifier },
                 { Classification.Keyword, standardClassifications.Keyword },
                 { Classification.KeyValue, standardClassifications.NumberLiteral },
                 { Classification.Operator, standardClassifications.Operator },

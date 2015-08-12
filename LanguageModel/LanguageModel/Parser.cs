@@ -37,7 +37,10 @@ namespace LanguageService
             return new SyntaxTree(root, errorList.ToImmutableList());
         }
 
-        #region tokenList Accessors 
+        #region tokenList Accessors
+
+        internal List<Token> TokenList => this.tokenList;
+
         private Token NextToken()
         {
             if (positionInTokenList + 1 < tokenList.Count)

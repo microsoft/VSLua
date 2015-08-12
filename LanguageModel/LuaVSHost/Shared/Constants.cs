@@ -2,10 +2,10 @@
 {
     internal sealed class Constants
     {
-        // Wait 2 seconds after last buffer change to actually update the UI
+        // Wait UIUpdateDelay milliseconds after last buffer change to actually update the UI
         // If changes come up during the way, cancel the current update task
         // and queue another.
-        internal const int UIUpdateDelay = 1750;
+        internal const int UIUpdateDelay = 875;
         internal const int MaximumErrorsPerFile = 25;
 
         internal sealed class Language
