@@ -1,4 +1,10 @@
-﻿using System;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System;
 using Microsoft.VisualStudio.Text;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
