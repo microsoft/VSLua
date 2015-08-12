@@ -89,7 +89,7 @@ namespace LanguageService.Formatting.Options
             { OptionalRuleGroup.SpaceOnInsideOfParenthesis, SpaceOnInsideOfParenthesis },
             { OptionalRuleGroup.SpaceOnInsideOfCurlyBraces, SpaceOnInsideOfCurlyBraces },
             { OptionalRuleGroup.SpaceOnInsideOfSquareBrackets, SpaceOnInsideOfSquareBrackets },
-            { OptionalRuleGroup.SpaceAfterCommas, SpaceAfterCommas},
+            { OptionalRuleGroup.SpaceAfterCommas, SpaceAfterCommas },
             { OptionalRuleGroup.SpaceBeforeAndAfterBinaryOperations, SpaceBeforeAndAfterBinaryOperations },
             { OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForStatement, SpaceBeforeAndAfterAssignmentInStatement },
             { OptionalRuleGroup.NoSpaceBeforeAndAfterIndiciesInForLoopHeader, SpaceBeforeAndAfterAssignmentInFor },

@@ -22,7 +22,6 @@ namespace LanguageService.Formatting
         internal SyntaxNode StatementNode { get; }
         internal bool InTableConstructor { get; }
 
-
         private static readonly ImmutableHashSet<SyntaxKind> StatKinds = ImmutableHashSet.Create(
             SyntaxKind.Semicolon,
             SyntaxKind.AssignmentStatementNode,
@@ -38,8 +37,7 @@ namespace LanguageService.Formatting
             SyntaxKind.SimpleForStatementNode,
             SyntaxKind.GlobalFunctionStatementNode,
             SyntaxKind.LocalFunctionStatementNode,
-            SyntaxKind.LocalAssignmentStatementNode
-        );
+            SyntaxKind.LocalAssignmentStatementNode);
 
         private static IEnumerable<ParsedToken> WalkTreeRangeKeepLevelAndParent(SyntaxNodeOrToken currentRoot, int blockLevel, SyntaxNode statementNode, bool inTableConstructor, Range range)
         {
@@ -49,7 +47,6 @@ namespace LanguageService.Formatting
                 foreach (SyntaxNodeOrToken node in syntaxNode.Children)
                 {
                     SyntaxNode nextStatementNode = syntaxNode;
-
 
                     if (!StatKinds.Contains(syntaxNode.Kind))
                     {

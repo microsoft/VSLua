@@ -188,8 +188,7 @@ namespace LanguageService.Formatting.Ruling
             DeleteSpaceBeforeValueAfterColon,
 
             DeleteSpaceBeforeEofToken,
-            DeleteTrailingWhitespace
-            );
+            DeleteTrailingWhitespace);
 
         internal static bool TokensAreOnSameLine(FormattingContext formattingContext)
         {

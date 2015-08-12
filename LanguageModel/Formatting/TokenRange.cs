@@ -17,8 +17,7 @@ namespace LanguageService.Formatting
                 Enum.GetValues(typeof(SyntaxKind)),
                 new SyntaxKind[] { });
 
-        internal static readonly ImmutableArray<SyntaxKind> BinaryOperators = ImmutableArray.Create
-        (
+        internal static readonly ImmutableArray<SyntaxKind> BinaryOperators = ImmutableArray.Create(
             SyntaxKind.AndBinop,
             SyntaxKind.BitwiseAndOperator,
             SyntaxKind.BitwiseLeftOperator,
@@ -40,18 +39,15 @@ namespace LanguageService.Formatting
             SyntaxKind.PlusOperator,
             SyntaxKind.StringConcatOperator,
             SyntaxKind.TildeUnOp,
-            SyntaxKind.VarArgOperator
-        );
+            SyntaxKind.VarArgOperator);
 
-        internal static readonly ImmutableArray<SyntaxKind> Brackets = ImmutableArray.Create
-        (
+        internal static readonly ImmutableArray<SyntaxKind> Brackets = ImmutableArray.Create(
             SyntaxKind.OpenBracket,
             SyntaxKind.CloseBracket,
             SyntaxKind.OpenCurlyBrace,
             SyntaxKind.CloseCurlyBrace,
             SyntaxKind.OpenParen,
-            SyntaxKind.CloseParen
-        );
+            SyntaxKind.CloseParen);
 
         internal static readonly ImmutableArray<SyntaxKind> Value = ImmutableArray.Create(
             SyntaxKind.Number,
@@ -60,8 +56,7 @@ namespace LanguageService.Formatting
             SyntaxKind.TrueKeyValue,
             SyntaxKind.NilKeyValue,
             SyntaxKind.Identifier,
-            SyntaxKind.FunctionKeyword
-        );
+            SyntaxKind.FunctionKeyword);
 
         private static ImmutableArray<SyntaxKind> Fill(Array values, SyntaxKind[] exclude)
         {
