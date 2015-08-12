@@ -16,7 +16,7 @@ namespace LanguageService.Formatting.Ruling
 
         internal bool InContext(FormattingContext formattingContext)
         {
-            foreach (Func<FormattingContext, bool> contextFilter in contextFilters)
+            foreach (Func<FormattingContext, bool> contextFilter in this.contextFilters)
             {
                 if (!contextFilter(formattingContext))
                 {

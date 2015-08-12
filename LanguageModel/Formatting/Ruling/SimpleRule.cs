@@ -37,7 +37,7 @@ namespace LanguageService.Formatting.Ruling
 
         private string GetTextFromAction()
         {
-            switch (RuleOperationContext.Action)
+            switch (this.RuleOperationContext.Action)
             {
                 case RuleAction.Delete:
                     return string.Empty;

@@ -14,13 +14,13 @@ namespace LanguageService
             Requires.NotNull(sourceText, nameof(sourceText));
 
             SyntaxTree syntaxTree;
-            if (sources.TryGetValue(sourceText, out syntaxTree))
+            if (this.sources.TryGetValue(sourceText, out syntaxTree))
             {
                 return syntaxTree;
             }
 
             syntaxTree = new Parser().CreateSyntaxTree(sourceText.TextReader);
-            sources.Add(sourceText, syntaxTree);
+            this.sources.Add(sourceText, syntaxTree);
 
             return syntaxTree;
         }

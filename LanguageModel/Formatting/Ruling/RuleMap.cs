@@ -35,17 +35,17 @@ namespace LanguageService.Formatting.Ruling
                     RuleBucket bucket;
                     Dictionary<SyntaxKind, RuleBucket> leftTokenMap;
 
-                    if (!map.TryGetValue(typeLeft, out leftTokenMap))
+                    if (!this.map.TryGetValue(typeLeft, out leftTokenMap))
                     {
-                        map[typeLeft] = new Dictionary<SyntaxKind, RuleBucket>();
-                        map[typeLeft][typeRight] = bucket = new RuleBucket();
+                        this.map[typeLeft] = new Dictionary<SyntaxKind, RuleBucket>();
+                        this.map[typeLeft][typeRight] = bucket = new RuleBucket();
                     }
                     else
                     {
                         // if this is true, a bucket has been found, and can leave the else safely
                         if (!leftTokenMap.TryGetValue(typeRight, out bucket))
                     {
-                            map[typeLeft][typeRight] = bucket = new RuleBucket();
+                            this.map[typeLeft][typeRight] = bucket = new RuleBucket();
                         }
                     }
                     bucket.Add(rule);
@@ -62,7 +62,7 @@ namespace LanguageService.Formatting.Ruling
             RuleBucket ruleBucket;
             Dictionary<SyntaxKind, RuleBucket> leftTokenMap;
             
-            if (map.TryGetValue(typeLeft, out leftTokenMap))
+            if (this.map.TryGetValue(typeLeft, out leftTokenMap))
             {
                 if (leftTokenMap.TryGetValue(typeRight, out ruleBucket))
             {
@@ -80,12 +80,12 @@ namespace LanguageService.Formatting.Ruling
                 optionalRuleMap = new OptionalRuleMap(Enumerable.Empty<OptionalRuleGroup>());
         }
 
-            map = new Dictionary<SyntaxKind, Dictionary<SyntaxKind, RuleBucket>>();
+            this.map = new Dictionary<SyntaxKind, Dictionary<SyntaxKind, RuleBucket>>();
             foreach (Rule rule in Rules.AllRules)
             {
                 if (!optionalRuleMap.DisabledRules.Contains(rule))
                 {
-                    Add(rule);
+                    this.Add(rule);
                 }
             }
         }
