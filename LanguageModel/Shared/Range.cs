@@ -24,6 +24,7 @@ namespace LanguageService.Shared
         }
 
         internal int Start { get; }
+
         internal int End { get; }
     }
 }

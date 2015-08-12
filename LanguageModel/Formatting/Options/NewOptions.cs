@@ -17,7 +17,8 @@ namespace LanguageService.Formatting.Options
     {
         /// <summary>
         /// Updates the general options.
-        /// <param name="disabledRuleGroups">
+        /// </summary>
+        /// <param name="disableRuleGroups">
         /// The disabled rules for the formatter.
         /// </param>
         /// <param name="tabSize">
@@ -29,7 +30,6 @@ namespace LanguageService.Formatting.Options
         /// <param name="usingTabs">
         /// Whether or not Keep Tabs is on or off.
         /// </param>
-        /// </summary>
         public NewOptions(
             List<OptionalRuleGroup> disableRuleGroups,
             uint tabSize, uint indentSize, bool usingTabs)
@@ -43,8 +43,11 @@ namespace LanguageService.Formatting.Options
         }
 
         internal ImmutableArray<OptionalRuleGroup> RuleGroupsToDisable { get; }
+
         internal uint TabSize { get; }
+
         internal uint IndentSize { get; }
+
         internal bool UsingTabs { get; }
     }
 }

@@ -39,7 +39,9 @@ namespace LanguageService.Formatting
             }
 
             internal int Start { get; }
+
             internal int Length { get; }
+
             internal bool IsBeforeText { get; }
         }
 

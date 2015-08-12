@@ -29,6 +29,7 @@ namespace LanguageService.Formatting.Ruling
         }
 
         internal ImmutableArray<SyntaxKind> TokenRangeLeft { get; }
+
         internal ImmutableArray<SyntaxKind> TokenRangeRight { get; }
     }
 }

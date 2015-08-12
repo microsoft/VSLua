@@ -24,8 +24,11 @@ namespace LanguageService.Formatting
         }
 
         internal Token Token { get; }
+
         internal int BlockLevel { get; }
+
         internal SyntaxNode StatementNode { get; }
+
         internal bool InTableConstructor { get; }
 
         private static readonly ImmutableHashSet<SyntaxKind> StatKinds = ImmutableHashSet.Create(

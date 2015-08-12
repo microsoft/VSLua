@@ -3,7 +3,6 @@
 *   © Copyright (C) Microsoft. All rights reserved.      *
 *                                                        *
 *********************************************************/
-
 using Validation;
 
 namespace LanguageService.Formatting
@@ -20,6 +19,7 @@ namespace LanguageService.Formatting
         }
 
         internal ParsedToken CurrentToken { get; }
+
         internal ParsedToken NextToken { get; }
 
         internal bool TriviaBetweenTokensContains(SyntaxKind triviaType)

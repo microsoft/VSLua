@@ -27,8 +27,11 @@ namespace LanguageService.Formatting.Options
         }
 
         internal uint IndentSize { get; }
+
         internal uint TabSize { get; }
+
         internal bool UsingTabs { get; }
+
         internal OptionalRuleMap OptionalRuleMap { get; }
     }
 }

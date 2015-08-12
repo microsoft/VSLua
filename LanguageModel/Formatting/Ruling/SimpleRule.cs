@@ -22,6 +22,7 @@ namespace LanguageService.Formatting.Ruling
         }
 
         internal override RuleDescriptor RuleDescriptor { get; }
+
         internal override RuleOperation RuleOperationContext { get; }
 
         internal override bool AppliesTo(FormattingContext formattingContext)

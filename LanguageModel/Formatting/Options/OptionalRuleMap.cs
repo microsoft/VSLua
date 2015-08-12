@@ -17,7 +17,10 @@ namespace LanguageService.Formatting.Options
     /// </summary>
     internal class OptionalRuleMap
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "<Pending>")]
         internal readonly HashSet<Rule> DisabledRules = new HashSet<Rule>();
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "<Pending>")]
         internal readonly HashSet<OptionalRuleGroup> DisabledRuleGroups = new HashSet<OptionalRuleGroup>();
 
         /// <summary>
@@ -53,6 +56,7 @@ namespace LanguageService.Formatting.Options
             this.DisabledRules.UnionWith(ruleGroup);
         }
 
+#pragma warning disable SA1306 // Field names must begin with lower-case letter
         private static ImmutableArray<Rule> SpaceBeforeOpenParenthesis = ImmutableArray.Create(
             Rules.SpaceAfterValueBeforeOpenParenthesis);
 
@@ -88,6 +92,7 @@ namespace LanguageService.Formatting.Options
         private static ImmutableArray<Rule> SpaceBeforeAfterAssignmentInField = ImmutableArray.Create(
             Rules.SpaceBeforeAssignmentOperatorInField,
             Rules.SpaceAfterAssignmentOperatorInField);
+#pragma warning restore SA1306 // Field names must begin with lower-case letter
 
         private static Dictionary<OptionalRuleGroup, IEnumerable<Rule>> optionalRuleGroups = new Dictionary<OptionalRuleGroup, IEnumerable<Rule>>
         {
