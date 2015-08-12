@@ -81,10 +81,10 @@ namespace Formatting.Tests
         public void MultiLinedTable()
         {
             string original = @"
-t = {
+    t = {
     1,
     2,
-}";
+    }";
             GeneralTest(original, original);
         }
 
@@ -92,13 +92,13 @@ t = {
         public void MutliLinedSquare()
         {
             string original = @"
-t = [
+    t = [
 
 
-1
+    1
 
 
-]";
+    ]";
             GeneralTest(original, original);
         }
 
@@ -106,11 +106,11 @@ t = [
         public void MutliLinedParams()
         {
             string original = @"
-foo = function (
+    foo = function (
     a, b, c)";
             string expected = @"
-foo = function (
-a, b, c )";
+    foo = function (
+    a, b, c )";
             GeneralTest(original, expected);
         }
 

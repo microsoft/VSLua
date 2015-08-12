@@ -19,13 +19,13 @@ namespace Formatting.Tests
         public void LotsOfTrailing()
         {
             string original = @"
-x
+    x
        
-x       ";
+    x       ";
             string expected = @"
-x
+    x
 
-x";
+    x";
             GeneralTest(original, expected);
         }
 
@@ -48,19 +48,19 @@ x";
         public void MultipleLines()
         {
             string original = @"
-x = 10           
--- comment here
---[[ block
-comment 
-here]]
-x = x + 1            ";
+    x = 10           
+    -- comment here
+    --[[ block
+    comment 
+    here]]
+    x = x + 1            ";
             string expected = @"
-x = 10
--- comment here
---[[ block
-comment 
-here]]
-x = x + 1";
+    x = 10
+    -- comment here
+    --[[ block
+    comment 
+    here]]
+    x = x + 1";
             GeneralTest(original, expected);
         }
 
@@ -70,7 +70,7 @@ x = x + 1";
             string original = @"x   
     ";
             string expected = @"x
-";
+    ";
             GeneralTest(original, expected);
         }
 

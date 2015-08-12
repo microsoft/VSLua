@@ -4,6 +4,17 @@ namespace LanguageService.Formatting
 {
     public class TextEditInfo
     {
+        internal TextEditInfo(int start, int length, string replaceWith)
+        {
+            Requires.NotNull(replaceWith, nameof(replaceWith));
+            Requires.Argument(length >= 0, nameof(length), nameof(length) + " must be non-negative");
+            Requires.Argument(start >= 0, nameof(start), nameof(start) + " must be non-negative");
+
+            this.Start = start;
+            this.Length = length;
+            this.ReplacingWith = replaceWith;
+        }
+
         /// <summary>
         /// The Start index of the text that is to be replaced.
         /// </summary>
@@ -19,16 +30,5 @@ namespace LanguageService.Formatting
         /// The string that will replace the text in question.
         /// </summary>
         public string ReplacingWith { get; }
-
-        internal TextEditInfo(int start, int length, string replaceWith)
-            {
-            Requires.NotNull(replaceWith, nameof(replaceWith));
-            Requires.Argument(length >= 0, nameof(length), nameof(length) + " must be non-negative");
-            Requires.Argument(start >= 0, nameof(start), nameof(start) + " must be non-negative");
-
-            this.Start = start;
-            this.Length = length;
-            this.ReplacingWith = replaceWith;
-        }
     }
 }

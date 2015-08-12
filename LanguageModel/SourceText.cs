@@ -11,6 +11,7 @@ namespace LanguageService
 
             this.TextReader = textReader;
         }
+
         public TextReader TextReader { get; }
     }
 }

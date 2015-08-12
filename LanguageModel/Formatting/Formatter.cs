@@ -66,6 +66,12 @@ namespace LanguageService.Formatting
             return textEdits;
         }
 
+        /// <summary>
+        /// Gets the indentation level at the specified position in the source text.
+        /// </summary>
+        /// <param name="sourceText">The content for the smart indenting</param>
+        /// <param name="position">The position to check for the block level</param>
+        /// <returns>The indentation amount in spaces</returns>
         public int SmartIndent(SourceText sourceText, int position)
         {
             SyntaxTree syntaxTree = this.parseTreeProvider.Get(sourceText);

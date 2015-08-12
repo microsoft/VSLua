@@ -12,21 +12,21 @@ namespace Formatting.Tests
         public void EmptyFunction()
         {
             string original = @"
-foo = function() end";
+    foo = function() end";
             string expected = @"
-foo = function()
-end";
-           GeneralTest(original, expected, expected);
+    foo = function()
+    end";
+            GeneralTest(original, expected, expected);
         }
 
         [Fact]
         public void Comment1()
         {
             string original = @"
-foo = function() --[[ comment ]]end";
+    foo = function() --[[ comment ]]end";
             string expected = @"
-foo = function()
---[[ comment ]]end";
+    foo = function()
+    --[[ comment ]]end";
             GeneralTest(original, expected, expected);
         }
 
@@ -34,15 +34,15 @@ foo = function()
         public void Comment2()
         {
             string original = @"
-foo = function () --[[ comment ]]return end";
+    foo = function () --[[ comment ]]return end";
             string expected1 = @"
-foo = function()
+    foo = function()
     --[[ comment ]]return
-end";
+    end";
             string expected2 = @"
-foo = function()
-      --[[ comment ]]return
-end";
+    foo = function()
+        --[[ comment ]]return
+    end";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -50,13 +50,13 @@ end";
         public void Comment3()
         {
             string original = @"
-t1 = {--[[ comment ]]}";
+    t1 = {--[[ comment ]]}";
             string expected1 = @"
-t1 = {
---[[ comment ]]}";
+    t1 = {
+    --[[ comment ]]}";
             string expected2 = @"
-t1 = {
-      --[[ comment ]]}";
+    t1 = {
+        --[[ comment ]]}";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -64,15 +64,15 @@ t1 = {
         public void Comment4()
         {
             string original = @"
-t1 = { --[[ comment ]]basic}";
+    t1 = { --[[ comment ]]basic}";
             string expected1 = @"
-t1 = {
+    t1 = {
     --[[ comment ]] basic
-}";
+    }";
             string expected2 = @"
-t1 = {
-      --[[ comment ]] basic
-     }";
+    t1 = {
+        --[[ comment ]] basic
+        }";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -80,15 +80,15 @@ t1 = {
         public void OneReturn()
         {
             string original = @"
-foo = function() return end";
+    foo = function() return end";
             string expected1 = @"
-foo = function()
+    foo = function()
     return
-end";
+    end";
             string expected2 = @"
-foo = function()
-      return
-end";
+    foo = function()
+        return
+    end";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -96,15 +96,15 @@ end";
         public void OneReturnWithVariable()
         {
             string original = @"
-foo = function() return x end";
+    foo = function() return x end";
             string expected1 = @"
-foo = function()
+    foo = function()
     return x
-end";
+    end";
             string expected2 = @"
-foo = function()
-      return x
-end";
+    foo = function()
+        return x
+    end";
 
             GeneralTest(original, expected1, expected2);
         }
@@ -113,17 +113,17 @@ end";
         public void TwoReturns()
         {
             string original = @"
-foo = function() return return end";
+    foo = function() return return end";
             string expected1 =@"
-foo = function()
+    foo = function()
     return
     return
-end";
+    end";
             string expected2 = @"
-foo = function()
-      return
-      return
-end";
+    foo = function()
+        return
+        return
+    end";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -131,10 +131,10 @@ end";
         public void EmptyFunctionV2()
         {
             string original = @"
-function foo() end";
+    function foo() end";
             string expected = @"
-function foo()
-end";
+    function foo()
+    end";
             GeneralTest(original, expected, expected);
         }
 
@@ -142,11 +142,11 @@ end";
         public void OneReturnV2()
         {
             string original = @"
-function foo() return end";
+    function foo() return end";
             string expected = @"
-function foo()
+    function foo()
     return
-end";
+    end";
             GeneralTest(original, expected, expected);
         }
 
@@ -154,15 +154,15 @@ end";
         public void OneExpression()
         {
             string original = @"
-foo = function() x = x + 1 end";
+    foo = function() x = x + 1 end";
             string expected1 = @"
-foo = function()
+    foo = function()
     x = x + 1
-end";
+    end";
             string expected2 = @"
-foo = function()
-      x = x + 1
-end";
+    foo = function()
+        x = x + 1
+    end";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -170,8 +170,8 @@ end";
         public void NotSameLineFunction1()
         {
             string original = @"
-foo = function() return
-end";
+    foo = function() return
+    end";
             GeneralTest(original, original, original);
         }
 
@@ -179,8 +179,8 @@ end";
         public void NotSameLineFunction2()
         {
             string original = @"
-foo =
-function() return end";
+    foo =
+    function() return end";
             GeneralTest(original, original, original);
         }
 
@@ -188,8 +188,8 @@ function() return end";
         public void NotSameLineFunction3()
         {
             string original = @"
-function foo()
-end";
+    function foo()
+    end";
             GeneralTest(original, original, original);
         }
 
@@ -197,13 +197,13 @@ end";
         public void EmptyTable()
         {
             string original = @"
-t1 = {}";
+    t1 = {}";
             string expected1 = @"
-t1 = {
-}";
+    t1 = {
+    }";
             string expected2 = @"
-t1 = {
-     }";
+    t1 = {
+        }";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -211,15 +211,15 @@ t1 = {
         public void OneElement()
         {
             string original = @"
-t1 = {2}";
+    t1 = {2}";
             string expected1 = @"
-t1 = {
+    t1 = {
     2
-}";
+    }";
             string expected2 = @"
-t1 = {
-      2
-     }";
+    t1 = {
+        2
+        }";
 
             GeneralTest(original, expected1, expected2);
 
@@ -229,15 +229,15 @@ t1 = {
         public void TableTrailingComma()
         {
             string original = @"
-t1 = {2,}";
+    t1 = {2,}";
             string expected1 = @"
-t1 = {
+    t1 = {
     2,
-}";
+    }";
             string expected2 = @"
-t1 = {
-      2,
-     }";
+    t1 = {
+        2,
+        }";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -245,19 +245,19 @@ t1 = {
         public void TableMoreElements()
         {
             string original = @"
-t1 = {1, 2, 3}";
+    t1 = {1, 2, 3}";
             string expected1 = @"
-t1 = {
+    t1 = {
     1,
     2,
     3,
-}";
+    }";
             string expected2 = @"
-t1 = {
-      1,
-      2,
-      3,
-     }";
+    t1 = {
+        1,
+        2,
+        3,
+        }";
             GeneralTest(original, expected1, expected2);
 
         }
@@ -266,8 +266,8 @@ t1 = {
         public void TableMultipleLines1()
         {
             string original = @"
-t1 =
-{}";
+    t1 =
+    {}";
             GeneralTest(original, original, original);
         }
 
@@ -275,8 +275,8 @@ t1 =
         public void TableMutlipleLines2()
         {
             string original = @"
-t2 = {2,
-}";
+    t2 = {2,
+    }";
             GeneralTest(original, original, original);
         }
 
@@ -284,8 +284,8 @@ t2 = {2,
         public void TableMutlipleLines3()
         {
             string original = @"
-t3 = {2
-,3}";
+    t3 = {2
+    ,3}";
             GeneralTest(original, original, original);
         }
 
@@ -293,21 +293,21 @@ t3 = {2
         public void EmbeddedTables()
         {
             string original = @"
-t1 = { t2 = { t3 = {} } }";
+    t1 = { t2 = { t3 = {} } }";
             string expected1 = @"
-t1 = {
+    t1 = {
     t2 = {
         t3 = {
         }
     }
-}";
+    }";
             string expected2 = @"
-t1 = {
-      t2 = {
+    t1 = {
+        t2 = {
             t3 = {
-                 }
-           }
-      }";
+                    }
+            }
+        }";
 
             GeneralTest(original, expected1, expected2);
         }
@@ -316,21 +316,21 @@ t1 = {
         public void EmbeddedFunctions()
         {
             string original = @"
-foo = function() bar = function() foobar = function() end end end";
+    foo = function() bar = function() foobar = function() end end end";
             string expected1 = @"
-foo = function()
+    foo = function()
     bar = function()
         foobar = function()
         end
     end
-end";
+    end";
             string expected2 = @"
-foo = function()
-      bar = function()
+    foo = function()
+        bar = function()
             foobar = function()
             end
-      end
-end";
+        end
+    end";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -338,14 +338,14 @@ end";
         public void EmbeddedFunctionsV2()
         {
             string original = @"
-function foo() function bar() function foobar() end end end";
+    function foo() function bar() function foobar() end end end";
             string expected = @"
-function foo()
+    function foo()
     function bar()
         function foobar()
         end
     end
-end";
+    end";
             GeneralTest(original, expected, expected);
         }
     }

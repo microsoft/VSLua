@@ -67,11 +67,11 @@ namespace Formatting.Tests
         public void MultiLinedAssignemnt()
         {
             string original = @"
-x=
-1";
+    x=
+    1";
             string expected = @"
-x =
-1";
+    x =
+    1";
             GeneralTest(original, expected);
         }
 
@@ -103,11 +103,11 @@ x =
         public void MutliLinedBinary()
         {
             string original = @"
-x = 1+1+
-1";
+    x = 1+1+
+    1";
             string expected = @"
-x = 1 + 1 +
-1";
+    x = 1 + 1 +
+    1";
             GeneralTest(original, expected);
         }
 

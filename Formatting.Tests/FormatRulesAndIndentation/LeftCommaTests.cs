@@ -99,11 +99,11 @@ namespace Formatting.Tests
         public void MultiLined()
         {
             string original = @"
-x,
-y = 1,2";
+    x,
+    y = 1,2";
             string expected = @"
-x,
-y = 1, 2";
+    x,
+    y = 1, 2";
             GeneralTest(original, expected);
         }
 

@@ -12,17 +12,17 @@ namespace Formatting.Tests
         public void BasicFunction()
         {
             string original = @"
-foo = function()
-return
-end";
-            string expected1 = @"
-foo = function ()
+    foo = function()
     return
-end";
+    end";
+            string expected1 = @"
+    foo = function ()
+    return
+    end";
             string expected2 = @"
-foo = function ()
-      return
-end";
+    foo = function ()
+        return
+    end";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -30,17 +30,17 @@ end";
         public void BasicTable()
         {
             string original = @"
-t1 = {
-1,
-}";
-            string expected1 = @"
-t1 = {
+    t1 = {
     1,
-}";
+    }";
+            string expected1 = @"
+    t1 = {
+    1,
+    }";
             string expected2 = @"
-t1 = {
-      1,
-     }";
+    t1 = {
+        1,
+        }";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -48,20 +48,20 @@ t1 = {
         public void EmbeddedFunctions()
         {
             string original = @"
-foo = function
-bar = function
-end
-end";
-            string expected1 = @"
-foo = function
+    foo = function
     bar = function
     end
-end";
+    end";
+            string expected1 = @"
+    foo = function
+    bar = function
+    end
+    end";
             string expected2 = @"
-foo = function
-      bar = function
-      end
-end";
+    foo = function
+        bar = function
+        end
+    end";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -69,32 +69,32 @@ end";
         public void EmbeddedTables()
         {
             string original = @"
-t1 = {
-t2 = {
-x, y, z
-}
-t3 = {
-x
-}
-}";
+    t1 = {
+    t2 = {
+    x, y, z
+    }
+    t3 = {
+    x
+    }
+    }";
             string expected1 = @"
-t1 = {
+    t1 = {
     t2 = {
         x, y, z
     }
     t3 = {
         x
     }
-}";
+    }";
             string expected2 = @"
-t1 = {
-      t2 = {
+    t1 = {
+        t2 = {
             x, y, z
-           }
-      t3 = {
+            }
+        t3 = {
             x
-           }
-     }";
+            }
+        }";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -102,13 +102,13 @@ t1 = {
         public void AlreadyIndented1()
         {
             string original = @"
-foo = function ()
+    foo = function ()
     return
-end";
+    end";
             string expected2 = @"
-foo = function ()
-      return
-end";
+    foo = function ()
+        return
+    end";
             GeneralTest(original, original, expected2);
         }
 
@@ -124,17 +124,17 @@ end";
         public void OverIndentedFunction()
         {
             string original = @"
-foo = function ()
-                  return
-end";
+    foo = function ()
+                    return
+    end";
             string expected1 = @"
-foo = function ()
+    foo = function ()
     return
-end";
+    end";
             string expected2 = @"
-foo = function ()
-      return
-end";
+    foo = function ()
+        return
+    end";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -142,11 +142,11 @@ end";
         public void SimpleOverIndent()
         {
             string original = @"t = {
-       x";
+        x";
             string expected1 = @"t = {
     x";
             string expected2 = @"{
- x";
+    x";
             GeneralTest(original, expected1, expected2); 
         }
 
@@ -154,17 +154,17 @@ end";
         public void EndBug()
         {
             string original = @"
-foo = function ()
-return--comment
+    foo = function ()
+    return--comment
     end";
             string expected1 = @"
-foo = function ()
+    foo = function ()
     return--comment
-end";
+    end";
             string expected2 = @"
-foo = function ()
-      return--comment
-end";
+    foo = function ()
+        return--comment
+    end";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -172,17 +172,17 @@ end";
         public void Comment()
         {
             string original = @"
-foo = function
---[[comment]] return
-end";
-            string expected1 = @"
-foo = function
+    foo = function
     --[[comment]] return
-end";
+    end";
+            string expected1 = @"
+    foo = function
+    --[[comment]] return
+    end";
             string expected2 = @"
-foo = function
-      --[[comment]] return
-end";
+    foo = function
+        --[[comment]] return
+    end";
             GeneralTest(original, expected1, expected2);
         }
     }
