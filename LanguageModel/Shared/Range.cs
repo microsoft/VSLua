@@ -1,4 +1,10 @@
-﻿namespace LanguageService.Shared
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+namespace LanguageService.Shared
 {
     /// <summary>
     /// Species a number range

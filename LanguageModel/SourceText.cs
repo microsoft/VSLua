@@ -1,4 +1,10 @@
-﻿using System.IO;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System.IO;
 using Validation;
 
 namespace LanguageService

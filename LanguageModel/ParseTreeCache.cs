@@ -1,4 +1,10 @@
-﻿using System.Runtime.CompilerServices;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System.Runtime.CompilerServices;
 using Validation;
 
 namespace LanguageService

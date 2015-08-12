@@ -1,4 +1,10 @@
-﻿using System;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 using Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages.UserControls;

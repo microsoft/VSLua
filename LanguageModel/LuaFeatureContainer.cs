@@ -1,5 +1,11 @@
-﻿using LanguageService.Diagnostics;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
 using LanguageService.Classification;
+using LanguageService.Diagnostics;
 using LanguageService.Formatting;
 
 namespace LanguageService
@@ -22,10 +28,15 @@ namespace LanguageService
         public IDiagnosticsProvider DiagnosticsProvider { get; }
 
         /// <summary>
-        /// Gets the formatting object
+        /// Gets the Formatter object
         /// </summary>
+        /// <value>The Formatter</value>
         public Formatter Formatter { get; }
 
+        /// <summary>
+        /// Gets the Colourizer object
+        /// </summary>
+        /// <value>The Colourizer</value>
         public Colourizer Colourizer { get; }
     }
 }

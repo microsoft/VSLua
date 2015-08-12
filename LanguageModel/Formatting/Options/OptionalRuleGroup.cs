@@ -1,4 +1,10 @@
-﻿namespace LanguageService.Formatting.Options
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+namespace LanguageService.Formatting.Options
 {
     /// <summary>
     /// The OptionalRuleGroups represent sets of rules that can enable/disable formatting options.

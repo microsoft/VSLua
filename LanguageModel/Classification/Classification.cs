@@ -1,4 +1,10 @@
-﻿namespace LanguageService.Classification
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+namespace LanguageService.Classification
 {
     /// <summary>
     /// Defines the token classifications for the Lua language service, every token can be placed into

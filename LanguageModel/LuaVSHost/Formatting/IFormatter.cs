@@ -1,4 +1,10 @@
-﻿namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
     internal interface IFormatter
     {

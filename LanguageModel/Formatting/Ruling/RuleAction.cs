@@ -1,4 +1,10 @@
-﻿namespace LanguageService.Formatting.Ruling
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+namespace LanguageService.Formatting.Ruling
 {
     /// <summary>
     /// The set of enumerables that describes all the possible Rule actions

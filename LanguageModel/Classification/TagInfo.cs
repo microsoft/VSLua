@@ -1,4 +1,10 @@
-﻿namespace LanguageService.Classification
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+namespace LanguageService.Classification
 {
     public class TagInfo
     {

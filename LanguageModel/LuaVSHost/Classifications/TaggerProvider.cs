@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using LanguageService.Classification;
 using Microsoft.VisualStudio.Language.StandardClassification;

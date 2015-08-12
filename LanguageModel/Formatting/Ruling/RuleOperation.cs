@@ -1,4 +1,10 @@
-﻿using Validation;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using Validation;
 
 namespace LanguageService.Formatting.Ruling
 {

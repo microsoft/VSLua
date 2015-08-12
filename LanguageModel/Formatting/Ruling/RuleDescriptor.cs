@@ -1,4 +1,10 @@
-﻿using System.Collections.Immutable;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System.Collections.Immutable;
 
 namespace LanguageService.Formatting.Ruling
 {

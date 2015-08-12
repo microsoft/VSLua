@@ -1,4 +1,11 @@
-﻿using System.ComponentModel;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using Microsoft.VisualStudio.TextManager.Interop;
 
@@ -6,6 +13,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
     internal sealed class UserSettings : INotifyPropertyChanged
     {
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed.")]
         public static readonly UserSettings MainInstance = new UserSettings();
 
         internal UserSettings()

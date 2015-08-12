@@ -1,4 +1,10 @@
-﻿using System.Windows.Controls;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System.Windows.Controls;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages.UserControls
 {
