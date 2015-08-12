@@ -7,7 +7,7 @@ namespace LanguageService.Formatting.Ruling
 {
     internal class RuleMap
     {
-        internal Dictionary<SyntaxKind, Dictionary<SyntaxKind, RuleBucket>> map;
+        internal Dictionary<SyntaxKind, Dictionary<SyntaxKind, RuleBucket>> Map;
         private static readonly int Length = Enum.GetNames(typeof(SyntaxKind)).Length;
 
         internal static RuleMap Create(OptionalRuleMap optionalRuleMap)
@@ -35,17 +35,17 @@ namespace LanguageService.Formatting.Ruling
                     RuleBucket bucket;
                     Dictionary<SyntaxKind, RuleBucket> leftTokenMap;
 
-                    if (!this.map.TryGetValue(typeLeft, out leftTokenMap))
+                    if (!this.Map.TryGetValue(typeLeft, out leftTokenMap))
                     {
-                        this.map[typeLeft] = new Dictionary<SyntaxKind, RuleBucket>();
-                        this.map[typeLeft][typeRight] = bucket = new RuleBucket();
+                        this.Map[typeLeft] = new Dictionary<SyntaxKind, RuleBucket>();
+                        this.Map[typeLeft][typeRight] = bucket = new RuleBucket();
                     }
                     else
                     {
                         // if this is true, a bucket has been found, and can leave the else safely
                         if (!leftTokenMap.TryGetValue(typeRight, out bucket))
                     {
-                            this.map[typeLeft][typeRight] = bucket = new RuleBucket();
+                            this.Map[typeLeft][typeRight] = bucket = new RuleBucket();
                         }
                     }
 
@@ -63,7 +63,7 @@ namespace LanguageService.Formatting.Ruling
             RuleBucket ruleBucket;
             Dictionary<SyntaxKind, RuleBucket> leftTokenMap;
             
-            if (this.map.TryGetValue(typeLeft, out leftTokenMap))
+            if (this.Map.TryGetValue(typeLeft, out leftTokenMap))
             {
                 if (leftTokenMap.TryGetValue(typeRight, out ruleBucket))
             {
@@ -81,7 +81,7 @@ namespace LanguageService.Formatting.Ruling
                 optionalRuleMap = new OptionalRuleMap(Enumerable.Empty<OptionalRuleGroup>());
         }
 
-            this.map = new Dictionary<SyntaxKind, Dictionary<SyntaxKind, RuleBucket>>();
+            this.Map = new Dictionary<SyntaxKind, Dictionary<SyntaxKind, RuleBucket>>();
             foreach (Rule rule in Rules.AllRules)
             {
                 if (!optionalRuleMap.DisabledRules.Contains(rule))
