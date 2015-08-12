@@ -20,7 +20,7 @@ namespace LanguageService.Formatting.Ruling
 
         internal override bool AppliesTo(FormattingContext formattingContext)
         {
-            return RuleOperationContext.Context.InContext(formattingContext);
+            return this.RuleOperationContext.Context.InContext(formattingContext);
         }
 
         internal override IEnumerable<TextEditInfo> Apply(FormattingContext formattingContext)

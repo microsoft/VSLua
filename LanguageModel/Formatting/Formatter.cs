@@ -39,7 +39,7 @@ namespace LanguageService.Formatting
             if (newOptions != null)
             {
                 this.globalOptions = new GlobalOptions(newOptions);
-                this.ruleMap = RuleMap.Create(globalOptions.OptionalRuleMap);
+                this.ruleMap = RuleMap.Create(this.globalOptions.OptionalRuleMap);
             }
 
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
@@ -61,7 +61,7 @@ namespace LanguageService.Formatting
                 }
             }
 
-            textEdits.AddRange(Indenter.GetIndentations(parsedTokens, globalOptions));
+            textEdits.AddRange(Indenter.GetIndentations(parsedTokens, this.globalOptions));
 
             return textEdits;
         }

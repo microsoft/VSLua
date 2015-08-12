@@ -9,22 +9,24 @@ namespace LanguageService.Formatting.Ruling
         // This methods is here for when I need to add precedence to the rules
         internal void Add(Rule rule)
         {
-            if (rules == null)
+            if (this.rules == null)
             {
-                rules = new List<Rule>();
+                this.rules = new List<Rule>();
             }
-            rules.Add(rule);
+
+            this.rules.Add(rule);
         }
 
         internal Rule Get(FormattingContext formattingContext)
         {
-            foreach (Rule rule in rules)
+            foreach (Rule rule in this.rules)
             {
                 if (rule.AppliesTo(formattingContext))
                 {
                     return rule;
                 }
             }
+
             return null;
         }
     }

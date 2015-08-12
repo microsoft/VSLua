@@ -3,7 +3,6 @@ using Validation;
 
 namespace LanguageService.Formatting.Options
 {
-
     internal class GlobalOptions
     {
         internal GlobalOptions(NewOptions options)
@@ -17,13 +16,13 @@ namespace LanguageService.Formatting.Options
 
         internal GlobalOptions()
         {
-            IndentSize = 4;
-            OptionalRuleMap = new OptionalRuleMap(ImmutableArray.Create<OptionalRuleGroup>());
+            this.IndentSize = 4;
+            this.OptionalRuleMap = new OptionalRuleMap(ImmutableArray.Create<OptionalRuleGroup>());
         }
 
         internal uint IndentSize { get; }
-		internal uint TabSize { get; }
-		internal bool UsingTabs { get; }
+        internal uint TabSize { get; }
+        internal bool UsingTabs { get; }
         internal OptionalRuleMap OptionalRuleMap { get; }
     }
 }

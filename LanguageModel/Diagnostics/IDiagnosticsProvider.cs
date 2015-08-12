@@ -10,7 +10,7 @@ namespace LanguageService.Diagnostics
     {
         /// <summary>
         /// Gets the diagnostics for a given <paramref name="sourceText"/>. These messages
-        /// may be generated from different sources, but are aggregated through this method. 
+        /// may be generated from different sources, but are aggregated through this method.
         /// At the moment, this list contains only parse errors (and the return type is constrained
         /// to parse errors, though it would be made a generic 'Message' in the future).
         /// </summary>

@@ -23,6 +23,7 @@ namespace LanguageService.Formatting.Ruling
                     return false;
                 }
             }
+
             return true;
         }
     }

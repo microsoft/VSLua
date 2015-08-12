@@ -58,7 +58,6 @@ namespace LanguageService.Formatting
             return level * (int)globalOptions.IndentSize;
         }
 
-
         internal static int GetIndentationFromPosition(SyntaxTree syntaxTree, GlobalOptions globalOptions, int position)
         {
             int level = GetIndentLevelFromPosition(syntaxTree, position);
@@ -123,7 +122,7 @@ namespace LanguageService.Formatting
                         ((Token)nextChild).Kind == SyntaxKind.MissingToken :
                         false;
 
-                    if (position > startCurrentChild && position < startNextChild ||
+                    if ((position > startCurrentChild && position < startNextChild) ||
                         ((currentSyntaxKind == SyntaxKind.BlockNode || currentSyntaxKind == SyntaxKind.FieldList)
                         && nextTokenIsMissing) ||
                         (position == startNextChild && nextSyntaxKind == SyntaxKind.EndOfFile))
@@ -139,7 +138,6 @@ namespace LanguageService.Formatting
                         currentNode = nextChild;
                         break;
                     }
-
                 }
             }
 

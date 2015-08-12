@@ -1,9 +1,9 @@
-using LanguageService.LanguageModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using LanguageService.LanguageModel;
 
 namespace LanguageService
 {

@@ -4,7 +4,6 @@ using Validation;
 
 namespace LanguageService.Formatting.Options
 {
-
     /// <summary>
     /// This class might be bypassed later since GlobalOptions.Update just takes three arguements.
     /// </summary>
@@ -24,6 +23,7 @@ namespace LanguageService.Formatting.Options
         /// <param name="usingTabs">
         /// Whether or not Keep Tabs is on or off.
         /// </param>
+        /// </summary>
         public NewOptions(
             List<OptionalRuleGroup> disableRuleGroups,
             uint tabSize, uint indentSize, bool usingTabs)

@@ -14,6 +14,5 @@
         public int Length { get; }
 
         public Classification Classification { get; }
-
     }
 }

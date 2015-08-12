@@ -18,7 +18,7 @@ namespace LanguageService.Formatting
 
         internal bool TriviaBetweenTokensContains(SyntaxKind triviaType)
         {
-            foreach (Trivia trivia in NextToken.Token.LeadingTrivia)
+            foreach (Trivia trivia in this.NextToken.Token.LeadingTrivia)
             {
                 if (trivia.Type == triviaType)
                 {

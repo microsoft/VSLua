@@ -160,8 +160,6 @@ namespace LanguageService.Formatting.Ruling
                 },
                 RuleAction.Space);
 
-
-
         internal static readonly ImmutableArray<Rule> AllRules = ImmutableArray.Create(
             NoSpaceAfterCommaInFor,
             SpaceAfterComma,

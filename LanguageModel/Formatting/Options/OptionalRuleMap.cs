@@ -25,9 +25,8 @@ namespace LanguageService.Formatting.Options
             Validation.Requires.NotNull(optionalRuleGroups, nameof(optionalRuleGroups));
             foreach (OptionalRuleGroup group in optionalRuleGroups)
             {
-                Disable(group);
+                this.Disable(group);
             }
-
         }
 
         private void Disable(OptionalRuleGroup optionalRuleGroup)
@@ -39,13 +38,13 @@ namespace LanguageService.Formatting.Options
                 throw new NotImplementedException();
             }
 
-            AddRuleGroup(ruleGroup);
+            this.AddRuleGroup(ruleGroup);
         }
 
         private void AddRuleGroup(IEnumerable<Rule> ruleGroup)
         {
             Validation.Requires.NotNull(ruleGroup, nameof(ruleGroup));
-            DisabledRules.UnionWith(ruleGroup);
+            this.DisabledRules.UnionWith(ruleGroup);
         }
 
         private static ImmutableArray<Rule> SpaceBeforeOpenParenthesis = ImmutableArray.Create(

@@ -5,8 +5,7 @@ namespace LanguageService.Formatting.Ruling
 {
     internal class DeleteSpaceBeforeEofToken : SimpleRule
     {
-        internal DeleteSpaceBeforeEofToken() :
-            base(
+        internal DeleteSpaceBeforeEofToken() : base(
                 new RuleDescriptor(TokenRange.All, SyntaxKind.EndOfFile),
                 new List<Func<FormattingContext, bool>> { Rules.TokensAreOnSameLine },
                 RuleAction.Delete)
