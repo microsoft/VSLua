@@ -50,7 +50,6 @@ namespace LanguageService.Formatting.Ruling
                     }
 
                     bucket.Add(rule);
-
                 }
             }
         }
@@ -62,7 +61,7 @@ namespace LanguageService.Formatting.Ruling
 
             RuleBucket ruleBucket;
             Dictionary<SyntaxKind, RuleBucket> leftTokenMap;
-            
+
             if (this.Map.TryGetValue(typeLeft, out leftTokenMap))
             {
                 if (leftTokenMap.TryGetValue(typeRight, out ruleBucket))

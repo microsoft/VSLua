@@ -5,8 +5,7 @@ namespace LanguageService.Formatting.Ruling
 {
     internal class DeleteTrailingWhitespace : SimpleRule
     {
-        internal DeleteTrailingWhitespace() :
-            base(
+        internal DeleteTrailingWhitespace() : base(
                 new RuleDescriptor(TokenRange.All, TokenRange.All),
                 new List<Func<FormattingContext, bool>> { Rules.TokensAreNotOnSameLine },
                 RuleAction.Delete)

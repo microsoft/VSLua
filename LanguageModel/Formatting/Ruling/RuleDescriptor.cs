@@ -11,7 +11,8 @@ namespace LanguageService.Formatting.Ruling
         }
 
         internal RuleDescriptor(ImmutableArray<SyntaxKind> tokenLeft, SyntaxKind tokenRight) : this(tokenLeft, ImmutableArray.Create(tokenRight))
-        { }
+        {
+        }
 
         internal RuleDescriptor(SyntaxKind tokenLeft, ImmutableArray<SyntaxKind> tokenRight) : this(ImmutableArray.Create(tokenLeft), tokenRight)
         {
