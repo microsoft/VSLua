@@ -4,6 +4,7 @@
 *                                                        *
 *********************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using LanguageService.Classification;
@@ -30,7 +31,18 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 
         public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
         {
-            return this.singletons.Tagger as ITagger<T>;
+            Requires.NotNull(buffer, nameof(buffer));
+
+            Func<Tagger> taggerCreator = () =>
+            {
+                Tagger tagger = new Tagger(buffer, this.standardClassifications, this.singletons);
+
+                return tagger;
+            };
+
+            // Taggers can be created for many reasons. In this case, it's fine to have a sinlge
+            // tagger for a given buffer, so cache it on the buffer as a singleton property.
+            return buffer.Properties.GetOrCreateSingletonProperty<Tagger>(taggerCreator) as ITagger<T>;
         }
     }
 }

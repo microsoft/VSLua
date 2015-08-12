@@ -23,7 +23,5 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         IServiceProvider ServiceProvider { get; }
 
         SourceTextCache SourceTextCache { get; }
-
-        Tagger Tagger { get; }
     }
 }

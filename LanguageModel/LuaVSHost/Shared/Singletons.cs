@@ -112,21 +112,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
             }
         }
 
-        private Tagger tagger;
-
-        public Tagger Tagger
-        {
-            get
-            {
-                if (this.tagger == null)
-                {
-                    this.tagger = new Tagger(this.standardClassifications.Value, this);
-                }
-
-                return this.tagger;
-            }
-        }
-
         public IServiceProvider ServiceProvider
         {
             get

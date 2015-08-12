@@ -23,15 +23,21 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
         private IStandardClassificationService standardClassifications;
         private ISingletons singletons;
         private Dictionary<Classification, IClassificationType> vsClassifications;
+        private ITextBuffer buffer;
 
-        internal Tagger(IStandardClassificationService standardClassifications, ISingletons singletons)
+        internal Tagger(ITextBuffer buffer, IStandardClassificationService standardClassifications, ISingletons singletons)
         {
             Requires.NotNull(standardClassifications, nameof(standardClassifications));
             Requires.NotNull(singletons, nameof(singletons));
 
+            this.buffer = buffer;
+            this.singletons = singletons;
+
             this.standardClassifications = standardClassifications;
             this.singletons = singletons;
             this.vsClassifications = this.InitializeDictionary(standardClassifications);
+
+            //this.buffer.Changed += this.OnBufferChanged;
         }
 
         public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans)
