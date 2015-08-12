@@ -33,6 +33,9 @@ namespace LanguageService.Formatting
         /// Ideally, Format will also take in a "formatting option" object that dictates
         /// the rules that should be enabled, spacing and tabs.
         /// </summary>
+        /// <param name="sourceText">The SourceText that represents the text to be formatted</param>
+        /// <param name="range">The range of indicies to be formatted</param>
+        /// <param name="newOptions">The options to format with, null leaves the options as they were</param>
         /// <returns>
         /// A list of TextEditInfo objects are returned for the spacing between tokens (starting from the
         /// first token in the document to the last token. After the spacing text edits, the indentation
