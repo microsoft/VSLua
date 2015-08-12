@@ -48,61 +48,52 @@ namespace LanguageService.Formatting.Options
         }
 
         private static ImmutableArray<Rule> SpaceBeforeOpenParenthesis = ImmutableArray.Create(
-            Rules.SpaceAfterValueBeforeOpenParenthesis
-            );
+            Rules.SpaceAfterValueBeforeOpenParenthesis);
 
         private static ImmutableArray<Rule> SpaceOnInsideOfParenthesis = ImmutableArray.Create(
             Rules.SpaceAfterValueBeforeCloseParenthesis,
-            Rules.SpaceBeforeValueAfterOpenParenthesis
-            );
+            Rules.SpaceBeforeValueAfterOpenParenthesis);
 
         private static ImmutableArray<Rule> SpaceOnInsideOfCurlyBraces = ImmutableArray.Create(
             Rules.SpaceAfterValueBeforeCloseCurlyBrace,
-            Rules.SpaceBeforeValueAfterOpenCurlyBrace
-            );
+            Rules.SpaceBeforeValueAfterOpenCurlyBrace);
 
         private static ImmutableArray<Rule> SpaceOnInsideOfSquareBrackets = ImmutableArray.Create(
             Rules.SpaceAfterValueBeforeCloseSquareBracket,
-            Rules.SpaceBeforeValueAfterOpenSquareBracket
-            );
+            Rules.SpaceBeforeValueAfterOpenSquareBracket);
 
         private static ImmutableArray<Rule> SpaceAfterCommas = ImmutableArray.Create(
-            Rules.SpaceAfterComma
-            );
+            Rules.SpaceAfterComma);
 
         private static ImmutableArray<Rule> SpaceBeforeAndAfterBinaryOperations = ImmutableArray.Create(
             Rules.SpaceAfterBinaryOperator,
-            Rules.SpaceBeforeBinaryOperator
-            );
+            Rules.SpaceBeforeBinaryOperator);
 
         // TODO: This Rule Group expands after the parser implemented, check OptionalRuleGroup enum
         //   for the rest
         private static ImmutableArray<Rule> SpaceBeforeAndAfterAssignmentInStatement = ImmutableArray.Create(
             Rules.SpaceAfterAssignmentOperatorInStatement,
-            Rules.SpaceBeforeAssignmentOperatorInStatement
-            );
+            Rules.SpaceBeforeAssignmentOperatorInStatement);
 
         private static ImmutableArray<Rule> SpaceBeforeAndAfterAssignmentInFor = ImmutableArray.Create(
             Rules.SpaceBeforeAssignmentOperatorInFor,
-            Rules.SpaceAfterAssignmentOperatorInFor
-            );
+            Rules.SpaceAfterAssignmentOperatorInFor);
 
         private static ImmutableArray<Rule> SpaceBeforeAfterAssignmentInField = ImmutableArray.Create(
             Rules.SpaceBeforeAssignmentOperatorInField,
-            Rules.SpaceAfterAssignmentOperatorInField
-            );
+            Rules.SpaceAfterAssignmentOperatorInField);
 
         private static Dictionary<OptionalRuleGroup, IEnumerable<Rule>> optionalRuleGroups = new Dictionary<OptionalRuleGroup, IEnumerable<Rule>>
         {
-            {OptionalRuleGroup.SpaceBeforeOpenParenthesis, SpaceBeforeOpenParenthesis},
-            {OptionalRuleGroup.SpaceOnInsideOfParenthesis, SpaceOnInsideOfParenthesis},
-            {OptionalRuleGroup.SpaceOnInsideOfCurlyBraces, SpaceOnInsideOfCurlyBraces},
-            {OptionalRuleGroup.SpaceOnInsideOfSquareBrackets, SpaceOnInsideOfSquareBrackets},
-            {OptionalRuleGroup.SpaceAfterCommas, SpaceAfterCommas},
-            {OptionalRuleGroup.SpaceBeforeAndAfterBinaryOperations, SpaceBeforeAndAfterBinaryOperations},
-            {OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForStatement, SpaceBeforeAndAfterAssignmentInStatement},
-            {OptionalRuleGroup.NoSpaceBeforeAndAfterIndiciesInForLoopHeader, SpaceBeforeAndAfterAssignmentInFor},
-            {OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForField, SpaceBeforeAfterAssignmentInField}
+            { OptionalRuleGroup.SpaceBeforeOpenParenthesis, SpaceBeforeOpenParenthesis },
+            { OptionalRuleGroup.SpaceOnInsideOfParenthesis, SpaceOnInsideOfParenthesis },
+            { OptionalRuleGroup.SpaceOnInsideOfCurlyBraces, SpaceOnInsideOfCurlyBraces },
+            { OptionalRuleGroup.SpaceOnInsideOfSquareBrackets, SpaceOnInsideOfSquareBrackets },
+            { OptionalRuleGroup.SpaceAfterCommas, SpaceAfterCommas},
+            { OptionalRuleGroup.SpaceBeforeAndAfterBinaryOperations, SpaceBeforeAndAfterBinaryOperations },
+            { OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForStatement, SpaceBeforeAndAfterAssignmentInStatement },
+            { OptionalRuleGroup.NoSpaceBeforeAndAfterIndiciesInForLoopHeader, SpaceBeforeAndAfterAssignmentInFor },
+            { OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForField, SpaceBeforeAfterAssignmentInField }
         };
     }
 }
