@@ -93,6 +93,7 @@
     <Compile Include="FormatRulesAndIndentation\LeftCommaTests.cs" />
     <Compile Include="FormatRulesAndIndentation\MixedTests.cs" />
     <Compile Include="FormatRulesAndIndentation\NewlineRuleTesting.cs" />
+    <Compile Include="IndentSpacesTests.cs" />
     <Compile Include="SmartIndent\SmartIndentTests.cs" />
     <Compile Include="Tester.cs" />
     <Compile Include="FormatRulesAndIndentation\TrailingWhitespaceTests.cs" />
