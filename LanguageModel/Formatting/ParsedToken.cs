@@ -80,6 +80,7 @@ namespace LanguageService.Formatting
                     {
                         yield break;
                     }
+
                     yield return new ParsedToken(token, blockLevel, statementNode, inTableConstructor);
                 }
             }

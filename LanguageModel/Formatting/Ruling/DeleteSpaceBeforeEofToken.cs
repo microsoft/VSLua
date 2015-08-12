@@ -45,6 +45,7 @@ namespace LanguageService.Formatting.Ruling
                 int start = token.Start - length;
                 edit = new TextEditInfo(start, length, "");
             }
+
             return edit;
         }
 

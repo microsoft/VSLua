@@ -48,6 +48,7 @@ namespace LanguageService.Formatting.Ruling
                             this.map[typeLeft][typeRight] = bucket = new RuleBucket();
                         }
                     }
+
                     bucket.Add(rule);
 
                 }
