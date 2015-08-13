@@ -14,7 +14,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Errors
     internal sealed class ErrorTaggerProvider : ITaggerProvider
     {
         [Import]
-        private ISingletons singletons;
+        private ISingletons singletons = null;
 
         public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
         {
@@ -22,7 +22,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Errors
 
             Func<ErrorTagger> errorTaggerCreator = () =>
             {
-                ErrorTagger tagger = new ErrorTagger(buffer, singletons);
+                ErrorTagger tagger = new ErrorTagger(buffer, this.singletons);
 
                 return tagger;
             };

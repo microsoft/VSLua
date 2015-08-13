@@ -80,6 +80,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
                         {
                             this.AddEndKeyword();
                         }
+
                         break;
 
                     case VSConstants.VSStd2KCmdID.RETURN:

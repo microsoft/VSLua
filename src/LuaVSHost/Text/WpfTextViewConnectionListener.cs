@@ -15,7 +15,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
     internal class WpfTextViewConnectionListener : IWpfTextViewConnectionListener
     {
         [Import]
-        private ISingletons singletons;
+        private ISingletons singletons = null;
 
         private static readonly Dictionary<IWpfTextView, TextView> viewMap = new Dictionary<IWpfTextView, TextView>();
 

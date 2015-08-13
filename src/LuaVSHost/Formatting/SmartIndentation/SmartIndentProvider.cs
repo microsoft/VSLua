@@ -16,7 +16,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.SmartIndentatio
     internal class SmartIndentProvider : ISmartIndentProvider
     {
         [Import]
-        private ISingletons singletons;
+        private ISingletons singletons = null;
 
         public ISmartIndent CreateSmartIndent(ITextView textView)
         {
