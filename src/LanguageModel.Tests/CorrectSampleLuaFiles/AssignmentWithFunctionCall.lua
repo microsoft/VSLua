@@ -1,0 +1,1 @@
+b = string.gsub(a, "one", "another")

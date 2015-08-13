@@ -1,5 +1,3 @@
-
-
 if true == "+" then
-    test();
+  x  = x[true]
 end
