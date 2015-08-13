@@ -20,9 +20,9 @@ namespace LanguageService.Classification
 
         private ParseTreeCache ParseTreeCache { get; }
 
-        public IEnumerable<TagInfo> Colourize(SourceText sourceText, List<Range> ranges)
+        public IEnumerable<TagInfo> ColorizeLexerTokens(SourceText sourceText, List<Range> ranges)
         {
-            foreach (Token token in GetTokens(this.ParseTreeCache.Get(sourceText).Root))
+            foreach (Token token in Lexer.Tokenize(sourceText.TextReader))
             {
                 foreach (TagInfo tagInfo in GetTokenTagInfos(ranges, token))
                 {
@@ -41,23 +41,33 @@ namespace LanguageService.Classification
                     int triviaLength = trivia.Text.Length;
                     if (trivia.Type != SyntaxKind.Newline && trivia.Type != SyntaxKind.Whitespace)
                     {
-                        int triviaEnd = start + triviaLength;
-                        int tagStart = start > range.Start ? start : range.Start;
-                        int tagEnd = triviaEnd < range.End ? triviaEnd : range.End;
-                        if (tagStart < tagEnd)
+                        if (trivia.Type != SyntaxKind.Comment)
                         {
-                            yield return new TagInfo(tagStart, tagEnd - tagStart, SyntaxKindClassifications[trivia.Type]);
+                            int triviaEnd = start + triviaLength;
+                            int tagStart = start > range.Start ? start : range.Start;
+                            int tagEnd = triviaEnd < range.End ? triviaEnd : range.End;
+                            if (tagStart < tagEnd)
+                            {
+                                yield return new TagInfo(tagStart, tagEnd - tagStart, SyntaxKindClassifications[trivia.Type]);
+                            }
+                        }
+                        else
+                        {
+                            yield return new TagInfo(start, triviaLength, SyntaxKindClassifications[SyntaxKind.Comment]);
                         }
                     }
 
                     start += triviaLength;
                 }
 
-                int tokenStart = token.Start > range.Start ? start : range.Start;
-                int tokenEnd = token.End < range.End ? token.End : range.End;
-                if (tokenStart < tokenEnd)
+                if (token.Kind != SyntaxKind.EndOfFile && token.Kind != SyntaxKind.Identifier)
                 {
-                    yield return new TagInfo(tokenStart, tokenEnd - tokenStart, SyntaxKindClassifications[token.Kind]);
+                    int tokenStart = token.Start > range.Start ? start : range.Start;
+                    int tokenEnd = token.End < range.End ? token.End : range.End;
+                    if (tokenStart < tokenEnd)
+                    {
+                        yield return new TagInfo(tokenStart, tokenEnd - tokenStart, SyntaxKindClassifications[token.Kind]);
+                    }
                 }
             }
         }
