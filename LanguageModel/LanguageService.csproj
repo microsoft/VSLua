@@ -82,7 +82,7 @@
     <Compile Include="Classification\Classification.cs" />
     <Compile Include="Classification\Colourizer.cs" />
     <Compile Include="Classification\TagInfo.cs" />
-    <Compile Include="Formatting\Options\OptionalRuleGroup.cs" />
+    <Compile Include="Formatting\Options\DisableableRules.cs" />
     <Compile Include="Formatting\Options\OptionalRuleMap.cs" />
     <Compile Include="Formatting\Options\FormattingOptions.cs" />
     <Compile Include="Formatting\Formatter.cs" />
