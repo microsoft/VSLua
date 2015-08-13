@@ -19,13 +19,13 @@ namespace Formatting.Tests
         public void LotsOfTrailing()
         {
             string original = @"
-    x
+    x = 10
        
-    x       ";
+    x = 10       ";
             string expected = @"
-    x
+x = 10
 
-    x";
+x = 10";
             GeneralTest(original, expected);
         }
 
@@ -55,22 +55,54 @@ namespace Formatting.Tests
     here]]
     x = x + 1            ";
             string expected = @"
-    x = 10
-    -- comment here
-    --[[ block
+x = 10
+-- comment here
+--[[ block
     comment 
     here]]
-    x = x + 1";
+x = x + 1";
             GeneralTest(original, expected);
         }
 
         [Fact]
         public void TrailingWhiteSpaceBeforeEof()
         {
-            string original = @"x   
+            string original = @"x = 10   
     ";
-            string expected = @"x
+            string expected = @"x = 10
     ";
+            GeneralTest(original, expected);
+        }
+
+        [Fact]
+        public void FunctionTrailing()
+        {
+            string original = @"
+foo = function ()
+     
+end";
+            string expected = @"
+foo = function ()
+
+end";
+            GeneralTest(original, expected);
+        }
+
+        [Fact]
+        public void EmbeddedFunctionTrailing()
+        {
+            string original = @"
+foo = function ()
+    t = {
+    
+    }
+end";
+            string expected = @"
+foo = function ()
+    t = {
+
+    }
+end";
             GeneralTest(original, expected);
         }
 

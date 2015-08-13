@@ -189,18 +189,18 @@ namespace LanguageService.Formatting
                 {
                     yield return new IndentInfo(start, 0, isBeforeText: true);
                 }
-                else
-                {
-                    Trivia nextTrivia = leadingTrivia[i + 1];
-                    if (nextTrivia.Type == SyntaxKind.Whitespace)
-                    {
-                        bool isBeforeText = i + 1 == leadingTrivia.Count - 1 ||
-                            (i + 2 < leadingTrivia.Count &&
-                            (leadingTrivia[i + 2].Type != SyntaxKind.Newline ||
-                            leadingTrivia[i + 2].Type != SyntaxKind.Whitespace));
-                        yield return new IndentInfo(start, nextTrivia.Text.Length, isBeforeText);
-                    }
-                }
+                //else
+                //{
+                //    Trivia nextTrivia = leadingTrivia[i + 1];
+                //    if (nextTrivia.Type == SyntaxKind.Whitespace)
+                //    {
+                //        bool isBeforeText = i + 1 == leadingTrivia.Count - 1 ||
+                //            (i + 2 < leadingTrivia.Count &&
+                //            (leadingTrivia[i + 2].Type != SyntaxKind.Newline ||
+                //            leadingTrivia[i + 2].Type != SyntaxKind.Whitespace));
+                //        yield return new IndentInfo(start, nextTrivia.Text.Length, isBeforeText);
+                //    }
+                //}
             }
         }
     }
