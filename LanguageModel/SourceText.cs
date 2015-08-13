@@ -11,13 +11,14 @@ namespace LanguageService
 {
     public class SourceText
     {
-        public SourceText(TextReader textReader)
+        public SourceText(string text)
         {
-            Requires.NotNull(textReader, nameof(textReader));
-
-            this.TextReader = textReader;
+            Requires.NotNull(text, nameof(text));
+            this.text = text;
         }
 
-        public TextReader TextReader { get; }
+        private string text;
+
+        public TextReader TextReader => new StringReader(this.text);
     }
 }

@@ -42,7 +42,7 @@ namespace Formatting.Tests
             {
                 SnapshotSpan newSpan = (SnapshotSpan)span;
                 var featureContainer = new LuaFeatureContainer();
-                SourceText sourceText = new SourceText(new StringReader(bufferApplied.GetText()));
+                SourceText sourceText = new SourceText(bufferApplied.GetText());
                 Range range = new Range(newSpan.Start.Position, newSpan.Length);
                 List<TextEditInfo> edits = featureContainer.Formatter.Format(sourceText, range, null);
                 var pastedBufferEdit = buffer.CreateEdit();
@@ -65,7 +65,7 @@ namespace Formatting.Tests
 
             FormattingOptions newOptions = new FormattingOptions(new List<DisableableRules>(), tabSize, indentSize, usingTabs);
 
-            List<TextEditInfo> textEdits = featureContainer.Formatter.Format(new SourceText(new StringReader(original)), range, newOptions);
+            List<TextEditInfo> textEdits = featureContainer.Formatter.Format(new SourceText(original), range, newOptions);
 
             var buffer = host.CreateTextBuffer(original);
             var edit = buffer.CreateEdit();
@@ -88,7 +88,7 @@ namespace Formatting.Tests
             var lineSnapshot = buffer.CurrentSnapshot.GetLineFromLineNumber(lineNumber);
             int position = lineSnapshot.Start.Position;
 
-            return featureContainer.Formatter.SmartIndent(new SourceText(new StringReader(text)), position);
+            return featureContainer.Formatter.SmartIndent(new SourceText(text), position);
         }
 
         internal static void FormattingTest(string original, string expected)

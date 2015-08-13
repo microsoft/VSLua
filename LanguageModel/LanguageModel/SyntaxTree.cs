@@ -15,10 +15,12 @@ namespace LanguageService
 
         public ChunkNode Root { get; }
         public ImmutableList<ParseError> ErrorList { get; }
+        public List<Token> Tokens { get; }
 
         public static SyntaxTree Create(TextReader luaReader)
         {
-            return new Parser().CreateSyntaxTree(luaReader);
+            var parser = new Parser().CreateSyntaxTree(luaReader);
+            return parser;
         }
 
         // For testing

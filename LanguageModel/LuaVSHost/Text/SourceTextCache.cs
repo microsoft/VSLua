@@ -20,7 +20,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
                 return sourceText;
             }
 
-            sourceText = new SourceText(new TextSnapshotToTextReader(textSnapshot));
+            sourceText = new SourceText(textSnapshot.GetText());
             this.sources.Add(textSnapshot, sourceText);
 
             return sourceText;

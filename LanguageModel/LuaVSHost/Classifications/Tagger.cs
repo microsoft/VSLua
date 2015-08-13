@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LanguageService;
 using LanguageService.Classification;
+using LanguageService.Shared;
 using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.PlatformUI;
@@ -46,19 +47,29 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 
         public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans)
         {
+            if (spans.Count < 0)
+            {
+                yield break;
+            }
+
+            List<Range> ranges = new List<Range>();
+
             foreach (SnapshotSpan span in spans)
             {
+                ranges.Add(new Range(span.Start.Position, span.Length));
                 ITextSnapshot textSnapshot = span.Snapshot;
-                SourceText sourceText = this.singletons.SourceTextCache.Get(textSnapshot);
+            }
 
-                foreach (TagInfo tagInfo in this.singletons.FeatureContainer.Colourizer.Colourize(sourceText))
-                {
-                    SnapshotSpan tokenSpan = new SnapshotSpan(textSnapshot, tagInfo.Start, tagInfo.Length);
-                    IClassificationType classification = this.standardClassifications.Other;
-                    this.vsClassifications.TryGetValue(tagInfo.Classification, out classification);
+            ITextSnapshot snapshot = this.buffer.CurrentSnapshot;
+            SourceText sourceText = this.singletons.SourceTextCache.Get(snapshot);
 
-                    yield return new TagSpan<ClassificationTag>(tokenSpan, new ClassificationTag(classification));
-                }
+            foreach (TagInfo tagInfo in this.singletons.FeatureContainer.Colourizer.Colourize(sourceText, ranges))
+            {
+                SnapshotSpan tokenSpan = new SnapshotSpan(snapshot, tagInfo.Start, tagInfo.Length);
+                IClassificationType classification = this.standardClassifications.Other;
+                this.vsClassifications.TryGetValue(tagInfo.Classification, out classification);
+
+                yield return new TagSpan<ClassificationTag>(tokenSpan, new ClassificationTag(classification));
             }
         }
 

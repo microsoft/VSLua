@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using LanguageService.Shared;
 using Validation;
 
 namespace LanguageService.Classification
@@ -18,6 +19,48 @@ namespace LanguageService.Classification
         }
 
         private ParseTreeCache ParseTreeCache { get; }
+
+        public IEnumerable<TagInfo> Colourize(SourceText sourceText, List<Range> ranges)
+        {
+            foreach (Token token in GetTokens(this.ParseTreeCache.Get(sourceText).Root))
+            {
+                foreach (TagInfo tagInfo in GetTokenTagInfos(ranges, token))
+                {
+                    yield return tagInfo;
+                }
+            }
+        }
+
+        private static IEnumerable<TagInfo> GetTokenTagInfos(List<Range> ranges, Token token)
+        {
+            foreach (Range range in ranges)
+            {
+                int start = token.FullStart;
+                foreach (Trivia trivia in token.LeadingTrivia)
+                {
+                    int triviaLength = trivia.Text.Length;
+                    if (trivia.Type != SyntaxKind.Newline && trivia.Type != SyntaxKind.Whitespace)
+                    {
+                        int triviaEnd = start + triviaLength;
+                        int tagStart = start > range.Start ? start : range.Start;
+                        int tagEnd = triviaEnd < range.End ? triviaEnd : range.End;
+                        if (tagStart < tagEnd)
+                        {
+                            yield return new TagInfo(tagStart, tagEnd - tagStart, SyntaxKindClassifications[trivia.Type]);
+                        }
+                    }
+
+                    start += triviaLength;
+                }
+
+                int tokenStart = token.Start > range.Start ? start : range.Start;
+                int tokenEnd = token.End < range.End ? token.End : range.End;
+                if (tokenStart < tokenEnd)
+                {
+                    yield return new TagInfo(tokenStart, tokenEnd - tokenStart, SyntaxKindClassifications[token.Kind]);
+                }
+            }
+        }
 
         private static IEnumerable<Token> GetTokens(SyntaxNodeOrToken currentRoot)
         {
@@ -39,35 +82,6 @@ namespace LanguageService.Classification
                 if (token != null)
                 {
                     yield return token;
-                }
-            }
-        }
-
-        public IEnumerable<TagInfo> Colourize(SourceText sourceText)
-        {
-            SyntaxTree syntaxTree = this.ParseTreeCache.Get(sourceText);
-
-            foreach (Token token in GetTokens(syntaxTree.Root))
-            {
-                int start = token.FullStart;
-                foreach (Trivia trivia in token.LeadingTrivia)
-                {
-                    int length = trivia.Text.Length;
-                    Classification triviaClass = Classification.Comment;
-                    if (trivia.Type != SyntaxKind.Whitespace || trivia.Type != SyntaxKind.Newline)
-                    {
-                        SyntaxKindClassifications.TryGetValue(trivia.Type, out triviaClass);
-                        yield return new TagInfo(start, length, triviaClass);
-                    }
-
-                    start += trivia.Text.Length;
-                }
-
-                Classification classification;
-
-                if (SyntaxKindClassifications.TryGetValue(token.Kind, out classification) && token.Kind != SyntaxKind.EndOfFile && token.Start >= 0 && token.Length >= 0)
-                {
-                    yield return new TagInfo(token.Start, token.Length, classification);
                 }
             }
         }
