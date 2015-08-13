@@ -21,13 +21,13 @@ namespace Formatting.Tests
 
         private static void GeneralOneIndent(uint tabSize, uint indentSize, int expectedTabs, int expectedSpaces, bool usingTabs)
         {
-            Tester.GeneralIndentAmountTest(testStringOneIndent,
+            Tester.SpacesAndTabsTest(testStringOneIndent,
                 tabSize, indentSize, expectedTabs, expectedSpaces, usingTabs);
         }
 
         private static void GeneralTwoIndents(uint tabSize, uint indentSize, int expectedTabs, int expectedSpaces, bool usingTabs)
         {
-            Tester.GeneralIndentAmountTest(testStringTwoIndents,
+            Tester.SpacesAndTabsTest(testStringTwoIndents,
                 tabSize, indentSize, expectedTabs, expectedSpaces, usingTabs);
         }
 

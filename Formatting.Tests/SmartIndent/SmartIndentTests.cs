@@ -15,7 +15,7 @@ namespace Formatting.Tests.SmartIndent
             string text = @"
     foo = function()
     end";
-            Tester.GeneralSmartIndentTest(text, lineNumber: 2, expectedIndent: 0);
+            Tester.SmartIndentationTest(text, lineNumber: 2, expectedIndent: 0);
         }
 
         [Fact]
@@ -24,7 +24,7 @@ namespace Formatting.Tests.SmartIndent
             string text = @"
     t = {
     }";
-            Tester.GeneralSmartIndentTest(text, lineNumber: 2, expectedIndent: 0);
+            Tester.SmartIndentationTest(text, lineNumber: 2, expectedIndent: 0);
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace Formatting.Tests.SmartIndent
             string text = @"foo = function
     ";
 
-            Tester.GeneralSmartIndentTest(text, lineNumber: 1, expectedIndent: 4);
+            Tester.SmartIndentationTest(text, lineNumber: 1, expectedIndent: 4);
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Formatting.Tests.SmartIndent
         {
             string text = "";
 
-            Tester.GeneralSmartIndentTest(text, lineNumber: 0, expectedIndent: 0);
+            Tester.SmartIndentationTest(text, lineNumber: 0, expectedIndent: 0);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace Formatting.Tests.SmartIndent
     end
     ";
 
-            Tester.GeneralSmartIndentTest(text, lineNumber: 4, expectedIndent: 0);
+            Tester.SmartIndentationTest(text, lineNumber: 4, expectedIndent: 0);
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace Formatting.Tests.SmartIndent
     return
     end";
 
-            Tester.GeneralSmartIndentTest(text, lineNumber: 0, expectedIndent: 0);
+            Tester.SmartIndentationTest(text, lineNumber: 0, expectedIndent: 0);
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace Formatting.Tests.SmartIndent
 
     return
     end";
-            Tester.GeneralSmartIndentTest(text, lineNumber: 2, expectedIndent: 4);
+            Tester.SmartIndentationTest(text, lineNumber: 2, expectedIndent: 4);
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace Formatting.Tests.SmartIndent
     1
     }";
 
-            Tester.GeneralSmartIndentTest(text, lineNumber: 0, expectedIndent: 0);
+            Tester.SmartIndentationTest(text, lineNumber: 0, expectedIndent: 0);
         }
 
         [Fact]
@@ -97,7 +97,7 @@ namespace Formatting.Tests.SmartIndent
     1
     }
     ";
-            Tester.GeneralSmartIndentTest(text, lineNumber: 4, expectedIndent: 0);
+            Tester.SmartIndentationTest(text, lineNumber: 4, expectedIndent: 0);
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace Formatting.Tests.SmartIndent
     1,
 
     }";
-            Tester.GeneralSmartIndentTest(text, lineNumber: 3, expectedIndent: 4);
+            Tester.SmartIndentationTest(text, lineNumber: 3, expectedIndent: 4);
         }
 
         [Fact]
@@ -117,7 +117,7 @@ namespace Formatting.Tests.SmartIndent
             string text = @"
     t = {
     ";
-            Tester.GeneralSmartIndentTest(text, lineNumber: 2, expectedIndent: 4);
+            Tester.SmartIndentationTest(text, lineNumber: 2, expectedIndent: 4);
         }
 
         [Fact]
@@ -129,7 +129,7 @@ namespace Formatting.Tests.SmartIndent
 
     end
     end";
-            Tester.GeneralSmartIndentTest(text, lineNumber: 3, expectedIndent: 8);
+            Tester.SmartIndentationTest(text, lineNumber: 3, expectedIndent: 8);
         }
 
         [Fact]
@@ -141,7 +141,7 @@ namespace Formatting.Tests.SmartIndent
 
     }
     }";
-            Tester.GeneralSmartIndentTest(text, lineNumber: 3, expectedIndent: 8);
+            Tester.SmartIndentationTest(text, lineNumber: 3, expectedIndent: 8);
         }
 
         [Fact]
@@ -151,7 +151,7 @@ namespace Formatting.Tests.SmartIndent
     t = {
     f = {
     ";
-            Tester.GeneralSmartIndentTest(text, lineNumber: 3, expectedIndent: 8);
+            Tester.SmartIndentationTest(text, lineNumber: 3, expectedIndent: 8);
         }
 
         [Fact]
@@ -161,7 +161,7 @@ namespace Formatting.Tests.SmartIndent
     foo = function()
     bar = function()
     ";
-            Tester.GeneralSmartIndentTest(text, lineNumber: 3, expectedIndent: 8);
+            Tester.SmartIndentationTest(text, lineNumber: 3, expectedIndent: 8);
         }
 
         [Fact]
@@ -172,7 +172,7 @@ namespace Formatting.Tests.SmartIndent
     bar = function()
         foobar = function()
     ";
-            Tester.GeneralSmartIndentTest(text, lineNumber: 4, expectedIndent: 12);
+            Tester.SmartIndentationTest(text, lineNumber: 4, expectedIndent: 12);
         }
 
         [Fact]
@@ -185,7 +185,7 @@ namespace Formatting.Tests.SmartIndent
     bar = function()
 
     end";
-            Tester.GeneralSmartIndentTest(text, lineNumber: 5, expectedIndent: 8);
+            Tester.SmartIndentationTest(text, lineNumber: 5, expectedIndent: 8);
 
         }
 
@@ -200,7 +200,7 @@ namespace Formatting.Tests.SmartIndent
     foo = function ()
     return x
     end";
-            Tester.GeneralSmartIndentTest(text, lineNumber: 2, expectedIndent: 4);
+            Tester.SmartIndentationTest(text, lineNumber: 2, expectedIndent: 4);
         }
 
         [Fact]
@@ -214,7 +214,7 @@ namespace Formatting.Tests.SmartIndent
     t = {
     1
     }";
-            Tester.GeneralSmartIndentTest(text, lineNumber: 2, expectedIndent: 4);
+            Tester.SmartIndentationTest(text, lineNumber: 2, expectedIndent: 4);
         }
 
 

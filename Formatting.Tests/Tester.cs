@@ -68,7 +68,7 @@ namespace Formatting.Tests
         }
 
 
-        internal static string Format(string original, uint tabSize = 4, uint indentSize = 4, bool usingTabs = false)
+        private static string Format(string original, uint tabSize = 4, uint indentSize = 4, bool usingTabs = false)
         {
             LuaFeatureContainer featureContainer = new LuaFeatureContainer();
             Range range = new Range(0, original.Length);
@@ -90,7 +90,7 @@ namespace Formatting.Tests
             return applied.GetText();
         }
 
-        internal static int SmartIndent(string text, int lineNumber)
+        private static int SmartIndent(string text, int lineNumber)
         {
             LuaFeatureContainer featureContainer = new LuaFeatureContainer();
 
@@ -101,13 +101,13 @@ namespace Formatting.Tests
             return featureContainer.Formatter.SmartIndent(new SourceText(new StringReader(text)), position);
         }
 
-        internal static void GeneralTest(string original, string expected)
+        internal static void FormattingTest(string original, string expected)
         {
             string actual = Tester.Format(original);
             Assert.Equal(expected, actual);
         }
 
-        internal static void GeneralTest(string original, string expected1, string expected2)
+        internal static void FormattingTest(string original, string expected1, string expected2)
         {
             string actual1 = Tester.Format(original);
             //string actual2 = Tester.Format(original, IndentStyle.Relative);
@@ -115,13 +115,13 @@ namespace Formatting.Tests
             //Assert.Equal(expected2, actual2);
         }
 
-        internal static void GeneralSmartIndentTest(string text, int lineNumber, int expectedIndent)
+        internal static void SmartIndentationTest(string text, int lineNumber, int expectedIndent)
         {
             int actualIndent = Tester.SmartIndent(text, lineNumber);
             Assert.Equal(expectedIndent, actualIndent);
         }
 
-        internal static void GeneralIndentAmountTest(string text, uint tabSize, uint indentSize, int expectedTabs, int expectedSpaces, bool usingTabs)
+        internal static void SpacesAndTabsTest(string text, uint tabSize, uint indentSize, int expectedTabs, int expectedSpaces, bool usingTabs)
         {
             string formatted = Tester.Format(text, tabSize, indentSize, usingTabs);
 

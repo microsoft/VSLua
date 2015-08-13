@@ -5,7 +5,7 @@ namespace Formatting.Tests
     public class DotColonTests
     {
         delegate void TestFunction(string original, string expected);
-        TestFunction GeneralTest = Tester.GeneralTest;
+        TestFunction GeneralTest = Tester.FormattingTest;
 
         [Fact]
         public void BasicDot()

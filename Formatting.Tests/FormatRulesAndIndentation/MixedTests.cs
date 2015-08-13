@@ -6,7 +6,7 @@ namespace Formatting.Tests
     public class MixedTests
     {
         delegate void TestFunction(string original, string expected1, string expected2);
-        TestFunction GeneralTest = Tester.GeneralTest;
+        TestFunction GeneralTest = Tester.FormattingTest;
 
         [Fact]
         public void Basic()

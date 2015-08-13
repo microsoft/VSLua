@@ -7,7 +7,7 @@ namespace Formatting.Tests
     {
 
         delegate void TestFunction(string original, string expected);
-        TestFunction GeneralTest = Tester.GeneralTest;
+        TestFunction GeneralTest = Tester.FormattingTest;
 
         [Fact]
         public void AssignmentBasic()
