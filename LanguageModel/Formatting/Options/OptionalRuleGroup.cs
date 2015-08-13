@@ -9,7 +9,7 @@ namespace LanguageService.Formatting.Options
     /// <summary>
     /// The OptionalRuleGroups represent sets of rules that can enable/disable formatting options.
     /// </summary>
-    public enum OptionalRuleGroup
+    public enum DisableableRules
     {
         /// <summary>
         /// The set of rules that make up the wrapping in for loops (single-lined)

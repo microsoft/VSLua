@@ -27,7 +27,7 @@ namespace LanguageService.Formatting.Ruling
         internal static RuleMap Create()
         {
             RuleMap ruleMap = new RuleMap();
-            ruleMap.AddEnabledRules(new OptionalRuleMap(Enumerable.Empty<OptionalRuleGroup>()));
+            ruleMap.AddEnabledRules(new OptionalRuleMap(Enumerable.Empty<DisableableRules>()));
 
             return ruleMap;
         }
@@ -83,7 +83,7 @@ namespace LanguageService.Formatting.Ruling
         {
             if (optionalRuleMap == null)
             {
-                optionalRuleMap = new OptionalRuleMap(Enumerable.Empty<OptionalRuleGroup>());
+                optionalRuleMap = new OptionalRuleMap(Enumerable.Empty<DisableableRules>());
         }
 
             this.Map = new Dictionary<SyntaxKind, Dictionary<SyntaxKind, RuleBucket>>();

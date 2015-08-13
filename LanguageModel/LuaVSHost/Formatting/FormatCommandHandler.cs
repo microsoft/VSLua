@@ -253,85 +253,85 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
         private FormattingOptions GetFormattingOptions(UserSettings settings)
         {
 
-            List<OptionalRuleGroup> disabledRuleGroups = this.GetDisabledRules(settings);
+            List<DisableableRules> disabledRules = this.GetDisabledRules(settings);
 
-            FormattingOptions newOptions = new FormattingOptions(disabledRuleGroups, settings.TabSize, settings.IndentSize, settings.UsingTabs);
+            FormattingOptions formattingOptions = new FormattingOptions(disabledRules, settings.TabSize, settings.IndentSize, settings.UsingTabs);
 
-            return newOptions;
+            return formattingOptions;
         }
 
-        private List<OptionalRuleGroup> GetDisabledRules(UserSettings settings)
+        private List<DisableableRules> GetDisabledRules(UserSettings settings)
         {
-            var disabledRules = new List<OptionalRuleGroup>();
+            var disabledRules = new List<DisableableRules>();
 
             if (settings.AddSpacesOnInsideOfCurlyBraces != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceOnInsideOfCurlyBraces);
+                disabledRules.Add(DisableableRules.SpaceOnInsideOfCurlyBraces);
             }
 
             if (settings.AddSpacesOnInsideOfParenthesis != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceOnInsideOfParenthesis);
+                disabledRules.Add(DisableableRules.SpaceOnInsideOfParenthesis);
             }
 
             if (settings.AddSpacesOnInsideOfSquareBrackets != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceOnInsideOfSquareBrackets);
+                disabledRules.Add(DisableableRules.SpaceOnInsideOfSquareBrackets);
             }
 
             if (settings.SpaceBetweenFunctionAndParenthesis != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceBeforeOpenParenthesis);
+                disabledRules.Add(DisableableRules.SpaceBeforeOpenParenthesis);
             }
 
             if (settings.SpaceAfterCommas != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceAfterCommas);
+                disabledRules.Add(DisableableRules.SpaceAfterCommas);
             }
 
             if (settings.SpaceBeforeAndAfterAssignmentInStatement != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForStatement);
+                disabledRules.Add(DisableableRules.SpaceBeforeAndAfterAssignmentForStatement);
             }
 
             if (settings.SpaceBeforeAndAfterAssignmentOperatorOnField != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForField);
+                disabledRules.Add(DisableableRules.SpaceBeforeAndAfterAssignmentForField);
             }
 
             if (settings.ForLoopAssignmentSpacing != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceBeforeAndAfterAssignmentInForLoopHeader);
+                disabledRules.Add(DisableableRules.SpaceBeforeAndAfterAssignmentInForLoopHeader);
             }
 
             if (settings.ForLoopIndexSpacing != true)
             {
-                disabledRules.Add(OptionalRuleGroup.NoSpaceBeforeAndAfterIndiciesInForLoopHeader);
+                disabledRules.Add(DisableableRules.NoSpaceBeforeAndAfterIndiciesInForLoopHeader);
             }
 
             if (settings.AddNewLinesToMultilineTableConstructors != true)
             {
-                disabledRules.Add(OptionalRuleGroup.WrappingMoreLinesForTableConstructors);
+                disabledRules.Add(DisableableRules.WrappingMoreLinesForTableConstructors);
             }
 
             if (settings.WrapSingleLineForLoops != true)
             {
-                disabledRules.Add(OptionalRuleGroup.WrappingOneLineForFors);
+                disabledRules.Add(DisableableRules.WrappingOneLineForFors);
             }
 
             if (settings.WrapSingleLineFunctions != true)
             {
-                disabledRules.Add(OptionalRuleGroup.WrappingOneLineForFunctions);
+                disabledRules.Add(DisableableRules.WrappingOneLineForFunctions);
             }
 
             if (settings.WrapSingleLineTableConstructors != true)
             {
-                disabledRules.Add(OptionalRuleGroup.WrappingOneLineForTableConstructors);
+                disabledRules.Add(DisableableRules.WrappingOneLineForTableConstructors);
             }
 
             if (settings.SpaceBeforeAndAfterBinaryOperations != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceBeforeAndAfterBinaryOperations);
+                disabledRules.Add(DisableableRules.SpaceBeforeAndAfterBinaryOperations);
             }
 
             return disabledRules;

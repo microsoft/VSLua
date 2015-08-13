@@ -29,7 +29,7 @@ namespace LanguageService.Formatting.Options
         /// Whether or not Keep Tabs is on or off.
         /// </param>
         public FormattingOptions(
-            List<OptionalRuleGroup> disableRuleGroups,
+            List<DisableableRules> disableRuleGroups,
             uint tabSize, uint indentSize, bool usingTabs)
         {
             Requires.NotNull(disableRuleGroups, nameof(disableRuleGroups));
@@ -44,7 +44,7 @@ namespace LanguageService.Formatting.Options
         public FormattingOptions()
         {
             this.IndentSize = 4;
-            this.OptionalRuleMap = new OptionalRuleMap(ImmutableArray.Create<OptionalRuleGroup>());
+            this.OptionalRuleMap = new OptionalRuleMap(ImmutableArray.Create<DisableableRules>());
         }
 
         public uint IndentSize { get; }
@@ -53,7 +53,7 @@ namespace LanguageService.Formatting.Options
 
         public bool UsingTabs { get; }
 
-        public ImmutableArray<OptionalRuleGroup> RuleGroupsToDisable { get; }
+        public ImmutableArray<DisableableRules> RuleGroupsToDisable { get; }
 
         internal OptionalRuleMap OptionalRuleMap { get; }
     }
