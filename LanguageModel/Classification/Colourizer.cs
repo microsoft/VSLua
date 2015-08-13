@@ -31,6 +31,11 @@ namespace LanguageService.Classification
             }
         }
 
+        public IEnumerable<TagInfo> ColorizeParserTokens(SourceText sourceText)
+        {
+            return null;
+        } 
+
         private static IEnumerable<TagInfo> GetTokenTagInfos(List<Range> ranges, Token token)
         {
             foreach (Range range in ranges)
