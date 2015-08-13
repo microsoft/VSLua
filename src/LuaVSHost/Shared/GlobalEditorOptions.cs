@@ -14,10 +14,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         private AxHost.ConnectionPointCookie connectionPoint;
 
         [Import]
-        private ISingletons singletons;
+        private ISingletons singletons = null;
 
         [Import]
-        private SVsServiceProvider serviceProvider;
+        private SVsServiceProvider serviceProvider = null;
 
         internal event EventHandler<EventArgs> OnUpdateLanguagePreferences;
 

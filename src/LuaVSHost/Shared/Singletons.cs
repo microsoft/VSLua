@@ -2,9 +2,9 @@
 using System.ComponentModel.Composition;
 using LanguageService;
 using Microsoft.VisualStudio.Editor;
-using Microsoft.VisualStudio.LanguageServices.Lua.Text;
 using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.LanguageServices.Lua.Classifications;
+using Microsoft.VisualStudio.LanguageServices.Lua.Text;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text.Operations;
@@ -15,19 +15,19 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
     internal class Singletons : ISingletons
     {
         [Import]
-        private IEditorOperationsFactoryService editorOperationsFactory;
+        private IEditorOperationsFactoryService editorOperationsFactory = null;
 
         [Import]
-        private IVsEditorAdaptersFactoryService editorAdaptersFactory;
+        private IVsEditorAdaptersFactoryService editorAdaptersFactory = null;
 
         [Import]
-        private SVsServiceProvider serviceProvider;
+        private SVsServiceProvider serviceProvider = null;
 
         [Import]
-        private Lazy<GlobalEditorOptions> globalEditorOptions;
+        private Lazy<GlobalEditorOptions> globalEditorOptions = null;
 
         [Import]
-        private Lazy<IStandardClassificationService> standardClassifications;
+        private Lazy<IStandardClassificationService> standardClassifications = null;
 
         private SourceTextCache sourceTextCache;
         private LuaFeatureContainer featureContainer;
