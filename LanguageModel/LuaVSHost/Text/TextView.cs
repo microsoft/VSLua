@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.Editor;
+﻿using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.LanguageServices.Lua.Errors;
 using Microsoft.VisualStudio.LanguageServices.Lua.Formatting;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
