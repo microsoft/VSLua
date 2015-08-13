@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
@@ -16,7 +11,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.SmartIndentatio
     internal class SmartIndentProvider : ISmartIndentProvider
     {
         [Import]
-        private ISingletons singletons = null;
+        private ISingletons singletons;
 
         public ISmartIndent CreateSmartIndent(ITextView textView)
         {

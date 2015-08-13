@@ -66,15 +66,9 @@
     <Compile Include="Navigation\IDocumentOperations.cs" />
     <Compile Include="Shared\IMiniCommandFilter.cs" />
     <Compile Include="Formatting\FormatCommandHandler.cs" />
-    <Compile Include="Formatting\OptionPages\BaseDialogPage.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Formatting\OptionPages\GeneralPage.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Formatting\OptionPages\SpacingPage.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Formatting\OptionPages\BaseDialogPage.cs" />
+    <Compile Include="Formatting\OptionPages\GeneralPage.cs" />
+    <Compile Include="Formatting\OptionPages\SpacingPage.cs" />
     <Compile Include="Formatting\OptionPages\UserControls\GeneralUserControl.xaml.cs">
       <DependentUpon>GeneralUserControl.xaml</DependentUpon>
     </Compile>
@@ -84,9 +78,7 @@
     <Compile Include="Formatting\OptionPages\UserControls\WrappingAndNewLineUserControl.xaml.cs">
       <DependentUpon>WrappingAndNewLineUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Formatting\OptionPages\WrappingAndNewLinePage.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Formatting\OptionPages\WrappingAndNewLinePage.cs" />
     <Compile Include="Formatting\SmartIndentation\SmartIndent.cs" />
     <Compile Include="Formatting\SmartIndentation\SmartIndentProvider.cs" />
     <Compile Include="Text\TextView.cs" />

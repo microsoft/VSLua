@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using LanguageService.Classification;
+﻿using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.Text;
@@ -15,14 +13,15 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
     internal class TaggerProvider : ITaggerProvider
     {
         [Import]
-        private IStandardClassificationService standardClassifications = null;
+        private IStandardClassificationService standardClassifications;
 
         [Import]
-        private ISingletons singletons = null;
+        private ISingletons singletons;
 
         public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
         {
             return this.singletons.Tagger as ITagger<T>;
         }
+
     }
 }
