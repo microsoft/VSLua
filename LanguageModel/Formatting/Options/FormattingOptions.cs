@@ -10,11 +10,9 @@ using Validation;
 
 namespace LanguageService.Formatting.Options
 {
-    /// <summary>
-    /// This class might be bypassed later since GlobalOptions.Update just takes three arguements.
-    /// </summary>
-    public class NewOptions
+    public class FormattingOptions
     {
+
         /// <summary>
         /// Updates the general options.
         /// </summary>
@@ -30,24 +28,33 @@ namespace LanguageService.Formatting.Options
         /// <param name="usingTabs">
         /// Whether or not Keep Tabs is on or off.
         /// </param>
-        public NewOptions(
+        public FormattingOptions(
             List<OptionalRuleGroup> disableRuleGroups,
             uint tabSize, uint indentSize, bool usingTabs)
         {
             Requires.NotNull(disableRuleGroups, nameof(disableRuleGroups));
 
-            this.RuleGroupsToDisable = disableRuleGroups.ToImmutableArray();
             this.TabSize = tabSize;
             this.IndentSize = indentSize;
             this.UsingTabs = usingTabs;
+            this.RuleGroupsToDisable = disableRuleGroups.ToImmutableArray();
+            this.OptionalRuleMap = new OptionalRuleMap(this.RuleGroupsToDisable);
         }
 
-        internal ImmutableArray<OptionalRuleGroup> RuleGroupsToDisable { get; }
+        public FormattingOptions()
+        {
+            this.IndentSize = 4;
+            this.OptionalRuleMap = new OptionalRuleMap(ImmutableArray.Create<OptionalRuleGroup>());
+        }
 
-        internal uint TabSize { get; }
+        public uint IndentSize { get; }
 
-        internal uint IndentSize { get; }
+        public uint TabSize { get; }
 
-        internal bool UsingTabs { get; }
+        public bool UsingTabs { get; }
+
+        public ImmutableArray<OptionalRuleGroup> RuleGroupsToDisable { get; }
+
+        internal OptionalRuleMap OptionalRuleMap { get; }
     }
 }

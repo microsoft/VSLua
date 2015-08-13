@@ -4,20 +4,19 @@
 *                                                        *
 *********************************************************/
 
+using LanguageService.Shared;
 using Validation;
 
 namespace LanguageService.Formatting
 {
     public class TextEditInfo
     {
-        internal TextEditInfo(int start, int length, string replaceWith)
+        internal TextEditInfo(Range range, string replaceWith)
         {
             Requires.NotNull(replaceWith, nameof(replaceWith));
-            Requires.Argument(length >= 0, nameof(length), nameof(length) + " must be non-negative");
-            Requires.Argument(start >= 0, nameof(start), nameof(start) + " must be non-negative");
 
-            this.Start = start;
-            this.Length = length;
+            this.Start = range.Start;
+            this.Length = range.Length;
             this.ReplacingWith = replaceWith;
         }
 

@@ -231,11 +231,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 
             SourceText sourceText = this.core.SourceTextCache.Get(this.textBuffer.CurrentSnapshot);
 
-            Range range = new Range(span.Start.Position, span.End.Position);
+            Range range = new Range(span.Start.Position, span.Length);
 
-            NewOptions newOptions = this.GetNewOptions(this.core.FormattingUserSettings);
+            FormattingOptions formattingOptions = this.GetFormattingOptions(this.core.FormattingUserSettings);
 
-            List<TextEditInfo> edits = this.core.FeatureContainer.Formatter.Format(sourceText, range, newOptions);
+            List<TextEditInfo> edits = this.core.FeatureContainer.Formatter.Format(sourceText, range, formattingOptions);
 
             using (ITextEdit textEdit = this.textBuffer.CreateEdit())
             {
@@ -250,16 +250,12 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             return true;
         }
 
-        private NewOptions GetNewOptions(UserSettings settings)
+        private FormattingOptions GetFormattingOptions(UserSettings settings)
         {
-            if (!this.core.FormattingUserSettings.RulesChanged)
-            {
-                return null;
-            }
 
             List<OptionalRuleGroup> disabledRuleGroups = this.GetDisabledRules(settings);
 
-            NewOptions newOptions = new NewOptions(disabledRuleGroups, settings.TabSize, settings.IndentSize, settings.UsingTabs);
+            FormattingOptions newOptions = new FormattingOptions(disabledRuleGroups, settings.TabSize, settings.IndentSize, settings.UsingTabs);
 
             return newOptions;
         }

@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using LanguageService.Shared;
 using Validation;
 
 namespace LanguageService.Formatting.Ruling
@@ -39,7 +40,7 @@ namespace LanguageService.Formatting.Ruling
             int length = rightToken.Start - start;
             string replaceWith = this.GetTextFromAction();
 
-            return new List<TextEditInfo> { new TextEditInfo(start, length, replaceWith) };
+            return new List<TextEditInfo> { new TextEditInfo(new Range(start, length), replaceWith) };
         }
 
         private string GetTextFromAction()

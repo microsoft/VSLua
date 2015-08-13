@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using LanguageService.Shared;
 
 namespace LanguageService.Formatting.Ruling
 {
@@ -49,7 +50,7 @@ namespace LanguageService.Formatting.Ruling
             {
                 int length = lastTrivia.Text.Length;
                 int start = token.Start - length;
-                edit = new TextEditInfo(start, length, string.Empty);
+                edit = new TextEditInfo(new Range(start, length), string.Empty);
             }
 
             return edit;

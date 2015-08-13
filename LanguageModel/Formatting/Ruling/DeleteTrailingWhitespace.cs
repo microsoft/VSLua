@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using LanguageService.Shared;
 
 namespace LanguageService.Formatting.Ruling
 {
@@ -42,7 +43,7 @@ namespace LanguageService.Formatting.Ruling
                 if (this.IsNewLineAfterSpace(i, leadingTrivia) ||
                     (isEndOfFile && this.IsSpaceBeforeEndOfFile(i, leadingTrivia)))
                 {
-                    edits.Add(new TextEditInfo(start, length, string.Empty));
+                    edits.Add(new TextEditInfo(new Range(start, length), string.Empty));
                 }
 
                 start += length;

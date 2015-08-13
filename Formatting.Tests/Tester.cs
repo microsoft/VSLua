@@ -53,7 +53,7 @@ namespace Formatting.Tests
                 SnapshotSpan newSpan = (SnapshotSpan)span;
                 var featureContainer = new LuaFeatureContainer();
                 SourceText sourceText = new SourceText(new StringReader(bufferApplied.GetText()));
-                Range range = new Range(newSpan.Start.Position, newSpan.End.Position);
+                Range range = new Range(newSpan.Start.Position, newSpan.Length);
                 List<TextEditInfo> edits = featureContainer.Formatter.Format(sourceText, range, null);
                 var pastedBufferEdit = buffer.CreateEdit();
                 foreach (TextEditInfo edit in edits)
@@ -73,7 +73,7 @@ namespace Formatting.Tests
             LuaFeatureContainer featureContainer = new LuaFeatureContainer();
             Range range = new Range(0, original.Length);
 
-            NewOptions newOptions = new NewOptions(new List<OptionalRuleGroup>(), tabSize, indentSize, usingTabs);
+            FormattingOptions newOptions = new FormattingOptions(new List<OptionalRuleGroup>(), tabSize, indentSize, usingTabs);
 
             List<TextEditInfo> textEdits = featureContainer.Formatter.Format(new SourceText(new StringReader(original)), range, newOptions);
 

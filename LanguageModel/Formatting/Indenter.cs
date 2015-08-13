@@ -6,24 +6,25 @@
 
 using System.Collections.Generic;
 using LanguageService.Formatting.Options;
+using LanguageService.Shared;
 using Validation;
 
 namespace LanguageService.Formatting
 {
     internal class Indenter
     {
-        internal static IEnumerable<TextEditInfo> GetIndentations(List<ParsedToken> parsedTokens, GlobalOptions globalOptions)
+        internal static IEnumerable<TextEditInfo> GetIndentations(List<ParsedToken> parsedTokens, FormattingOptions formattingOptions)
         {
             Requires.NotNull(parsedTokens, nameof(parsedTokens));
 
             foreach (ParsedToken parsedToken in parsedTokens)
             {
                 string indentationString =
-                                  Indenter.GetIndentationStringFromBlockLevel(parsedToken, globalOptions);
+                                  Indenter.GetIndentationStringFromBlockLevel(parsedToken, formattingOptions);
 
                 foreach (IndentInfo indentInfo in Indenter.GetIndentInformation(parsedToken))
                 {
-                    yield return new TextEditInfo(indentInfo.Start, indentInfo.Length,
+                    yield return new TextEditInfo(new Range(indentInfo.Start, indentInfo.Length),
                         indentInfo.IsBeforeText ? indentationString : string.Empty);
                 }
             }
@@ -45,31 +46,31 @@ namespace LanguageService.Formatting
             internal bool IsBeforeText { get; }
         }
 
-        private static string GetIndentationStringFromBlockLevel(ParsedToken parsedToken, GlobalOptions globalOptions)
+        internal static int GetIndentationFromPosition(SyntaxTree syntaxTree, FormattingOptions formattingOptions, int position)
         {
-            int totalSpaces = GetTotalNumberOfSpaces(parsedToken.BlockLevel, globalOptions);
+            int level = GetIndentLevelFromPosition(syntaxTree, position);
+            return GetTotalNumberOfSpaces(level, formattingOptions);
+        }
+
+        private static string GetIndentationStringFromBlockLevel(ParsedToken parsedToken, FormattingOptions formattingOptions)
+        {
+            int totalSpaces = GetTotalNumberOfSpaces(parsedToken.BlockLevel, formattingOptions);
 
             int spacesNeeded = totalSpaces;
             int tabsNeeded = 0;
 
-            if (globalOptions.UsingTabs && globalOptions.TabSize > 0)
+            if (formattingOptions.UsingTabs && formattingOptions.TabSize > 0)
             {
-                spacesNeeded = totalSpaces % (int)globalOptions.TabSize;
-                tabsNeeded = (totalSpaces - spacesNeeded) / (int)globalOptions.TabSize;
+                spacesNeeded = totalSpaces % (int)formattingOptions.TabSize;
+                tabsNeeded = (totalSpaces - spacesNeeded) / (int)formattingOptions.TabSize;
             }
 
             return new string('\t', tabsNeeded) + new string(' ', spacesNeeded);
         }
 
-        private static int GetTotalNumberOfSpaces(int level, GlobalOptions globalOptions)
+        private static int GetTotalNumberOfSpaces(int level, FormattingOptions globalOptions)
         {
             return level * (int)globalOptions.IndentSize;
-        }
-
-        internal static int GetIndentationFromPosition(SyntaxTree syntaxTree, GlobalOptions globalOptions, int position)
-        {
-            int level = GetIndentLevelFromPosition(syntaxTree, position);
-            return GetTotalNumberOfSpaces(level, globalOptions);
         }
 
         private static int GetIndentLevelFromPosition(SyntaxTree syntaxTree, int position)

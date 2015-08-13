@@ -4,7 +4,9 @@
 *                                                        *
 *********************************************************/
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using LanguageService.Formatting.Options;
 using LanguageService.Formatting.Ruling;
 using LanguageService.Shared;
@@ -19,12 +21,12 @@ namespace LanguageService.Formatting
             Requires.NotNull(parseTreeProvider, nameof(parseTreeProvider));
 
             this.parseTreeProvider = parseTreeProvider;
-            this.globalOptions = new GlobalOptions();
+            this.formattingOptions = new FormattingOptions();
             this.ruleMap = RuleMap.Create();
         }
 
         private ParseTreeCache parseTreeProvider;
-        private GlobalOptions globalOptions;
+        private FormattingOptions formattingOptions;
         private RuleMap ruleMap;
 
         /// <summary>
@@ -35,7 +37,7 @@ namespace LanguageService.Formatting
         /// </summary>
         /// <param name="sourceText">The SourceText that represents the text to be formatted</param>
         /// <param name="range">The range of indicies to be formatted</param>
-        /// <param name="newOptions">The options to format with, null leaves the options as they were</param>
+        /// <param name="formattingOptions">The options to format with, null leaves the options as they were</param>
         /// <returns>
         /// A list of TextEditInfo objects are returned for the spacing between tokens (starting from the
         /// first token in the document to the last token. After the spacing text edits, the indentation
@@ -43,13 +45,13 @@ namespace LanguageService.Formatting
         /// indentation text edits from the spacing text edits in the future but for now they are in
         /// the same list.
         /// </returns>
-        public List<TextEditInfo> Format(SourceText sourceText, Range range, NewOptions newOptions)
+        public List<TextEditInfo> Format(SourceText sourceText, Range range, FormattingOptions formattingOptions)
         {
-            if (newOptions != null)
-            {
-                this.globalOptions = new GlobalOptions(newOptions);
-                this.ruleMap = RuleMap.Create(this.globalOptions.OptionalRuleMap);
-            }
+            Requires.NotNull(formattingOptions, nameof(formattingOptions));
+            Requires.NotNull(sourceText, nameof(sourceText));
+
+            this.formattingOptions = formattingOptions;
+            this.ruleMap = RuleMap.Create(this.formattingOptions.OptionalRuleMap);
 
             List<TextEditInfo> textEdits = new List<TextEditInfo>();
 
@@ -57,20 +59,25 @@ namespace LanguageService.Formatting
 
             List<ParsedToken> parsedTokens = new List<ParsedToken>(ParsedToken.GetParsedTokens(syntaxTree, range));
 
-            for (int i = 0; i < parsedTokens.Count - 1; ++i)
+            if (syntaxTree.ErrorList.Count == 0)
             {
-                FormattingContext formattingContext =
-                    new FormattingContext(parsedTokens[i], parsedTokens[i + 1]);
-
-                Rule rule = this.ruleMap.Get(formattingContext);
-
-                if (rule != null)
+                for (int i = 0; i < parsedTokens.Count - 1; ++i)
                 {
-                    textEdits.AddRange(rule.Apply(formattingContext));
+                    FormattingContext formattingContext =
+                        new FormattingContext(parsedTokens[i], parsedTokens[i + 1]);
+
+                    Rule rule = this.ruleMap.Get(formattingContext);
+
+                    if (rule != null)
+                    {
+                        textEdits.AddRange(rule.Apply(formattingContext));
+                    }
                 }
             }
 
-            textEdits.AddRange(Indenter.GetIndentations(parsedTokens, this.globalOptions));
+            textEdits.AddRange(Indenter.GetIndentations(parsedTokens, this.formattingOptions));
+
+            textEdits.Sort((x, y) => x.Start < y.Start ? 1 : x.Start == y.Start ? 0 : -1);
 
             return textEdits;
         }
@@ -84,7 +91,7 @@ namespace LanguageService.Formatting
         public int SmartIndent(SourceText sourceText, int position)
         {
             SyntaxTree syntaxTree = this.parseTreeProvider.Get(sourceText);
-            return Indenter.GetIndentationFromPosition(syntaxTree, this.globalOptions, position);
+            return Indenter.GetIndentationFromPosition(syntaxTree, this.formattingOptions, position);
         }
     }
 }
