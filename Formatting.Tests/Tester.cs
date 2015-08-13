@@ -15,16 +15,6 @@ namespace Formatting.Tests
         private static EditorUtils.EditorHostFactory factory = new EditorUtils.EditorHostFactory();
         private static EditorUtils.EditorHost host = factory.CreateEditorHost();
 
-        private static Stream GenerateStreamFromString(string s)
-        {
-            MemoryStream stream = new MemoryStream();
-            StreamWriter writer = new StreamWriter(stream);
-            writer.Write(s);
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
-        }
-
         internal struct PasteInfo
         {
             internal string PasteString { get; }
