@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using LanguageService.Shared;
 using Validation;
 
@@ -24,7 +25,7 @@ namespace LanguageService.Classification
         {
             foreach (Token token in Lexer.Tokenize(sourceText.TextReader))
             {
-                foreach (TagInfo tagInfo in GetTokenTagInfos(ranges, token))
+                foreach (TagInfo tagInfo in GetTokenTagInfoFromLexer(ranges, token))
                 {
                     yield return tagInfo;
                 }
@@ -33,10 +34,132 @@ namespace LanguageService.Classification
 
         public IEnumerable<TagInfo> ColorizeParserTokens(SourceText sourceText)
         {
-            return null;
-        } 
+            SyntaxTree syntaxTree = this.ParseTreeCache.Get(sourceText);
+            return GetTokenTagInfoFromParser(syntaxTree.Root, new List<string>(), new List<string>(), false);
+        }
 
-        private static IEnumerable<TagInfo> GetTokenTagInfos(List<Range> ranges, Token token)
+        private static IEnumerable<TagInfo> GetTokenTagInfoFromParser(
+            SyntaxNodeOrToken currentRoot, List<string> locals, List<string> paramrefs, bool isField)
+        {
+            if (!SyntaxTree.IsLeafNode(currentRoot))
+            {
+                SyntaxKind syntaxKindCurrentRoot =
+                        (currentRoot as Token == null) ?
+                        ((SyntaxNode)currentRoot).Kind : ((Token)currentRoot).Kind;
+
+                SyntaxNode syntaxNode = (SyntaxNode)currentRoot;
+                foreach (SyntaxNodeOrToken syntaxNodeOrToken in ((SyntaxNode)currentRoot).Children)
+                {
+                    SyntaxKind syntaxKindChild =
+                            syntaxNodeOrToken as Token == null ?
+                            ((SyntaxNode)syntaxNodeOrToken).Kind : ((Token)syntaxNodeOrToken).Kind;
+
+                    List<string> paramrefsCopy = null;
+                    if (syntaxKindCurrentRoot == SyntaxKind.BlockNode)
+                    {
+                        if (syntaxKindChild == SyntaxKind.LocalAssignmentStatementNode ||
+                            syntaxKindChild == SyntaxKind.LocalFunctionStatementNode)
+                        {
+                            locals.AddRange(GetLocalIdentifiers((LocalAssignmentStatementNode)syntaxNodeOrToken));
+                        }
+                        else if (syntaxKindChild == SyntaxKind.FuncBodyNode)
+                        {
+                            paramrefsCopy = new List<string>(paramrefs);
+                            paramrefsCopy.AddRange(GetParamrefIdentifiers((FuncBodyNode)syntaxNodeOrToken));
+                        }
+                    }
+
+                    if (syntaxKindChild == SyntaxKind.FieldList)
+                    {
+                        // pass for now
+                    }
+                    else if (syntaxKindChild != SyntaxKind.DotVar)
+                    {
+                        // pass for now
+                    }
+                    else
+                    {
+                        foreach (TagInfo tagInfo in GetTokenTagInfoFromParser(syntaxNodeOrToken,
+                            locals,
+                            paramrefsCopy == null ? paramrefs : paramrefsCopy,
+                            isField))
+                        {
+                            yield return tagInfo;
+                        }
+                    }
+
+                }
+            }
+            else
+            {
+                Token token = currentRoot as Token;
+                if (token != null)
+                {
+                    Classification classification;
+                    if (paramrefs.Contains(token.Text))
+                    {
+                        classification = Classification.ParameterReference;
+                    }
+                    else if (locals.Contains(token.Text))
+                    {
+                        classification = Classification.Local;
+                    }
+                    else
+                    {
+                        classification = Classification.Global;
+                    }
+
+                    yield return new TagInfo(token.Start, token.Length, classification);
+                }
+            }
+        }
+
+        private static List<string> GetParamrefIdentifiers(FuncBodyNode funcBody)
+        {
+            ParList paramList = funcBody.ParameterList;
+
+            List<string> names = new List<string>();
+
+            if (paramList.Children.Count > 0 && paramList.Children[0] as NameListPar != null)
+            {
+                NameListPar nameListPar = (NameListPar)paramList.Children[0];
+                SeparatedList nameList = nameListPar.NamesList;
+
+                names.AddRange(GetNamesFromNameList(nameList));
+            }
+
+            return names;
+        }
+
+        private static List<string> GetLocalIdentifiers(SyntaxNodeOrToken localAssignmentOrFunction)
+        {
+            List<string> names = new List<string>();
+
+            if (localAssignmentOrFunction as LocalFunctionStatementNode != null)
+            {
+                names.Add(((LocalFunctionStatementNode)localAssignmentOrFunction).Name.Text);
+                return names;
+            }
+
+            LocalAssignmentStatementNode localAssignment = (LocalAssignmentStatementNode)localAssignmentOrFunction;
+
+            names.AddRange(GetNamesFromNameList(localAssignment.NameList));
+
+            return names;
+        }
+
+        private static IEnumerable<string> GetNamesFromNameList(SeparatedList nameList)
+        {
+            foreach (SeparatedListElement listElement in nameList.SyntaxList)
+            {
+                if (listElement.Element as Token != null)
+                {
+                    yield return ((Token)listElement.Element).Text;
+                }
+            }
+        }
+
+        private static IEnumerable<TagInfo> GetTokenTagInfoFromLexer(List<Range> ranges, Token token)
         {
             foreach (Range range in ranges)
             {

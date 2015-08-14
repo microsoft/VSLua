@@ -18,9 +18,27 @@ namespace LanguageService.Classification
         Keyword,
 
         /// <summary>
-        /// Any name that is not a keyword
+        /// Any name that is not a keyword and defined at the global scope as
+        /// defined by the Lua language manual
         /// </summary>
-        Identifier,
+        Global,
+
+        /// <summary>
+        /// Any name that is not a keyword and defined at the local scope as
+        /// defined by the Lua language manual
+        /// </summary>
+        Local,
+
+        /// <summary>
+        /// Any name that is the field of a table
+        /// </summary>
+        Field,
+
+        /// <summary>
+        /// Any name that is defined as a parameter for a function and all its references
+        /// within the function
+        /// </summary>
+        ParameterReference,
 
         /// <summary>
         /// Dots, Semi-Colons, Colons, Commas

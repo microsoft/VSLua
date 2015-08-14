@@ -60,7 +60,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 
         private IEnumerable<ITagSpan<ClassificationTag>> GetTagsFromParser(NormalizedSnapshotSpanCollection spans)
         {
-            // spans should be only one span... the entire visible buffer I suspect - I'll find out later. TODO
+            // spans should contain one span... the entire visible buffer I suspect - I'll find out later. TODO
             if (spans.Count <= 0)
             {
                 yield break;
