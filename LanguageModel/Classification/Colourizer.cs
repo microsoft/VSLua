@@ -55,25 +55,23 @@ namespace LanguageService.Classification
                             ((SyntaxNode)syntaxNodeOrToken).Kind : ((Token)syntaxNodeOrToken).Kind;
 
                     List<string> paramrefsCopy = null;
-                    if (syntaxKindCurrentRoot == SyntaxKind.BlockNode)
+
+                    if (syntaxKindChild == SyntaxKind.LocalAssignmentStatementNode ||
+                        syntaxKindChild == SyntaxKind.LocalFunctionStatementNode)
                     {
-                        if (syntaxKindChild == SyntaxKind.LocalAssignmentStatementNode ||
-                            syntaxKindChild == SyntaxKind.LocalFunctionStatementNode)
-                        {
-                            locals.AddRange(GetLocalIdentifiers((LocalAssignmentStatementNode)syntaxNodeOrToken));
-                        }
-                        else if (syntaxKindChild == SyntaxKind.FuncBodyNode)
-                        {
-                            paramrefsCopy = new List<string>(paramrefs);
-                            paramrefsCopy.AddRange(GetParamrefIdentifiers((FuncBodyNode)syntaxNodeOrToken));
-                        }
+                        locals.AddRange(GetLocalIdentifiers((LocalAssignmentStatementNode)syntaxNodeOrToken));
+                    }
+                    else if (syntaxKindChild == SyntaxKind.FuncBodyNode)
+                    {
+                        paramrefsCopy = new List<string>(paramrefs);
+                        paramrefsCopy.AddRange(GetParamrefIdentifiers((FuncBodyNode)syntaxNodeOrToken));
                     }
 
                     if (syntaxKindChild == SyntaxKind.FieldList)
                     {
                         // pass for now
                     }
-                    else if (syntaxKindChild != SyntaxKind.DotVar)
+                    else if (syntaxKindChild == SyntaxKind.DotVar)
                     {
                         // pass for now
                     }
@@ -93,7 +91,7 @@ namespace LanguageService.Classification
             else
             {
                 Token token = currentRoot as Token;
-                if (token != null)
+                if (token != null && token.Kind == SyntaxKind.Identifier)
                 {
                     Classification classification;
                     if (paramrefs.Contains(token.Text))
@@ -120,10 +118,9 @@ namespace LanguageService.Classification
 
             List<string> names = new List<string>();
 
-            if (paramList.Children.Count > 0 && paramList.Children[0] as NameListPar != null)
+            if (paramList.Children.Count > 0 && paramList.Children[0] as SeparatedList != null)
             {
-                NameListPar nameListPar = (NameListPar)paramList.Children[0];
-                SeparatedList nameList = nameListPar.NamesList;
+                var nameList = (SeparatedList)paramList.Children[0];
 
                 names.AddRange(GetNamesFromNameList(nameList));
             }

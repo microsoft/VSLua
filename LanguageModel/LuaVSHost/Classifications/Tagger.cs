@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
 using LanguageService;
@@ -31,6 +32,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
         private CancellationTokenSource cancellationTokenSource;
         private bool doParserRelatedColorization;
 
+        private Dictionary<SnapshotSpan, ClassificationTag> parserTags;
+
         internal Tagger(ITextBuffer buffer, IStandardClassificationService standardClassifications, ISingletons singletons)
         {
             Requires.NotNull(standardClassifications, nameof(standardClassifications));
@@ -48,40 +51,12 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 
         public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans)
         {
-            if (!this.doParserRelatedColorization)
-            {
-                return this.GetTagsFromLexer(spans);
-            }
-            else
-            {
-                return this.GetTagsFromParser(spans);
-            }
+            bool useParser = this.doParserRelatedColorization;
+            this.doParserRelatedColorization = false;
+            return this.GetTags(spans, useParser);
         }
 
-        private IEnumerable<ITagSpan<ClassificationTag>> GetTagsFromParser(NormalizedSnapshotSpanCollection spans)
-        {
-            // spans should contain one span... the entire visible buffer I suspect - I'll find out later. TODO
-            if (spans.Count <= 0)
-            {
-                yield break;
-            }
-
-            var span = spans[0];
-            var snapshot = span.Snapshot;
-
-            SourceText sourceText = this.singletons.SourceTextCache.Get(snapshot);
-
-            foreach (TagInfo tagInfo in this.singletons.FeatureContainer.Colourizer.ColorizeParserTokens(sourceText))
-            {
-                SnapshotSpan tokenSpan = new SnapshotSpan(snapshot, tagInfo.Start, tagInfo.Length);
-                IClassificationType classification = this.standardClassifications.Other;
-                this.vsClassifications.TryGetValue(tagInfo.Classification, out classification);
-
-                yield return new TagSpan<ClassificationTag>(tokenSpan, new ClassificationTag(classification));
-            }
-        }
-
-        private IEnumerable<ITagSpan<ClassificationTag>> GetTagsFromLexer(NormalizedSnapshotSpanCollection spans)
+        private IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans, bool useParser)
         {
             if (spans.Count < 0)
             {
@@ -98,6 +73,18 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
             ITextSnapshot snapshot = this.buffer.CurrentSnapshot;
             SourceText sourceText = this.singletons.SourceTextCache.Get(snapshot);
 
+            if (useParser)
+            {
+                this.parserTags = new Dictionary<SnapshotSpan, ClassificationTag>();
+                foreach (TagInfo tagInfo in this.singletons.FeatureContainer.Colourizer.ColorizeParserTokens(sourceText))
+                {
+                    IClassificationType classification = this.standardClassifications.Other;
+                    this.vsClassifications.TryGetValue(tagInfo.Classification, out classification);
+                    SnapshotSpan snapshotSpan = new SnapshotSpan(spans[0].Snapshot, tagInfo.Start, tagInfo.Length);
+                    this.parserTags.Add(snapshotSpan, new ClassificationTag(classification));
+                }
+            }
+
             foreach (TagInfo tagInfo in this.singletons.FeatureContainer.Colourizer.ColorizeLexerTokens(sourceText, ranges))
             {
                 SnapshotSpan tokenSpan = new SnapshotSpan(snapshot, tagInfo.Start, tagInfo.Length);
@@ -105,6 +92,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
                 this.vsClassifications.TryGetValue(tagInfo.Classification, out classification);
 
                 yield return new TagSpan<ClassificationTag>(tokenSpan, new ClassificationTag(classification));
+            }
+
+            if (this.parserTags != null)
+            {
+                foreach (SnapshotSpan snapshotSpan in this.parserTags.Keys)
+                {
+                    yield return new TagSpan<ClassificationTag>(snapshotSpan, this.parserTags[snapshotSpan]);
+                }
             }
         }
 
@@ -140,10 +135,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
                     return;
                 }
 
+                this.doParserRelatedColorization = true;
                 this.TagsChanged?.Invoke(this, new SnapshotSpanEventArgs(new SnapshotSpan(snapshot, 0, snapshot.Length)));
             }, token);
-
-            this.doParserRelatedColorization = true;
         }
 
         private Dictionary<Classification, IClassificationType> InitializeDictionary(IStandardClassificationService standardClassifications)
@@ -158,7 +152,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
                 { Classification.Number, standardClassifications.NumberLiteral },
                 { Classification.Punctuation, standardClassifications.Other },
                 { Classification.StringLiteral, standardClassifications.StringLiteral },
-                { Classification.Bracket, standardClassifications.SymbolDefinition }
+                { Classification.Bracket, standardClassifications.SymbolDefinition },
+                { Classification.Global, standardClassifications.Identifier },
+                { Classification.Local, standardClassifications.PreprocessorKeyword },
+                { Classification.ParameterReference, standardClassifications.SymbolReference }
             };
         }
     }
