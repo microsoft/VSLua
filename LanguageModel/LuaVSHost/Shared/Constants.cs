@@ -26,6 +26,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 
             internal const string ParamName = "LuaParam";
             internal const string ParamDisplayName = "Lua Parameter Reference";
+
+            internal const string FieldName = "LuaField";
+            internal const string FieldDisplayName = "Lua Field";
         }
 
         internal sealed class Formatting

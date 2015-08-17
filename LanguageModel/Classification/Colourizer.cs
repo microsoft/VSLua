@@ -35,14 +35,14 @@ namespace LanguageService.Classification
         public IEnumerable<TagInfo> ColorizeParserTokens(SourceText sourceText)
         {
             SyntaxTree syntaxTree = this.ParseTreeCache.Get(sourceText);
-            return GetTokenTagInfoFromParser(syntaxTree.Root, new HashSet<string>(), new HashSet<string>(), false);
+            return GetTokenTagInfoFromParser(syntaxTree.Root, new HashSet<string>(), new HashSet<string>(), new Token[1]);
         }
 
         private static IEnumerable<TagInfo> GetTokenTagInfoFromParser(
             SyntaxNodeOrToken currentRoot,
             HashSet<string> locals,
             HashSet<string> paramrefs,
-            bool isField)
+            Token[] previousToken)
         {
             if (!SyntaxTree.IsLeafNode(currentRoot))
             {
@@ -91,29 +91,32 @@ namespace LanguageService.Classification
                     {
                         // pass for now
                     }
-                    else if (syntaxKindChild == SyntaxKind.DotVar)
+
+                    foreach (TagInfo tagInfo in GetTokenTagInfoFromParser(syntaxNodeOrToken,
+                        locals,
+                        paramrefs,
+                        previousToken))
                     {
-                        // pass for now
-                    }
-                    else
-                    {
-                        foreach (TagInfo tagInfo in GetTokenTagInfoFromParser(syntaxNodeOrToken,
-                            locals,
-                            paramrefs,
-                            isField))
-                        {
-                            yield return tagInfo;
-                        }
+                        yield return tagInfo;
                     }
                 }
             }
             else
             {
                 Token token = currentRoot as Token;
+
                 if (token != null && token.Kind == SyntaxKind.Identifier)
                 {
                     Classification classification;
-                    if (paramrefs.Contains(token.Text))
+
+                    if (previousToken[0] != null && (previousToken[0].Kind == SyntaxKind.Dot || previousToken[0].Kind == SyntaxKind.Colon))
+                    {
+                        // Everything after a dot or colon counts as a field for now...
+                        //   The reason this is here instead of the lexer is for consistency,
+                        //   so all "Field" classifications update at the same time, this is just convenient.
+                        classification = Classification.Field;
+                    }
+                    else if (paramrefs.Contains(token.Text))
                     {
                         classification = Classification.ParameterReference;
                     }
@@ -128,6 +131,10 @@ namespace LanguageService.Classification
 
                     yield return new TagInfo(token.Start, token.Length, classification);
                 }
+
+                // I use an array so I can keep track of the previous token and avoid having
+                //   a pointer to pointer reference, which is kind of a pain.
+                previousToken[0] = token == null ? null : token;
             }
         }
 
