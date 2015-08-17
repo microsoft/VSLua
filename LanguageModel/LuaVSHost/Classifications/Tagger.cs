@@ -55,6 +55,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
                 vsClassifications;
 
             this.buffer.Changed += this.OnBufferChanged;
+            this.UpdateParserRelatedClassifications(this.buffer.CurrentSnapshot, new CancellationToken());
         }
 
         public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans)
@@ -145,7 +146,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
         {
             Task.Run(async () =>
             {
-                await Task.Delay(Constants.UIUpdateDelay);
+                await Task.Delay(Constants.Colourization.ParserUpdateDelay);
 
                 if (token.IsCancellationRequested)
                 {

@@ -18,6 +18,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 
         internal sealed class Colourization
         {
+            internal const int ParserUpdateDelay = 440;
+
             internal const string GlobalName = "LuaGlobal";
             internal const string GlobalDisplayName = "Lua Global Identifier";
 
