@@ -53,6 +53,8 @@
     <CodeAnalysisRuleSet>LuaLanguageServicePackage.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Classifications\ClassificationFormats.cs" />
+    <Compile Include="Classifications\LuaClassificationTypeDefinition.cs" />
     <Compile Include="Classifications\Tagger.cs" />
     <Compile Include="Classifications\TaggerProvider.cs" />
     <Compile Include="Errors\ErrorListItem.cs" />

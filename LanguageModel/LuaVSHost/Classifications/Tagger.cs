@@ -27,25 +27,32 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
         public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
         private IStandardClassificationService standardClassifications;
+        private IClassificationTypeRegistryService classificationTypeRegistry;
         private ISingletons singletons;
-        private Dictionary<Classification, IClassificationType> vsClassifications;
+        private static Dictionary<Classification, IClassificationType> vsClassifications;
         private ITextBuffer buffer;
         private CancellationTokenSource cancellationTokenSource;
         private bool doParserRelatedColorization;
 
         private Dictionary<SnapshotSpan, ClassificationTag> parserTags;
 
-        internal Tagger(ITextBuffer buffer, IStandardClassificationService standardClassifications, ISingletons singletons)
+        internal Tagger(ITextBuffer buffer, IStandardClassificationService standardClassifications, IClassificationTypeRegistryService classificationTypeRegistry, ISingletons singletons)
         {
             Requires.NotNull(standardClassifications, nameof(standardClassifications));
+            Requires.NotNull(classificationTypeRegistry, nameof(classificationTypeRegistry));
             Requires.NotNull(singletons, nameof(singletons));
 
             this.buffer = buffer;
             this.singletons = singletons;
 
             this.standardClassifications = standardClassifications;
+            this.classificationTypeRegistry = classificationTypeRegistry;
             this.singletons = singletons;
-            this.vsClassifications = this.InitializeDictionary(standardClassifications);
+
+            vsClassifications =
+                vsClassifications == null ?
+                InitializeDictionary(this.standardClassifications, this.classificationTypeRegistry) :
+                vsClassifications;
 
             this.buffer.Changed += this.OnBufferChanged;
         }
@@ -80,7 +87,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
                 foreach (TagInfo tagInfo in this.singletons.FeatureContainer.Colourizer.ColorizeParserTokens(sourceText))
                 {
                     IClassificationType classification = this.standardClassifications.Other;
-                    this.vsClassifications.TryGetValue(tagInfo.Classification, out classification);
+                    vsClassifications.TryGetValue(tagInfo.Classification, out classification);
                     SnapshotSpan snapshotSpan = new SnapshotSpan(spans[0].Snapshot, tagInfo.Start, tagInfo.Length);
                     this.parserTags.Add(snapshotSpan, new ClassificationTag(classification));
                 }
@@ -90,7 +97,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
             {
                 SnapshotSpan tokenSpan = new SnapshotSpan(snapshot, tagInfo.Start, tagInfo.Length);
                 IClassificationType classification = this.standardClassifications.Other;
-                this.vsClassifications.TryGetValue(tagInfo.Classification, out classification);
+                vsClassifications.TryGetValue(tagInfo.Classification, out classification);
 
                 yield return new TagSpan<ClassificationTag>(tokenSpan, new ClassificationTag(classification));
             }
@@ -150,22 +157,21 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
             }, token);
         }
 
-        private Dictionary<Classification, IClassificationType> InitializeDictionary(IStandardClassificationService standardClassifications)
+        private static Dictionary<Classification, IClassificationType> InitializeDictionary(IStandardClassificationService standardClassifications, IClassificationTypeRegistryService classificationTypeRegistry)
         {
-            var something = standardClassifications.Comment;
             return new Dictionary<Classification, IClassificationType>()
             {
                 { Classification.Comment, standardClassifications.Comment },
                 { Classification.Keyword, standardClassifications.Keyword },
-                { Classification.KeyValue, standardClassifications.NumberLiteral },
+                { Classification.KeyValue, standardClassifications.Literal },
                 { Classification.Operator, standardClassifications.Operator },
                 { Classification.Number, standardClassifications.NumberLiteral },
-                { Classification.Punctuation, standardClassifications.Other },
+                { Classification.Punctuation, classificationTypeRegistry.GetClassificationType("punctuation") },
                 { Classification.StringLiteral, standardClassifications.StringLiteral },
-                { Classification.Bracket, standardClassifications.SymbolDefinition },
-                { Classification.Global, standardClassifications.Identifier },
-                { Classification.Local, standardClassifications.PreprocessorKeyword },
-                { Classification.ParameterReference, standardClassifications.SymbolReference }
+                { Classification.Bracket, classificationTypeRegistry.GetClassificationType("punctuation") },
+                { Classification.Global, classificationTypeRegistry.GetClassificationType(Constants.Colourization.GlobalName) },
+                { Classification.Local, classificationTypeRegistry.GetClassificationType(Constants.Colourization.LocalName) },
+                { Classification.ParameterReference, classificationTypeRegistry.GetClassificationType(Constants.Colourization.ParamName) }
             };
         }
     }

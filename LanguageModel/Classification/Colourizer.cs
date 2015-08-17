@@ -301,6 +301,7 @@ namespace LanguageService.Classification
                 { SyntaxKind.UnterminatedString, Classification.StringLiteral },
                 { SyntaxKind.UntilKeyword, Classification.Keyword },
                 { SyntaxKind.WhileKeyword, Classification.Keyword },
+                { SyntaxKind.Unknown, Classification.Global }
             }
 
             .ToImmutableDictionary();

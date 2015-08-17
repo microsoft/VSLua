@@ -1,4 +1,6 @@
-﻿namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
+﻿using System.Windows.Media;
+
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
     internal sealed class Constants
     {
@@ -12,6 +14,18 @@
         {
             internal const string Name = "Lua";
             internal const string FileExtension = ".lua";
+        }
+
+        internal sealed class Colourization
+        {
+            internal const string GlobalName = "LuaGlobal";
+            internal const string GlobalDisplayName = "Lua Global Identifier";
+
+            internal const string LocalName = "LuaLocal";
+            internal const string LocalDisplayName = "Lua Local Identifier";
+
+            internal const string ParamName = "LuaParam";
+            internal const string ParamDisplayName = "Lua Parameter Reference";
         }
 
         internal sealed class Formatting

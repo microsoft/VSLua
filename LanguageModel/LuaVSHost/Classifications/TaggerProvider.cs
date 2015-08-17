@@ -11,6 +11,7 @@ using LanguageService.Classification;
 using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 
@@ -26,6 +27,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
         private IStandardClassificationService standardClassifications;
 
         [Import]
+        private IClassificationTypeRegistryService classificationTypeRegistry;
+
+        [Import]
         private ISingletons singletons;
         #pragma warning restore 0169, 0649
 
@@ -35,7 +39,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 
             Func<Tagger> taggerCreator = () =>
             {
-                Tagger tagger = new Tagger(buffer, this.standardClassifications, this.singletons);
+                Tagger tagger = new Tagger(buffer, this.standardClassifications, this.classificationTypeRegistry, this.singletons);
 
                 return tagger;
             };
