@@ -39,7 +39,10 @@ namespace LanguageService.Classification
         }
 
         private static IEnumerable<TagInfo> GetTokenTagInfoFromParser(
-            SyntaxNodeOrToken currentRoot, List<string> locals, List<string> paramrefs, bool isField)
+            SyntaxNodeOrToken currentRoot,
+            List<string> locals,
+            List<string> paramrefs,
+            bool isField)
         {
             if (!SyntaxTree.IsLeafNode(currentRoot))
             {
@@ -59,7 +62,8 @@ namespace LanguageService.Classification
                     if (syntaxKindChild == SyntaxKind.LocalAssignmentStatementNode ||
                         syntaxKindChild == SyntaxKind.LocalFunctionStatementNode)
                     {
-                        locals.AddRange(GetLocalIdentifiers((LocalAssignmentStatementNode)syntaxNodeOrToken));
+                        locals = new List<string>(locals);
+                        locals.AddRange(GetLocalIdentifiers(syntaxNodeOrToken));
                     }
                     else if (syntaxKindChild == SyntaxKind.FuncBodyNode)
                     {
