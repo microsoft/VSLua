@@ -57,8 +57,6 @@ namespace LanguageService.Classification
                             syntaxNodeOrToken as Token == null ?
                             ((SyntaxNode)syntaxNodeOrToken).Kind : ((Token)syntaxNodeOrToken).Kind;
 
-                    HashSet<string> paramrefsCopy = null;
-
                     if (syntaxKindChild == SyntaxKind.LocalAssignmentStatementNode ||
                         syntaxKindChild == SyntaxKind.LocalFunctionStatementNode)
                     {
@@ -79,13 +77,12 @@ namespace LanguageService.Classification
                     }
                     else if (syntaxKindChild == SyntaxKind.FuncBodyNode)
                     {
-                        paramrefsCopy = new HashSet<string>(paramrefs);
-
+                        paramrefs = new HashSet<string>(paramrefs);
                         foreach (string identifier in GetParamrefIdentifiers((FuncBodyNode)syntaxNodeOrToken))
                         {
-                            if (!paramrefsCopy.Contains(identifier))
+                            if (!paramrefs.Contains(identifier))
                             {
-                                paramrefsCopy.Add(identifier);
+                                paramrefs.Add(identifier);
                             }
                         }
                     }
@@ -102,7 +99,7 @@ namespace LanguageService.Classification
                     {
                         foreach (TagInfo tagInfo in GetTokenTagInfoFromParser(syntaxNodeOrToken,
                             locals,
-                            paramrefsCopy == null ? paramrefs : paramrefsCopy,
+                            paramrefs,
                             isField))
                         {
                             yield return tagInfo;
