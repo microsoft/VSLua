@@ -35,13 +35,13 @@ namespace LanguageService.Classification
         public IEnumerable<TagInfo> ColorizeParserTokens(SourceText sourceText)
         {
             SyntaxTree syntaxTree = this.ParseTreeCache.Get(sourceText);
-            return GetTokenTagInfoFromParser(syntaxTree.Root, new List<string>(), new List<string>(), false);
+            return GetTokenTagInfoFromParser(syntaxTree.Root, new HashSet<string>(), new HashSet<string>(), false);
         }
 
         private static IEnumerable<TagInfo> GetTokenTagInfoFromParser(
             SyntaxNodeOrToken currentRoot,
-            List<string> locals,
-            List<string> paramrefs,
+            HashSet<string> locals,
+            HashSet<string> paramrefs,
             bool isField)
         {
             if (!SyntaxTree.IsLeafNode(currentRoot))
@@ -57,18 +57,37 @@ namespace LanguageService.Classification
                             syntaxNodeOrToken as Token == null ?
                             ((SyntaxNode)syntaxNodeOrToken).Kind : ((Token)syntaxNodeOrToken).Kind;
 
-                    List<string> paramrefsCopy = null;
+                    HashSet<string> paramrefsCopy = null;
 
                     if (syntaxKindChild == SyntaxKind.LocalAssignmentStatementNode ||
                         syntaxKindChild == SyntaxKind.LocalFunctionStatementNode)
                     {
-                        locals = new List<string>(locals);
-                        locals.AddRange(GetLocalIdentifiers(syntaxNodeOrToken));
+                        locals = new HashSet<string>(locals);
+                        foreach (string identifier in GetLocalIdentifiers(syntaxNodeOrToken))
+                        {
+                            if (!locals.Contains(identifier))
+                            {
+                                locals.Add(identifier);
+                                if (paramrefs.Contains(identifier))
+                                {
+                                    // if a local is defined in a block, the parameter references
+                                    //   are not used, so we need to remove its precedence.
+                                    paramrefs.Remove(identifier);
+                                }
+                            }
+                        }
                     }
                     else if (syntaxKindChild == SyntaxKind.FuncBodyNode)
                     {
-                        paramrefsCopy = new List<string>(paramrefs);
-                        paramrefsCopy.AddRange(GetParamrefIdentifiers((FuncBodyNode)syntaxNodeOrToken));
+                        paramrefsCopy = new HashSet<string>(paramrefs);
+
+                        foreach (string identifier in GetParamrefIdentifiers((FuncBodyNode)syntaxNodeOrToken))
+                        {
+                            if (!paramrefsCopy.Contains(identifier))
+                            {
+                                paramrefsCopy.Add(identifier);
+                            }
+                        }
                     }
 
                     if (syntaxKindChild == SyntaxKind.FieldList)
@@ -89,7 +108,6 @@ namespace LanguageService.Classification
                             yield return tagInfo;
                         }
                     }
-
                 }
             }
             else

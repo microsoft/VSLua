@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LanguageService;
@@ -115,6 +116,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 
         private void OnBufferChanged(object sender, TextContentChangedEventArgs e)
         {
+            this.UpdateLexerRelatedClassifications(e);
+
             if (this.cancellationTokenSource != null)
             {
                 this.cancellationTokenSource.Cancel();
@@ -122,6 +125,13 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 
             this.cancellationTokenSource = new CancellationTokenSource();
             this.UpdateParserRelatedClassifications(e.After, this.cancellationTokenSource.Token);
+        }
+
+        private void UpdateLexerRelatedClassifications(TextContentChangedEventArgs e)
+        {
+            int position = e.Changes.Min(c => c.OldPosition);
+            this.TagsChanged?.Invoke(this,
+                new SnapshotSpanEventArgs(EditorUtilities.CreateSnapshotSpan(e.Before, position, e.Before.Length - position)));
         }
 
         private void UpdateParserRelatedClassifications(ITextSnapshot snapshot, CancellationToken token)

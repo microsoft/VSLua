@@ -30,7 +30,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.SmartIndentatio
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            // don't know if I need this...
+            // throw new NotImplementedException();
         }
 
         public int? GetDesiredIndentation(ITextSnapshotLine line)
