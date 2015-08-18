@@ -13,7 +13,7 @@ namespace LanguageService
             this.Text = trivia;
         }
 
-        public string ToString()
+        public override string ToString()
         {
             return string.Format("{0},\t{1}", Enum.GetName(typeof(SyntaxKind), Type), ConvertStringToSymbols(Text));
         }
