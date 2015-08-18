@@ -420,6 +420,12 @@ namespace LanguageService
             node.StartPosition = this.textPosition;
             node.ReturnKeyword = GetExpectedToken(SyntaxKind.ReturnKeyword);
             node.ExpList = ParseExpList().ToBuilder();
+
+            if (ParseExpected(SyntaxKind.Semicolon))
+            {
+                node.SemiColon = currentToken;
+            }
+
             node.Length = this.textPosition - node.StartPosition;
             return node.ToImmutable();
         }
@@ -451,10 +457,10 @@ namespace LanguageService
                                 node.PrefixExp = ParseNameVar().ToBuilder();
                                 break;
                             case SyntaxKind.OpenBracket:
-                                node.PrefixExp = ParseSquareBracketVar().ToBuilder();
+                                node.PrefixExp = ParseSquareBracketVar(ParseNameVar()).ToBuilder();
                                 break;
                             case SyntaxKind.Dot:
-                                node.PrefixExp = ParseDotVar().ToBuilder();
+                                node.PrefixExp = ParseDotVar(ParseNameVar()).ToBuilder();
                                 break;
                             default:
                                 throw new NotImplementedException();
@@ -572,7 +578,7 @@ namespace LanguageService
                             case SyntaxKind.Colon:
                             case SyntaxKind.OpenCurlyBrace:
                             case SyntaxKind.String:
-                                exp = ParseFunctionCallExp(prefixExp);
+                                exp = ParseFunctionCallPrefixp(prefixExp);
                                 break;
                             default:
                                 exp = prefixExp;
@@ -598,10 +604,10 @@ namespace LanguageService
             }
         }
 
-        private FunctionCallExp ParseFunctionCallExp(PrefixExp prefixExp = null)
+        private FunctionCallPrefixexp ParseFunctionCallPrefixp(PrefixExp prefixExp = null)
         {
 
-            var node = FunctionCallExp.CreateBuilder();
+            var node = FunctionCallPrefixexp.CreateBuilder();
             node.Kind = SyntaxKind.FunctionCallExp;
             node.StartPosition = this.textPosition;
 
@@ -728,7 +734,7 @@ namespace LanguageService
 
         private PrefixExp ParsePrefixExp(PrefixExp prefixExp = null)
         {
-            if (prefixExp != null)
+            if (prefixExp == null)
             {
                 switch (Peek().Kind)
                 {
@@ -757,10 +763,10 @@ namespace LanguageService
                     case SyntaxKind.OpenParen:
                     case SyntaxKind.OpenCurlyBrace:
                     case SyntaxKind.Colon:
-                        prefixExp = ParseFunctionCallExp(prefixExp);
+                        prefixExp = ParseFunctionCallPrefixp(prefixExp);
                         break;
                     default:
-                        break;
+                        throw new InvalidOperationException();
                 }
             }
 
@@ -848,19 +854,21 @@ namespace LanguageService
                     switch (Peek(2).Kind)
                     {
                         case SyntaxKind.OpenBracket:
-                            return ParseSquareBracketVar();
+                            return ParseSquareBracketVar(ParseNameVar());
                         case SyntaxKind.Dot:
-                            return ParseDotVar();
+                            return ParseDotVar(ParseNameVar());
                         case SyntaxKind.Colon:
                         case SyntaxKind.OpenCurlyBrace:
                         case SyntaxKind.OpenParen:
                         case SyntaxKind.String:
-                            return ParsePotentialVarWithPrefixExp();
+                            var functionCallPrefixExp = ParseFunctionCallPrefixp(ParseNameVar());
+                            return ParsePotentialVarWithPrefixExp(functionCallPrefixExp);
                         default:
                             return ParseNameVar();
                     }
                 case SyntaxKind.OpenParen:
-                    return ParsePotentialVarWithPrefixExp();
+                    var parenPrefixExp = ParseParenPrefixExp();
+                    return ParsePotentialVarWithPrefixExp(parenPrefixExp);
                 default:
                     ParseErrorAtCurrentPosition(ErrorMessages.InvalidVar);
 
@@ -1435,15 +1443,16 @@ namespace LanguageService
             }
         }
 
-        private Var ParsePotentialVarWithPrefixExp()
+        private Var ParsePotentialVarWithPrefixExp(PrefixExp prefixExp)
         {
-            var prefixExp = ParsePrefixExp(); //Skip to the end of the prefix exp before checking.
             if (Peek().Kind == SyntaxKind.OpenBracket)
             {
                 return ParseSquareBracketVar(prefixExp);
             }
             else
             {
+                //Arbitrarily assuming it's a dot var as that is the only valid alternative
+                //when there is no open bracket... will log errors, if the requirements for dot var are not found
                 return ParseDotVar(prefixExp);
             }
         }
