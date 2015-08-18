@@ -10,16 +10,16 @@ namespace Formatting.Tests
         [Fact]
         public void BasicDot()
         {
-            string original = "t . foo";
-            string expected = "t.foo";
+            string original = "t . foo ()";
+            string expected = "t.foo ()";
             GeneralTest(original, expected);
         }
 
         [Fact]
         public void BasicColon()
         {
-            string original = "t : foo";
-            string expected = "t:foo";
+            string original = "t : foo ()";
+            string expected = "t:foo ()";
             GeneralTest(original, expected);
         }
 

@@ -11,8 +11,8 @@ namespace Formatting.Tests
         [Fact]
         public void BasicSquare()
         {
-            string original = "t[1]";
-            string expected = "t[ 1 ]";
+            string original = "t[1] = 10";
+            string expected = "t[ 1 ] = 10";
             GeneralTest(original, expected);
         }
 
@@ -72,8 +72,8 @@ namespace Formatting.Tests
         [Fact]
         public void LongSquare()
         {
-            string original = "t[\"this is a test that grabs this key in Lua\"]";
-            string expected = "t[ \"this is a test that grabs this key in Lua\" ]";
+            string original = "t[\"this is a test that grabs this key in Lua\"] = 10";
+            string expected = "t[ \"this is a test that grabs this key in Lua\" ] = 10";
             GeneralTest(original, expected);
         }
 
@@ -81,10 +81,10 @@ namespace Formatting.Tests
         public void MultiLinedTable()
         {
             string original = @"
-    t = {
+t = {
     1,
     2,
-    }";
+}";
             GeneralTest(original, original);
         }
 
@@ -92,13 +92,13 @@ namespace Formatting.Tests
         public void MutliLinedSquare()
         {
             string original = @"
-    t = [
+t = [
 
 
-    1
+1
 
 
-    ]";
+] = 10";
             GeneralTest(original, original);
         }
 
@@ -106,11 +106,11 @@ namespace Formatting.Tests
         public void MutliLinedParams()
         {
             string original = @"
-    foo = function (
-    a, b, c)";
+foo = function (
+a, b, c)";
             string expected = @"
-    foo = function (
-    a, b, c )";
+foo = function (
+a, b, c )";
             GeneralTest(original, expected);
         }
 
