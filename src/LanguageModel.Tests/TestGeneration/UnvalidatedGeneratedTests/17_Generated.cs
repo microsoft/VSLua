@@ -1,6 +1,6 @@
-//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\IfElse.lua\r\nusing LanguageModel.Tests.TestGeneration;
-using LanguageService;
+//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\IfElseIf.lua
 using LanguageModel.Tests.TestGeneration;
+using LanguageService;
 using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
@@ -58,28 +58,48 @@ namespace LanguageModel.Tests.GeneratedTestFiles
                                 }
                             }
                         }
-                        t.N(SyntaxKind.ElseBlockNode);
+                        t.N(SyntaxKind.ElseIfBlockNode);
                         {
-                            t.N(SyntaxKind.Identifier);
+                            t.N(SyntaxKind.ElseIfKeyword);
+                            t.N(SyntaxKind.BinaryOperatorExpression);
+                            {
+                                t.N(SyntaxKind.NameVar);
+                                {
+                                    t.N(SyntaxKind.Identifier);
+                                }
+                                t.N(SyntaxKind.EqualityOperator);
+                                t.N(SyntaxKind.SimpleExpression);
+                                {
+                                    t.N(SyntaxKind.String);
+                                }
+                            }
+                            t.N(SyntaxKind.ThenKeyword);
                             t.N(SyntaxKind.BlockNode);
                             {
-                                t.N(SyntaxKind.FunctionCallStatementNode);
+                                t.N(SyntaxKind.AssignmentStatementNode);
                                 {
-                                    t.N(SyntaxKind.NameVar);
+                                    t.N(SyntaxKind.VarList);
                                     {
-                                        t.N(SyntaxKind.Identifier);
-                                    }
-                                    t.N(SyntaxKind.ParenArg);
-                                    {
-                                        t.N(SyntaxKind.OpenParen);
-                                        t.N(SyntaxKind.ExpList);
+                                        t.N(SyntaxKind.NameVar);
                                         {
-                                            t.N(SyntaxKind.SimpleExpression);
+                                            t.N(SyntaxKind.Identifier);
+                                        }
+                                    }
+                                    t.N(SyntaxKind.AssignmentOperator);
+                                    t.N(SyntaxKind.ExpList);
+                                    {
+                                        t.N(SyntaxKind.BinaryOperatorExpression);
+                                        {
+                                            t.N(SyntaxKind.NameVar);
                                             {
-                                                t.N(SyntaxKind.String);
+                                                t.N(SyntaxKind.Identifier);
+                                            }
+                                            t.N(SyntaxKind.MinusOperator);
+                                            t.N(SyntaxKind.NameVar);
+                                            {
+                                                t.N(SyntaxKind.Identifier);
                                             }
                                         }
-                                        t.N(SyntaxKind.CloseParen);
                                     }
                                 }
                             }

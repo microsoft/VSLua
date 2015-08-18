@@ -1,6 +1,6 @@
-//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\FunctionCallWithTableConstructor.lua\r\nusing LanguageModel.Tests.TestGeneration;
-using LanguageService;
+//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\GenericForStatement.lua
 using LanguageModel.Tests.TestGeneration;
+using LanguageService;
 using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
@@ -13,39 +13,62 @@ namespace LanguageModel.Tests.GeneratedTestFiles
             {
                 t.N(SyntaxKind.BlockNode);
                 {
-                    t.N(SyntaxKind.FunctionCallStatementNode);
+                    t.N(SyntaxKind.MultipleArgForStatementNode);
                     {
-                        t.N(SyntaxKind.NameVar);
+                        t.N(SyntaxKind.ForKeyword);
+                        t.N(SyntaxKind.NameList);
                         {
                             t.N(SyntaxKind.Identifier);
+                            t.N(SyntaxKind.Comma);
+                            t.N(SyntaxKind.Identifier);
                         }
-                        t.N(SyntaxKind.TableConstructorArg);
+                        t.N(SyntaxKind.InKeyword);
+                        t.N(SyntaxKind.ExpList);
                         {
-                            t.N(SyntaxKind.OpenCurlyBrace);
-                            t.N(SyntaxKind.FieldList);
+                            t.N(SyntaxKind.FunctionCallExp);
                             {
-                                t.N(SyntaxKind.AssignmentField);
+                                t.N(SyntaxKind.NameVar);
                                 {
                                     t.N(SyntaxKind.Identifier);
-                                    t.N(SyntaxKind.AssignmentOperator);
-                                    t.N(SyntaxKind.SimpleExpression);
-                                    {
-                                        t.N(SyntaxKind.String);
-                                    }
                                 }
-                                t.N(SyntaxKind.Comma);
-                                t.N(SyntaxKind.AssignmentField);
+                                t.N(SyntaxKind.ParenArg);
                                 {
-                                    t.N(SyntaxKind.Identifier);
-                                    t.N(SyntaxKind.AssignmentOperator);
-                                    t.N(SyntaxKind.SimpleExpression);
+                                    t.N(SyntaxKind.OpenParen);
+                                    t.N(SyntaxKind.ExpList);
                                     {
-                                        t.N(SyntaxKind.String);
+                                        t.N(SyntaxKind.NameVar);
+                                        {
+                                            t.N(SyntaxKind.Identifier);
+                                        }
                                     }
+                                    t.N(SyntaxKind.CloseParen);
                                 }
                             }
-                            t.N(SyntaxKind.CloseCurlyBrace);
                         }
+                        t.N(SyntaxKind.DoKeyword);
+                        t.N(SyntaxKind.BlockNode);
+                        {
+                            t.N(SyntaxKind.FunctionCallStatementNode);
+                            {
+                                t.N(SyntaxKind.NameVar);
+                                {
+                                    t.N(SyntaxKind.Identifier);
+                                }
+                                t.N(SyntaxKind.ParenArg);
+                                {
+                                    t.N(SyntaxKind.OpenParen);
+                                    t.N(SyntaxKind.ExpList);
+                                    {
+                                        t.N(SyntaxKind.NameVar);
+                                        {
+                                            t.N(SyntaxKind.Identifier);
+                                        }
+                                    }
+                                    t.N(SyntaxKind.CloseParen);
+                                }
+                            }
+                        }
+                        t.N(SyntaxKind.EndKeyword);
                     }
                 }
                 t.N(SyntaxKind.EndOfFile);

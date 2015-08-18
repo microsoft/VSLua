@@ -1,6 +1,6 @@
-//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\LocalAssignments.lua\r\nusing LanguageModel.Tests.TestGeneration;
-using LanguageService;
+//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\NestedFunctionCallStatement.lua
 using LanguageModel.Tests.TestGeneration;
+using LanguageService;
 using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
@@ -13,148 +13,46 @@ namespace LanguageModel.Tests.GeneratedTestFiles
             {
                 t.N(SyntaxKind.BlockNode);
                 {
-                    t.N(SyntaxKind.LocalAssignmentStatementNode);
+                    t.N(SyntaxKind.FunctionCallStatementNode);
                     {
-                        t.N(SyntaxKind.LocalKeyword);
-                        t.N(SyntaxKind.NameList);
+                        t.N(SyntaxKind.NameVar);
                         {
                             t.N(SyntaxKind.Identifier);
                         }
-                        t.N(SyntaxKind.AssignmentOperator);
-                        t.N(SyntaxKind.ExpList);
+                        t.N(SyntaxKind.ParenArg);
                         {
-                            t.N(SyntaxKind.BinaryOperatorExpression);
+                            t.N(SyntaxKind.OpenParen);
+                            t.N(SyntaxKind.ExpList);
                             {
-                                t.N(SyntaxKind.SimpleExpression);
+                                t.N(SyntaxKind.FunctionCallExp);
                                 {
-                                    t.N(SyntaxKind.Number);
-                                }
-                                t.N(SyntaxKind.MultiplyOperator);
-                                t.N(SyntaxKind.NameVar);
-                                {
-                                    t.N(SyntaxKind.Identifier);
-                                }
-                            }
-                        }
-                    }
-                    t.N(SyntaxKind.LocalAssignmentStatementNode);
-                    {
-                        t.N(SyntaxKind.LocalKeyword);
-                        t.N(SyntaxKind.NameList);
-                        {
-                            t.N(SyntaxKind.Identifier);
-                        }
-                        t.N(SyntaxKind.AssignmentOperator);
-                        t.N(SyntaxKind.ExpList);
-                        {
-                            t.N(SyntaxKind.FunctionCallExp);
-                            {
-                                t.N(SyntaxKind.NameVar);
-                                {
-                                    t.N(SyntaxKind.Identifier);
-                                }
-                                t.N(SyntaxKind.ParenArg);
-                                {
-                                    t.N(SyntaxKind.OpenParen);
-                                    t.N(SyntaxKind.ExpList);
+                                    t.N(SyntaxKind.NameVar);
                                     {
-                                        t.N(SyntaxKind.BinaryOperatorExpression);
+                                        t.N(SyntaxKind.Identifier);
+                                    }
+                                    t.N(SyntaxKind.ParenArg);
+                                    {
+                                        t.N(SyntaxKind.OpenParen);
+                                        t.N(SyntaxKind.ExpList);
                                         {
-                                            t.N(SyntaxKind.NameVar);
-                                            {
-                                                t.N(SyntaxKind.Identifier);
-                                            }
-                                            t.N(SyntaxKind.ExponentOperator);
                                             t.N(SyntaxKind.BinaryOperatorExpression);
                                             {
                                                 t.N(SyntaxKind.SimpleExpression);
                                                 {
                                                     t.N(SyntaxKind.Number);
                                                 }
-                                                t.N(SyntaxKind.MinusOperator);
-                                                t.N(SyntaxKind.BinaryOperatorExpression);
+                                                t.N(SyntaxKind.MultiplyOperator);
+                                                t.N(SyntaxKind.SimpleExpression);
                                                 {
-                                                    t.N(SyntaxKind.SimpleExpression);
-                                                    {
-                                                        t.N(SyntaxKind.Number);
-                                                    }
-                                                    t.N(SyntaxKind.MultiplyOperator);
-                                                    t.N(SyntaxKind.BinaryOperatorExpression);
-                                                    {
-                                                        t.N(SyntaxKind.NameVar);
-                                                        {
-                                                            t.N(SyntaxKind.Identifier);
-                                                        }
-                                                        t.N(SyntaxKind.MultiplyOperator);
-                                                        t.N(SyntaxKind.NameVar);
-                                                        {
-                                                            t.N(SyntaxKind.Identifier);
-                                                        }
-                                                    }
+                                                    t.N(SyntaxKind.Number);
                                                 }
                                             }
                                         }
+                                        t.N(SyntaxKind.CloseParen);
                                     }
-                                    t.N(SyntaxKind.CloseParen);
                                 }
                             }
-                        }
-                    }
-                    t.N(SyntaxKind.LocalAssignmentStatementNode);
-                    {
-                        t.N(SyntaxKind.LocalKeyword);
-                        t.N(SyntaxKind.NameList);
-                        {
-                            t.N(SyntaxKind.Identifier);
-                        }
-                        t.N(SyntaxKind.AssignmentOperator);
-                        t.N(SyntaxKind.ExpList);
-                        {
-                            t.N(SyntaxKind.BinaryOperatorExpression);
-                            {
-                                t.N(SyntaxKind.ParenPrefixExp);
-                                {
-                                    t.N(SyntaxKind.OpenParen);
-                                    t.N(SyntaxKind.EndKeyword);
-                                    {
-                                        t.N(SyntaxKind.MinusOperator);
-                                        t.N(SyntaxKind.BinaryOperatorExpression);
-                                        {
-                                            t.N(SyntaxKind.NameVar);
-                                            {
-                                                t.N(SyntaxKind.Identifier);
-                                            }
-                                            t.N(SyntaxKind.PlusOperator);
-                                            t.N(SyntaxKind.NameVar);
-                                            {
-                                                t.N(SyntaxKind.Identifier);
-                                            }
-                                        }
-                                    }
-                                    t.N(SyntaxKind.CloseParen);
-                                }
-                                t.N(SyntaxKind.DivideOperator);
-                                t.N(SyntaxKind.NameVar);
-                                {
-                                    t.N(SyntaxKind.Identifier);
-                                }
-                            }
-                        }
-                    }
-                    t.N(SyntaxKind.LocalAssignmentStatementNode);
-                    {
-                        t.N(SyntaxKind.LocalKeyword);
-                        t.N(SyntaxKind.NameList);
-                        {
-                            t.N(SyntaxKind.Identifier);
-                        }
-                        t.N(SyntaxKind.AssignmentOperator);
-                        t.N(SyntaxKind.ExpList);
-                        {
-                            t.N(SyntaxKind.SimpleExpression);
-                            {
-                                t.N(SyntaxKind.Number);
-                            }
+                            t.N(SyntaxKind.CloseParen);
                         }
                     }
                 }

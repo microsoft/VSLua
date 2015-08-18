@@ -1,6 +1,6 @@
-//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\StringConcat.lua\r\nusing LanguageModel.Tests.TestGeneration;
-using LanguageService;
+//C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\TripleNestedFunctionCall.lua
 using LanguageModel.Tests.TestGeneration;
+using LanguageService;
 using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
@@ -24,16 +24,38 @@ namespace LanguageModel.Tests.GeneratedTestFiles
                             t.N(SyntaxKind.OpenParen);
                             t.N(SyntaxKind.ExpList);
                             {
-                                t.N(SyntaxKind.BinaryOperatorExpression);
+                                t.N(SyntaxKind.FunctionCallExp);
                                 {
-                                    t.N(SyntaxKind.SimpleExpression);
+                                    t.N(SyntaxKind.NameVar);
                                     {
-                                        t.N(SyntaxKind.String);
+                                        t.N(SyntaxKind.Identifier);
                                     }
-                                    t.N(SyntaxKind.StringConcatOperator);
-                                    t.N(SyntaxKind.SimpleExpression);
+                                    t.N(SyntaxKind.ParenArg);
                                     {
-                                        t.N(SyntaxKind.String);
+                                        t.N(SyntaxKind.OpenParen);
+                                        t.N(SyntaxKind.ExpList);
+                                        {
+                                            t.N(SyntaxKind.FunctionCallExp);
+                                            {
+                                                t.N(SyntaxKind.NameVar);
+                                                {
+                                                    t.N(SyntaxKind.Identifier);
+                                                }
+                                                t.N(SyntaxKind.ParenArg);
+                                                {
+                                                    t.N(SyntaxKind.OpenParen);
+                                                    t.N(SyntaxKind.ExpList);
+                                                    {
+                                                        t.N(SyntaxKind.NameVar);
+                                                        {
+                                                            t.N(SyntaxKind.Identifier);
+                                                        }
+                                                    }
+                                                    t.N(SyntaxKind.CloseParen);
+                                                }
+                                            }
+                                        }
+                                        t.N(SyntaxKind.CloseParen);
                                     }
                                 }
                             }

@@ -215,10 +215,6 @@ get_zero = function() return 0 end", "LucaDemo");
             new Generated_31().Test(new Tester(treeList[fileNumber++]));
             new Generated_32().Test(new Tester(treeList[fileNumber++]));
             new Generated_33().Test(new Tester(treeList[fileNumber++]));
-            new Generated_34().Test(new Tester(treeList[fileNumber++]));
-            new Generated_35().Test(new Tester(treeList[fileNumber++]));
-            new Generated_36().Test(new Tester(treeList[fileNumber++]));
-            new Generated_37().Test(new Tester(treeList[fileNumber++]));
         }
     }
 }
