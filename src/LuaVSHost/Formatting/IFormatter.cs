@@ -1,4 +1,10 @@
-﻿namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 {
     internal interface IFormatter
     {
@@ -17,14 +23,17 @@
         /// </summary>
         void FormatSelection();
 
+        #pragma warning disable SA1512, SA1515 // Single-line comments must not be followed/preceeded by blank line
         /// <summary>
         /// Formats the statenent made by the user. A statement as defined in the Formatting Functional Spec.
         /// </summary>
+
         // void FormatStatement();
 
         /// <summary>
         /// Formats the pasted content.
         /// </summary>
         void FormatOnPaste();
+        #pragma warning restore SA1512, SA1515 // Single-line comments must not be followed/preceeded by blank line
     }
 }

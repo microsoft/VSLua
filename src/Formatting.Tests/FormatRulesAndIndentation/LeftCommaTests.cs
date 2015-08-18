@@ -6,14 +6,13 @@ namespace Formatting.Tests
     {
 
         delegate void TestFunction(string original, string expected);
-        TestFunction GeneralTest = Tester.GeneralTest;
+        TestFunction GeneralTest = Tester.FormattingTest;
 
         [Fact(Skip = "Not passing")]
         public void Basic()
         {
             string original = ",x";
-            string expected = ", x";
-            GeneralTest(original, expected);
+            GeneralTest(original, original);
         }
 
         [Fact]
@@ -26,32 +25,32 @@ namespace Formatting.Tests
         [Fact]
         public void TwoVariables()
         {
-            string original = "x,y";
-            string expected = "x, y";
+            string original = "x,y = 1,2";
+            string expected = "x, y = 1, 2";
             GeneralTest(original, expected);
         }
 
         [Fact]
         public void InTable()
         {
-            string original = "{ x,y,z }";
-            string expected = "{ x, y, z }";
+            string original = "t = { x,y,z }";
+            string expected = "t = { x, y, z }";
             GeneralTest(original, expected);
         }
 
         [Fact]
         public void Parameters()
         {
-            string original = "function foo(x,y,z)";
-            string expected = "function foo ( x, y, z )";
+            string original = "function foo(x,y,z) end";
+            string expected = "function foo ( x, y, z ) end";
             GeneralTest(original, expected);
         }
 
         [Fact(Skip = "Not passing")]
         public void TrailingComma()
         {
-            string original = "{ x, y,}";
-            string expected = "{ x, y, }";
+            string original = "t = { x, y,}";
+            string expected = "t = { x, y, }";
             GeneralTest(original, expected);
         }
 
@@ -75,23 +74,14 @@ namespace Formatting.Tests
         public void BrokenCode2()
         {
             string original = "{ x,,y }";
-            string expected = "{ x, , y }";
-            GeneralTest(original, expected);
-        }
-
-        [Fact(Skip = "Not passing")]
-        public void ManyTestsInOne()
-        {
-            string original = "{ x,y, ,,,, },y32,,,s2,";
-            string expected = "{ x, y, , , , , }, y32, , , s2,";
-            GeneralTest(original, expected);
+            GeneralTest(original, original);
         }
 
         [Fact]
         public void MoreSpacesBetweenComma()
         {
-            string original = "x,             y";
-            string expected = "x, y";
+            string original = "x,             y = 1, 2";
+            string expected = "x, y = 1, 2";
             GeneralTest(original, expected);
         }
 

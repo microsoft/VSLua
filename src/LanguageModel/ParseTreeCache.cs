@@ -1,12 +1,17 @@
-﻿using System.Runtime.CompilerServices;
-using Validation;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
 
+using System.Runtime.CompilerServices;
+using Validation;
 
 namespace LanguageService
 {
     internal class ParseTreeCache
     {
-        private readonly ConditionalWeakTable<SourceText, SyntaxTree> sources = 
+        private readonly ConditionalWeakTable<SourceText, SyntaxTree> sources =
             new ConditionalWeakTable<SourceText, SyntaxTree>();
 
         internal SyntaxTree Get(SourceText sourceText)
@@ -14,13 +19,13 @@ namespace LanguageService
             Requires.NotNull(sourceText, nameof(sourceText));
 
             SyntaxTree syntaxTree;
-            if (sources.TryGetValue(sourceText, out syntaxTree))
+            if (this.sources.TryGetValue(sourceText, out syntaxTree))
             {
                 return syntaxTree;
             }
 
-            syntaxTree = new Parser().CreateSyntaxTree(sourceText.TextReader);
-            sources.Add(sourceText, syntaxTree);
+            syntaxTree = SyntaxTree.Create(sourceText.TextReader);
+            this.sources.Add(sourceText, syntaxTree);
 
             return syntaxTree;
         }

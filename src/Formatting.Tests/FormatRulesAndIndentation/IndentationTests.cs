@@ -5,8 +5,8 @@ namespace Formatting.Tests
     public class IndentationTests
     {
 
-        delegate void TestFunction(string original, string expected1, string expected2);
-        TestFunction GeneralTest = Tester.GeneralTest;
+        delegate void TestFunction(string original, string expected1);
+        TestFunction FormattingTest = Tester.FormattingTest;
 
         [Fact]
         public void BasicFunction()
@@ -19,11 +19,7 @@ end";
 foo = function ()
     return
 end";
-            string expected2 = @"
-foo = function ()
-      return
-end";
-            GeneralTest(original, expected1, expected2);
+            FormattingTest(original, expected1);
         }
 
         [Fact]
@@ -37,32 +33,23 @@ t1 = {
 t1 = {
     1,
 }";
-            string expected2 = @"
-t1 = {
-      1,
-     }";
-            GeneralTest(original, expected1, expected2);
+            FormattingTest(original, expected1);
         }
 
         [Fact(Skip = "Not passing")]
         public void EmbeddedFunctions()
         {
             string original = @"
-foo = function
-bar = function
+foo = function ()
+bar = function ()
 end
 end";
             string expected1 = @"
-foo = function
-    bar = function
+foo = function ()
+    bar = function ()
     end
 end";
-            string expected2 = @"
-foo = function
-      bar = function
-      end
-end";
-            GeneralTest(original, expected1, expected2);
+            FormattingTest(original, expected1);
         }
 
         [Fact(Skip = "Not passing")]
@@ -72,7 +59,7 @@ end";
 t1 = {
 t2 = {
 x, y, z
-}
+},
 t3 = {
 x
 }
@@ -81,21 +68,12 @@ x
 t1 = {
     t2 = {
         x, y, z
-    }
+    },
     t3 = {
         x
     }
 }";
-            string expected2 = @"
-t1 = {
-      t2 = {
-            x, y, z
-           }
-      t3 = {
-            x
-           }
-     }";
-            GeneralTest(original, expected1, expected2);
+            FormattingTest(original, expected1);
         }
 
         [Fact]
@@ -105,11 +83,7 @@ t1 = {
 foo = function ()
     return
 end";
-            string expected2 = @"
-foo = function ()
-      return
-end";
-            GeneralTest(original, original, expected2);
+            FormattingTest(original, original);
         }
 
         [Fact]
@@ -117,7 +91,7 @@ end";
         {
             string original = "     foo";
             string expected = "foo";
-            GeneralTest(original, expected, expected);
+            FormattingTest(original, expected);
         }
 
         [Fact]
@@ -125,29 +99,23 @@ end";
         {
             string original = @"
 foo = function ()
-                  return
+                    return
 end";
             string expected1 = @"
 foo = function ()
     return
 end";
-            string expected2 = @"
-foo = function ()
-      return
-end";
-            GeneralTest(original, expected1, expected2);
+            FormattingTest(original, expected1);
         }
 
         [Fact]
         public void SimpleOverIndent()
         {
             string original = @"t = {
-       x";
+        x";
             string expected1 = @"t = {
     x";
-            string expected2 = @"{
- x";
-            GeneralTest(original, expected1, expected2); 
+            FormattingTest(original, expected1); 
         }
 
         [Fact]
@@ -156,34 +124,26 @@ end";
             string original = @"
 foo = function ()
 return--comment
-    end";
+end";
             string expected1 = @"
 foo = function ()
     return--comment
 end";
-            string expected2 = @"
-foo = function ()
-      return--comment
-end";
-            GeneralTest(original, expected1, expected2);
+            FormattingTest(original, expected1);
         }
 
         [Fact]
         public void Comment()
         {
             string original = @"
-foo = function
+foo = function ()
 --[[comment]] return
 end";
             string expected1 = @"
-foo = function
+foo = function ()
     --[[comment]] return
 end";
-            string expected2 = @"
-foo = function
-      --[[comment]] return
-end";
-            GeneralTest(original, expected1, expected2);
+            FormattingTest(original, expected1);
         }
     }
 }

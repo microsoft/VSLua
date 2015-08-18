@@ -1,4 +1,10 @@
-﻿using Microsoft.VisualStudio.Shell;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using Microsoft.VisualStudio.Shell;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages
 {

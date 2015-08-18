@@ -1,4 +1,10 @@
-﻿using System;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using LanguageService.Formatting.Ruling;
@@ -11,8 +17,11 @@ namespace LanguageService.Formatting.Options
     /// </summary>
     internal class OptionalRuleMap
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "<Pending>")]
         internal readonly HashSet<Rule> DisabledRules = new HashSet<Rule>();
-        internal readonly HashSet<OptionalRuleGroup> DisabledRuleGroups = new HashSet<OptionalRuleGroup>();
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields must be private", Justification = "<Pending>")]
+        internal readonly HashSet<DisableableRules> DisabledRuleGroups = new HashSet<DisableableRules>();
 
         /// <summary>
         /// Allows Rule disabling.
@@ -20,17 +29,16 @@ namespace LanguageService.Formatting.Options
         /// <param name="optionalRuleGroups">
         /// The OptionalRuleGroups that are to be disabled/skipped.
         /// </param>
-        internal OptionalRuleMap(IEnumerable<OptionalRuleGroup> optionalRuleGroups)
+        internal OptionalRuleMap(IEnumerable<DisableableRules> optionalRuleGroups)
         {
             Validation.Requires.NotNull(optionalRuleGroups, nameof(optionalRuleGroups));
-            foreach (OptionalRuleGroup group in optionalRuleGroups)
+            foreach (DisableableRules group in optionalRuleGroups)
             {
-                Disable(group);
+                this.Disable(group);
             }
-
         }
 
-        private void Disable(OptionalRuleGroup optionalRuleGroup)
+        private void Disable(DisableableRules optionalRuleGroup)
         {
             IEnumerable<Rule> ruleGroup;
 
@@ -39,71 +47,64 @@ namespace LanguageService.Formatting.Options
                 throw new NotImplementedException();
             }
 
-            AddRuleGroup(ruleGroup);
+            this.AddRuleGroup(ruleGroup);
         }
 
         private void AddRuleGroup(IEnumerable<Rule> ruleGroup)
         {
             Validation.Requires.NotNull(ruleGroup, nameof(ruleGroup));
-            DisabledRules.UnionWith(ruleGroup);
+            this.DisabledRules.UnionWith(ruleGroup);
         }
 
+#pragma warning disable SA1306 // Field names must begin with lower-case letter
         private static ImmutableArray<Rule> SpaceBeforeOpenParenthesis = ImmutableArray.Create(
-            Rules.SpaceAfterValueBeforeOpenParenthesis
-            );
+            Rules.SpaceAfterValueBeforeOpenParenthesis);
 
         private static ImmutableArray<Rule> SpaceOnInsideOfParenthesis = ImmutableArray.Create(
             Rules.SpaceAfterValueBeforeCloseParenthesis,
-            Rules.SpaceBeforeValueAfterOpenParenthesis
-            );
+            Rules.SpaceBeforeValueAfterOpenParenthesis);
 
         private static ImmutableArray<Rule> SpaceOnInsideOfCurlyBraces = ImmutableArray.Create(
             Rules.SpaceAfterValueBeforeCloseCurlyBrace,
-            Rules.SpaceBeforeValueAfterOpenCurlyBrace
-            );
+            Rules.SpaceBeforeValueAfterOpenCurlyBrace);
 
         private static ImmutableArray<Rule> SpaceOnInsideOfSquareBrackets = ImmutableArray.Create(
             Rules.SpaceAfterValueBeforeCloseSquareBracket,
-            Rules.SpaceBeforeValueAfterOpenSquareBracket
-            );
+            Rules.SpaceBeforeValueAfterOpenSquareBracket);
 
         private static ImmutableArray<Rule> SpaceAfterCommas = ImmutableArray.Create(
-            Rules.SpaceAfterComma
-            );
+            Rules.SpaceAfterComma);
 
         private static ImmutableArray<Rule> SpaceBeforeAndAfterBinaryOperations = ImmutableArray.Create(
             Rules.SpaceAfterBinaryOperator,
-            Rules.SpaceBeforeBinaryOperator
-            );
+            Rules.SpaceBeforeBinaryOperator);
 
         // TODO: This Rule Group expands after the parser implemented, check OptionalRuleGroup enum
         //   for the rest
         private static ImmutableArray<Rule> SpaceBeforeAndAfterAssignmentInStatement = ImmutableArray.Create(
             Rules.SpaceAfterAssignmentOperatorInStatement,
-            Rules.SpaceBeforeAssignmentOperatorInStatement
-            );
+            Rules.SpaceBeforeAssignmentOperatorInStatement);
 
         private static ImmutableArray<Rule> SpaceBeforeAndAfterAssignmentInFor = ImmutableArray.Create(
             Rules.SpaceBeforeAssignmentOperatorInFor,
-            Rules.SpaceAfterAssignmentOperatorInFor
-            );
+            Rules.SpaceAfterAssignmentOperatorInFor);
 
         private static ImmutableArray<Rule> SpaceBeforeAfterAssignmentInField = ImmutableArray.Create(
             Rules.SpaceBeforeAssignmentOperatorInField,
-            Rules.SpaceAfterAssignmentOperatorInField
-            );
+            Rules.SpaceAfterAssignmentOperatorInField);
+#pragma warning restore SA1306 // Field names must begin with lower-case letter
 
-        private static Dictionary<OptionalRuleGroup, IEnumerable<Rule>> optionalRuleGroups = new Dictionary<OptionalRuleGroup, IEnumerable<Rule>>
+        private static Dictionary<DisableableRules, IEnumerable<Rule>> optionalRuleGroups = new Dictionary<DisableableRules, IEnumerable<Rule>>
         {
-            {OptionalRuleGroup.SpaceBeforeOpenParenthesis, SpaceBeforeOpenParenthesis},
-            {OptionalRuleGroup.SpaceOnInsideOfParenthesis, SpaceOnInsideOfParenthesis},
-            {OptionalRuleGroup.SpaceOnInsideOfCurlyBraces, SpaceOnInsideOfCurlyBraces},
-            {OptionalRuleGroup.SpaceOnInsideOfSquareBrackets, SpaceOnInsideOfSquareBrackets},
-            {OptionalRuleGroup.SpaceAfterCommas, SpaceAfterCommas},
-            {OptionalRuleGroup.SpaceBeforeAndAfterBinaryOperations, SpaceBeforeAndAfterBinaryOperations},
-            {OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForStatement, SpaceBeforeAndAfterAssignmentInStatement},
-            {OptionalRuleGroup.NoSpaceBeforeAndAfterIndiciesInForLoopHeader, SpaceBeforeAndAfterAssignmentInFor},
-            {OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForField, SpaceBeforeAfterAssignmentInField}
+            { DisableableRules.SpaceBeforeOpenParenthesis, SpaceBeforeOpenParenthesis },
+            { DisableableRules.SpaceOnInsideOfParenthesis, SpaceOnInsideOfParenthesis },
+            { DisableableRules.SpaceOnInsideOfCurlyBraces, SpaceOnInsideOfCurlyBraces },
+            { DisableableRules.SpaceOnInsideOfSquareBrackets, SpaceOnInsideOfSquareBrackets },
+            { DisableableRules.SpaceAfterCommas, SpaceAfterCommas },
+            { DisableableRules.SpaceBeforeAndAfterBinaryOperations, SpaceBeforeAndAfterBinaryOperations },
+            { DisableableRules.SpaceBeforeAndAfterAssignmentForStatement, SpaceBeforeAndAfterAssignmentInStatement },
+            { DisableableRules.NoSpaceBeforeAndAfterIndiciesInForLoopHeader, SpaceBeforeAndAfterAssignmentInFor },
+            { DisableableRules.SpaceBeforeAndAfterAssignmentForField, SpaceBeforeAfterAssignmentInField }
         };
     }
 }

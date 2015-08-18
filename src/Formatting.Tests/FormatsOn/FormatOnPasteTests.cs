@@ -51,12 +51,12 @@ namespace Formatting.Tests.FormatsOn
         public void PasteMultipleLines()
         {
             string original = @"foo=
-";
+    ";
             PasteInfo paste = new PasteInfo(@"x+1
-y+1", 6, 0);
+    y+1", 6, 0);
             string expected = @"foo=
-x + 1
-y + 1";
+    x + 1
+    y + 1";
             PasteTest(original, paste, expected);
         }
 
@@ -64,8 +64,8 @@ y + 1";
         public void PasteOverMultipleLines()
         {
             string original = @"x = 10
-y = 30
-z = x + y";
+    y = 30
+    z = x + y";
             PasteInfo paste = new PasteInfo("print(\"hello world\")", 0, original.Length);
             string expected = "print ( \"hello world\" )";
             PasteTest(original, paste, expected);
@@ -75,13 +75,13 @@ z = x + y";
         public void PasteMultipleLinesOverMultipleLines()
         {
             string original = @"x = 10
-y = 30
-z=x+y";
+    y = 30
+    z=x+y";
             PasteInfo paste = new PasteInfo(@"x = x+y
-y = y + x", 0, 14);
+    y = y + x", 0, 14);
             string expected = @"x = x + y
-y = y + x
-z=x+y";
+    y = y + x
+    z=x+y";
             PasteTest(original, paste, expected);
         }
 

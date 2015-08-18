@@ -7,7 +7,7 @@ namespace Formatting.Tests
     {
 
         delegate void TestFunction(string original, string expected);
-        TestFunction GeneralTest = Tester.GeneralTest;
+        TestFunction GeneralTest = Tester.FormattingTest;
 
         [Fact]
         public void AssignmentBasic()
@@ -67,11 +67,11 @@ namespace Formatting.Tests
         public void MultiLinedAssignemnt()
         {
             string original = @"
-x=
-1";
+    x=
+    1";
             string expected = @"
-x =
-1";
+    x =
+    1";
             GeneralTest(original, expected);
         }
 
@@ -123,8 +123,7 @@ x = 1 + 1 +
         public void TrailingBinary()
         {
             string original = "x = 1+";
-            string expected = "x = 1 +";
-            GeneralTest(original, expected);
+            GeneralTest(original, original);
         }
 
         [Fact(Skip = "Not passing")]

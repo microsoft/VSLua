@@ -53,6 +53,8 @@
     <CodeAnalysisRuleSet>LuaLanguageServicePackage.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Classifications\ClassificationFormats.cs" />
+    <Compile Include="Classifications\LuaClassificationTypeDefinition.cs" />
     <Compile Include="Classifications\Tagger.cs" />
     <Compile Include="Classifications\TaggerProvider.cs" />
     <Compile Include="Errors\ErrorListItem.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="Shared\EditorUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="ClassDiagram1.cd" />
     <None Include="Key.snk" />
     <None Include="LuaLanguageServicePackage.ruleset" />
@@ -232,6 +235,10 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Collections.Immutable.1.1.37\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />

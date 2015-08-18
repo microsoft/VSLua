@@ -1,14 +1,33 @@
-﻿namespace LanguageService.Shared
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+namespace LanguageService.Shared
 {
+    /// <summary>
+    /// Species a number range
+    /// </summary>
     public struct Range
     {
-        public Range(int startFrom, int endAt)
+        /// <summary>
+        /// Specifies a number range
+        /// </summary>
+        /// <param name="start">The start index</param>
+        /// <param name="length">The end index, must be equal or
+        /// greater than <paramref name="start"/></param>
+        public Range(int start, int length)
         {
-            this.Start = startFrom;
-            this.End = endAt;
+            this.Start = start;
+            this.Length = length;
+            this.End = start + length;
         }
 
-        internal int Start { get; }
-        internal int End { get; }
+        public int Start { get; }
+
+        public int End { get; }
+
+        public int Length { get; }
     }
 }

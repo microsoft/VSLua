@@ -14,6 +14,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
     [Export(typeof(ISingletons))]
     internal class Singletons : ISingletons
     {
+#pragma warning disable 0169, 0649
         [Import]
         private IEditorOperationsFactoryService editorOperationsFactory = null;
 
@@ -27,7 +28,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         private Lazy<GlobalEditorOptions> globalEditorOptions = null;
 
         [Import]
-        private Lazy<IStandardClassificationService> standardClassifications = null;
+        private Lazy<IStandardClassificationService> standardClassifications;
+#pragma warning restore 0169, 0649
 
         private SourceTextCache sourceTextCache;
         private LuaFeatureContainer featureContainer;
@@ -107,20 +109,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
                 }
 
                 return this.userSettings;
-            }
-        }
-
-        private Tagger tagger;
-        public Tagger Tagger
-        {
-            get
-            {
-                if (this.tagger == null)
-                {
-                    this.tagger = new Tagger(this.standardClassifications.Value, this);
-                }
-
-                return this.tagger;
             }
         }
 

@@ -5,21 +5,21 @@ namespace Formatting.Tests
     public class DotColonTests
     {
         delegate void TestFunction(string original, string expected);
-        TestFunction GeneralTest = Tester.GeneralTest;
+        TestFunction GeneralTest = Tester.FormattingTest;
 
         [Fact]
         public void BasicDot()
         {
-            string original = "t . foo";
-            string expected = "t.foo";
+            string original = "t . foo ()";
+            string expected = "t.foo ()";
             GeneralTest(original, expected);
         }
 
         [Fact]
         public void BasicColon()
         {
-            string original = "t : foo";
-            string expected = "t:foo";
+            string original = "t : foo ()";
+            string expected = "t:foo ()";
             GeneralTest(original, expected);
         }
 
@@ -45,7 +45,7 @@ namespace Formatting.Tests
 t :
 foo ()
 t.
- bar ()";
+bar ()";
             string expected = @"
 t:
 foo ()

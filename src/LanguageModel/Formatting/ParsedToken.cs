@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using LanguageService.Shared;
 using Validation;
@@ -18,10 +24,12 @@ namespace LanguageService.Formatting
         }
 
         internal Token Token { get; }
-        internal int BlockLevel { get; }
-        internal SyntaxNode StatementNode { get; }
-        internal bool InTableConstructor { get; }
 
+        internal int BlockLevel { get; }
+
+        internal SyntaxNode StatementNode { get; }
+
+        internal bool InTableConstructor { get; }
 
         private static readonly ImmutableHashSet<SyntaxKind> StatKinds = ImmutableHashSet.Create(
             SyntaxKind.Semicolon,
@@ -38,34 +46,35 @@ namespace LanguageService.Formatting
             SyntaxKind.SimpleForStatementNode,
             SyntaxKind.GlobalFunctionStatementNode,
             SyntaxKind.LocalFunctionStatementNode,
-            SyntaxKind.LocalAssignmentStatementNode
-        );
+            SyntaxKind.LocalAssignmentStatementNode);
 
         private static IEnumerable<ParsedToken> WalkTreeRangeKeepLevelAndParent(SyntaxNodeOrToken currentRoot, int blockLevel, SyntaxNode statementNode, bool inTableConstructor, Range range)
         {
             if (!SyntaxTree.IsLeafNode(currentRoot))
             {
                 SyntaxNode syntaxNode = (SyntaxNode)currentRoot;
-                foreach (SyntaxNodeOrToken node in syntaxNode.Children)
+
+                SyntaxNode nextStatementNode = syntaxNode;
+
+                if (!StatKinds.Contains(syntaxNode.Kind))
                 {
-                    SyntaxNode nextStatementNode = syntaxNode;
+                    nextStatementNode = statementNode;
+                }
 
+                if ((syntaxNode.Kind == SyntaxKind.BlockNode && nextStatementNode != null) ||
+                     syntaxNode.Kind == SyntaxKind.FieldList)
+                {
+                    blockLevel++;
+                }
 
-                    if (!StatKinds.Contains(syntaxNode.Kind))
-                    {
-                        nextStatementNode = statementNode;
-                    }
-
-                    bool increaseBlockLevel =
-                        (syntaxNode.Kind == SyntaxKind.BlockNode && nextStatementNode != null) ||
-                         syntaxNode.Kind == SyntaxKind.FieldList;
-
-                    bool nowInTable =
+                bool nowInTable =
                         syntaxNode.Kind == SyntaxKind.TableConstructorArg ||
                         syntaxNode.Kind == SyntaxKind.TableConstructorExp;
 
+                foreach (SyntaxNodeOrToken node in syntaxNode.Children)
+                {
                     foreach (ParsedToken parsedToken in WalkTreeRangeKeepLevelAndParent(node,
-                        increaseBlockLevel ? blockLevel + 1 : blockLevel,
+                        blockLevel,
                         nextStatementNode, nowInTable ? true : inTableConstructor,
                         range))
                     {
@@ -83,6 +92,7 @@ namespace LanguageService.Formatting
                     {
                         yield break;
                     }
+
                     yield return new ParsedToken(token, blockLevel, statementNode, inTableConstructor);
                 }
             }

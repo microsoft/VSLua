@@ -1,5 +1,12 @@
-﻿using System;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System;
 using System.Collections.Generic;
+using LanguageService.Shared;
 using Validation;
 
 namespace LanguageService.Formatting.Ruling
@@ -16,11 +23,12 @@ namespace LanguageService.Formatting.Ruling
         }
 
         internal override RuleDescriptor RuleDescriptor { get; }
+
         internal override RuleOperation RuleOperationContext { get; }
 
         internal override bool AppliesTo(FormattingContext formattingContext)
         {
-            return RuleOperationContext.Context.InContext(formattingContext);
+            return this.RuleOperationContext.Context.InContext(formattingContext);
         }
 
         internal override IEnumerable<TextEditInfo> Apply(FormattingContext formattingContext)
@@ -32,12 +40,12 @@ namespace LanguageService.Formatting.Ruling
             int length = rightToken.Start - start;
             string replaceWith = this.GetTextFromAction();
 
-            return new List<TextEditInfo> { new TextEditInfo(start, length, replaceWith) };
+            return new List<TextEditInfo> { new TextEditInfo(new Range(start, length), replaceWith) };
         }
 
         private string GetTextFromAction()
         {
-            switch (RuleOperationContext.Action)
+            switch (this.RuleOperationContext.Action)
             {
                 case RuleAction.Delete:
                     return string.Empty;
@@ -49,6 +57,5 @@ namespace LanguageService.Formatting.Ruling
                     return string.Empty;
             }
         }
-
     }
 }

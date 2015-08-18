@@ -1,9 +1,9 @@
-using LanguageService.LanguageModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using LanguageService.LanguageModel;
 
 namespace LanguageService
 {
@@ -37,7 +37,10 @@ namespace LanguageService
             return new SyntaxTree(root, errorList.ToImmutableList());
         }
 
-        #region tokenList Accessors 
+        #region tokenList Accessors
+
+        internal List<Token> TokenList => this.tokenList;
+
         private Token NextToken()
         {
             if (positionInTokenList + 1 < tokenList.Count)

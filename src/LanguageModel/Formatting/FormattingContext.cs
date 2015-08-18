@@ -1,4 +1,9 @@
-﻿using Validation;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+using Validation;
 
 namespace LanguageService.Formatting
 {
@@ -14,11 +19,12 @@ namespace LanguageService.Formatting
         }
 
         internal ParsedToken CurrentToken { get; }
+
         internal ParsedToken NextToken { get; }
 
         internal bool TriviaBetweenTokensContains(SyntaxKind triviaType)
         {
-            foreach (Trivia trivia in NextToken.Token.LeadingTrivia)
+            foreach (Trivia trivia in this.NextToken.Token.LeadingTrivia)
             {
                 if (trivia.Type == triviaType)
                 {

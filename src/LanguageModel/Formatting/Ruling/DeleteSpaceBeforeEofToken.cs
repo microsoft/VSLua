@@ -1,12 +1,18 @@
-﻿using System;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System;
 using System.Collections.Generic;
+using LanguageService.Shared;
 
 namespace LanguageService.Formatting.Ruling
 {
     internal class DeleteSpaceBeforeEofToken : SimpleRule
     {
-        internal DeleteSpaceBeforeEofToken() :
-            base(
+        internal DeleteSpaceBeforeEofToken() : base(
                 new RuleDescriptor(TokenRange.All, SyntaxKind.EndOfFile),
                 new List<Func<FormattingContext, bool>> { Rules.TokensAreOnSameLine },
                 RuleAction.Delete)
@@ -44,10 +50,10 @@ namespace LanguageService.Formatting.Ruling
             {
                 int length = lastTrivia.Text.Length;
                 int start = token.Start - length;
-                edit = new TextEditInfo(start, length, "");
+                edit = new TextEditInfo(new Range(start, length), string.Empty);
             }
+
             return edit;
         }
-
     }
 }

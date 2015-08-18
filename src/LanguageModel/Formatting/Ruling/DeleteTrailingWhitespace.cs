@@ -1,12 +1,18 @@
-﻿using System;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System;
 using System.Collections.Generic;
+using LanguageService.Shared;
 
 namespace LanguageService.Formatting.Ruling
 {
     internal class DeleteTrailingWhitespace : SimpleRule
     {
-        internal DeleteTrailingWhitespace() :
-            base(
+        internal DeleteTrailingWhitespace() : base(
                 new RuleDescriptor(TokenRange.All, TokenRange.All),
                 new List<Func<FormattingContext, bool>> { Rules.TokensAreNotOnSameLine },
                 RuleAction.Delete)
@@ -37,7 +43,7 @@ namespace LanguageService.Formatting.Ruling
                 if (this.IsNewLineAfterSpace(i, leadingTrivia) ||
                     (isEndOfFile && this.IsSpaceBeforeEndOfFile(i, leadingTrivia)))
                 {
-                    edits.Add(new TextEditInfo(start, length, string.Empty));
+                    edits.Add(new TextEditInfo(new Range(start, length), string.Empty));
                 }
 
                 start += length;

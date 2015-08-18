@@ -1,4 +1,10 @@
-﻿using System;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System;
 using System.Collections.Generic;
 using LanguageService;
 using LanguageService.Formatting;
@@ -73,16 +79,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             {
                 switch ((VSConstants.VSStd2KCmdID)commandId)
                 {
-                    case VSConstants.VSStd2KCmdID.TYPECHAR:
-                        char ch = CommandFilter.GetTypedChar(variantIn);
-
-                        if (ch == '(')
-                        {
-                            this.AddEndKeyword();
-                        }
-
-                        break;
-
                     case VSConstants.VSStd2KCmdID.RETURN:
                         this.FormatOnEnter();
                         break;
@@ -148,27 +144,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             }
 
             // I would do stuff here when the FormattingCloses, which is when the textview also closes
-
             this.isClosed = true;
-        }
-
-        private void AddEndKeyword()
-        {
-            int caretPos = this.textView.Caret.Position.BufferPosition.Position;
-
-            double caretdouble = this.textView.Caret.Right;
-
-            var textBuffer = this.textView.TextBuffer;
-
-            string addedEnd = ") end";
-
-            using (var editBuffer = textBuffer.CreateEdit())
-            {
-                editBuffer.Replace(caretPos, 0, addedEnd);
-                var applied = editBuffer.Apply();
-            }
-
-            this.textView.Caret.MoveTo(this.textView.Caret.ContainingTextViewLine, caretdouble);
         }
 
         private bool CanFormatDocument()
@@ -255,11 +231,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
 
             SourceText sourceText = this.core.SourceTextCache.Get(this.textBuffer.CurrentSnapshot);
 
-            Range range = new Range(span.Start.Position, span.End.Position);
+            Range range = new Range(span.Start.Position, span.Length);
 
-            NewOptions newOptions = this.GetNewOptions(this.core.FormattingUserSettings);
+            FormattingOptions formattingOptions = this.GetFormattingOptions(this.core.FormattingUserSettings);
 
-            List<TextEditInfo> edits = this.core.FeatureContainer.Formatter.Format(sourceText, range, newOptions);
+            List<TextEditInfo> edits = this.core.FeatureContainer.Formatter.Format(sourceText, range, formattingOptions);
 
             using (ITextEdit textEdit = this.textBuffer.CreateEdit())
             {
@@ -274,92 +250,88 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting
             return true;
         }
 
-        private NewOptions GetNewOptions(UserSettings settings)
-        {
-            if (!this.core.FormattingUserSettings.RulesChanged)
+        private FormattingOptions GetFormattingOptions(UserSettings settings)
             {
-                return null;
-            }
 
-            List<OptionalRuleGroup> disabledRuleGroups = this.GetDisabledRules(settings);
+            List<DisableableRules> disabledRules = this.GetDisabledRules(settings);
 
-            NewOptions newOptions = new NewOptions(disabledRuleGroups, settings.TabSize, settings.IndentSize, settings.UsingTabs);
+            FormattingOptions formattingOptions = new FormattingOptions(disabledRules, settings.TabSize, settings.IndentSize, settings.UsingTabs);
 
-            return newOptions;
+            return formattingOptions;
         }
 
-        private List<OptionalRuleGroup> GetDisabledRules(UserSettings settings)
+        private List<DisableableRules> GetDisabledRules(UserSettings settings)
         {
-            var disabledRules = new List<OptionalRuleGroup>();
+            var disabledRules = new List<DisableableRules>();
 
             if (settings.AddSpacesOnInsideOfCurlyBraces != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceOnInsideOfCurlyBraces);
+                disabledRules.Add(DisableableRules.SpaceOnInsideOfCurlyBraces);
             }
 
             if (settings.AddSpacesOnInsideOfParenthesis != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceOnInsideOfParenthesis);
+                disabledRules.Add(DisableableRules.SpaceOnInsideOfParenthesis);
             }
 
             if (settings.AddSpacesOnInsideOfSquareBrackets != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceOnInsideOfSquareBrackets);
+                disabledRules.Add(DisableableRules.SpaceOnInsideOfSquareBrackets);
             }
 
             if (settings.SpaceBetweenFunctionAndParenthesis != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceBeforeOpenParenthesis);
+                disabledRules.Add(DisableableRules.SpaceBeforeOpenParenthesis);
             }
 
             if (settings.SpaceAfterCommas != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceAfterCommas);
+                disabledRules.Add(DisableableRules.SpaceAfterCommas);
             }
 
             if (settings.SpaceBeforeAndAfterAssignmentInStatement != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForStatement);
+                disabledRules.Add(DisableableRules.SpaceBeforeAndAfterAssignmentForStatement);
             }
 
             if (settings.SpaceBeforeAndAfterAssignmentOperatorOnField != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceBeforeAndAfterAssignmentForField);
+                disabledRules.Add(DisableableRules.SpaceBeforeAndAfterAssignmentForField);
             }
 
             if (settings.ForLoopAssignmentSpacing != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceBeforeAndAfterAssignmentInForLoopHeader);
+                disabledRules.Add(DisableableRules.SpaceBeforeAndAfterAssignmentInForLoopHeader);
             }
 
             if (settings.ForLoopIndexSpacing != true)
             {
-                disabledRules.Add(OptionalRuleGroup.NoSpaceBeforeAndAfterIndiciesInForLoopHeader);
+                disabledRules.Add(DisableableRules.NoSpaceBeforeAndAfterIndiciesInForLoopHeader);
             }
 
             if (settings.AddNewLinesToMultilineTableConstructors != true)
             {
-                disabledRules.Add(OptionalRuleGroup.WrappingMoreLinesForTableConstructors);
+                disabledRules.Add(DisableableRules.WrappingMoreLinesForTableConstructors);
             }
 
             if (settings.WrapSingleLineForLoops != true)
             {
-                disabledRules.Add(OptionalRuleGroup.WrappingOneLineForFors);
+                disabledRules.Add(DisableableRules.WrappingOneLineForFors);
             }
 
             if (settings.WrapSingleLineFunctions != true)
             {
-                disabledRules.Add(OptionalRuleGroup.WrappingOneLineForFunctions);
+                disabledRules.Add(DisableableRules.WrappingOneLineForFunctions);
             }
 
             if (settings.WrapSingleLineTableConstructors != true)
             {
-                disabledRules.Add(OptionalRuleGroup.WrappingOneLineForTableConstructors);
+                disabledRules.Add(DisableableRules.WrappingOneLineForTableConstructors);
             }
 
             if (settings.SpaceBeforeAndAfterBinaryOperations != true)
             {
-                disabledRules.Add(OptionalRuleGroup.SpaceBeforeAndAfterBinaryOperations);
+                disabledRules.Add(DisableableRules.SpaceBeforeAndAfterBinaryOperations);
             }
 
             return disabledRules;

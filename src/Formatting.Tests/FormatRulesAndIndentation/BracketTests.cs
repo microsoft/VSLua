@@ -6,13 +6,13 @@ namespace Formatting.Tests
     {
 
         delegate void TestFunction(string original, string expected);
-        TestFunction GeneralTest = Tester.GeneralTest;
+        TestFunction GeneralTest = Tester.FormattingTest;
 
         [Fact]
         public void BasicSquare()
         {
-            string original = "t[1]";
-            string expected = "t[ 1 ]";
+            string original = "t[1] = 10";
+            string expected = "t[ 1 ] = 10";
             GeneralTest(original, expected);
         }
 
@@ -72,8 +72,8 @@ namespace Formatting.Tests
         [Fact]
         public void LongSquare()
         {
-            string original = "t[\"this is a test that grabs this key in Lua\"]";
-            string expected = "t[ \"this is a test that grabs this key in Lua\" ]";
+            string original = "t[\"this is a test that grabs this key in Lua\"] = 10";
+            string expected = "t[ \"this is a test that grabs this key in Lua\" ] = 10";
             GeneralTest(original, expected);
         }
 
@@ -98,7 +98,7 @@ t = [
 1
 
 
-]";
+] = 10";
             GeneralTest(original, original);
         }
 
@@ -107,7 +107,7 @@ t = [
         {
             string original = @"
 foo = function (
-    a, b, c)";
+a, b, c)";
             string expected = @"
 foo = function (
 a, b, c )";

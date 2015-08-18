@@ -1,4 +1,10 @@
-﻿using System;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
@@ -6,7 +12,7 @@ namespace LanguageService.Formatting.Ruling
 {
     internal class Rules
     {
-        private static readonly List<Func<FormattingContext, bool>> defaultFilters = new List<Func<FormattingContext, bool>>
+        private static readonly List<Func<FormattingContext, bool>> DefaultFilters = new List<Func<FormattingContext, bool>>
         {
             TokensAreOnSameLine,
             NoCommentsBetweenTokens
@@ -15,7 +21,7 @@ namespace LanguageService.Formatting.Ruling
         internal static readonly Rule SpaceAfterComma =
             new SimpleRule(
                 new RuleDescriptor(SyntaxKind.Comma, TokenRange.AnyVisible),
-                defaultFilters, RuleAction.Space);
+                DefaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceAfterAssignmentOperatorInStatement =
             new SimpleRule(
@@ -72,61 +78,61 @@ namespace LanguageService.Formatting.Ruling
         internal static readonly Rule SpaceAfterBinaryOperator =
             new SimpleRule(
                 new RuleDescriptor(TokenRange.BinaryOperators, TokenRange.AnyVisible),
-                defaultFilters, RuleAction.Space);
+                DefaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceBeforeBinaryOperator =
             new SimpleRule(
                 new RuleDescriptor(TokenRange.AnyVisible, TokenRange.BinaryOperators),
-                defaultFilters, RuleAction.Space);
+                DefaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceAfterValueBeforeOpenParenthesis =
             new SimpleRule(
                 new RuleDescriptor(TokenRange.Value, SyntaxKind.OpenParen),
-                defaultFilters, RuleAction.Space);
+                DefaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceBeforeValueAfterOpenParenthesis =
             new SimpleRule(
                 new RuleDescriptor(SyntaxKind.OpenParen, TokenRange.Value),
-                defaultFilters, RuleAction.Space);
+                DefaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceBeforeValueAfterOpenSquareBracket =
             new SimpleRule(
                 new RuleDescriptor(SyntaxKind.OpenBracket, TokenRange.Value),
-                defaultFilters, RuleAction.Space);
+                DefaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceBeforeValueAfterOpenCurlyBrace =
             new SimpleRule(new RuleDescriptor(SyntaxKind.OpenCurlyBrace, TokenRange.Value),
-                defaultFilters, RuleAction.Space);
+                DefaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceAfterValueBeforeCloseParenthesis =
             new SimpleRule(new RuleDescriptor(TokenRange.Value, SyntaxKind.CloseParen),
-                defaultFilters, RuleAction.Space);
+                DefaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceAfterValueBeforeCloseSquareBracket =
             new SimpleRule(new RuleDescriptor(TokenRange.Value, SyntaxKind.CloseBracket),
-                defaultFilters, RuleAction.Space);
+                DefaultFilters, RuleAction.Space);
 
         internal static readonly Rule SpaceAfterValueBeforeCloseCurlyBrace =
             new SimpleRule(new RuleDescriptor(TokenRange.Value, SyntaxKind.CloseCurlyBrace),
-                defaultFilters, RuleAction.Space);
+                DefaultFilters, RuleAction.Space);
 
         internal static readonly DeleteSpaceBeforeEofToken DeleteSpaceBeforeEofToken = new DeleteSpaceBeforeEofToken();
 
         internal static readonly Rule DeleteSpaceAfterValueBeforeDot =
             new SimpleRule(new RuleDescriptor(TokenRange.Value, SyntaxKind.Dot),
-                defaultFilters, RuleAction.Delete);
+                DefaultFilters, RuleAction.Delete);
 
         internal static readonly Rule DeleteSpaceBeforeValueAfterDot =
             new SimpleRule(new RuleDescriptor(SyntaxKind.Dot, TokenRange.Value),
-                defaultFilters, RuleAction.Delete);
+                DefaultFilters, RuleAction.Delete);
 
         internal static readonly Rule DeleteSpaceAfterValueBeforeColon =
             new SimpleRule(new RuleDescriptor(TokenRange.Value, SyntaxKind.Colon),
-                defaultFilters, RuleAction.Delete);
+                DefaultFilters, RuleAction.Delete);
 
         internal static readonly Rule DeleteSpaceBeforeValueAfterColon =
             new SimpleRule(new RuleDescriptor(SyntaxKind.Colon, TokenRange.Value),
-                defaultFilters, RuleAction.Delete);
+                DefaultFilters, RuleAction.Delete);
 
         internal static readonly Rule DeleteTrailingWhitespace = new DeleteTrailingWhitespace();
 
@@ -160,22 +166,17 @@ namespace LanguageService.Formatting.Ruling
                 },
                 RuleAction.Space);
 
-
-
         internal static readonly ImmutableArray<Rule> AllRules = ImmutableArray.Create(
             NoSpaceAfterCommaInFor,
             SpaceAfterComma,
-
             SpaceAfterAssignmentOperatorInStatement,
             SpaceBeforeAssignmentOperatorInStatement,
             SpaceBeforeAssignmentOperatorInFor,
             SpaceAfterAssignmentOperatorInFor,
             SpaceBeforeAssignmentOperatorInField,
             SpaceAfterAssignmentOperatorInField,
-
             SpaceAfterBinaryOperator,
             SpaceBeforeBinaryOperator,
-
             SpaceAfterValueBeforeOpenParenthesis,
             SpaceBeforeValueAfterOpenParenthesis,
             SpaceBeforeValueAfterOpenSquareBracket,
@@ -183,15 +184,12 @@ namespace LanguageService.Formatting.Ruling
             SpaceAfterValueBeforeCloseParenthesis,
             SpaceAfterValueBeforeCloseSquareBracket,
             SpaceAfterValueBeforeCloseCurlyBrace,
-
             DeleteSpaceAfterValueBeforeDot,
             DeleteSpaceBeforeValueAfterDot,
             DeleteSpaceAfterValueBeforeColon,
             DeleteSpaceBeforeValueAfterColon,
-
             DeleteSpaceBeforeEofToken,
-            DeleteTrailingWhitespace
-            );
+            DeleteTrailingWhitespace);
 
         internal static bool TokensAreOnSameLine(FormattingContext formattingContext)
         {
@@ -208,9 +206,19 @@ namespace LanguageService.Formatting.Ruling
             return !formattingContext.ContainsCommentsBetweenTokens();
         }
 
+        /// <summary>
+        /// Describes the side the token in question
+        /// </summary>
         private enum Side
         {
+            /// <summary>
+            /// The left token
+            /// </summary>
             Left,
+
+            /// <summary>
+            /// The right token
+            /// </summary>
             Right
         }
 
@@ -250,11 +258,5 @@ namespace LanguageService.Formatting.Ruling
                 return parsedToken.Token.Start == parsedToken.StatementNode.StartPosition;
             };
         }
-
-        //private static bool StatementOnOneLine(FormattingContext formattingContext)
-        //{
-        //    return formattingContext.CurrentToken.StatementNode.
-        //}
-
     }
 }

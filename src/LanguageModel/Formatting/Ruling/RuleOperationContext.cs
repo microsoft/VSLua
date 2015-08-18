@@ -1,4 +1,10 @@
-﻿using System;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System;
 using System.Collections.Generic;
 
 namespace LanguageService.Formatting.Ruling
@@ -16,13 +22,14 @@ namespace LanguageService.Formatting.Ruling
 
         internal bool InContext(FormattingContext formattingContext)
         {
-            foreach (Func<FormattingContext, bool> contextFilter in contextFilters)
+            foreach (Func<FormattingContext, bool> contextFilter in this.contextFilters)
             {
                 if (!contextFilter(formattingContext))
                 {
                     return false;
                 }
             }
+
             return true;
         }
     }

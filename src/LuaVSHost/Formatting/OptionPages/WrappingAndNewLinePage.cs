@@ -1,4 +1,10 @@
-﻿using System;
+﻿/********************************************************
+*                                                        *
+*   © Copyright (C) Microsoft. All rights reserved.      *
+*                                                        *
+*********************************************************/
+
+using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 using Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages.UserControls;
@@ -10,6 +16,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Formatting.OptionPages
     internal class WrappingAndNewLinePage : BaseDialogPage
     {
         private WrappingAndNewLineUserControl wrappingAndNewLineUserControl;
+
         protected override UIElement Child
         {
             get
