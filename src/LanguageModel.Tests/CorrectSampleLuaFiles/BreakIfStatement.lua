@@ -1,0 +1,1 @@
+if a[i] == v then break end

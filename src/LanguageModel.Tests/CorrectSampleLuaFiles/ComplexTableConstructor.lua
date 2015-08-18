@@ -1,0 +1,1 @@
+y = {x=10, ["x"]=0, y=45; "one", print("hello world"), [3] = {x=10}, "two", "three"}

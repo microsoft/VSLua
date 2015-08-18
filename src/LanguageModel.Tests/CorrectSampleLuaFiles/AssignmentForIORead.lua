@@ -1,0 +1,1 @@
+a = io.read("*number") 
