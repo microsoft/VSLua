@@ -10,16 +10,16 @@ namespace Formatting.Tests
         [Fact]
         public void BasicDot()
         {
-            string original = "t . foo";
-            string expected = "t.foo";
+            string original = "t . foo ()";
+            string expected = "t.foo ()";
             GeneralTest(original, expected);
         }
 
         [Fact]
         public void BasicColon()
         {
-            string original = "t : foo";
-            string expected = "t:foo";
+            string original = "t : foo ()";
+            string expected = "t:foo ()";
             GeneralTest(original, expected);
         }
 
@@ -42,15 +42,15 @@ namespace Formatting.Tests
         public void NewLineInBetweenDotOrColon()
         {
             string original = @"
-    t :
-    foo ()
-    t.
-    bar ()";
+t :
+foo ()
+t.
+bar ()";
             string expected = @"
-    t:
-    foo ()
-    t.
-    bar ()";
+t:
+foo ()
+t.
+bar ()";
             GeneralTest(original, expected);
         }
 

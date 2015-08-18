@@ -103,11 +103,11 @@ namespace Formatting.Tests
         public void MutliLinedBinary()
         {
             string original = @"
-    x = 1+1+
-    1";
+x = 1+1+
+1";
             string expected = @"
-    x = 1 + 1 +
-    1";
+x = 1 + 1 +
+1";
             GeneralTest(original, expected);
         }
 
@@ -123,8 +123,7 @@ namespace Formatting.Tests
         public void TrailingBinary()
         {
             string original = "x = 1+";
-            string expected = "x = 1 +";
-            GeneralTest(original, expected);
+            GeneralTest(original, original);
         }
 
         [Fact]
