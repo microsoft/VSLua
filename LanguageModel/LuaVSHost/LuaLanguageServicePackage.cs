@@ -14,6 +14,9 @@ using Microsoft.VisualStudio.Shell;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua
 {
+
+    using Interop = Microsoft.VisualStudio.Shell.Interop;
+
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     [Guid(Guids.PackageString)]
@@ -39,6 +42,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua
 
         protected override void Initialize()
         {
+            var uiShell = (Interop.IVsUIShell2)this.GetService(typeof(Interop.IVsUIShell2));
+            
             base.Initialize();
         }
 

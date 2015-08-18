@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Media;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 
@@ -55,12 +52,16 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed.")]
     internal sealed class ParamIdentifierClassificationFormat : ClassificationFormatDefinition
     {
+        private readonly SolidColorBrush brush = new SolidColorBrush();
+
         internal ParamIdentifierClassificationFormat()
         {
             this.DisplayName = Constants.Colourization.ParamDisplayName;
 
-            this.ForegroundColor = (Color)ColorConverter.ConvertFromString("#99CCFF");
-            this.ForegroundBrush = SystemColors.WindowTextBrush;
+            //this.ForegroundColor = (Color)ColorConverter.ConvertFromString("#99CCFF");
+            
+            BindingOperations.SetBinding(this.brush, SolidColorBrush.ColorProperty, new Binding("EnvironmentColors.ButtonTextColorKey"));
+            this.ForegroundBrush = this.brush;
         }
     }
 
