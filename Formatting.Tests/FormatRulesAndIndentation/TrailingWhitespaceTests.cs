@@ -70,7 +70,7 @@ x = x + 1";
             string original = @"x = 10   
     ";
             string expected = @"x = 10
-    ";
+";
             GeneralTest(original, expected);
         }
 

@@ -13,8 +13,8 @@ namespace Formatting.Tests.SmartIndent
         public void OnEnd()
         {
             string text = @"
-    foo = function()
-    end";
+foo = function()
+end";
             Tester.SmartIndentationTest(text, lineNumber: 2, expectedIndent: 0);
         }
 
@@ -22,8 +22,8 @@ namespace Formatting.Tests.SmartIndent
         public void OnCloseBrace()
         {
             string text = @"
-    t = {
-    }";
+t = {
+}";
             Tester.SmartIndentationTest(text, lineNumber: 2, expectedIndent: 0);
         }
 
@@ -31,7 +31,7 @@ namespace Formatting.Tests.SmartIndent
         public void Basic()
         {
             string text = @"foo = function
-    ";
+";
 
             Tester.SmartIndentationTest(text, lineNumber: 1, expectedIndent: 4);
         }
@@ -48,10 +48,10 @@ namespace Formatting.Tests.SmartIndent
         public void AfterFunction()
         {
             string text = @"
-    foo = function()
+foo = function()
     return
-    end
-    ";
+end
+";
 
             Tester.SmartIndentationTest(text, lineNumber: 4, expectedIndent: 0);
         }
@@ -60,9 +60,9 @@ namespace Formatting.Tests.SmartIndent
         public void BeforeFunction()
         {
             string text = @"
-    foo = function()
+foo = function()
     return
-    end";
+end";
 
             Tester.SmartIndentationTest(text, lineNumber: 0, expectedIndent: 0);
         }
@@ -71,10 +71,10 @@ namespace Formatting.Tests.SmartIndent
         public void InFunction()
         {
             string text = @"
-    foo function()
+foo function()
 
-    return
-    end";
+return
+end";
             Tester.SmartIndentationTest(text, lineNumber: 2, expectedIndent: 4);
         }
 
@@ -82,9 +82,9 @@ namespace Formatting.Tests.SmartIndent
         public void BeforeTable()
         {
             string text = @"
-    t = {
+t = {
     1
-    }";
+}";
 
             Tester.SmartIndentationTest(text, lineNumber: 0, expectedIndent: 0);
         }
@@ -93,10 +93,10 @@ namespace Formatting.Tests.SmartIndent
         public void AfterTable()
         {
             string text = @"
-    t = {
-    1
-    }
-    ";
+t = {
+1
+}
+";
             Tester.SmartIndentationTest(text, lineNumber: 4, expectedIndent: 0);
         }
 
@@ -104,10 +104,10 @@ namespace Formatting.Tests.SmartIndent
         public void InTable()
         {
             string text = @"
-    t = {
-    1,
+t = {
+1,
 
-    }";
+}";
             Tester.SmartIndentationTest(text, lineNumber: 3, expectedIndent: 4);
         }
 
@@ -115,8 +115,8 @@ namespace Formatting.Tests.SmartIndent
         public void UnfinishedTable()
         {
             string text = @"
-    t = {
-    ";
+t = {
+";
             Tester.SmartIndentationTest(text, lineNumber: 2, expectedIndent: 4);
         }
 
@@ -124,11 +124,11 @@ namespace Formatting.Tests.SmartIndent
         public void EmbeddedFunction()
         {
             string text = @"
-    foo = function()
+foo = function()
     bar = function()
 
     end
-    end";
+end";
             Tester.SmartIndentationTest(text, lineNumber: 3, expectedIndent: 8);
         }
 
@@ -136,11 +136,11 @@ namespace Formatting.Tests.SmartIndent
         public void EmbeddedTable()
         {
             string text = @"
-    t = {
+t = {
     f = {
 
     }
-    }";
+}";
             Tester.SmartIndentationTest(text, lineNumber: 3, expectedIndent: 8);
         }
 
@@ -148,9 +148,9 @@ namespace Formatting.Tests.SmartIndent
         public void EmbeddedUnfinishedTable()
         {
             string text = @"
-    t = {
+t = {
     f = {
-    ";
+";
             Tester.SmartIndentationTest(text, lineNumber: 3, expectedIndent: 8);
         }
 
@@ -158,9 +158,9 @@ namespace Formatting.Tests.SmartIndent
         public void EmbeddedUnfinishedFunction()
         {
             string text = @"
-    foo = function()
+foo = function()
     bar = function()
-    ";
+";
             Tester.SmartIndentationTest(text, lineNumber: 3, expectedIndent: 8);
         }
 
@@ -168,10 +168,10 @@ namespace Formatting.Tests.SmartIndent
         public void ThreeEmbeddedFunction()
         {
             string text = @"
-    foo = function()
+foo = function()
     bar = function()
         foobar = function()
-    ";
+";
             Tester.SmartIndentationTest(text, lineNumber: 4, expectedIndent: 12);
         }
 
@@ -179,7 +179,7 @@ namespace Formatting.Tests.SmartIndent
         public void MultipleLinesFunction()
         {
             string text = @"
-    foo = function()
+foo = function()
 
 
     bar = function()
@@ -193,13 +193,13 @@ namespace Formatting.Tests.SmartIndent
         public void SmartIndentBeforeAlreadyDefinedFunction()
         {
             string text = @"
-    bar  = function ()
+bar  = function ()
 
-    end
+end
 
-    foo = function ()
+foo = function ()
     return x
-    end";
+end";
             Tester.SmartIndentationTest(text, lineNumber: 2, expectedIndent: 4);
         }
 
@@ -207,13 +207,13 @@ namespace Formatting.Tests.SmartIndent
         public void SmartIndentBeforeAlreadyDefinedTable()
         {
             string text = @"
-    t = {
+t = {
 
-    }
+}
 
-    t = {
+t = {
     1
-    }";
+}";
             Tester.SmartIndentationTest(text, lineNumber: 2, expectedIndent: 4);
         }
 

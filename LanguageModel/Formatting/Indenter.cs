@@ -171,37 +171,51 @@ namespace LanguageService.Formatting
             }
 
             int start = parsedToken.Token.FullStart;
+            int length = 0;
 
             for (int i = 0; i < leadingTrivia.Count; ++i)
             {
-                start += leadingTrivia[i].Text.Length;
+                length = leadingTrivia[i].Text.Length;
 
                 Trivia currentTrivia = leadingTrivia[i];
-                if (currentTrivia.Type != SyntaxKind.Newline)
+
+                bool isLastTrivia = i >= leadingTrivia.Count - 1;
+                if (currentTrivia.Type == SyntaxKind.Whitespace)
                 {
-                    continue;
+                    bool previousTriviaIsNewline = i > 0 && leadingTrivia[i - 1].Type == SyntaxKind.Newline;
+                    bool nextTriviaIsNotNewLine = !isLastTrivia && leadingTrivia[i + 1].Type != SyntaxKind.Newline;
+
+                    if (previousTriviaIsNewline && (isLastTrivia || nextTriviaIsNotNewLine))
+                    {
+                        yield return new IndentInfo(start, length, isBeforeText: true);
+                    }
+                }
+                else if (currentTrivia.Type == SyntaxKind.Newline)
+                {
+                    bool previousIsNotWhitespace = i <= 0 || leadingTrivia[i - 1].Type != SyntaxKind.Whitespace;
+                    bool nextIsNotWhitespace = isLastTrivia || leadingTrivia[i + 1].Type != SyntaxKind.Whitespace;
+
+                    if (previousIsNotWhitespace && nextIsNotWhitespace && IsLastNewLineInTrivia(leadingTrivia, i))
+                    {
+                        yield return new IndentInfo(start + length, 0, isBeforeText: true);
+                    }
                 }
 
-                bool isAtEndOfTrivia = i + 1 >= leadingTrivia.Count;
-                if (isAtEndOfTrivia ||
-                           (leadingTrivia[i + 1].Type != SyntaxKind.Whitespace &&
-                           leadingTrivia[i + 1].Type != SyntaxKind.Newline))
-                {
-                    yield return new IndentInfo(start, 0, isBeforeText: true);
-                }
-                //else
-                //{
-                //    Trivia nextTrivia = leadingTrivia[i + 1];
-                //    if (nextTrivia.Type == SyntaxKind.Whitespace)
-                //    {
-                //        bool isBeforeText = i + 1 == leadingTrivia.Count - 1 ||
-                //            (i + 2 < leadingTrivia.Count &&
-                //            (leadingTrivia[i + 2].Type != SyntaxKind.Newline ||
-                //            leadingTrivia[i + 2].Type != SyntaxKind.Whitespace));
-                //        yield return new IndentInfo(start, nextTrivia.Text.Length, isBeforeText);
-                //    }
-                //}
+                start += length;
             }
+        }
+
+        private static bool IsLastNewLineInTrivia(List<Trivia> leadingTrivia, int index)
+        {
+            for (int i = index + 1; i < leadingTrivia.Count; ++i)
+            {
+                if (leadingTrivia[i].Type == SyntaxKind.Newline)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

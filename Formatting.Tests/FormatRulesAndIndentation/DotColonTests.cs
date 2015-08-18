@@ -42,15 +42,15 @@ namespace Formatting.Tests
         public void NewLineInBetweenDotOrColon()
         {
             string original = @"
-    t :
-    foo ()
-    t.
-    bar ()";
+t :
+foo ()
+t.
+bar ()";
             string expected = @"
-    t:
-    foo ()
-    t.
-    bar ()";
+t:
+foo ()
+t.
+bar ()";
             GeneralTest(original, expected);
         }
 

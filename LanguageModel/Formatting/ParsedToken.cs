@@ -53,25 +53,28 @@ namespace LanguageService.Formatting
             if (!SyntaxTree.IsLeafNode(currentRoot))
             {
                 SyntaxNode syntaxNode = (SyntaxNode)currentRoot;
-                foreach (SyntaxNodeOrToken node in syntaxNode.Children)
+
+                SyntaxNode nextStatementNode = syntaxNode;
+
+                if (!StatKinds.Contains(syntaxNode.Kind))
                 {
-                    SyntaxNode nextStatementNode = syntaxNode;
+                    nextStatementNode = statementNode;
+                }
 
-                    if (!StatKinds.Contains(syntaxNode.Kind))
-                    {
-                        nextStatementNode = statementNode;
-                    }
+                if ((syntaxNode.Kind == SyntaxKind.BlockNode && nextStatementNode != null) ||
+                     syntaxNode.Kind == SyntaxKind.FieldList)
+                {
+                    blockLevel++;
+                }
 
-                    bool increaseBlockLevel =
-                        (syntaxNode.Kind == SyntaxKind.BlockNode && nextStatementNode != null) ||
-                         syntaxNode.Kind == SyntaxKind.FieldList;
-
-                    bool nowInTable =
+                bool nowInTable =
                         syntaxNode.Kind == SyntaxKind.TableConstructorArg ||
                         syntaxNode.Kind == SyntaxKind.TableConstructorExp;
 
+                foreach (SyntaxNodeOrToken node in syntaxNode.Children)
+                {
                     foreach (ParsedToken parsedToken in WalkTreeRangeKeepLevelAndParent(node,
-                        increaseBlockLevel ? blockLevel + 1 : blockLevel,
+                        blockLevel,
                         nextStatementNode, nowInTable ? true : inTableConstructor,
                         range))
                     {
