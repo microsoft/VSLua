@@ -35,13 +35,14 @@ namespace LanguageService.Classification
         public IEnumerable<TagInfo> ColorizeParserTokens(SourceText sourceText)
         {
             SyntaxTree syntaxTree = this.ParseTreeCache.Get(sourceText);
-            return GetTokenTagInfoFromParser(syntaxTree.Root, new HashSet<string>(), new HashSet<string>(), new Token[1]);
+            return GetTokenTagInfoFromParser(syntaxTree.Root, new HashSet<string>(), new HashSet<string>(), new HashSet<TagInfo>(), new Token[1]);
         }
 
         private static IEnumerable<TagInfo> GetTokenTagInfoFromParser(
             SyntaxNodeOrToken currentRoot,
             HashSet<string> locals,
             HashSet<string> paramrefs,
+            HashSet<TagInfo> fields,
             Token[] previousToken)
         {
             if (!SyntaxTree.IsLeafNode(currentRoot))
@@ -89,12 +90,21 @@ namespace LanguageService.Classification
 
                     if (syntaxKindChild == SyntaxKind.FieldList)
                     {
-                        // pass for now
+                        fields = new HashSet<TagInfo>(fields);
+                        foreach (TagInfo tagInfo in GetTokenTagInfoForFieldLists((SeparatedList)syntaxNodeOrToken))
+                        {
+                            if (!fields.Contains(tagInfo))
+                            {
+                                fields.Add(tagInfo);
+                            }
+                        }
                     }
 
-                    foreach (TagInfo tagInfo in GetTokenTagInfoFromParser(syntaxNodeOrToken,
+                    foreach (TagInfo tagInfo in GetTokenTagInfoFromParser(
+                        syntaxNodeOrToken,
                         locals,
                         paramrefs,
+                        fields,
                         previousToken))
                     {
                         yield return tagInfo;
@@ -109,7 +119,8 @@ namespace LanguageService.Classification
                 {
                     Classification classification;
 
-                    if (previousToken[0] != null && (previousToken[0].Kind == SyntaxKind.Dot || previousToken[0].Kind == SyntaxKind.Colon))
+                    if ((previousToken[0] != null && (previousToken[0].Kind == SyntaxKind.Dot || previousToken[0].Kind == SyntaxKind.Colon)) ||
+                        StartAndLengthInFieldHashSet(fields, token.Start, token.Length))
                     {
                         // Everything after a dot or colon counts as a field for now...
                         //   The reason this is here instead of the lexer is for consistency,
@@ -135,6 +146,34 @@ namespace LanguageService.Classification
                 // I use an array so I can keep track of the previous token and avoid having
                 //   a pointer to pointer reference, which is kind of a pain.
                 previousToken[0] = token == null ? null : token;
+            }
+        }
+
+        private static bool StartAndLengthInFieldHashSet(HashSet<TagInfo> hashSet, int start, int length)
+        {
+            foreach (TagInfo tagInfo in hashSet)
+            {
+                if (tagInfo.Start == start && tagInfo.Length == length)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static IEnumerable<TagInfo> GetTokenTagInfoForFieldLists(SeparatedList fieldList)
+        {
+            foreach (SeparatedListElement element in fieldList.SyntaxList)
+            {
+                if (element.Element as AssignmentField != null)
+                {
+                    AssignmentField field = (AssignmentField)element.Element;
+                    if (field.Name != null || field.Kind != SyntaxKind.MissingToken)
+                    {
+                        yield return new TagInfo(field.Name.Start, field.Name.Length, Classification.Field);
+                    }
+                }
             }
         }
 
