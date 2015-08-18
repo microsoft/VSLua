@@ -105,6 +105,7 @@
     <Compile Include="..\LanguageModel\LuaVSHost\Shared\EditorUtilities.cs">
       <Link>Shared\EditorUtilities.cs</Link>
     </Compile>
+    <Compile Include="Colourization\ParserColorizationTests.cs" />
     <Compile Include="FormatRulesAndIndentation\AssignmentAndBinaryOperatorTests.cs" />
     <Compile Include="FormatRulesAndIndentation\BracketTests.cs" />
     <Compile Include="FormatRulesAndIndentation\DotColonTests.cs" />
