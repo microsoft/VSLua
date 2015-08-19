@@ -95,6 +95,16 @@ namespace LanguageService.Formatting.Ruling
                 new RuleDescriptor(SyntaxKind.OpenParen, TokenRange.Value),
                 DefaultFilters, RuleAction.Space);
 
+        internal static readonly Rule NoSpaceBeforeOpenSquareBracket =
+            new SimpleRule(
+                new RuleDescriptor(TokenRange.AnyVisible, SyntaxKind.OpenBracket),
+                DefaultFilters, RuleAction.Delete);
+
+        internal static readonly Rule SpaceBeforeOpenCurlyBraces =
+            new SimpleRule(
+                new RuleDescriptor(TokenRange.AnyVisible, SyntaxKind.OpenCurlyBrace),
+                DefaultFilters, RuleAction.Space);
+
         internal static readonly Rule SpaceBeforeValueAfterOpenSquareBracket =
             new SimpleRule(
                 new RuleDescriptor(SyntaxKind.OpenBracket, TokenRange.Value),
@@ -115,6 +125,10 @@ namespace LanguageService.Formatting.Ruling
         internal static readonly Rule SpaceAfterValueBeforeCloseCurlyBrace =
             new SimpleRule(new RuleDescriptor(TokenRange.Value, SyntaxKind.CloseCurlyBrace),
                 DefaultFilters, RuleAction.Space);
+
+        internal static readonly Rule NoSpaceBeforeComma =
+            new SimpleRule(new RuleDescriptor(TokenRange.AnyVisible, SyntaxKind.Comma),
+                DefaultFilters, RuleAction.Delete);
 
         internal static readonly DeleteSpaceBeforeEofToken DeleteSpaceBeforeEofToken = new DeleteSpaceBeforeEofToken();
 
@@ -169,6 +183,9 @@ namespace LanguageService.Formatting.Ruling
         internal static readonly ImmutableArray<Rule> AllRules = ImmutableArray.Create(
             NoSpaceAfterCommaInFor,
             SpaceAfterComma,
+            SpaceBeforeOpenCurlyBraces,
+            NoSpaceBeforeComma,
+            NoSpaceBeforeOpenSquareBracket,
             SpaceAfterAssignmentOperatorInStatement,
             SpaceBeforeAssignmentOperatorInStatement,
             SpaceBeforeAssignmentOperatorInFor,
@@ -205,6 +222,11 @@ namespace LanguageService.Formatting.Ruling
         {
             return !formattingContext.ContainsCommentsBetweenTokens();
         }
+
+        //internal static bool NoTokensBetweenTokens(FormattingContext formattingContext)
+        //{
+        //    formattingContext.TriviaBetweenTokensContains(SyntaxKind.)
+        //}
 
         /// <summary>
         /// Describes the side the token in question

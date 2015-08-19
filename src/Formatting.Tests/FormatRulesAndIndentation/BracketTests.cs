@@ -97,7 +97,7 @@ namespace Formatting.Tests
         public void SquareBracketAfterAnything()
         {
             string original = "x = x     [1]";
-            string expected = "x = x[1]";
+            string expected = "x = x[ 1 ]";
             FormattingTest(original, expected);
         }
 
