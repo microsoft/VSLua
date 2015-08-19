@@ -60,11 +60,7 @@ namespace LanguageService.Formatting.Ruling
                 {
                     TokensAreOnSameLine,
                     NoCommentsBetweenTokens,
-                    InSyntaxNode(Side.Left, new List<SyntaxKind>
-                    {
-                        SyntaxKind.TableConstructorArg,
-                        SyntaxKind.TableConstructorExp
-                    })
+                    InTableConstructor(Side.Left)
                 },
                 RuleAction.Space);
 
@@ -75,11 +71,7 @@ namespace LanguageService.Formatting.Ruling
                 {
                     TokensAreOnSameLine,
                     NoCommentsBetweenTokens,
-                    InSyntaxNode(Side.Right, new List<SyntaxKind>
-                    {
-                        SyntaxKind.TableConstructorArg,
-                        SyntaxKind.TableConstructorExp
-                    })
+                    InTableConstructor(Side.Right)
                 },
                 RuleAction.Space);
 
@@ -231,11 +223,6 @@ namespace LanguageService.Formatting.Ruling
             return !formattingContext.ContainsCommentsBetweenTokens();
         }
 
-        //internal static bool NoTokensBetweenTokens(FormattingContext formattingContext)
-        //{
-        //    formattingContext.TriviaBetweenTokensContains(SyntaxKind.)
-        //}
-
         /// <summary>
         /// Describes the side the token in question
         /// </summary>
@@ -259,13 +246,18 @@ namespace LanguageService.Formatting.Ruling
                     formattingContext.NextToken;
         }
 
-        private static Func<FormattingContext, bool> IsInATableConstructor(Side side)
+        private static Func<FormattingContext, bool> InTableConstructor(Side side)
         {
             return (FormattingContext formattingContext) =>
             {
                 ParsedToken parsedToken = GetTokenOn(side, formattingContext);
 
-                return parsedToken.InTableConstructor;
+                bool upperStatementNodeIsTableConstructor =
+                    parsedToken.UpperStatementNode != null &&
+                    (SyntaxKind.TableConstructorArg == parsedToken.ImmediateStatementNode.Kind ||
+                    SyntaxKind.TableConstructorExp == parsedToken.ImmediateStatementNode.Kind);
+
+                return upperStatementNodeIsTableConstructor;
             };
         }
 
@@ -275,7 +267,11 @@ namespace LanguageService.Formatting.Ruling
             {
                 ParsedToken parsedToken = GetTokenOn(side, formattingContext);
 
-                return statementKinds.Contains(parsedToken.StatementNode.Kind);
+                bool containsImmediateStatementNode =
+                parsedToken.ImmediateStatementNode != null &&
+                statementKinds.Contains(parsedToken.ImmediateStatementNode.Kind);
+
+                return containsImmediateStatementNode;
             };
         }
 
@@ -285,7 +281,69 @@ namespace LanguageService.Formatting.Ruling
             {
                 ParsedToken parsedToken = GetTokenOn(side, formattingContext);
 
-                return parsedToken.Token.Start == parsedToken.StatementNode.StartPosition;
+                return parsedToken.Token.FullStart == parsedToken.UpperStatementNode.StartPosition;
+            };
+        }
+
+        private static Func<FormattingContext, bool> InForLoopOnSameLine(Side side)
+        {
+            return (FormattingContext formattingContext) =>
+            {
+                ParsedToken parsedToken = GetTokenOn(side, formattingContext);
+                SourceText sourceText = formattingContext.SourceText;
+
+                int start;
+                int end;
+
+                if (parsedToken.UpperStatementNode.Kind == SyntaxKind.SimpleForStatementNode)
+                {
+                    SimpleForStatementNode forStatement = (SimpleForStatementNode)parsedToken.UpperStatementNode;
+                    start = forStatement.ForKeyword.Start;
+                    end = forStatement.EndKeyword.Start;
+
+                    return sourceText.GetLineNumberFromIndex(start) == sourceText.GetLineNumberFromIndex(end);
+                }
+                else if (parsedToken.UpperStatementNode.Kind == SyntaxKind.MultipleArgForStatementNode)
+                {
+                    MultipleArgForStatementNode forStatement = (MultipleArgForStatementNode)parsedToken.UpperStatementNode;
+                    start = forStatement.ForKeyword.Start;
+                    end = forStatement.EndKeyword.Start;
+
+                    return sourceText.GetLineNumberFromIndex(start) == sourceText.GetLineNumberFromIndex(end);
+                }
+
+                return false;
+            };
+        }
+
+        private static Func<FormattingContext, bool> InFunctionStatement(Side side)
+        {
+            return (FormattingContext formattingContext) =>
+            {
+                ParsedToken parsedToken = GetTokenOn(side, formattingContext);
+                SourceText sourceText = formattingContext.SourceText;
+
+                int start;
+                int end;
+
+                if (parsedToken.UpperStatementNode.Kind == SyntaxKind.GlobalFunctionStatementNode)
+                {
+                    GlobalFunctionStatementNode function = (GlobalFunctionStatementNode)parsedToken.UpperStatementNode;
+                    start = function.FunctionKeyword.Start;
+                    end = function.FuncBody.EndKeyword.Start;
+
+                    return sourceText.GetLineNumberFromIndex(start) == sourceText.GetLineNumberFromIndex(end);
+                }
+                else if (parsedToken.UpperStatementNode.Kind == SyntaxKind.LocalFunctionStatementNode)
+                {
+                    LocalFunctionStatementNode function = (LocalFunctionStatementNode)parsedToken.UpperStatementNode;
+                    start = function.LocalKeyword.Start;
+                    end = function.FuncBody.EndKeyword.Start;
+
+                    return sourceText.GetLineNumberFromIndex(start) == sourceText.GetLineNumberFromIndex(end);
+                }
+
+                return false;
             };
         }
     }
