@@ -9,18 +9,22 @@ namespace LanguageService.Formatting
 {
     internal struct FormattingContext
     {
-        internal FormattingContext(ParsedToken currentToken, ParsedToken nextToken)
+        internal FormattingContext(ParsedToken currentToken, ParsedToken nextToken, SourceText sourceText)
         {
             Requires.NotNull(currentToken, nameof(currentToken));
             Requires.NotNull(nextToken, nameof(nextToken));
+            Requires.NotNull(sourceText, nameof(sourceText));
 
             this.CurrentToken = currentToken;
             this.NextToken = nextToken;
+            this.SourceText = sourceText;
         }
 
         internal ParsedToken CurrentToken { get; }
 
         internal ParsedToken NextToken { get; }
+
+        internal SourceText SourceText { get; }
 
         internal bool TriviaBetweenTokensContains(SyntaxKind triviaType)
         {

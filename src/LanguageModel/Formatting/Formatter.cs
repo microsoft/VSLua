@@ -64,7 +64,7 @@ namespace LanguageService.Formatting
                 for (int i = 0; i < parsedTokens.Count - 1; ++i)
                 {
                     FormattingContext formattingContext =
-                        new FormattingContext(parsedTokens[i], parsedTokens[i + 1]);
+                        new FormattingContext(parsedTokens[i], parsedTokens[i + 1], sourceText);
 
                     Rule rule = this.ruleMap.Get(formattingContext);
 
