@@ -59,14 +59,17 @@ namespace Formatting.Tests
         }
 
 
-        private static string Format(string original, uint tabSize = 4, uint indentSize = 4, bool usingTabs = false)
+        private static string Format(string original, uint tabSize = 4, uint indentSize = 4, bool usingTabs = false, FormattingOptions formattingOptions = null)
         {
             LuaFeatureContainer featureContainer = new LuaFeatureContainer();
             Range range = new Range(0, original.Length);
 
-            FormattingOptions newOptions = new FormattingOptions(new List<DisableableRules>(), tabSize, indentSize, usingTabs);
+            if (formattingOptions == null)
+            {
+                formattingOptions = new FormattingOptions(new List<DisableableRules>(), tabSize, indentSize, usingTabs);
+            }
 
-            List<TextEditInfo> textEdits = featureContainer.Formatter.Format(new SourceText(original), range, newOptions);
+            List<TextEditInfo> textEdits = featureContainer.Formatter.Format(new SourceText(original), range, formattingOptions);
 
             var buffer = host.CreateTextBuffer(original);
             var edit = buffer.CreateEdit();
@@ -79,6 +82,11 @@ namespace Formatting.Tests
             var applied = edit.Apply();
 
             return applied.GetText();
+        }
+
+        private static string Format(string original, FormattingOptions formattingOptions)
+        {
+            return Format(original, 4, 4, false, formattingOptions);
         }
 
         private static int SmartIndent(string text, int lineNumber)
@@ -104,6 +112,12 @@ namespace Formatting.Tests
             //string actual2 = Tester.Format(original, IndentStyle.Relative);
             Assert.Equal(expected1, actual1);
             //Assert.Equal(expected2, actual2);
+        }
+
+        internal static void FormattingTest(string original, string expected, FormattingOptions formattingOptions)
+        {
+            string actual = Format(original, formattingOptions);
+            Assert.Equal(expected, actual);
         }
 
         internal static void SmartIndentationTest(string text, int lineNumber, int expectedIndent)

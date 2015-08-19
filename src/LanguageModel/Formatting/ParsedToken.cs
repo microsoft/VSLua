@@ -56,7 +56,9 @@ namespace LanguageService.Formatting
 
                 SyntaxNode nextStatementNode = syntaxNode;
 
-                if (!StatKinds.Contains(syntaxNode.Kind))
+                if (SyntaxKind.TableConstructorExp != syntaxNode.Kind &&
+                    SyntaxKind.TableConstructorArg != syntaxNode.Kind &&
+                    !StatKinds.Contains(syntaxNode.Kind))
                 {
                     nextStatementNode = statementNode;
                 }

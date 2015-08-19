@@ -75,7 +75,8 @@ namespace Formatting.Tests
         public void BrokenCode1()
         {
             string original = "x,= 1";
-            GeneralTest(original, original);
+            string expected = "x, = 1";
+            GeneralTest(original, expected);
         }
 
         [Fact]

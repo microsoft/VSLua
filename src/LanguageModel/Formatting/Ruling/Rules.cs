@@ -60,7 +60,11 @@ namespace LanguageService.Formatting.Ruling
                 {
                     TokensAreOnSameLine,
                     NoCommentsBetweenTokens,
-                    IsInATableConstructor(Side.Left)
+                    InSyntaxNode(Side.Left, new List<SyntaxKind>
+                    {
+                        SyntaxKind.TableConstructorArg,
+                        SyntaxKind.TableConstructorExp
+                    })
                 },
                 RuleAction.Space);
 
@@ -71,7 +75,11 @@ namespace LanguageService.Formatting.Ruling
                 {
                     TokensAreOnSameLine,
                     NoCommentsBetweenTokens,
-                    IsInATableConstructor(Side.Right)
+                    InSyntaxNode(Side.Right, new List<SyntaxKind>
+                    {
+                        SyntaxKind.TableConstructorArg,
+                        SyntaxKind.TableConstructorExp
+                    })
                 },
                 RuleAction.Space);
 
@@ -183,9 +191,7 @@ namespace LanguageService.Formatting.Ruling
         internal static readonly ImmutableArray<Rule> AllRules = ImmutableArray.Create(
             NoSpaceAfterCommaInFor,
             SpaceAfterComma,
-            SpaceBeforeOpenCurlyBraces,
             NoSpaceBeforeComma,
-            NoSpaceBeforeOpenSquareBracket,
             SpaceAfterAssignmentOperatorInStatement,
             SpaceBeforeAssignmentOperatorInStatement,
             SpaceBeforeAssignmentOperatorInFor,
@@ -194,6 +200,8 @@ namespace LanguageService.Formatting.Ruling
             SpaceAfterAssignmentOperatorInField,
             SpaceAfterBinaryOperator,
             SpaceBeforeBinaryOperator,
+            SpaceBeforeOpenCurlyBraces,
+            NoSpaceBeforeOpenSquareBracket,
             SpaceAfterValueBeforeOpenParenthesis,
             SpaceBeforeValueAfterOpenParenthesis,
             SpaceBeforeValueAfterOpenSquareBracket,
