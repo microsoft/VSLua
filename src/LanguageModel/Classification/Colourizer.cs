@@ -67,14 +67,15 @@ namespace LanguageService.Classification
                             if (!locals.Contains(identifier))
                             {
                                 locals.Add(identifier);
-                                if (paramrefs.Contains(identifier))
-                                {
-                                    // if a local is defined in a block, the parameter references
-                                    //   are not used, so we need to remove its precedence.
-                                    paramrefs.Remove(identifier);
-                    }
-                }
-            }
+                            }
+
+                            if (paramrefs.Contains(identifier))
+                            {
+                                // if a local is defined in a block, the parameter references
+                                //   are not used, so we need to remove its precedence.
+                                paramrefs.Remove(identifier);
+                            }
+                        }
                     }
                     else if (syntaxKindChild == SyntaxKind.FuncBodyNode)
                     {
@@ -126,15 +127,15 @@ namespace LanguageService.Classification
                         //   The reason this is here instead of the lexer is for consistency,
                         //   so all "Field" classifications update at the same time, this is just convenient.
                         classification = Classification.Field;
-                }
+                    }
                     else if (paramrefs.Contains(token.Text))
                     {
                         classification = Classification.ParameterReference;
-            }
+                    }
                     else if (locals.Contains(token.Text))
                     {
                         classification = Classification.Local;
-        }
+                    }
                     else
                     {
                         classification = Classification.Global;
@@ -215,7 +216,7 @@ namespace LanguageService.Classification
             foreach (SeparatedListElement listElement in nameList.SyntaxList)
             {
                 if (listElement.Element as Token != null)
-        {
+                {
                     yield return ((Token)listElement.Element).Text;
                 }
             }
@@ -259,8 +260,8 @@ namespace LanguageService.Classification
                         yield return new TagInfo(tokenStart, tokenEnd - tokenStart, SyntaxKindClassifications[token.Kind]);
                     }
                 }
-                    }
-                }
+            }
+        }
 
         private static IEnumerable<Token> GetTokens(SyntaxNodeOrToken currentRoot)
         {

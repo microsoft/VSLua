@@ -149,6 +149,20 @@ end";
         }
 
         [Fact]
+        public void LocalBeforeLocalInFunction()
+        {
+            string text = @"local x
+foo = function(x, y, z)
+    local x
+end";
+            Classification[] expectedClassifications =
+                new Classification[6] { Classification.Local, Classification.Global, Classification.ParameterReference, Classification.ParameterReference, Classification.ParameterReference, Classification.Local };
+            string[] expectedStrings = new string[6] { "x", "foo", "x", "y", "z", "x" };
+            ClassificationAndOrderTest(text, expectedClassifications, expectedStrings);
+
+        }
+
+        [Fact]
         public void ChainedFields()
         {
             string text = "x.foo:bar.something:Else()";
