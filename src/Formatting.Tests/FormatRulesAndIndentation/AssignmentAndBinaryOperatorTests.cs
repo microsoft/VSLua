@@ -7,21 +7,21 @@ namespace Formatting.Tests
     {
 
         delegate void TestFunction(string original, string expected);
-        TestFunction GeneralTest = Tester.FormattingTest;
+        TestFunction FormattingTest = Tester.FormattingTest;
 
         [Fact]
         public void AssignmentBasic()
         {
             string original = "x=1";
             string expected = "x = 1";
-            GeneralTest(original, expected);
+            FormattingTest(original, expected);
         }
 
         [Fact]
         public void AssignmentComment()
         {
             string original = "x =--[[ comment ]]1";
-            GeneralTest(original, original);
+            FormattingTest(original, original);
         }
 
         [Fact(Skip = "Weird")]
@@ -29,7 +29,7 @@ namespace Formatting.Tests
         {
             string original = "x = -hello_world";
             string expected = "x = - hello_world";
-            GeneralTest(original, expected);
+            FormattingTest(original, expected);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace Formatting.Tests
         {
             string original = "t = { x=1, y=2 }";
             string expected = "t = { x = 1, y = 2 }";
-            GeneralTest(original, expected);
+            FormattingTest(original, expected);
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace Formatting.Tests
         {
             string original = "x=1 == 1";
             string expected = "x = 1 == 1";
-            GeneralTest(original, expected);
+            FormattingTest(original, expected);
         }
 
         [Fact]
@@ -53,14 +53,14 @@ namespace Formatting.Tests
         {
             string original = "x = x..y";
             string expected = "x = x .. y";
-            GeneralTest(original, expected);
+            FormattingTest(original, expected);
         }
 
         [Fact]
         public void BinaryComment()
         {
             string original = "x ==--[[ comment ]]y";
-            GeneralTest(original, original);
+            FormattingTest(original, original);
         }
 
         [Fact]
@@ -72,7 +72,7 @@ x=
             string expected = @"
 x =
 1";
-            GeneralTest(original, expected);
+            FormattingTest(original, expected);
         }
 
         [Fact]
@@ -80,7 +80,7 @@ x =
         {
             string original = "x     =       2         +      1";
             string expected = "x = 2 + 1";
-            GeneralTest(original, expected);
+            FormattingTest(original, expected);
         }
 
         [Fact]
@@ -88,7 +88,7 @@ x =
         {
             string original = "x = 1+1";
             string expected = "x = 1 + 1";
-            GeneralTest(original, expected);
+            FormattingTest(original, expected);
         }
 
         [Fact]
@@ -96,7 +96,7 @@ x =
         {
             string original = "x = 1==1+2-4*10^6";
             string expected = "x = 1 == 1 + 2 - 4 * 10 ^ 6";
-            GeneralTest(original, expected);
+            FormattingTest(original, expected);
         }
 
         [Fact]
@@ -108,7 +108,7 @@ x = 1+1+
             string expected = @"
 x = 1 + 1 +
 1";
-            GeneralTest(original, expected);
+            FormattingTest(original, expected);
         }
 
         [Fact]
@@ -116,14 +116,14 @@ x = 1 + 1 +
         {
             string original = "+-*/";
             string expected = "+-*/";
-            GeneralTest(original, expected);
+            FormattingTest(original, expected);
         }
 
         [Fact]
         public void TrailingBinary()
         {
             string original = "x = 1+";
-            GeneralTest(original, original);
+            FormattingTest(original, original);
         }
 
         [Fact]
@@ -131,7 +131,15 @@ x = 1 + 1 +
         {
             string original = "x = x +1 == 2   x= 3 /2+4";
             string expected = "x = x + 1 == 2   x = 3 / 2 + 4";
-            GeneralTest(original, expected);
+            FormattingTest(original, expected);
+        }
+
+        [Fact]
+        public void TableAssignment()
+        {
+            string original = "t = { x=y }";
+            string expected = "t = { x = y }";
+            FormattingTest(original, expected);
         }
 
     }

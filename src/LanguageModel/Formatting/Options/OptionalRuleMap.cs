@@ -89,6 +89,9 @@ namespace LanguageService.Formatting.Options
             Rules.SpaceBeforeAssignmentOperatorInFor,
             Rules.SpaceAfterAssignmentOperatorInFor);
 
+        private static ImmutableArray<Rule> NoSpaceAfterCommaInFor = ImmutableArray.Create(
+            Rules.NoSpaceAfterCommaInFor);
+
         private static ImmutableArray<Rule> SpaceBeforeAfterAssignmentInField = ImmutableArray.Create(
             Rules.SpaceBeforeAssignmentOperatorInField,
             Rules.SpaceAfterAssignmentOperatorInField);
@@ -103,7 +106,8 @@ namespace LanguageService.Formatting.Options
             { DisableableRules.SpaceAfterCommas, SpaceAfterCommas },
             { DisableableRules.SpaceBeforeAndAfterBinaryOperations, SpaceBeforeAndAfterBinaryOperations },
             { DisableableRules.SpaceBeforeAndAfterAssignmentForStatement, SpaceBeforeAndAfterAssignmentInStatement },
-            { DisableableRules.NoSpaceBeforeAndAfterIndiciesInForLoopHeader, SpaceBeforeAndAfterAssignmentInFor },
+            { DisableableRules.SpaceBeforeAndAfterAssignmentInForLoopHeader, SpaceBeforeAndAfterAssignmentInFor },
+            { DisableableRules.NoSpaceBeforeAndAfterIndiciesInForLoopHeader, NoSpaceAfterCommaInFor },
             { DisableableRules.SpaceBeforeAndAfterAssignmentForField, SpaceBeforeAfterAssignmentInField }
         };
     }

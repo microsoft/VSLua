@@ -164,7 +164,7 @@ namespace LanguageService.Formatting.Ruling
             new SimpleRule(new RuleDescriptor(TokenRange.AnyVisible, SyntaxKind.AssignmentOperator),
                 new List<Func<FormattingContext, bool>>
                 {
-                    TokensAreNotOnSameLine,
+                    TokensAreOnSameLine,
                     NoCommentsBetweenTokens,
                     InSyntaxNode(Side.Right, new List<SyntaxKind> { SyntaxKind.SimpleForStatementNode })
                 },
@@ -174,7 +174,7 @@ namespace LanguageService.Formatting.Ruling
             new SimpleRule(new RuleDescriptor(SyntaxKind.AssignmentOperator, TokenRange.AnyVisible),
                 new List<Func<FormattingContext, bool>>
                 {
-                    TokensAreNotOnSameLine,
+                    TokensAreOnSameLine,
                     NoCommentsBetweenTokens,
                     InSyntaxNode(Side.Left, new List<SyntaxKind> { SyntaxKind.SimpleForStatementNode })
                 },

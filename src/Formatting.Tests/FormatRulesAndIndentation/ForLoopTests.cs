@@ -37,5 +37,13 @@ namespace Formatting.Tests
             string expected = "for i = 1,2 do end";
             GeneralTest(original, expected);
         }
+
+        [Fact]
+        public void SpacesAssignment()
+        {
+            string original = "for i   =   1,2 do end";
+            string expected = "for i = 1,2 do end";
+            GeneralTest(original, expected);
+        }
     }
 }

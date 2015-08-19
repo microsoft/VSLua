@@ -17,5 +17,7 @@ namespace LanguageService.Formatting.Ruling
         internal abstract bool AppliesTo(FormattingContext formattingContext);
 
         internal abstract IEnumerable<TextEditInfo> Apply(FormattingContext formattingContext);
+
+        internal abstract Rule Inverse { get; }
     }
 }

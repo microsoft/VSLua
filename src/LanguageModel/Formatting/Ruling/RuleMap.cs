@@ -19,15 +19,15 @@ namespace LanguageService.Formatting.Ruling
         internal static RuleMap Create(OptionalRuleMap optionalRuleMap)
         {
             RuleMap ruleMap = new RuleMap();
-            ruleMap.AddEnabledRules(optionalRuleMap);
+            ruleMap.AddEnabledRulesOrInverses(optionalRuleMap);
 
             return ruleMap;
-            }
+        }
 
         internal static RuleMap Create()
         {
             RuleMap ruleMap = new RuleMap();
-            ruleMap.AddEnabledRules(new OptionalRuleMap(Enumerable.Empty<DisableableRules>()));
+            ruleMap.AddEnabledRulesOrInverses(new OptionalRuleMap(Enumerable.Empty<DisableableRules>()));
 
             return ruleMap;
         }
@@ -50,7 +50,7 @@ namespace LanguageService.Formatting.Ruling
                     {
                         // if this is true, a bucket has been found, and can leave the else safely
                         if (!leftTokenMap.TryGetValue(typeRight, out bucket))
-                    {
+                        {
                             this.Map[typeLeft][typeRight] = bucket = new RuleBucket();
                         }
                     }
@@ -71,25 +71,34 @@ namespace LanguageService.Formatting.Ruling
             if (this.Map.TryGetValue(typeLeft, out leftTokenMap))
             {
                 if (leftTokenMap.TryGetValue(typeRight, out ruleBucket))
-            {
-                return ruleBucket.Get(formattingContext);
-            }
+                {
+                    return ruleBucket.Get(formattingContext);
+                }
             }
 
             return null;
         }
 
-        private void AddEnabledRules(OptionalRuleMap optionalRuleMap)
+        private void AddEnabledRulesOrInverses(OptionalRuleMap optionalRuleMap)
         {
             if (optionalRuleMap == null)
             {
                 optionalRuleMap = new OptionalRuleMap(Enumerable.Empty<DisableableRules>());
-        }
+            }
 
             this.Map = new Dictionary<SyntaxKind, Dictionary<SyntaxKind, RuleBucket>>();
             foreach (Rule rule in Rules.AllRules)
             {
-                if (!optionalRuleMap.DisabledRules.Contains(rule))
+                if (optionalRuleMap.DisabledRules.Contains(rule))
+                {
+                    if (rule as SimpleRule != null &&
+                        (rule.RuleOperationContext.Action == RuleAction.Space ||
+                        rule.RuleOperationContext.Action == RuleAction.Delete))
+                    {
+                        this.Add(rule.Inverse);
+                    }
+                }
+                else
                 {
                     this.Add(rule);
                 }

@@ -22,9 +22,32 @@ namespace LanguageService.Formatting.Ruling
             this.RuleOperationContext = new RuleOperation(new RuleOperationContext(contextFilters), action);
         }
 
+        private SimpleRule(RuleDescriptor ruleDescriptor, RuleOperationContext ruleOperationContext, RuleAction ruleAction)
+        {
+            Requires.NotNull(ruleDescriptor, nameof(ruleDescriptor));
+            Requires.NotNull(ruleOperationContext, nameof(ruleOperationContext));
+
+            this.RuleDescriptor = ruleDescriptor;
+            this.RuleOperationContext = new RuleOperation(ruleOperationContext, ruleAction);
+        }
+
         internal override RuleDescriptor RuleDescriptor { get; }
 
         internal override RuleOperation RuleOperationContext { get; }
+
+        private Rule invertedRule;
+
+        internal override Rule Inverse
+        {
+            get
+            {
+                this.invertedRule = this.invertedRule == null ?
+                    new SimpleRule(this.RuleDescriptor, this.RuleOperationContext.Context, GetInverseAction(this.RuleOperationContext.Action)) :
+                    this.invertedRule;
+
+                return this.invertedRule;
+            }
+        }
 
         internal override bool AppliesTo(FormattingContext formattingContext)
         {
@@ -55,6 +78,22 @@ namespace LanguageService.Formatting.Ruling
                     return " ";
                 default:
                     return string.Empty;
+            }
+        }
+
+        private static RuleAction GetInverseAction(RuleAction action)
+        {
+            if (action == RuleAction.Delete)
+            {
+                return RuleAction.Space;
+            }
+            else if (action == RuleAction.Space)
+            {
+                return RuleAction.Delete;
+            }
+            else
+            {
+                return action;
             }
         }
     }
