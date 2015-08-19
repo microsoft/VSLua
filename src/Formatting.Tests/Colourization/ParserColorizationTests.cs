@@ -148,7 +148,7 @@ end";
             ClassificationAndOrderTest(text, expectedClassifications, expectedStrings);
         }
 
-        [Fact]
+        [Fact(Skip = "Parser Error")]
         public void ChainedFields()
         {
             string text = "x.foo:bar.something:Else()";

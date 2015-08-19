@@ -7,7 +7,7 @@ namespace Formatting.Tests
         delegate void TestFunction(string original, string expected);
         TestFunction GeneralTest = Tester.FormattingTest;
 
-        [Fact]
+        [Fact(Skip = "Parser Error")]
         public void BasicDot()
         {
             string original = "t . foo ()";
@@ -38,7 +38,7 @@ namespace Formatting.Tests
             GeneralTest(original, original);
         }
 
-        [Fact]
+        [Fact(Skip = "Parser error")]
         public void NewLineInBetweenDotOrColon()
         {
             string original = @"

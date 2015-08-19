@@ -42,8 +42,8 @@ namespace Formatting.Tests.FormatsOn
         public void PastingInLine()
         {
             string original = "foo=function";
-            PasteInfo paste = new PasteInfo("(x,y,z)", 12, 0);
-            string expected = "foo=function( x, y, z )";
+            PasteInfo paste = new PasteInfo("(x,y,z) end", 12, 0);
+            string expected = "foo=function( x, y, z ) end";
             PasteTest(original, paste, expected);
         }
 
@@ -75,13 +75,13 @@ namespace Formatting.Tests.FormatsOn
         public void PasteMultipleLinesOverMultipleLines()
         {
             string original = @"x = 10
-    y = 30
-    z=x+y";
+y = 30
+z=x+y";
             PasteInfo paste = new PasteInfo(@"x = x+y
-    y = y + x", 0, 14);
+y = y + x", 0, 14);
             string expected = @"x = x + y
-    y = y + x
-    z=x+y";
+y = y + x
+z=x+y";
             PasteTest(original, paste, expected);
         }
 

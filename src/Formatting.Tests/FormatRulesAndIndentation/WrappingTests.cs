@@ -262,12 +262,12 @@ namespace Formatting.Tests
 
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented")]
         public void TableMultipleLines1()
         {
             string original = @"
-    t1 =
-    {}";
+t1 =
+{}";
             GeneralTest(original, original, original);
         }
 
@@ -275,8 +275,8 @@ namespace Formatting.Tests
         public void TableMutlipleLines2()
         {
             string original = @"
-    t2 = {2,
-    }";
+t2 = {2,
+}";
             GeneralTest(original, original, original);
         }
 
@@ -284,8 +284,8 @@ namespace Formatting.Tests
         public void TableMutlipleLines3()
         {
             string original = @"
-    t3 = {2
-    ,3}";
+t3 = {2
+,3}";
             GeneralTest(original, original, original);
         }
 
@@ -293,14 +293,14 @@ namespace Formatting.Tests
         public void EmbeddedTables()
         {
             string original = @"
-    t1 = { t2 = { t3 = {} } }";
+t1 = { t2 = { t3 = {} } }";
             string expected1 = @"
-    t1 = {
+t1 = {
     t2 = {
         t3 = {
         }
     }
-    }";
+}";
             string expected2 = @"
     t1 = {
         t2 = {
@@ -316,14 +316,14 @@ namespace Formatting.Tests
         public void EmbeddedFunctions()
         {
             string original = @"
-    foo = function() bar = function() foobar = function() end end end";
+foo = function() bar = function() foobar = function() end end end";
             string expected1 = @"
-    foo = function()
+foo = function()
     bar = function()
         foobar = function()
         end
     end
-    end";
+end";
             string expected2 = @"
     foo = function()
         bar = function()
@@ -338,14 +338,14 @@ namespace Formatting.Tests
         public void EmbeddedFunctionsV2()
         {
             string original = @"
-    function foo() function bar() function foobar() end end end";
+function foo() function bar() function foobar() end end end";
             string expected = @"
-    function foo()
+function foo()
     function bar()
         function foobar()
         end
     end
-    end";
+end";
             GeneralTest(original, expected, expected);
         }
     }

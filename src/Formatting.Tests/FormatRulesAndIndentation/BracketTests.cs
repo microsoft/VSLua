@@ -107,10 +107,10 @@ t = [
         {
             string original = @"
 foo = function (
-a, b, c)";
+a, b, c) end";
             string expected = @"
 foo = function (
-a, b, c )";
+a, b, c ) end";
             GeneralTest(original, expected);
         }
 

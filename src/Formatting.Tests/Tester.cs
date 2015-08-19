@@ -44,7 +44,8 @@ namespace Formatting.Tests
                 var featureContainer = new LuaFeatureContainer();
                 SourceText sourceText = new SourceText(bufferApplied.GetText());
                 Range range = new Range(newSpan.Start.Position, newSpan.Length);
-                List<TextEditInfo> edits = featureContainer.Formatter.Format(sourceText, range, null);
+                List<TextEditInfo> edits = featureContainer.Formatter.Format(sourceText, range,
+                    new FormattingOptions(new List<DisableableRules>(), 4, 4, false));
                 var pastedBufferEdit = buffer.CreateEdit();
                 foreach (TextEditInfo edit in edits)
                 {
