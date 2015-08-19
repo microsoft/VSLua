@@ -348,5 +348,27 @@ function foo()
 end";
             GeneralTest(original, expected, expected);
         }
+
+        [Fact(Skip = "not implemented")]
+        public void ForWrapping1()
+        {
+            string original = "for i = 10,3 do end";
+            string expected = @"for i = 10,3 do
+end";
+            GeneralTest(original, expected, expected);
+        }
+
+        [Fact(Skip = "not implemented")]
+        public void ForWrapping2()
+        {
+            string original = "for i = 10,3 do x = 10 y = 4 z = x + y end";
+            string expected = @"for i = 10,3 do
+    x = 10
+    y = 4
+    z = x + y
+end";
+            GeneralTest(original, expected, expected);
+        }
+
     }
 }
