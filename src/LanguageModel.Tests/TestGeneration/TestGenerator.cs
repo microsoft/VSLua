@@ -7,9 +7,9 @@ using System.Collections.Generic;
 
 namespace LanguageModel.Tests
 {
-    class TestGenerator
+    public class TestGenerator
     {
-        public IndentingTextWriter IndentingWriter { get; private set; }
+        internal IndentingTextWriter IndentingWriter { get; private set; }
         public StringBuilder sb { get; private set; }
 
         private static readonly string BasePath = Environment.ExpandEnvironmentVariables(@"%UserProfile%\\Documents\\LuaTests");

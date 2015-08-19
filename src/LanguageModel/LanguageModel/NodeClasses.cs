@@ -689,7 +689,7 @@ namespace LanguageService
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
-    public partial class FunctionCallExp : PrefixExp
+    public partial class FunctionCallPrefixexp : PrefixExp
     {
         [Required]
         readonly PrefixExp prefixExp;
