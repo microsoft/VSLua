@@ -141,6 +141,5 @@ x = 1 + 1 +
             string expected = "t = { x = y }";
             FormattingTest(original, expected);
         }
-
     }
 }
