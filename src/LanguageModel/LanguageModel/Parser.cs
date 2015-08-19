@@ -189,30 +189,45 @@ namespace LanguageService
                         return ParseLocalAssignmentStatementNode();
                     }
                 case SyntaxKind.Identifier:
-                    switch (Peek(2).Kind)
-                    {
-                        case SyntaxKind.OpenCurlyBrace:
-                        case SyntaxKind.OpenParen:
-                        case SyntaxKind.String:
-                        case SyntaxKind.Colon:
-                            return ParseFunctionCallStatementNode();
-                        default:
-                            return ParseAssignmentStatementNode();
-                    }
                 case SyntaxKind.OpenParen:
                     int tempPosition = positionInTokenList;
-                    var prefixExp = ParseParenPrefixExp();
-                    switch (Peek(2).Kind)
+                    var prefixExp = ParsePrefixExp();
+                    positionInTokenList = tempPosition;
+
+                    if (prefixExp is FunctionCallPrefixexp)
                     {
-                        case SyntaxKind.OpenParen:
-                        case SyntaxKind.OpenCurlyBrace:
-                        case SyntaxKind.String:
-                        case SyntaxKind.Colon:
-                            return ParseFunctionCallStatementNode(prefixExp);
-                        default:
-                            positionInTokenList = tempPosition;
-                            return ParseAssignmentStatementNode();
+                        //return prefixExp.ToFunctionCallStatementNode();
+                        return ParseFunctionCallStatementNode();
                     }
+                    else
+                    {
+                        return ParseAssignmentStatementNode();
+                    }
+                //case SyntaxKind.Identifier:
+                //    switch (Peek(2).Kind)
+                //    {
+                //        case SyntaxKind.OpenCurlyBrace:
+                //        case SyntaxKind.OpenParen:
+                //        case SyntaxKind.String:
+                //        case SyntaxKind.Colon:
+                //            return ParseFunctionCallStatementNode();
+                //        default:
+                //            return ParseAssignmentStatementNode();
+                //    }
+                //case SyntaxKind.OpenParen:
+                //    int tempPosition = positionInTokenList;
+                //    var prefixExp = ParseParenPrefixExp();
+                //    switch (Peek(2).Kind)
+                //    {
+                //        case SyntaxKind.OpenParen:
+                //        case SyntaxKind.OpenCurlyBrace:
+                //        case SyntaxKind.String:
+                //        case SyntaxKind.Colon:
+                //            return ParseFunctionCallStatementNode(prefixExp);
+                //        default:
+                //            positionInTokenList = tempPosition;
+                //            return ParseAssignmentStatementNode();
+                //    }
                 default:
                     throw new InvalidOperationException();
             }
@@ -443,33 +458,34 @@ namespace LanguageService
             }
             else
             {
-                switch (Peek().Kind)
-                {
-                    case SyntaxKind.OpenParen:
-                        node.PrefixExp = ParseParenPrefixExp().ToBuilder();
-                        break;
-                    case SyntaxKind.Identifier:
-                        switch (Peek(2).Kind)
-                        {
-                            case SyntaxKind.OpenParen:
-                            case SyntaxKind.OpenCurlyBrace:
-                            case SyntaxKind.String:
-                            case SyntaxKind.Colon:
-                                node.PrefixExp = ParseNameVar().ToBuilder();
-                                break;
-                            case SyntaxKind.OpenBracket:
-                                node.PrefixExp = ParseSquareBracketVar(ParseNameVar()).ToBuilder();
-                                break;
-                            case SyntaxKind.Dot:
-                                node.PrefixExp = ParseDotVar(ParseNameVar()).ToBuilder();
-                                break;
-                            default:
-                                throw new InvalidOperationException();
-                        }
-                        break;
-                    default:
-                        throw new InvalidOperationException();
-                }
+                node.PrefixExp = ParsePrefixExp(null, true).ToBuilder();
+                //switch (Peek().Kind)
+                //{
+                //    case SyntaxKind.OpenParen:
+                //        node.PrefixExp = ParseParenPrefixExp().ToBuilder();
+                //        break;
+                //    case SyntaxKind.Identifier:
+                //        switch (Peek(2).Kind)
+                //        {
+                //            case SyntaxKind.OpenParen:
+                //            case SyntaxKind.OpenCurlyBrace:
+                //            case SyntaxKind.String:
+                //            case SyntaxKind.Colon:
+                //                node.PrefixExp = ParseNameVar().ToBuilder();
+                //                break;
+                //            case SyntaxKind.OpenBracket:
+                //                node.PrefixExp = ParseSquareBracketVar(ParseNameVar()).ToBuilder();
+                //                break;
+                //            case SyntaxKind.Dot:
+                //                node.PrefixExp = ParseDotVar(ParseNameVar()).ToBuilder();
+                //                break;
+                //            default:
+                //                throw new InvalidOperationException();
+                //        }
+                //        break;
+                //    default:
+                //        throw new InvalidOperationException();
+                //}
             }
 
             if (ParseExpected(SyntaxKind.Colon))
@@ -733,7 +749,7 @@ namespace LanguageService
 
         #region PrefixExp Expression
 
-        private PrefixExp ParsePrefixExp(PrefixExp prefixExp = null)
+        private PrefixExp ParsePrefixExp(PrefixExp prefixExp = null, bool parsingFunctionCallStatement = false)
         {
             if (prefixExp == null)
             {
@@ -750,6 +766,8 @@ namespace LanguageService
                 }
             }
 
+            int tempPosition = 0;
+
             while (ContinueParsingPrefixExp(Peek().Kind))
             {
                 switch (Peek().Kind)
@@ -764,10 +782,31 @@ namespace LanguageService
                     case SyntaxKind.OpenParen:
                     case SyntaxKind.OpenCurlyBrace:
                     case SyntaxKind.Colon:
+                        tempPosition = positionInTokenList;
                         prefixExp = ParseFunctionCallPrefixp(prefixExp);
+                        //if (parsingFunctionCallStatement)
+                        //{
+                        //    return prefixExp;
+                        //}
+                        //else
+                        //{  
+                        //    prefixExp = ParseFunctionCallPrefixp(prefixExp);
+                        //}
                         break;
                     default:
-                        throw new InvalidOperationException();
+                        return prefixExp;
+                }
+            }
+
+            if(parsingFunctionCallStatement)
+            {
+                if(prefixExp is FunctionCallPrefixexp)
+                {
+                    positionInTokenList = tempPosition;
+                    return (prefixExp as FunctionCallPrefixexp).PrefixExp;
+                } else
+                {
+                    return prefixExp;
                 }
             }
 

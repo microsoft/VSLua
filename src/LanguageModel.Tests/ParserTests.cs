@@ -156,9 +156,52 @@ get_zero = function() return 0 end", "LucaDemo");
         public void PrefixExpNestedTest()
         {
             SyntaxTree tree = SyntaxTree.CreateFromString("foo.bar(t[5]).set():run{}");
-            int x = tree.ErrorList.Count;
+            Assert.Equal(0, tree.ErrorList.Count);
             var generator = new TestGenerator();
             generator.GenerateTestFromString("foo.bar(t[5]).set():run{}", "PrefixExpNested");
+            new PrefixExpNested_Generated().Test(new Tester(tree));
+        }
+
+        [Fact]
+        public void NestedTableTest()
+        {
+            SyntaxTree tree = SyntaxTree.CreateFromString(@"
+t = {
+    f = {
+
+    }
+}");
+            Assert.Equal(0, tree.ErrorList.Count);
+            var generator = new TestGenerator();
+            generator.GenerateTestFromString(@"
+t = {
+    f = {
+
+    }
+}", "NestedTable");
+
+            new NestedTable_Generated().Test(new Tester(tree));
+        }
+
+        [Fact]
+        public void EmbeddedFunctionTest()
+        {
+            SyntaxTree tree = SyntaxTree.CreateFromString(@"
+foo = function()
+    bar = function()
+
+    end
+end");
+            Assert.Equal(0, tree.ErrorList.Count);
+            var generator = new TestGenerator();
+            generator.GenerateTestFromString(@"
+foo = function()
+    bar = function()
+
+    end
+end", "EmbeddedFunction");
+
+            new EmbeddedFunction_Generated().Test(new Tester(tree));
         }
 
         [Fact]

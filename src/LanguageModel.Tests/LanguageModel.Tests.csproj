@@ -91,12 +91,15 @@
     <Compile Include="TestGeneration\ValidatedGeneratedTests\Assignments_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\BracketError_Generator.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\ComplexTableConstructor_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\EmbeddedFunction_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\EmptyProgram_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\FunctionDefError_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\GrabKeyFromTable_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\LucaDemo_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\MultipleTypeAssignment_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\NestedTable_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\PrefixExpFirst_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\PrefixExpNested_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\SimpleTableError_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\SmallIf_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\TableStatements_Generated.cs" />
