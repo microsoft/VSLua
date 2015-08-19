@@ -48,6 +48,22 @@ namespace Formatting.Tests
         }
 
         [Fact]
+        public void SpacesBeforeCommas1()
+        {
+            string original = "t = { x    ,y}";
+            string expected = "t = { x, y }";
+            GeneralTest(original, expected);
+        }
+
+        [Fact]
+        public void SpacesBeforeCommas2()
+        {
+            string original = "t = { x    ,y          ,z}";
+            string expected = "t = { x, y, z }";
+            GeneralTest(original, expected);
+        }
+
+        [Fact]
         public void MultipleAssignment()
         {
             string original = "x,y = 1,2";
