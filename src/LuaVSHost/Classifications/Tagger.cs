@@ -66,7 +66,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
         }
 
         private IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans, bool useParser)
-        {
+         {
             if (spans.Count < 0)
             {
                 yield break;
