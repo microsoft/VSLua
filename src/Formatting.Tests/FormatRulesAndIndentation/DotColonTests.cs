@@ -23,7 +23,7 @@ namespace Formatting.Tests
             GeneralTest(original, expected);
         }
 
-        [Fact(Skip = "Not passing")]
+        [Fact(Skip = "Parser Error")]
         public void MultipleInOneLine()
         {
             string original = "t     :foo ().anothertable.  bar : foobar ()";

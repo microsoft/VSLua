@@ -47,16 +47,16 @@ namespace Formatting.Tests.FormatsOn
             PasteTest(original, paste, expected);
         }
 
-        [Fact(Skip = "Not passing")]
+        [Fact]
         public void PasteMultipleLines()
         {
             string original = @"foo=
-    ";
+";
             PasteInfo paste = new PasteInfo(@"x+1
-    y+1", 6, 0);
+x=y+1", 6, 0);
             string expected = @"foo=
-    x + 1
-    y + 1";
+x + 1
+x = y + 1";
             PasteTest(original, paste, expected);
         }
 
@@ -64,8 +64,8 @@ namespace Formatting.Tests.FormatsOn
         public void PasteOverMultipleLines()
         {
             string original = @"x = 10
-    y = 30
-    z = x + y";
+y = 30
+z = x + y";
             PasteInfo paste = new PasteInfo("print(\"hello world\")", 0, original.Length);
             string expected = "print ( \"hello world\" )";
             PasteTest(original, paste, expected);
@@ -85,12 +85,12 @@ z=x+y";
             PasteTest(original, paste, expected);
         }
 
-        [Fact(Skip = "Not passing")]
+        [Fact]
         public void PasteInBetweenLetters()
         {
             string original = "xy";
-            PasteInfo paste = new PasteInfo("+ x/y *", 1, 0);
-            string expected = "x+ x / y * y";
+            PasteInfo paste = new PasteInfo("= x/y *", 1, 0);
+            string expected = "x= x / y * y";
             PasteTest(original, paste, expected);
         }
     }

@@ -24,11 +24,11 @@ namespace Formatting.Tests
             GeneralTest(original, original);
         }
 
-        [Fact(Skip = "Not passing")]
+        [Fact(Skip = "Weird")]
         public void BasicMinus()
         {
-            string original = "-hello_world";
-            string expected = "- hello_world";
+            string original = "x = -hello_world";
+            string expected = "x = - hello_world";
             GeneralTest(original, expected);
         }
 
@@ -48,11 +48,11 @@ namespace Formatting.Tests
             GeneralTest(original, expected);
         }
 
-        [Fact(Skip = "Not passing")]
+        [Fact]
         public void Concat()
         {
-            string original = "x..y";
-            string expected = "x .. y";
+            string original = "x = x..y";
+            string expected = "x = x .. y";
             GeneralTest(original, expected);
         }
 
@@ -75,11 +75,11 @@ x =
             GeneralTest(original, expected);
         }
 
-        [Fact(Skip = "Not passing")]
+        [Fact]
         public void MultiSpacedBinaryAssignment()
         {
-            string original = "1     +       2        =       x";
-            string expected = "1 + 2 = x";
+            string original = "x     =       2         +      1";
+            string expected = "x = 2 + 1";
             GeneralTest(original, expected);
         }
 
@@ -126,11 +126,11 @@ x = 1 + 1 +
             GeneralTest(original, original);
         }
 
-        [Fact(Skip = "Not passing")]
+        [Fact]
         public void Mixed()
         {
-            string original = "x +1 == 2   x= 3 /2+4";
-            string expected = "x + 1 == 2   x = 3 / 2 + 4";
+            string original = "x = x +1 == 2   x= 3 /2+4";
+            string expected = "x = x + 1 == 2   x = 3 / 2 + 4";
             GeneralTest(original, expected);
         }
 

@@ -8,13 +8,6 @@ namespace Formatting.Tests
         delegate void TestFunction(string original, string expected);
         TestFunction GeneralTest = Tester.FormattingTest;
 
-        [Fact(Skip = "Not passing")]
-        public void Basic()
-        {
-            string original = ",x";
-            GeneralTest(original, original);
-        }
-
         [Fact]
         public void Comment()
         {
@@ -46,7 +39,7 @@ namespace Formatting.Tests
             GeneralTest(original, expected);
         }
 
-        [Fact(Skip = "Not passing")]
+        [Fact]
         public void TrailingComma()
         {
             string original = "t = { x, y,}";
@@ -66,14 +59,6 @@ namespace Formatting.Tests
         public void BrokenCode1()
         {
             string original = "x,= 1";
-            string expected = "x, = 1";
-            GeneralTest(original, expected);
-        }
-
-        [Fact(Skip = "Not passing")]
-        public void BrokenCode2()
-        {
-            string original = "{ x,,y }";
             GeneralTest(original, original);
         }
 

@@ -36,7 +36,7 @@ t1 = {
             FormattingTest(original, expected1);
         }
 
-        [Fact(Skip = "Not passing")]
+        [Fact]
         public void EmbeddedFunctions()
         {
             string original = @"
@@ -52,7 +52,7 @@ end";
             FormattingTest(original, expected1);
         }
 
-        [Fact(Skip = "Not passing")]
+        [Fact]
         public void EmbeddedTables()
         {
             string original = @"

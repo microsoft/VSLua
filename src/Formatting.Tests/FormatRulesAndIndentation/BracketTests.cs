@@ -39,7 +39,7 @@ namespace Formatting.Tests
             GeneralTest(original, original);
         }
 
-        [Fact(Skip = "Not passing")]
+        [Fact]
         public void CommentSquare()
         {
             string original = "t = [ 1--[[ comment ]]]";
