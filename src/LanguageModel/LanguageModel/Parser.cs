@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using Microsoft.Internal.VisualStudio.Shell;
 
 namespace LanguageService
 {
@@ -25,6 +26,9 @@ namespace LanguageService
 
         public SyntaxTree CreateSyntaxTree(TextReader luaStream)
         {
+
+            Validate.IsNotNull(luaStream, nameof(luaStream));
+
             positionInTokenList = -1;  //Make sure that internal state is at "beginning"
             tokenList = Lexer.Tokenize(luaStream);
 
@@ -68,19 +72,16 @@ namespace LanguageService
             {
                 return currentToken;
             }
+            else if (kind == SyntaxKind.AssignmentOperator && IsBlockContext(contextStack.Peek()))
+            {
+                ParseErrorAtCurrentPosition(ErrorMessages.InvalidStatementWithoutAssignementOperator);
+            }
             else
             {
-                if (kind == SyntaxKind.AssignmentOperator && IsBlockContext(contextStack.Peek()))
-                {
-                    ParseErrorAtCurrentPosition(ErrorMessages.InvalidStatementWithoutAssignementOperator);
-                }
-                else
-                {
-                    ParseErrorAtCurrentPosition(ErrorMessages.MissingToken + kind.ToString());
-                }
-
-                return Token.CreateMissingToken(currentToken.End);
+                ParseErrorAtCurrentPosition(ErrorMessages.MissingToken + kind.ToString());
             }
+
+            return Token.CreateMissingToken(currentToken.End);
         }
 
         private Token Peek(int forwardAmount = 1)
@@ -115,7 +116,7 @@ namespace LanguageService
             node.Kind = node.Kind = SyntaxKind.BlockNode;
             node.StartPosition = this.textPosition;
             bool EncounteredReturnStatement = false;
-            List<StatementNode> children = new List<StatementNode>();
+            var children = ImmutableList.CreateBuilder<StatementNode>();
 
             while (!IsListTerminator(context, Peek().Kind))
             {
@@ -463,11 +464,11 @@ namespace LanguageService
                                 node.PrefixExp = ParseDotVar(ParseNameVar()).ToBuilder();
                                 break;
                             default:
-                                throw new NotImplementedException();
+                                throw new InvalidOperationException();
                         }
                         break;
                     default:
-                        throw new NotImplementedException();
+                        throw new InvalidOperationException();
                 }
             }
 
@@ -500,7 +501,7 @@ namespace LanguageService
         private ImmutableList<ElseIfBlockNode> ParseElseIfList()
         {
             //TODO change parse logic.
-            var elseIfList = new List<ElseIfBlockNode>();
+            var elseIfList = ImmutableList.CreateBuilder<ElseIfBlockNode>();
 
             while (ParseExpected(SyntaxKind.ElseIfKeyword))
             {
@@ -674,7 +675,7 @@ namespace LanguageService
 
         private SeparatedList ParseFieldList()
         {
-            return ParseSeperatedList(ParsingContext.FieldList);
+            return ParseSeparatedList(ParsingContext.FieldList);
         }
 
         private FieldNode ParseField()
@@ -949,11 +950,11 @@ namespace LanguageService
 
         #region List Nodes
 
-        private SeparatedList ParseSeperatedList(ParsingContext context)
+        private SeparatedList ParseSeparatedList(ParsingContext context)
         {
             contextStack.Push(context);
             var listNode = SeparatedList.CreateBuilder();
-            var syntaxList = new List<SeparatedListElement>();
+            var syntaxList = ImmutableList.CreateBuilder<SeparatedListElement>();
             listNode.Kind = GetListKind(context);
             listNode.StartPosition = this.textPosition;
             bool commaFound = false;
@@ -1204,7 +1205,7 @@ namespace LanguageService
         #region Code To Deprecate
         private SeparatedList ParseVarList()
         {
-            return ParseSeperatedList(ParsingContext.VarList);
+            return ParseSeparatedList(ParsingContext.VarList);
         }
 
         private ParList ParseParList()
@@ -1236,12 +1237,12 @@ namespace LanguageService
 
         private SeparatedList ParseNameList()
         {
-            return ParseSeperatedList(ParsingContext.NameList);
+            return ParseSeparatedList(ParsingContext.NameList);
         }
 
         private SeparatedList ParseExpList()
         {
-            return ParseSeperatedList(ParsingContext.ExpList);
+            return ParseSeparatedList(ParsingContext.ExpList);
         }
 
         #endregion
@@ -1269,7 +1270,7 @@ namespace LanguageService
             node.StartPosition = this.textPosition;
             node.Name = GetExpectedToken(SyntaxKind.Identifier);
 
-            node.FuncNameList = ParseSeperatedList(ParsingContext.FuncNameDotSeperatedNameList).ToBuilder();
+            node.FuncNameList = ParseSeparatedList(ParsingContext.FuncNameDotSeperatedNameList).ToBuilder();
             if (ParseExpected(SyntaxKind.Colon))
             {
                 node.OptionalColon = currentToken;

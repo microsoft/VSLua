@@ -7,17 +7,20 @@ using LanguageModel.Tests;
 using System.IO;
 using System.Text;
 
+using Assert = Xunit.Assert;
+
 namespace LanguageService.Tests
 {
     [DeploymentItem("CorrectSampleLuaFiles", "CorrectSampleLuaFiles")]
     [DeploymentItem("SerializedJsonOutput", "SerializedJsonOutput")]
     public class ParserTests
     {
-        [Fact(Skip = "Not passing")]
+        [Fact]
         public void SmallIfGeneratedTest()
         {
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\smallif.lua");
             new SmallIf_Generated().Test(new Tester(tree));
+            Assert.Equal(0, tree.ErrorList.Count);
         }
 
         [Fact]
@@ -25,6 +28,7 @@ namespace LanguageService.Tests
         {
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\Assignments.lua");
             new Assignments_Generated().Test(new Tester(tree));
+            Assert.Equal(0, tree.ErrorList.Count);
         }
 
         [Fact]
@@ -32,6 +36,7 @@ namespace LanguageService.Tests
         {
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\MultipleTypeAssignment.lua");
             new MultipleTypeAssignment_Generated().Test(new Tester(tree));
+            Assert.Equal(0, tree.ErrorList.Count);
         }
 
         [Fact]
@@ -39,6 +44,7 @@ namespace LanguageService.Tests
         {
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\WhileStatement.lua");
             new WhileStatement_Generated().Test(new Tester(tree));
+            Assert.Equal(0, tree.ErrorList.Count);
         }
 
         [Fact]
@@ -46,6 +52,7 @@ namespace LanguageService.Tests
         {
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\ComplexTableConstructor.lua");
             new ComplexTableConstructor_Generated().Test(new Tester(tree));
+            Assert.Equal(0, tree.ErrorList.Count);
         }
 
         [Fact]
@@ -53,6 +60,7 @@ namespace LanguageService.Tests
         {
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\TableStatements.lua");
             new TableStatements_Generated().Test(new Tester(tree));
+            Assert.Equal(0, tree.ErrorList.Count);
         }
 
         [Fact]
@@ -60,6 +68,7 @@ namespace LanguageService.Tests
         {
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\TripleNestedFunctionCall.lua"); ;
             new TripleNestedFunctionCall_Generated().Test(new Tester(tree));
+            Assert.Equal(0, tree.ErrorList.Count);
         }
 
         [Fact]
@@ -102,6 +111,7 @@ get_zero = function() return 0 end", "LucaDemo");
             Debug.WriteLine(tree.ErrorList.Count);
 
             new LucaDemo_Generated().Test(new Tester(tree));
+            Assert.Equal(0, tree.ErrorList.Count);
         }
 
         [Fact]
@@ -120,6 +130,7 @@ get_zero = function() return 0 end", "LucaDemo");
             var generator = new TestGenerator();
             generator.GenerateTestFromString("", "EmptyProgram");
             new EmptyProgram_Generated().Test(new Tester(tree));
+            Assert.Equal(0, tree.ErrorList.Count);
         }
 
         [Fact]
@@ -138,8 +149,18 @@ get_zero = function() return 0 end", "LucaDemo");
             var generator = new TestGenerator();
             generator.GenerateTestFromString("(f)[s] = k", "PrefixExpFirst");
             new PrefixExpFirst_Generated().Test(new Tester(tree));
+            Assert.Equal(0, tree.ErrorList.Count);
         }
-        
+
+        [Fact]
+        public void PrefixExpNestedTest()
+        {
+            SyntaxTree tree = SyntaxTree.CreateFromString("foo.bar(t[5]).set():run{}");
+            int x = tree.ErrorList.Count;
+            var generator = new TestGenerator();
+            generator.GenerateTestFromString("foo.bar(t[5]).set():run{}", "PrefixExpNested");
+        }
+
         [Fact]
         public void CheckForExceptionsFromListOfInvalidProgramsTest()
         {
@@ -149,7 +170,7 @@ get_zero = function() return 0 end", "LucaDemo");
                 char nextChar = (char)reader.Read();
                 var sb = new StringBuilder();
 
-                if(nextChar == '"')
+                if (nextChar == '"')
                     nextChar = (char)reader.Read();
 
                 while (nextChar != '"' && !reader.EndOfStream)
@@ -174,7 +195,7 @@ get_zero = function() return 0 end", "LucaDemo");
             SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\InvalidProgramsAsStrings.lua");
         }
 
-        [Fact(Skip = "Not passing")]
+        [Fact]
         public void CheckForErrorsParsingVariousLuaFilesTest()
         {
             var generator = new TestGenerator();

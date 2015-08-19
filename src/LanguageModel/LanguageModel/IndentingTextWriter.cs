@@ -11,7 +11,7 @@ using System.Text;
 
 namespace LanguageService
 {
-    public class IndentingTextWriter : TextWriter
+    internal class IndentingTextWriter : TextWriter
     {
         private const string Indentation = "    ";
         private readonly TextWriter inner;

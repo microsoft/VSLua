@@ -81,6 +81,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\LanguageModel\LanguageModel\IndentingTextWriter.cs">
+      <Link>IndentingTextWriter.cs</Link>
+    </Compile>
     <Compile Include="LexerTests.cs" />
     <Compile Include="ParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -268,7 +271,6 @@
       <Name>LanguageService</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
