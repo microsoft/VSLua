@@ -145,6 +145,7 @@
       <Generator>MSBuild:GenerateCodeFromAttributes</Generator>
     </Compile>
     <Compile Include="LanguageModel\SyntaxKind.cs" />
+    <Compile Include="Text\SourceTextLine.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
