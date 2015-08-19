@@ -52,6 +52,12 @@ namespace LanguageService
             return currentToken;
         }
 
+        private void SetPositionInTokenList(int position)
+        {
+            this.positionInTokenList = position;
+            this.textPosition = position >= 0 ? tokenList[position].End : 0;
+        }
+
         private bool ParseExpected(SyntaxKind type)
         {
             int tempIndex = positionInTokenList + 1;
@@ -192,7 +198,7 @@ namespace LanguageService
                 case SyntaxKind.OpenParen:
                     int tempPosition = positionInTokenList;
                     var prefixExp = ParsePrefixExp();
-                    positionInTokenList = tempPosition;
+                    this.SetPositionInTokenList(tempPosition);
 
                     if (prefixExp is FunctionCallPrefixexp)
                     {
@@ -798,13 +804,14 @@ namespace LanguageService
                 }
             }
 
-            if(parsingFunctionCallStatement)
+            if (parsingFunctionCallStatement)
             {
-                if(prefixExp is FunctionCallPrefixexp)
+                if (prefixExp is FunctionCallPrefixexp)
                 {
-                    positionInTokenList = tempPosition;
+                    this.SetPositionInTokenList(tempPosition);
                     return (prefixExp as FunctionCallPrefixexp).PrefixExp;
-                } else
+                }
+                else
                 {
                     return prefixExp;
                 }
@@ -1408,7 +1415,7 @@ namespace LanguageService
                 tokenList[positionInTokenList] = tokenWithAddedTrivia;
             }
 
-            positionInTokenList--;
+            this.SetPositionInTokenList(positionInTokenList - 1);
             currentToken = (positionInTokenList >= 0) ? currentToken = tokenList[positionInTokenList] : null;
         }
 
