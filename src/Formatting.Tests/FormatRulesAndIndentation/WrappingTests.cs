@@ -12,10 +12,10 @@ namespace Formatting.Tests
         public void EmptyFunction()
         {
             string original = @"
-    foo = function() end";
+foo = function() end";
             string expected = @"
-    foo = function()
-    end";
+foo = function()
+end";
             GeneralTest(original, expected, expected);
         }
 
@@ -34,15 +34,15 @@ namespace Formatting.Tests
         public void Comment2()
         {
             string original = @"
-    foo = function () --[[ comment ]]return end";
+foo = function () --[[ comment ]]return end";
             string expected1 = @"
-    foo = function()
-    --[[ comment ]]return
-    end";
+foo = function()
+--[[ comment ]]return
+end";
             string expected2 = @"
-    foo = function()
-        --[[ comment ]]return
-    end";
+foo = function()
+    --[[ comment ]]return
+end";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -50,13 +50,13 @@ namespace Formatting.Tests
         public void Comment3()
         {
             string original = @"
-    t1 = {--[[ comment ]]}";
+t1 = {--[[ comment ]]}";
             string expected1 = @"
-    t1 = {
-    --[[ comment ]]}";
+t1 = {
+--[[ comment ]]}";
             string expected2 = @"
-    t1 = {
-        --[[ comment ]]}";
+t1 = {
+    --[[ comment ]]}";
             GeneralTest(original, expected1, expected2);
         }
 
@@ -64,27 +64,27 @@ namespace Formatting.Tests
         public void Comment4()
         {
             string original = @"
-    t1 = { --[[ comment ]]basic}";
+t1 = { --[[ comment ]]basic}";
             string expected1 = @"
-    t1 = {
+t1 = {
+--[[ comment ]] basic
+}";
+            string expected2 = @"
+t1 = {
     --[[ comment ]] basic
     }";
-            string expected2 = @"
-    t1 = {
-        --[[ comment ]] basic
-        }";
             GeneralTest(original, expected1, expected2);
         }
 
-        [Fact(Skip = "Not passing")]
+        [Fact]
         public void OneReturn()
         {
             string original = @"
-    foo = function() return end";
+foo = function() return end";
             string expected1 = @"
-    foo = function()
+foo = function()
     return
-    end";
+end";
             string expected2 = @"
     foo = function()
         return
@@ -96,45 +96,45 @@ namespace Formatting.Tests
         public void OneReturnWithVariable()
         {
             string original = @"
-    foo = function() return x end";
+foo = function() return x end";
             string expected1 = @"
-    foo = function()
-    return x
-    end";
+foo = function()
+return x
+end";
             string expected2 = @"
-    foo = function()
-        return x
-    end";
+foo = function()
+    return x
+end";
 
             GeneralTest(original, expected1, expected2);
         }
 
-        [Fact(Skip = "Not passing")]
+        [Fact]
         public void TwoReturns()
         {
             string original = @"
-    foo = function() return return end";
+foo = function() x = 10 return end";
             string expected1 =@"
-    foo = function()
+foo = function()
+    x = 10
     return
-    return
-    end";
+end";
             string expected2 = @"
-    foo = function()
-        return
-        return
-    end";
+foo = function()
+    x = 10
+    return
+end";
             GeneralTest(original, expected1, expected2);
         }
 
-        [Fact(Skip = "Not passing")]
+        [Fact]
         public void EmptyFunctionV2()
         {
             string original = @"
-    function foo() end";
+function foo() end";
             string expected = @"
-    function foo()
-    end";
+function foo()
+end";
             GeneralTest(original, expected, expected);
         }
 

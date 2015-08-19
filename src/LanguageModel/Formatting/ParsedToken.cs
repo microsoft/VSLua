@@ -65,6 +65,11 @@ namespace LanguageService.Formatting
                     nextUpperStatementNode = upperStatementNode;
                 }
 
+                if (nextUpperStatementNode == null)
+                {
+                    nextUpperStatementNode = nextImmediateStatementNode;
+                }
+
                 if ((syntaxNode.Kind == SyntaxKind.BlockNode && nextImmediateStatementNode != null) ||
                      syntaxNode.Kind == SyntaxKind.FieldList)
                 {

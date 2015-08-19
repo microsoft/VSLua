@@ -281,7 +281,7 @@ namespace LanguageService.Formatting.Ruling
             {
                 ParsedToken parsedToken = GetTokenOn(side, formattingContext);
 
-                return parsedToken.Token.FullStart == parsedToken.UpperStatementNode.StartPosition;
+                return parsedToken.Token.FullStart == parsedToken.ImmediateStatementNode.StartPosition;
             };
         }
 
@@ -316,7 +316,7 @@ namespace LanguageService.Formatting.Ruling
             };
         }
 
-        private static Func<FormattingContext, bool> InFunctionStatement(Side side)
+        private static Func<FormattingContext, bool> InFunctionStatementOnOneLine(Side side)
         {
             return (FormattingContext formattingContext) =>
             {
