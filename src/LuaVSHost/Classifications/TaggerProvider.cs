@@ -45,7 +45,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 
             // Taggers can be created for many reasons. In this case, it's fine to have a sinlge
             // tagger for a given buffer, so cache it on the buffer as a singleton property.
-            return buffer.Properties.GetOrCreateSingletonProperty(taggerCreator) as ITagger<T>;
+            // return buffer.Properties.GetOrCreateSingletonProperty(taggerCreator) as ITagger<T>;
+            return new Tagger(buffer, this.standardClassifications, this.classificationTypeRegistry, this.singletons) as ITagger<T>;
         }
     }
 }

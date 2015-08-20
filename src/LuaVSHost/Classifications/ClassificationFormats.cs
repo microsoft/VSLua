@@ -26,7 +26,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
             this.ForegroundBrush = SystemColors.WindowTextBrush;
         }
     }
-    
+
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = Constants.Colourization.LocalName)]
     [Name("LuaLocalClassificationFormat")]
@@ -52,16 +52,15 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed.")]
     internal sealed class ParamIdentifierClassificationFormat : ClassificationFormatDefinition
     {
-        //private readonly SolidColorBrush brush = new SolidColorBrush();
+        private readonly SolidColorBrush brush = new SolidColorBrush();
 
         internal ParamIdentifierClassificationFormat()
         {
             this.DisplayName = Constants.Colourization.ParamDisplayName;
 
-            this.ForegroundColor = (Color)ColorConverter.ConvertFromString("#99CCFF");
-
-            //BindingOperations.SetBinding(this.brush, SolidColorBrush.ColorProperty, new Binding("EnvironmentColors.ButtonTextColorKey"));
-            //this.ForegroundBrush = this.brush;
+            // this.ForegroundColor = (Color)ColorConverter.ConvertFromString("#99CCFF");
+            BindingOperations.SetBinding(this.brush, SolidColorBrush.ColorProperty, new Binding("EnvironmentColors.ButtonTextColorKey"));
+            this.ForegroundBrush = this.brush;
         }
     }
 
