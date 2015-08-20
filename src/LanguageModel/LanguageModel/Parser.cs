@@ -8,7 +8,7 @@ using Microsoft.Internal.VisualStudio.Shell;
 
 namespace LanguageService
 {
-    public class Parser
+    internal class Parser
     {
         private Stack<ParsingContext> contextStack;
         private Token currentToken;
@@ -17,20 +17,24 @@ namespace LanguageService
         private int textPosition;
         private List<ParseError> errorList;
 
-        public Parser()
+        private Parser()
         {
             contextStack = new Stack<ParsingContext>();
             errorList = new List<ParseError>();
             positionInTokenList = -1;
         }
 
-        public SyntaxTree CreateSyntaxTree(TextReader luaStream)
+        internal static SyntaxTree Parse(TextReader luaReader)
         {
+            return new Parser().CreateSyntaxTreeInner(luaReader);
+        }
 
-            Validate.IsNotNull(luaStream, nameof(luaStream));
+        private  SyntaxTree CreateSyntaxTreeInner(TextReader luaReader)
+        {
+            Validate.IsNotNull(luaReader, nameof(luaReader));
 
             positionInTokenList = -1;  //Make sure that internal state is at "beginning"
-            tokenList = Lexer.Tokenize(luaStream);
+            tokenList = Lexer.Tokenize(luaReader);
 
             if (tokenList.Count == 1)
             {

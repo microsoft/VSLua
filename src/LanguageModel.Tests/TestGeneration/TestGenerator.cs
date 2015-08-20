@@ -110,7 +110,7 @@ namespace LanguageModel.Tests
                 IndentingWriter.WriteLine("t.N(SyntaxKind." + ((Token)syntaxNodeOrToken).Kind + ");");
             }
 
-            if (!SyntaxTree.IsLeafNode(syntaxNodeOrToken))
+            if (!syntaxNodeOrToken.IsLeafNode)
             {
                 IndentingWriter.WriteLine("{");
                 foreach (var node in ((SyntaxNode)syntaxNodeOrToken).Children)

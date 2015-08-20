@@ -14,7 +14,7 @@ namespace LanguageService.Classification
 
         private static IEnumerable<Token> GetTokens(SyntaxNodeOrToken currentRoot)
         {
-            if (!SyntaxTree.IsLeafNode(currentRoot))
+            if (!currentRoot.IsLeafNode)
             {
                 SyntaxNode syntaxNode = (SyntaxNode)currentRoot;
                 foreach (SyntaxNodeOrToken node in syntaxNode.Children)

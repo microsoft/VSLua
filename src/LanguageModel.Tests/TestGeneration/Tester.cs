@@ -10,7 +10,7 @@ namespace LanguageModel.Tests.TestGeneration
 
         public Tester(SyntaxTree actualTree)
         {
-            this.treeEnumerator = actualTree.Next(actualTree.Root).GetEnumerator();
+            this.treeEnumerator = actualTree.Root.Descendants().GetEnumerator();
         }
 
         public void N(SyntaxKind kind)

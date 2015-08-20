@@ -6,7 +6,10 @@ using System.Linq;
 
 namespace LanguageService
 {
-    public abstract class SyntaxNodeOrToken { }
+    public abstract class SyntaxNodeOrToken
+    {
+        public virtual bool IsLeafNode => true;
+    }
 
     [GenerateImmutable(GenerateBuilder = true)]
     public abstract partial class SyntaxNode : SyntaxNodeOrToken
@@ -19,6 +22,31 @@ namespace LanguageService
         readonly int length;
 
         public abstract ImmutableList<SyntaxNodeOrToken> Children { get; }
+
+        public override bool IsLeafNode => this.Children.Count == 0;
+
+        public IEnumerable<SyntaxNodeOrToken> Descendants()
+        {
+            if (this is SyntaxNode && ((SyntaxNode)this).Kind == SyntaxKind.ChunkNode)
+            {
+                yield return this;
+            }
+
+            foreach (var node in this.Children)
+            {
+                yield return node;
+
+                var nodeAsSyntaxNode = node as SyntaxNode;
+
+                if (nodeAsSyntaxNode != null)
+                {
+                    foreach (var nextNode in nodeAsSyntaxNode.Descendants())
+                    {
+                        yield return nextNode;
+                    }
+                }
+            }
+        }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
