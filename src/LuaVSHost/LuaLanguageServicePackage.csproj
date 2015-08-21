@@ -63,7 +63,6 @@
     <Compile Include="Errors\ErrorTagger.cs" />
     <Compile Include="Errors\ErrorTaggerProvider.cs" />
     <Compile Include="Errors\TaskExtensions.cs" />
-    <Compile Include="Navigation\IEditorOperationsFactoryService.cs" />
     <Compile Include="Shared\BufferExtensions.cs" />
     <Compile Include="Shared\CommandFilter.cs" />
     <Compile Include="Formatting\IFormatter.cs" />

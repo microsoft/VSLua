@@ -2,7 +2,7 @@
 {
     internal sealed class Constants
     {
-        // Wait 2 seconds after last buffer change to actually update the UI
+        // Wait some time after last buffer change to actually update the UI
         // If changes come up during the way, cancel the current update task
         // and queue another.
         internal const int UIUpdateDelay = 1750;

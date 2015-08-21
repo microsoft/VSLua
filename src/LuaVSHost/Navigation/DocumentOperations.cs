@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Microsoft.Internal.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
@@ -20,6 +21,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 
         public bool OpenDocument(string path, out bool isAlreadyOpen, out IWpfTextView textView)
         {
+            Validate.IsNotNull(path, nameof(path));
+
             isAlreadyOpen = false;
             textView = null;
 
@@ -42,6 +45,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 
         public bool GetAlreadyOpenedDocument(string path, out IVsWindowFrame windowFrame)
         {
+            Validate.IsNotNull(path, nameof(path));
+
             IVsUIHierarchy hierarchy;
             uint itemId;
 
@@ -57,10 +62,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 
         public void NavigateTo(IWpfTextView textView, Span span, bool selectSpan, bool deferNavigationWithOutlining)
         {
-            if (textView == null)
-            {
-                throw new ArgumentNullException("textView");
-            }
+            Validate.IsNotNull(textView, nameof(textView));
 
             Debug.Assert(span.End <= textView.TextSnapshot.Length, string.Format("span.End ({0}) > textView.TextSnapshot.Length ({1})", span.End, textView.TextSnapshot.Length));
 
@@ -79,10 +81,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 
         private static IVsTextView GetVsTextView(IVsWindowFrame windowFrame)
         {
-            if (windowFrame == null)
-            {
-                throw new ArgumentNullException("windowFrame");
-            }
+            Validate.IsNotNull(windowFrame, nameof(windowFrame));
 
             object docView;
             int hresult = windowFrame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out docView);
