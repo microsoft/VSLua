@@ -19,9 +19,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
         internal GlobalIdentifierClassificationFormat()
         {
             this.DisplayName = Constants.Colourization.GlobalDisplayName;
-
-            this.ForegroundColor = Colors.LightSalmon;
-            this.ForegroundBrush = SystemColors.WindowTextBrush;
         }
     }
 
@@ -36,9 +33,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
         internal LocalIdentifierClassificationFormat()
         {
             this.DisplayName = Constants.Colourization.LocalDisplayName;
-
-            this.ForegroundColor = (Color)ColorConverter.ConvertFromString("#16D1AC");
-            this.ForegroundBrush = SystemColors.WindowTextBrush;
         }
     }
 
@@ -53,7 +47,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
         internal ParamIdentifierClassificationFormat()
         {
             this.DisplayName = Constants.Colourization.ParamDisplayName;
-            // this.ForegroundColor = Color.FromArgb(0xFF, 0x00, 0x00, 0xFF);
         }
     }
 
@@ -68,9 +61,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
         internal FieldClassificationFormat()
         {
             this.DisplayName = Constants.Colourization.FieldDisplayName;
-
-            this.ForegroundColor = (Color)ColorConverter.ConvertFromString("#CCCC00");
-            this.ForegroundBrush = SystemColors.WindowTextBrush;
+            this.IsItalic = true;
         }
     }
 }

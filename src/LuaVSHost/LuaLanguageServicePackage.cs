@@ -28,8 +28,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua
     [ProvideOptionPage(typeof(SpacingPage), Constants.Formatting.Category, Constants.Formatting.Pages.Spacing,
         1000, 1004, true, ProfileMigrationType = ProfileMigrationType.PassThrough)]
 
-    [ProvideOptionPage(typeof(WrappingAndNewLinePage), Constants.Formatting.Category, Constants.Formatting.Pages.WrappingAndNewLines,
-        1000, 1005, true, ProfileMigrationType = ProfileMigrationType.PassThrough)]
+    /*[ProvideOptionPage(typeof(WrappingAndNewLinePage), Constants.Formatting.Category, Constants.Formatting.Pages.WrappingAndNewLines,
+        1000, 1005, true, ProfileMigrationType = ProfileMigrationType.PassThrough)]*/
 
     public sealed class LuaLanguageServicePackage : Package
     {
