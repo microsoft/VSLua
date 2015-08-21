@@ -12,8 +12,8 @@ using LanguageService.Formatting.Ruling;
 namespace LanguageService.Formatting.Options
 {
     /// <summary>
-    /// OptionalRuleMap holds all the disabled Rules, and it sent in as a parameter when the Rules
-    /// are changed in "Update" in GlobalOptions.
+    /// OptionalRuleMap holds all the Rules that can be turned off, and is sent in as a parameter
+    /// when the Rules are changed in "Update" in GlobalOptions.
     /// </summary>
     internal class OptionalRuleMap
     {

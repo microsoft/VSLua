@@ -17,7 +17,7 @@ namespace LanguageService.Formatting.Options
         /// Updates the general options.
         /// </summary>
         /// <param name="disableRuleGroups">
-        /// The disabled rules for the formatter.
+        /// The rules that can be turned off for the formatter.
         /// </param>
         /// <param name="tabSize">
         /// How big in spaces the indents are when you format
