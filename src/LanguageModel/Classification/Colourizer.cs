@@ -45,7 +45,7 @@ namespace LanguageService.Classification
             HashSet<TagInfo> fields,
             Token[] previousToken)
         {
-            if (!SyntaxTree.IsLeafNode(currentRoot))
+            if (!currentRoot.IsLeafNode)
             {
                 SyntaxKind syntaxKindCurrentRoot =
                         (currentRoot as Token == null) ?
@@ -265,7 +265,7 @@ namespace LanguageService.Classification
 
         private static IEnumerable<Token> GetTokens(SyntaxNodeOrToken currentRoot)
         {
-            if (!SyntaxTree.IsLeafNode(currentRoot))
+            if (!currentRoot.IsLeafNode)
             {
                 SyntaxNode syntaxNode = (SyntaxNode)currentRoot;
                 foreach (SyntaxNodeOrToken node in syntaxNode.Children)

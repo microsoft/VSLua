@@ -4,7 +4,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
     internal sealed class Constants
     {
-        // Wait UIUpdateDelay milliseconds after last buffer change to actually update the UI
+        // Wait some time after last buffer change to actually update the UI
         // If changes come up during the way, cancel the current update task
         // and queue another.
         internal const int UIUpdateDelay = 875;

@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
+
 using Constants = Microsoft.VisualStudio.LanguageServices.Lua.Shared.Constants;
 using Task = System.Threading.Tasks.Task;
 
@@ -50,18 +51,18 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Errors
             this.errorListProvider.Tasks.Clear();
         }
 
-        private ErrorListItem CreateErrorListItem(SnapshotSpan snapshot, ParseError error, string filePath)
+        private ErrorListItem CreateErrorListItem(SnapshotSpan span, ParseError error, string filePath)
         {
-            ITextSnapshotLine line = snapshot.Snapshot.GetLineFromPosition(snapshot.Start);
+            ITextSnapshotLine line = span.Snapshot.GetLineFromPosition(span.Start);
 
-            var errorListItem = new ErrorListItem(snapshot);
+            var errorListItem = new ErrorListItem(span);
             errorListItem.Category = TaskCategory.All;
             errorListItem.Priority = TaskPriority.Normal;
             errorListItem.Document = filePath;
             errorListItem.ErrorCategory = TaskErrorCategory.Error;
             errorListItem.Text = error.Message;
             errorListItem.Line = line.LineNumber;
-            errorListItem.Column = Math.Min(line.End, snapshot.Start) - line.Start;
+            errorListItem.Column = Math.Min(line.End, span.Start) - line.Start;
 
             errorListItem.Navigate += this.OnErrorListItemNavigate;
 
@@ -76,6 +77,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Errors
             }
 
             this.ClearErrors();
+
+            Validate.IsNotNull(this.errorListProvider, nameof(this.errorListProvider));
 
             this.errorListProvider.Dispose();
             this.errorListProvider = null;

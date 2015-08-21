@@ -50,7 +50,7 @@ namespace LanguageService.Formatting
 
         private static IEnumerable<ParsedToken> WalkTreeRangeKeepLevelAndParent(SyntaxNodeOrToken currentRoot, int blockLevel, SyntaxNode upperStatementNode, SyntaxNode immediateStatementNode, Range range)
         {
-            if (!SyntaxTree.IsLeafNode(currentRoot))
+            if (!currentRoot.IsLeafNode)
             {
                 SyntaxNode syntaxNode = (SyntaxNode)currentRoot;
 

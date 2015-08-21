@@ -19,54 +19,21 @@ namespace LanguageService
 
         public static SyntaxTree Create(TextReader luaReader)
         {
-            var parser = new Parser().CreateSyntaxTree(luaReader);
+            var parser = Parser.Parse(luaReader);
             return parser;
         }
 
         // For testing
         public static SyntaxTree Create(string filename)
         {
-            TextReader luaReader = File.OpenText(filename);
-            return new Parser().CreateSyntaxTree(luaReader);
+            TextReader luaStream = File.OpenText(filename);
+            return Parser.Parse(luaStream);
         }
 
         public static SyntaxTree CreateFromString(string program)
         {
             TextReader luaStream = new StringReader(program);
-            return new Parser().CreateSyntaxTree(luaStream);
-        }
-
-        public IEnumerable<SyntaxNodeOrToken> Next(SyntaxNodeOrToken syntaxNodeOrToken)
-        {
-            if (syntaxNodeOrToken is SyntaxNode && ((SyntaxNode)syntaxNodeOrToken).Kind == SyntaxKind.ChunkNode)
-            {
-                yield return syntaxNodeOrToken;
-            }
-
-            if (!IsLeafNode(syntaxNodeOrToken))
-            {
-                foreach (var node in ((SyntaxNode)syntaxNodeOrToken).Children)
-                {
-                    yield return node;
-
-                    foreach (var nextNode in Next(node))
-                    {
-                        yield return nextNode;
-                    }
-                }
-            }
-        }
-
-        public static bool IsLeafNode(SyntaxNodeOrToken node)
-        {
-            if (node is Token)
-            {
-                return true;
-            }
-            else
-            {
-                return (node as SyntaxNode).Children.Count == 0;
-            }
+            return Parser.Parse(luaStream);
         }
 
         public SyntaxNode GetNodeAt(int position)

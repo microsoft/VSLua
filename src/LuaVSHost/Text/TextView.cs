@@ -25,10 +25,6 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Text
 
         protected bool IsReadOnly { get; }
 
-        protected bool IsClosed { get; }
-
-        public bool IsClosing { get; private set; }
-
         public ErrorListPresenter ErrorListPresenter
         {
             get

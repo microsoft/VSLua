@@ -5,11 +5,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Errors
 {
     internal class ErrorListItem : ErrorTask
     {
-        public SnapshotSpan ErrorSpan { get; }
-
         public ErrorListItem(SnapshotSpan errorSpan)
         {
             this.ErrorSpan = errorSpan;
         }
+
+        public SnapshotSpan ErrorSpan { get; }
     }
 }

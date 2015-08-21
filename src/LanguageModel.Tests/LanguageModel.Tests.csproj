@@ -115,6 +115,7 @@
     <Compile Include="TestGeneration\ValidatedGeneratedTests\EmptyProgram_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\FunctionDefError_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\GrabKeyFromTable_Generated.cs" />
+    <Compile Include="TestGeneration\ValidatedGeneratedTests\IfStatement_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\LucaDemo_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\MultipleTypeAssignment_Generated.cs" />
     <Compile Include="TestGeneration\ValidatedGeneratedTests\NestedTable_Generated.cs" />
