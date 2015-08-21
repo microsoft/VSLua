@@ -10,20 +10,19 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
     internal class LuaClassificationTypeDefinition
     {
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name(Constants.Colourization.GlobalName)]
-        internal ClassificationTypeDefinition Globals = null;
+        [Name(Constants.Colourization.GlobalName), Export]
+        internal ClassificationTypeDefinition Globals { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name(Constants.Colourization.LocalName)]
-        internal ClassificationTypeDefinition Locals = null;
+        [Name(Constants.Colourization.LocalName), Export]
+        internal ClassificationTypeDefinition Locals { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
-        // [Name(Constants.Colourization.ParamName)]
-        [Name("LuaParamClassificationFormat"), Export]
+        [Name(Constants.Colourization.ParamName), Export]
         internal ClassificationTypeDefinition LuaParams { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name(Constants.Colourization.FieldName)]
-        internal ClassificationTypeDefinition Fields = null;
+        [Name(Constants.Colourization.FieldName), Export]
+        internal ClassificationTypeDefinition Fields { get; set; }
     }
 }

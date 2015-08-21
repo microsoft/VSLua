@@ -172,8 +172,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
                 { Classification.Bracket, classificationTypeRegistry.GetClassificationType("punctuation") },
                 { Classification.Global, classificationTypeRegistry.GetClassificationType(Constants.Colourization.GlobalName) },
                 { Classification.Local, classificationTypeRegistry.GetClassificationType(Constants.Colourization.LocalName) },
-                //{ Classification.ParameterReference, classificationTypeRegistry.GetClassificationType(Constants.Colourization.ParamName) },
-                { Classification.ParameterReference, classificationTypeRegistry.GetClassificationType("LuaParamClassificationFormat") },
+                { Classification.ParameterReference, classificationTypeRegistry.GetClassificationType(Constants.Colourization.ParamName) },
                 { Classification.Field, classificationTypeRegistry.GetClassificationType(Constants.Colourization.FieldName) }
             };
         }

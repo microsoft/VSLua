@@ -1,11 +1,8 @@
 ﻿using System.ComponentModel.Composition;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
 using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
-using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 
@@ -13,7 +10,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 {
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = Constants.Colourization.GlobalName)]
-    [Name("LuaGlobalClassificationFormat")]
+    [Name(Constants.Colourization.GlobalName)]
     [UserVisible(true)]
     [Order(Before = Priority.Default)]
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed.")]
@@ -30,7 +27,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = Constants.Colourization.LocalName)]
-    [Name("LuaLocalClassificationFormat")]
+    [Name(Constants.Colourization.LocalName)]
     [UserVisible(true)]
     [Order(Before = Priority.Default)]
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed.")]
@@ -46,9 +43,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    // [ClassificationType(ClassificationTypeNames = Constants.Colourization.ParamName)]
-    [ClassificationType(ClassificationTypeNames = "LuaParamClassificationFormat")]
-    [Name("LuaParamClassificationFormat")]
+    [ClassificationType(ClassificationTypeNames = Constants.Colourization.ParamName)]
+    [Name(Constants.Colourization.ParamName)]
     [UserVisible(true)]
     [Order(Before = Priority.Default)]
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed.")]
@@ -63,7 +59,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = Constants.Colourization.FieldName)]
-    [Name("LuaFieldClassificationFormat")]
+    [Name(Constants.Colourization.FieldName)]
     [UserVisible(true)]
     [Order(Before = Priority.Default)]
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed.")]

@@ -20,16 +20,16 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
         {
             internal const int ParserUpdateDelay = 440;
 
-            internal const string GlobalName = "LuaGlobal";
+            internal const string GlobalName = "LuaGlobalClassificationFormat";
             internal const string GlobalDisplayName = "Lua Global Identifier";
 
-            internal const string LocalName = "LuaLocal";
+            internal const string LocalName = "LuaLocalClassificationFormat";
             internal const string LocalDisplayName = "Lua Local Identifier";
 
-            internal const string ParamName = "LuaParam";
+            internal const string ParamName = "LuaParamClassificationFormat";
             internal const string ParamDisplayName = "Lua Parameter Reference";
 
-            internal const string FieldName = "LuaField";
+            internal const string FieldName = "LuaFieldClassificationFormat";
             internal const string FieldDisplayName = "Lua Field";
         }
 
