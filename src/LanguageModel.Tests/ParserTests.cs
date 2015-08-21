@@ -222,7 +222,7 @@ else
     currentRoom = roomStack:pop();
 end", "IfStatement");
 
-            new EmbeddedFunction_Generated().Test(new Tester(tree));
+            new IfStatement_Generated().Test(new Tester(tree));
         }
 
         [Fact]
