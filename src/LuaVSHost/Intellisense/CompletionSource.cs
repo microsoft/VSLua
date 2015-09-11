@@ -37,7 +37,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
             //var ch = triggerPoint.GetChar();
             Token currentToken = null;
             int currentTokenIndex = 0;
-            for(;currentTokenIndex < syntaxTree.Tokens.Count; currentTokenIndex++)
+            for (;currentTokenIndex < syntaxTree.Tokens.Count; currentTokenIndex++)
             {
                 var token = syntaxTree.Tokens[currentTokenIndex];
                 if ((token.Start <= triggerPoint.Position) && (token.Start + token.Length) >= triggerPoint.Position)
@@ -58,33 +58,39 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
                     {
                         if (statement.GetType() == typeof(AssignmentStatementNode))
                         {
-                            var children = statement.Children[2].Children[0];
-                            if (children.GetType() == typeof(TableConstructorExp))
+                            for (int j = 0; j < statement.Children[2].Children.Count; j++)
                             {
-                                if (statement.Children[0].Children[0].Children[0].IsLeafNode && ((Token)(statement.Children[0].Children[0].Children[0])).Text == targetname)
+                                var child = statement.Children[2].Children[j];
+                                if (child.GetType() == typeof(TableConstructorExp))
                                 {
-                                    foreach (var assignment in children.Children[1].Children)
+                                    if (statement.Children[0].Children[j].Children[0].IsLeafNode && ((Token)(statement.Children[0].Children[j].Children[0])).Text == targetname)
                                     {
-                                        if (assignment.GetType() == typeof(AssignmentField))
-                                            strList.Add(((Token)assignment.Children[0]).Text);
+                                        foreach (var assignment in child.Children[1].Children)
+                                        {
+                                            if (assignment.GetType() == typeof(AssignmentField))
+                                                strList.Add(((Token)assignment.Children[0]).Text);
+                                        }
                                     }
                                 }
                             }
                         }
                         else if (statement.GetType() == typeof(LocalAssignmentStatementNode))
                         {
-                            var children = statement.Children[3].Children[0];
-                            if (children.GetType() == typeof(TableConstructorExp))
+                            for (int j = 0; j < statement.Children[3].Children.Count; j++)
                             {
-                                if (statement.Children[1].Children[0].IsLeafNode && ((Token)(statement.Children[1].Children[0])).Text == targetname)
+                                var child = statement.Children[3].Children[j];
+                                if (child.GetType() == typeof(TableConstructorExp))
                                 {
-                                    foreach (var assignment in children.Children[1].Children)
+                                    if (statement.Children[1].Children[j].IsLeafNode && ((Token)(statement.Children[1].Children[j])).Text == targetname)
                                     {
-                                        if (assignment.GetType() == typeof(AssignmentField))
-                                            strList.Add(((Token)assignment.Children[0]).Text);
+                                        foreach (var assignment in child.Children[1].Children)
+                                        {
+                                            if (assignment.GetType() == typeof(AssignmentField))
+                                                strList.Add(((Token)assignment.Children[0]).Text);
+                                        }
                                     }
                                 }
-                            }
+                            }                            
                         }
                     }
                 }
@@ -103,15 +109,16 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
                     {
                         if (statement.GetType() == typeof(AssignmentStatementNode))
                         {
-                            foreach (var namevar in statement.Children[0].Children[0].Children)
+                            var namelist = statement.Children[0];
+                            foreach (var namevar in namelist.Children)
                             {
-                                if (namevar.IsLeafNode)
+                                if (namevar.GetType() == typeof(NameVar))
                                 {
-                                    var str = ((Token)namevar).Text;
+                                    var str = ((Token)((NameVar)namevar).Children[0]).Text;
                                     if (strList.IndexOf(str) == -1)
                                         strList.Add(str);
                                 }
-                            }
+                            }                                
                         }
                         else if (statement.GetType() == typeof(LocalAssignmentStatementNode))
                         {
