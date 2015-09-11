@@ -60,15 +60,18 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
                         {
                             for (int j = 0; j < statement.Children[2].Children.Count; j++)
                             {
-                                var child = statement.Children[2].Children[j];
-                                if (child.GetType() == typeof(TableConstructorExp))
+                                if (statement.Children.Count > 2)
                                 {
-                                    if (statement.Children[0].Children[j].Children[0].IsLeafNode && ((Token)(statement.Children[0].Children[j].Children[0])).Text == targetname)
+                                    var child = statement.Children[2].Children[j];
+                                    if (child.GetType() == typeof(TableConstructorExp))
                                     {
-                                        foreach (var assignment in child.Children[1].Children)
+                                        if (statement.Children[0].Children[j].Children[0].IsLeafNode && ((Token)(statement.Children[0].Children[j].Children[0])).Text == targetname)
                                         {
-                                            if (assignment.GetType() == typeof(AssignmentField))
-                                                strList.Add(((Token)assignment.Children[0]).Text);
+                                            foreach (var assignment in child.Children[1].Children)
+                                            {
+                                                if (assignment.GetType() == typeof(AssignmentField))
+                                                    strList.Add(((Token)assignment.Children[0]).Text);
+                                            }
                                         }
                                     }
                                 }
@@ -76,21 +79,24 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
                         }
                         else if (statement.GetType() == typeof(LocalAssignmentStatementNode))
                         {
-                            for (int j = 0; j < statement.Children[3].Children.Count; j++)
+                            if (statement.Children.Count > 3)
                             {
-                                var child = statement.Children[3].Children[j];
-                                if (child.GetType() == typeof(TableConstructorExp))
+                                for (int j = 0; j < statement.Children[3].Children.Count; j++)
                                 {
-                                    if (statement.Children[1].Children[j].IsLeafNode && ((Token)(statement.Children[1].Children[j])).Text == targetname)
+                                    var child = statement.Children[3].Children[j];
+                                    if (child.GetType() == typeof(TableConstructorExp))
                                     {
-                                        foreach (var assignment in child.Children[1].Children)
+                                        if (statement.Children[1].Children[j].IsLeafNode && ((Token)(statement.Children[1].Children[j])).Text == targetname)
                                         {
-                                            if (assignment.GetType() == typeof(AssignmentField))
-                                                strList.Add(((Token)assignment.Children[0]).Text);
+                                            foreach (var assignment in child.Children[1].Children)
+                                            {
+                                                if (assignment.GetType() == typeof(AssignmentField))
+                                                    strList.Add(((Token)assignment.Children[0]).Text);
+                                            }
                                         }
                                     }
                                 }
-                            }                            
+                            }                         
                         }
                     }
                 }
