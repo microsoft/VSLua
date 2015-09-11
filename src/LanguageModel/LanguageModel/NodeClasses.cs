@@ -9,6 +9,8 @@ namespace LanguageService
     public abstract class SyntaxNodeOrToken
     {
         public virtual bool IsLeafNode => true;
+        public virtual bool IsToken => true;
+        public abstract ImmutableList<SyntaxNodeOrToken> Children { get; }
     }
 
     [GenerateImmutable(GenerateBuilder = true)]
@@ -20,9 +22,7 @@ namespace LanguageService
         readonly int startPosition;
         [Required]
         readonly int length;
-
-        public abstract ImmutableList<SyntaxNodeOrToken> Children { get; }
-
+        public override bool IsToken => false;
         public override bool IsLeafNode => this.Children.Count == 0;
 
         public IEnumerable<SyntaxNodeOrToken> Descendants()

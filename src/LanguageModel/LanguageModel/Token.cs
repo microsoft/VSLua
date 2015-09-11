@@ -41,5 +41,13 @@ namespace LanguageService
 
             return sb.ToString();
         }
+
+        public override System.Collections.Immutable.ImmutableList<SyntaxNodeOrToken> Children
+        {
+            get
+            {
+                return null;
+            }
+        }
     }
 }

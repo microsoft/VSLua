@@ -9,12 +9,12 @@ using Validation;
 
 namespace LanguageService
 {
-    internal class ParseTreeCache
+    public class ParseTreeCache
     {
         private readonly ConditionalWeakTable<SourceText, SyntaxTree> sources = 
             new ConditionalWeakTable<SourceText, SyntaxTree>();
 
-        internal SyntaxTree Get(SourceText sourceText)
+        public SyntaxTree Get(SourceText sourceText)
         {
             Requires.NotNull(sourceText, nameof(sourceText));
 
@@ -25,7 +25,7 @@ namespace LanguageService
             }
 
             syntaxTree = Parser.Parse(sourceText.TextReader);
-            sources.Add(sourceText, syntaxTree);
+            this.sources.Add(sourceText, syntaxTree);
 
             return syntaxTree;
         }

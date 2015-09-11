@@ -13,6 +13,7 @@ namespace LanguageService
         private Stack<ParsingContext> contextStack;
         private Token currentToken;
         private List<Token> tokenList;
+        private List<StatementNode> statementNodeList;
         private int positionInTokenList;
         private int textPosition;
         private List<ParseError> errorList;
@@ -41,8 +42,9 @@ namespace LanguageService
                 currentToken = Peek();
             }
 
+            statementNodeList = new List<StatementNode>();
             ChunkNode root = ParseChunkNode();
-            return new SyntaxTree(root, errorList.ToImmutableList());
+            return new SyntaxTree(root, tokenList, statementNodeList, errorList.ToImmutableList());
         }
 
         #region tokenList Accessors 
@@ -228,6 +230,7 @@ namespace LanguageService
             node.AssignmentOperator = GetExpectedToken(SyntaxKind.AssignmentOperator);
             node.ExpList = ParseExpList().ToBuilder();
             node.Length = this.textPosition - node.StartPosition;
+            this.statementNodeList.Add(node.ToImmutable());
             return node.ToImmutable();
         }
 
@@ -287,6 +290,7 @@ namespace LanguageService
             }
 
             node.Length = this.textPosition - node.StartPosition;
+            this.statementNodeList.Add(node.ToImmutable());
             return node.ToImmutable();
         }
 
@@ -409,7 +413,6 @@ namespace LanguageService
 
             node.EndKeyword = GetExpectedToken(SyntaxKind.EndKeyword);
             node.Length = this.textPosition - node.StartPosition;
-
             return node.ToImmutable();
         }
 

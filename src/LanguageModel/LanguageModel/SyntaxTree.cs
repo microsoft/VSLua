@@ -7,15 +7,18 @@ namespace LanguageService
 {
     public class SyntaxTree
     {
-        public SyntaxTree(ChunkNode root, ImmutableList<ParseError> errorList)
+        public SyntaxTree(ChunkNode root, List<Token> tokens, List<StatementNode> statementNodeList, ImmutableList<ParseError> errorList)
         {
             this.Root = root;
+            this.Tokens = tokens;
             this.ErrorList = errorList;
+            this.StatementNodeList = statementNodeList;
         }
 
         public ChunkNode Root { get; }
         public ImmutableList<ParseError> ErrorList { get; }
         public List<Token> Tokens { get; }
+        public List<StatementNode> StatementNodeList { get; }
 
         public static SyntaxTree Create(TextReader luaReader)
         {
