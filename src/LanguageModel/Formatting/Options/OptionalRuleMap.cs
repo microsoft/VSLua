@@ -44,7 +44,7 @@ namespace LanguageService.Formatting.Options
 
             if (!optionalRuleGroups.TryGetValue(optionalRuleGroup, out ruleGroup))
             {
-                throw new NotImplementedException();
+                return;
             }
 
             this.AddRuleGroup(ruleGroup);
