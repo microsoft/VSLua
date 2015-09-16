@@ -1,11 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23103.0
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageService", "LanguageModel\LanguageService.csproj", "{CFF6EF45-EE9F-4A9E-BD4E-8607C2BC9452}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formatting.Tests", "Formatting.Tests\Formatting.Tests.csproj", "{7F9F1C86-159A-4189-A23C-6994A1A5D50D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4C4E17B1-4382-460E-8308-A799C1F000C3} = {4C4E17B1-4382-460E-8308-A799C1F000C3}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageModel.Tests", "LanguageModel.Tests\LanguageModel.Tests.csproj", "{FD20D189-B281-4793-8940-EA9BE9428D32}"
 EndProject
