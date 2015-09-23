@@ -45,6 +45,6 @@ Note that you do not all versions of Visual Studio. You'll need VS 2015 to build
 
 ## Building with Visual Studio
 
-*Lua.sln** can be opened and built in Visual Studio using the **Build Solution** command. To debug, ensure that **LuaLanguageServicePackage** is selected as the startup project. In Project->Properties->Debug page, select Start external program and choose devenv.exe. In the Start Options panel, set Command line arguments to -RootSuffix exp  and use F5. If an error appears rather than a new instance of VS, ensure the **Project|Debug** settings are correct.
+*Lua.sln** can be opened and built in Visual Studio using the **Build Solution** command. To debug, ensure that **LuaLanguageServicePackage** is selected as the startup project. In Project->Properties->Debug page, select Start external program and choose devenv.exe. In the Start Options panel, set Command line arguments to -rootSuffix exp  and use F5. If an error appears rather than a new instance of VS, ensure the **Project|Debug** settings are correct.
 
 Building in Visual Studio may produce a number of warnings related to potentially incompatible assemblies and missing references. As long as all projects build successfully, these warnings are benign and can be ignored. 
