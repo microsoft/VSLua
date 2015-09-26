@@ -7,11 +7,11 @@ The extension currently supports editing intelliSense, syntax colorization, form
 ![](images/errorsquiggles.png?raw=true)
 
 Releases
-•	Visual Studio Extension for Lua 1.0 includes editing support for Visual Studio 2015.
+â€¢	Visual Studio Extension for Lua 1.0 includes editing support for Visual Studio 2015.
 
 Contributions
 We would love to have you as a contributor!
-* [Contributing to Visual Studio Extension for Lua](https://github.com/Microsoft/VSLua/blob/master/Contributing.md)
+* [Contributing to Visual Studio Extension for Lua](https://github.com/Microsoft/VSLua/blob/master/CONTRIBUTING.md)
 * [Build Instructions for Visual Studio Extension for Lua](https://github.com/Microsoft/VSLua/wiki/Build-Instructions)
 
 
