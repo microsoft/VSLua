@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6D2688FE-6FD8-44A8-B96A-6037457F72A7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.VisualStudio.Debugger.Lua</RootNamespace>
+    <AssemblyName>Microsoft.VisualStudio.Debugger.Lua</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <SignAssembly>false</SignAssembly>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <BaseIntermediateOutputPath>..\..\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.Debugger.Interop.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Debugger.InteropA, Version=8.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.14.0, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Threading, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AD7.Definitions\AD7Guids.cs" />
+    <Compile Include="AD7.Impl\AD7BoundBreakpoint.cs" />
+    <Compile Include="AD7.Impl\AD7BreakpointResolution.cs" />
+    <Compile Include="AD7.Impl\AD7DocumentContext.cs" />
+    <Compile Include="AD7.Impl\AD7Enums.cs" />
+    <Compile Include="AD7.Impl\AD7Events.cs" />
+    <Compile Include="AD7.Impl\AD7Expression.cs" />
+    <Compile Include="AD7.Impl\AD7ProgramProvider.cs" />
+    <Compile Include="AD7.Impl\AD7StackFrame.cs" />
+    <Compile Include="AD7.Impl\AD7MemoryAddress.cs" />
+    <Compile Include="AD7.Impl\AD7ProgramNode.cs" />
+    <Compile Include="AD7.Impl\AD7Property.cs" />
+    <Compile Include="AD7.Impl\AD7Thread.cs" />
+    <Compile Include="AD7.Definitions\AD7Hresult.cs" />
+    <Compile Include="AD7.Impl\AD7PendingBreakpoint.cs" />
+    <Compile Include="AD7.Impl\EngineConstants.cs" />
+    <Compile Include="Commands.cs" />
+    <Compile Include="DLLInjector.cs" />
+    <Compile Include="Engine.Impl\BreakpointManager.cs" />
+    <Compile Include="AD7.Impl\AD7Engine.cs" />
+    <Compile Include="Frame.cs" />
+    <Compile Include="NativeMethods.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Engine.Impl\EngineUtils.cs" />
+    <Compile Include="ResourceStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Variable.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ResourceStrings.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourceStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EngineRegistration.pkgdef">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
