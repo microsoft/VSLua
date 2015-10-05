@@ -9,7 +9,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
     // This class represents a pending breakpoint which is an abstract representation of a breakpoint before it is bound.
     // When a user creates a new breakpoint, the pending breakpoint is created and is later bound. The bound breakpoints
     // become children of the pending breakpoint.
-    class AD7PendingBreakpoint : IDebugPendingBreakpoint2
+    internal class AD7PendingBreakpoint : IDebugPendingBreakpoint2
     {
         private IDebugBreakpointRequest2 m_pBPRequest;
         private BP_REQUEST_INFO m_bpRequestInfo;
@@ -38,8 +38,6 @@ namespace Microsoft.VisualStudio.Debugger.Lua
 
         public int Bind()
         {
-            // BP_REQUEST_INFO[] requestInfo = new BP_REQUEST_INFO[1];
-
             IDebugDocumentPosition2 docPosition = (IDebugDocumentPosition2)(Marshal.GetObjectForIUnknown(m_bpRequestInfo.bpLocation.unionmember2));
 
             string filename;
@@ -56,9 +54,6 @@ namespace Microsoft.VisualStudio.Debugger.Lua
 
             AD7BreakpointResolution breakpointResolution = new AD7BreakpointResolution(this.m_engine, docContext);
             AD7BoundBreakpoint boundBreakpoint = new AD7BoundBreakpoint(this.m_engine, this, breakpointResolution);
-            // AD7BreakpointBoundEvent boundBreakpointEvent = new AD7BreakpointBoundEvent(boundBreakpoint);
-
-            // this.m_engine.Send(boundBreakpointEvent, AD7BreakpointBoundEvent.IID, null);
 
             string fileandline = Path.GetFileName(filename) + ((int)startPosition[0].dwLine + 1).ToString();
             m_bpManager.StoreBoundBreakpoint(fileandline, boundBreakpoint);

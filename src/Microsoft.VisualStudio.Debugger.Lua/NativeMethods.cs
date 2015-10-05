@@ -26,6 +26,9 @@ namespace Microsoft.VisualStudio.Debugger.Lua
 
         [DllImport("kernel32.dll")]
         public static extern uint SuspendThread(IntPtr hThread);
+
+        [DllImport("ole32.dll")]
+        public static extern int CoWaitForMultipleHandles(uint dwFlags, int dwTimeout, int cHandles, IntPtr[] pHandles, out uint lpdwindex);
     }
 
     [StructLayout(LayoutKind.Sequential)]

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.VisualStudio.Debugger.Lua
 {
-    class Frame
+    internal class Frame
     {
         private string m_func;
         private string m_src;

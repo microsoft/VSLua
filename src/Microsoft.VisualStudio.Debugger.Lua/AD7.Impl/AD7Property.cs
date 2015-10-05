@@ -10,7 +10,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
     // The property is usually the result of an expression evaluation. 
     //
     // The sample engine only supports locals and parameters for functions that have symbols loaded.
-    class AD7Property : IDebugProperty2
+    internal class AD7Property : IDebugProperty2
     {
 
         private Variable m_variableInformation;

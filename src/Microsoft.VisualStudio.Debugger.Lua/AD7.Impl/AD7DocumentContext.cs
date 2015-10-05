@@ -7,12 +7,11 @@ using System.Diagnostics;
 namespace Microsoft.VisualStudio.Debugger.Lua
 {
     // This class represents a document context to the debugger. A document context represents a location within a source file. 
-    class AD7DocumentContext : IDebugDocumentContext2
+    internal class AD7DocumentContext : IDebugDocumentContext2
     {
         string m_fileName;
         TEXT_POSITION m_begPos;
         TEXT_POSITION m_endPos;
-        //AD7MemoryAddress m_codeContext;
 
 
         public AD7DocumentContext(string fileName, TEXT_POSITION begPos, TEXT_POSITION endPos/*, AD7MemoryAddress codeContext*/)
@@ -20,7 +19,6 @@ namespace Microsoft.VisualStudio.Debugger.Lua
             m_fileName = fileName;
             m_begPos = begPos;
             m_endPos = endPos;
-            // m_codeContext = codeContext;
         }
 
 
@@ -43,9 +41,6 @@ namespace Microsoft.VisualStudio.Debugger.Lua
             ppEnumCodeCxts = null;
             try
             {
-                //AD7MemoryAddress[] codeContexts = new AD7MemoryAddress[1];
-                //codeContexts[0] = m_codeContext;
-                //ppEnumCodeCxts = new AD7CodeContextEnum(codeContexts);
                 return VSConstants.S_OK;
             }
             catch (Exception e)
@@ -68,7 +63,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
         int IDebugDocumentContext2.GetLanguageInfo(ref string pbstrLanguage, ref Guid pguidLanguage)
         {
             pbstrLanguage = "Lua";
-            pguidLanguage = new Guid("88A1F488-9D00-4896-A255-6F8251208B90"); // TODO
+            pguidLanguage = new Guid("88A1F488-9D00-4896-A255-6F8251208B90");
             return VSConstants.S_OK;
         }
 
@@ -101,9 +96,8 @@ namespace Microsoft.VisualStudio.Debugger.Lua
                 pEndPosition[0].dwColumn = m_endPos.dwColumn;
                 pEndPosition[0].dwLine = m_endPos.dwLine;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                // return EngineUtils.UnexpectedException(e);
             }
 
             return VSConstants.S_OK;

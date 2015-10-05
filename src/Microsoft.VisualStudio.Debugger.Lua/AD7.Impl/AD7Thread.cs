@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Debugger.Interop;
 namespace Microsoft.VisualStudio.Debugger.Lua
 {
     // This class implements IDebugThread2 which represents a thread running in a program.
-    class AD7Thread : IDebugThread2, IDebugThread100
+    internal class AD7Thread : IDebugThread2, IDebugThread100
     {
         private readonly AD7Engine m_engine;
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.VisualStudio.Debugger.Lua
 {
-    enum CommandKind
+    internal enum CommandKind
     {
         Breakpoint,
         Step,
@@ -15,7 +15,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
         DebuggerEnvironmentReady
     }
 
-    class Command
+    internal class Command
     {
         public CommandKind Kind { get; private set; }
 
@@ -25,7 +25,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
         }
     }
 
-    class BreakpointCommand : Command
+    internal class BreakpointCommand : Command
     {
         public string File { get; private set; }
         public int LineNumber { get; private set; }

@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 namespace Microsoft.VisualStudio.Debugger.Lua
 {
     // This class represents the information that describes a bound breakpoint.
-    class AD7BreakpointResolution : IDebugBreakpointResolution2
+    internal class AD7BreakpointResolution : IDebugBreakpointResolution2
     {
         private AD7Engine m_engine;
         private AD7DocumentContext m_documentContext;

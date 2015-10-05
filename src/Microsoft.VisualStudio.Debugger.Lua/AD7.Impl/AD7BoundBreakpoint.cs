@@ -9,7 +9,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
     // This class represents a breakpoint that has been bound to a location in the debuggee. It is a child of the pending breakpoint
     // that creates it. Unless the pending breakpoint only has one bound breakpoint, each bound breakpoint is displayed as a child of the
     // pending breakpoint in the breakpoints window. Otherwise, only one is displayed.
-    class AD7BoundBreakpoint : IDebugBoundBreakpoint2
+    internal class AD7BoundBreakpoint : IDebugBoundBreakpoint2
     {
         private AD7PendingBreakpoint m_pendingBreakpoint;
         private AD7BreakpointResolution m_breakpointResolution;

@@ -9,7 +9,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
     // This class implements IDebugProgramNode2.
     // This interface represents a program that can be debugged.
     // A debug engine (DE) or a custom port supplier implements this interface to represent a program that can be debugged. 
-    class AD7ProgramNode : IDebugProgramNode2
+    internal class AD7ProgramNode : IDebugProgramNode2
     {
         readonly int m_processId;
 

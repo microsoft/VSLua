@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.Debugger.Interop;
 namespace Microsoft.VisualStudio.Debugger.Lua
 {
     #region Base Class
-    class AD7Enum<T,I> where I: class
+    internal class AD7Enum<T,I> where I: class
     {
         readonly T[] m_data;
         uint m_position;

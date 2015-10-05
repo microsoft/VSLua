@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Microsoft.VisualStudio.Debugger.Lua
 {
     // This class manages breakpoints for the engine. 
-    class BreakpointManager
+    internal class BreakpointManager
     {
         private AD7Engine m_engine;
         private List<AD7PendingBreakpoint> m_pendingBreakpoints;
@@ -36,10 +36,6 @@ namespace Microsoft.VisualStudio.Debugger.Lua
         // Called from the engine's detach method to remove the debugger's breakpoint instructions.
         public void ClearBoundBreakpoints()
         {
-            foreach (AD7PendingBreakpoint pendingBreakpoint in m_pendingBreakpoints)
-            {
-                // pendingBreakpoint.ClearBoundBreakpoints();
-            }
         }
 
         internal AD7BoundBreakpoint GetBoundBreakpoint(string fileandline)

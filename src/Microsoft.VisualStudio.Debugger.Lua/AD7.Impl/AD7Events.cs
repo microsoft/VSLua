@@ -15,7 +15,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
 {
     #region Event base classes
 
-    class AD7AsynchronousEvent : IDebugEvent2
+    internal class AD7AsynchronousEvent : IDebugEvent2
     {
         public const uint Attributes = (uint)enum_EVENTATTRIBUTES.EVENT_ASYNCHRONOUS;
 

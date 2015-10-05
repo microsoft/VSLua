@@ -128,7 +128,6 @@ namespace Microsoft.VisualStudio.Debugger.Lua
         int IDebugEngine2.DestroyProgram(IDebugProgram2 pProgram)
         {
             return pProgram.Terminate();
-            //return (AD7_HRESULT.E_PROGRAM_DESTROY_PENDING);
         }
 
         // Gets the GUID of the DE.
@@ -230,8 +229,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
             pID = pi.dwProcessId;
             Task writepipeOK = WriteNamedPipeAsync();
             Task readpipeOK = ReadNamedPipeAsync();
-
-            // Marshal.FreeHGlobal(lpEnvironment);
+            
             threadHandle = pi.hThread;
             IntPtr processHandle = pi.hProcess;
 
@@ -257,7 +255,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
 
             IntPtr[] handles1 = new IntPtr[] { hRemoteThread1 };
             uint index1;
-            CoWaitForMultipleHandles(0, -1, handles1.Length, handles1, out index1);
+            NativeMethods.CoWaitForMultipleHandles(0, -1, handles1.Length, handles1, out index1);
 
             string debugDllName = Path.Combine(VS140ExtensionPath, "LuaDebug32.dll");
 
@@ -272,7 +270,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
             IntPtr hRemoteThread2 = DLLInjector.CreateRemoteThread(processHandle, IntPtr.Zero, 0, loadLibAddr, allocMemAddress2, 0, IntPtr.Zero);
             IntPtr[] handles = new IntPtr[] { hRemoteThread2 };
             uint index2;
-            CoWaitForMultipleHandles(0, -1, handles.Length, handles, out index2);
+            NativeMethods.CoWaitForMultipleHandles(0, -1, handles.Length, handles, out index2);
 
 
             AD_PROCESS_ID adProcessId = new AD_PROCESS_ID();
@@ -285,9 +283,6 @@ namespace Microsoft.VisualStudio.Debugger.Lua
             return VSConstants.S_OK;
         }
 
-        [DllImport("ole32.dll")]
-        static extern int CoWaitForMultipleHandles(uint dwFlags, int dwTimeout, int cHandles, IntPtr[] pHandles, out uint lpdwindex);
-
         private async Task WriteNamedPipeAsync()
         {
             string pipeID = pID.ToString();
@@ -299,7 +294,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
                 using (StreamWriter pipeWriter = new StreamWriter(pipeServer))
                 {
                     pipeWriter.AutoFlush = true;
-                    // keepWritePipeOpen = true;
+                    keepWritePipeOpen = true;
 
                     // Transition to a background thread
                     await TaskScheduler.Default;
@@ -354,8 +349,6 @@ namespace Microsoft.VisualStudio.Debugger.Lua
                         {
                             case "BreakpointHit":
                             {
-                                // this.writeCommandQueue.Enqueue(new Command(CommandKind.Locals));
-                                // this.writeCommandQueue.Enqueue(new Command(CommandKind.CallStack));
                                 debugThread.SourceFile = await pipeReader.ReadLineAsync();
                                 debugThread.Line = uint.Parse(await pipeReader.ReadLineAsync());
                                 debugThread.FuncName = await pipeReader.ReadLineAsync();
@@ -364,7 +357,6 @@ namespace Microsoft.VisualStudio.Debugger.Lua
                                 debugThread.FrameCount = int.Parse(await pipeReader.ReadLineAsync());
 
                                 List<Frame> frames = new List<Frame>(debugThread.FrameCount);
-                                // List<string> frames = new List<string>(debugThread.FrameCount);
 
                                 for (int stackLineIndex = 0; stackLineIndex < debugThread.FrameCount; stackLineIndex++)
                                 {
@@ -372,12 +364,10 @@ namespace Microsoft.VisualStudio.Debugger.Lua
                                     string source = await pipeReader.ReadLineAsync();
                                     string line = await pipeReader.ReadLineAsync();
                                     frames.Add(new Frame(func, source, line));
-                                    // frames.Add(await pipeReader.ReadLineAsync());
                                 }
 
                                 debugThread.StackFrames = frames;
-
-                                    // TODO get locals
+                                    
                                 int numberToRead = int.Parse(await pipeReader.ReadLineAsync());
 
                                 List<Variable> variables = new List<Variable>(numberToRead);
@@ -499,8 +489,6 @@ namespace Microsoft.VisualStudio.Debugger.Lua
         // breakmode. 
         public int CauseBreak()
         {
-            // TODO: pause, async break P2
-
             return VSConstants.S_OK;
         }
 
@@ -616,7 +604,6 @@ namespace Microsoft.VisualStudio.Debugger.Lua
         // This method is deprecated. Use the IDebugProcess3::Step method instead.
         public int Step(IDebugThread2 pThread, enum_STEPKIND sk, enum_STEPUNIT Step)
         {
-            // TODO stepping,
             EnqueueCommand(new Command(CommandKind.Step));
             return VSConstants.S_OK;
         }

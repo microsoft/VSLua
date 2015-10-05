@@ -9,7 +9,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
 {
     // Represents a logical stack frame on the thread stack. 
     // Also implements the IDebugExpressionContext interface, which allows expression evaluation and watch windows.
-    class AD7StackFrame : IDebugStackFrame2, IDebugExpressionContext2
+    internal class AD7StackFrame : IDebugStackFrame2, IDebugExpressionContext2
     {
         private readonly AD7Engine m_engine;
         private readonly AD7Thread m_thread;
@@ -64,8 +64,6 @@ namespace Microsoft.VisualStudio.Debugger.Lua
             // The optional information is requested by setting flags in the dwFieldSpec parameter.
             if ((dwFieldSpec & enum_FRAMEINFO_FLAGS.FIF_FUNCNAME) != 0)
             {
-                // m_thread.funcname
-                // string funcName = m_thread.StackFrames[index].GetFunc();
                 string funcName = m_thread.StackFrames[index].GetFunc();
 
                 if ((dwFieldSpec & enum_FRAMEINFO_FLAGS.FIF_FUNCNAME_MODULE) != 0)
