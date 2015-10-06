@@ -5,7 +5,7 @@
     <DisplayName>Microsoft Visual Studio Extension for Lua</DisplayName>
     <Description xml:space="preserve">Microsoft Visual Studio Extension for Lua</Description>
   </Metadata>
-  <Installation>
+  <Installation AllUsers="true">
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />
   </Installation>
   <Dependencies>

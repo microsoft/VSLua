@@ -1,0 +1,31 @@
+; This file registers the sample debug engine with Visual Studio.
+; The 'AD7Metrics\Engine\{guid}' section declares capabiliets of the engine.
+; Make sure to update the GUID in this file when changing EngineVSConstants.EngineId
+
+[$RootKey$\AD7Metrics\Engine\{FE72992A-F091-45CA-B9C6-B653D374AA61}]
+"CLSID"="{438738F7-C363-47ED-87DA-42B682E38096}"
+"ProgramProvider"="{14DB1ECC-B720-4F36-AEC6-3CFAC4E23A37}"
+"Attach"=dword:00000001
+"AddressBP"=dword:00000000
+"AutoSelectPriority"=dword:00000004
+"CallstackBP"=dword:00000001
+"Name"="Sample Debug Engine"
+"PortSupplier"="{708C1ECA-FF48-11D2-904F-00C04FA302A1}"
+@="Lua Debug Engine"
+
+[$RootKey$\AD7Metrics\Engine\{FE72992A-F091-45CA-B9C6-B653D374AA61}\IncompatibleList]
+"guidCOMPlusNativeEng"="{92EF0900-2251-11D2-B72E-0000F87572EF}"
+"guidCOMPlusOnlyEng"="{449EC4CC-30D2-4032-9256-EE18EB41B62B}"
+"guidNativeOnlyEng"="{449EC4CC-30D2-4032-9256-EE18EB41B62B}"
+"guidScriptEng"="{F200A7E7-DEA5-11D0-B854-00A0244A1DE2}"
+"gpudebugengine"="{F4453496-1DB8-47F8-A7D5-31EBDDC2EC96}"
+
+[$RootKey$\CLSID\{438738F7-C363-47ED-87DA-42B682E38096}]
+"Assembly"="Microsoft.VisualStudio.Debugger.Lua"
+"Class"="Microsoft.VisualStudio.Debugger.Lua.AD7Engine"
+"CodeBase"="$PackageFolder$\Microsoft.VisualStudio.Debugger.Lua.dll"
+
+[$RootKey$\CLSID\{14DB1ECC-B720-4F36-AEC6-3CFAC4E23A37}]
+"Assembly"="Microsoft.VisualStudio.Debugger.SampleEngine"
+"Class"="Microsoft.VisualStudio.Debugger.Lua.AD7ProgramProvider"
+"CodeBase"="$PackageFolder$\Microsoft.VisualStudio.Debugger.Lua.dll"

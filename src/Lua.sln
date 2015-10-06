@@ -14,6 +14,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageModel.Tests", "Lang
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuaLanguageServicePackage", "LuaVSHost\LuaLanguageServicePackage.csproj", "{4C4E17B1-4382-460E-8308-A799C1F000C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VisualStudio.Debugger.Lua", "Microsoft.VisualStudio.Debugger.Lua\Microsoft.VisualStudio.Debugger.Lua.csproj", "{6D2688FE-6FD8-44A8-B96A-6037457F72A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectLauncher", "ProjectLauncher\ProjectLauncher.csproj", "{7DDAD15C-AF23-4B42-8ADE-CD3BB23DF072}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +40,14 @@ Global
 		{4C4E17B1-4382-460E-8308-A799C1F000C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C4E17B1-4382-460E-8308-A799C1F000C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C4E17B1-4382-460E-8308-A799C1F000C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D2688FE-6FD8-44A8-B96A-6037457F72A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D2688FE-6FD8-44A8-B96A-6037457F72A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D2688FE-6FD8-44A8-B96A-6037457F72A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D2688FE-6FD8-44A8-B96A-6037457F72A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DDAD15C-AF23-4B42-8ADE-CD3BB23DF072}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DDAD15C-AF23-4B42-8ADE-CD3BB23DF072}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DDAD15C-AF23-4B42-8ADE-CD3BB23DF072}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DDAD15C-AF23-4B42-8ADE-CD3BB23DF072}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
