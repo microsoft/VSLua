@@ -48,8 +48,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
         BreakpointManager breakpointManager;
 
         IDebugProcess2 debugProcess;
-
-        // IDebugThread2 debugThread;
+        
         AD7Thread debugThread;
 
         ManualResetEvent _programCreateContinued = new ManualResetEvent(false);
@@ -167,7 +166,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
         {
             return VSConstants.S_OK;
         }
-
+        
         // A metric is a registry value used to change a debug engine's behavior or to advertise supported functionality. 
         // This method can forward the call to the appropriate form of the Debugging SDK Helpers function, SetMetric.
         int IDebugEngine2.SetMetric(string pszMetric, object varValue)
