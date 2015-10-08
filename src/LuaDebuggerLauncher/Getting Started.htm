@@ -1,0 +1,65 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+    <head>
+        <title>Visual C++ debugger extensibility getting started</title>
+    </head>
+    <body>
+    
+        <h1 style="font-weight: 700">
+            Visual C++ Debugger Extensibility</h1>
+        <p>
+            There are a couple of scenarios for extending the set of debuggers available in 
+            Visual C++:</p>
+        <ol>
+            <li>You have written your own debugger, and need a way for Visual C++ to use it to 
+                launch projects.</li>
+            <li>You want to modify how a standard Visual C++ debugger is launched.</li>
+        </ol>
+        <p>
+            This project template demonstrates how to wrap an existing debugger's launcher 
+            in order to customize the settings that are sent to the debugger during launch.  
+            If you've written your own debugger, you may simply remove the irrelevant 
+            debugger-wrapping bits of code and add in your own logic.  
+        </p>
+  
+        <h3>
+            How do I build my debug launcher?</h3>
+        <p>
+            Fix up the project by editing the .csproj file so that its linking in of general.xml uses the 
+            $(MSBuildProgramFiles32) property instead of the broken relative path.</p>
+        <h3>
+            How do I deploy my debug launcher?</h3>
+        <p>
+            Be sure to review the comments in the VendorNameCoolDebugger.xaml file regarding 
+            the use of property names and update as necessary.</p>
+        <p>
+            The [PlatformName] folder in this project contains the files that you will 
+            likely want to distribute under the 
+            %ProgramFiles%\msbuild\Microsoft.Cpp\v4.0\v120\Platforms\Win32 directory if your 
+            debugger should appear in the Win32 platform.  Or if you are also 
+            developing your own platform you can deploy these files underneath the directory 
+            you create for your platform.</p>
+        <h3>
+            How do I debug my debug launcher?</h3>
+        <p>
+            After copying the Platform files to the appropriate directory, you can just 
+            run/debug <em>this </em>project to launch another instance of Visual Studio with 
+            this debugger extension installed. Within that instance of Visual Studio, create 
+            a Visual C++ project, view its Debugger property page, and set the debugger to 
+            your own (if it's not already the default).  Then hit F5 within <em>that</em> 
+            instance of Visual Studio.  That should trigger your debugger launcher and 
+            fire any breakpoint you may have set.</p>
+        <h3>
+            How do I implement my own debugger launcher if I'm writing from scratch?</h3>
+        <p>
+            To get an idea of what you need to do in your own implementation, start by 
+            leaving the debugger-wrapping code in the project, and using the above 
+            techniques to debug through what it does, while observing the inputs and outputs 
+            of the QueryDebugTargetsAsync method. 
+        </p>
+        <p>
+            Be sure to review the classes and methods available in the 
+            Microsoft.VisualStudio.ProjectSystem.Utilities.DebuggerProviders namespace, which are 
+            not necessary but may be useful to you.</p>
+    </body>
+</html>

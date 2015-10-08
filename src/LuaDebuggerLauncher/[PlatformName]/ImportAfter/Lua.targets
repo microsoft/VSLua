@@ -1,0 +1,6 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <!-- Add your debugger to the list of available debuggers in the project property pages dialog. -->
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)LuaDebugger.xaml" />
+  </ItemGroup>
+</Project>

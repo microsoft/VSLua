@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VisualStudio.Debu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectLauncher", "ProjectLauncher\ProjectLauncher.csproj", "{7DDAD15C-AF23-4B42-8ADE-CD3BB23DF072}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuaDebuggerLauncher", "LuaDebuggerLauncher\LuaDebuggerLauncher.csproj", "{E39AA29B-85EA-4423-9D9D-FE1122D92EDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,10 @@ Global
 		{7DDAD15C-AF23-4B42-8ADE-CD3BB23DF072}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DDAD15C-AF23-4B42-8ADE-CD3BB23DF072}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DDAD15C-AF23-4B42-8ADE-CD3BB23DF072}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E39AA29B-85EA-4423-9D9D-FE1122D92EDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E39AA29B-85EA-4423-9D9D-FE1122D92EDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E39AA29B-85EA-4423-9D9D-FE1122D92EDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E39AA29B-85EA-4423-9D9D-FE1122D92EDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
