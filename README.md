@@ -1,6 +1,6 @@
 Visual Studio Extension for Lua is a free, open source plugin that turns Visual Studio into a Lua development environment. It is designed, developed, and supported by Microsoft and the community.
 
-The extension currently supports editing intelliSense, syntax colorization, formatting, and error squiggles.
+The extension currently supports editing intelliSense, syntax colorization, formatting, and error squiggles. It also supports single Lua file debugging.
 
 ![](images/colorization.png?raw=true)
 ![](images/intelliSense.png?raw=true)
