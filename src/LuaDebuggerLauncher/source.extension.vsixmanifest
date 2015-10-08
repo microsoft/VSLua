@@ -17,5 +17,8 @@
   <References />
   <Content>
     <MefComponent>|%CurrentProject%|</MefComponent>
+    <MefComponent>|LuaLanguageServicePackage|</MefComponent>
+    <Assembly AssemblyName="LanguageService">|LanguageService|</Assembly>
+    <VsPackage>LuaLanguageServiceThemes.pkgdef</VsPackage>
   </Content>
 </Vsix>
