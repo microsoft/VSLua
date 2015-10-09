@@ -257,7 +257,10 @@ namespace LanguageService.Classification
                     int tokenEnd = token.End < range.End ? token.End : range.End;
                     if (tokenStart < tokenEnd)
                     {
-                        yield return new TagInfo(tokenStart, tokenEnd - tokenStart, SyntaxKindClassifications[token.Kind]);
+                        if (SyntaxKindClassifications.ContainsKey(token.Kind))
+                        {
+                            yield return new TagInfo(tokenStart, tokenEnd - tokenStart, SyntaxKindClassifications[token.Kind]);
+                        }
                     }
                 }
             }
