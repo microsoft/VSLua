@@ -47,6 +47,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
                 }
             }
             List<string> strList = new List<string>();
+            if (currentToken == null)
+                return;
             if (currentToken.Kind == SyntaxKind.Dot)
             {
                 //user inputs dot. Try search members
