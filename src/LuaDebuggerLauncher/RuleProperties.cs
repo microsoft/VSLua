@@ -20,7 +20,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua.Rules
         /// Initializes a new instance of the <see cref="RuleProperties"/> class.
         /// </summary>
         [ImportingConstructor]
-        public RuleProperties([Import(RequiredCreationPolicy = CreationPolicy.Shared)] ConfiguredProject configuredProject)
+        public RuleProperties(ConfiguredProject configuredProject)
             : base(configuredProject)
         {
         }

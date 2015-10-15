@@ -107,10 +107,27 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
             else
             {
                 //list all variables and keywords
-                strList.Add("function");
-                strList.Add("local");
-                strList.Add("while");
+                //strList.Add("and");
+                //strList.Add("break");
+                //strList.Add("do");
+                //strList.Add("else");
+                //strList.Add("elseif");
+                //strList.Add("end");
+                //strList.Add("false");
                 strList.Add("for");
+                strList.Add("function");
+                strList.Add("if");
+                //strList.Add("in");
+                strList.Add("local");
+                //strList.Add("nil");
+                //strList.Add("not");
+                //strList.Add("or");
+                //strList.Add("repeat");
+                //strList.Add("return");
+                //strList.Add("then");
+                //strList.Add("true");
+                //strList.Add("until");
+                strList.Add("while");
                 foreach (var statement in syntaxTree.StatementNodeList)
                 {
                     if (statement.StartPosition + statement.Length < triggerPoint.Position) //make sure the variable is declared before the usage
