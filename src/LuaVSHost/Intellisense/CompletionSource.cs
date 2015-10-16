@@ -181,10 +181,22 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
         {
             SnapshotPoint currentPoint = session.TextView.Caret.Position.BufferPosition;
             if (!m_memberlist)
+            {
                 currentPoint = currentPoint - 1;
-            ITextStructureNavigator navigator = m_sourceProvider.NavigatorService.GetTextStructureNavigator(m_textBuffer);
-            TextExtent extent = navigator.GetExtentOfWord(currentPoint);
-            return currentPoint.Snapshot.CreateTrackingSpan(extent.Span, SpanTrackingMode.EdgeInclusive);
+            }
+            var navigator = m_sourceProvider.NavigatorService.GetTextStructureNavigator(m_textBuffer);
+            var extent = navigator.GetExtentOfWord(currentPoint);
+            var text = extent.Span.GetText();
+            System.Diagnostics.Debug.WriteLine("t: " + text);
+            if (!string.IsNullOrEmpty(text.Trim().Replace(Environment.NewLine, string.Empty).Replace("\n", string.Empty)))
+            {
+                return currentPoint.Snapshot.CreateTrackingSpan(extent.Span, SpanTrackingMode.EdgeInclusive);
+            }
+
+            return currentPoint.Snapshot.CreateTrackingSpan(
+                currentPoint.Position,
+                0,
+                SpanTrackingMode.EdgeInclusive);
         }
 
         private bool m_isDisposed;
