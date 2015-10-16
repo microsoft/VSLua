@@ -469,7 +469,8 @@ namespace Microsoft.VisualStudio.Debugger.Lua
             }
             
             EnqueueCommand(new Command(CommandKind.Detach));
-
+            this.keepReadPipeOpen = false;
+            this.keepWritePipeOpen = false;
             return debugProcess.Terminate();
         }
 
@@ -612,6 +613,8 @@ namespace Microsoft.VisualStudio.Debugger.Lua
         {
             // Because the sample engine is a native debugger, it implements IDebugEngineLaunch2, and will terminate
             // the process in IDebugEngineLaunch2.TerminateProcess
+            this.keepReadPipeOpen = false;
+            this.keepWritePipeOpen = false;
             return VSConstants.S_OK;
         }
 
