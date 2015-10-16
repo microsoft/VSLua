@@ -82,7 +82,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
                 {
                     this.TriggerCompletion();
                     if (m_session != null && !m_session.IsDismissed)
-                        m_session.Filter();
+                        if(typedChar != 46) //do not filter is it is '.'
+                            m_session.Filter();
                 }
                 else     //the completion session is already active, so just filter
                 {

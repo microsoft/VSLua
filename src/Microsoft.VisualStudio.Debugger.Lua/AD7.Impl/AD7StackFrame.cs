@@ -68,7 +68,11 @@ namespace Microsoft.VisualStudio.Debugger.Lua
 
                 if ((dwFieldSpec & enum_FRAMEINFO_FLAGS.FIF_FUNCNAME_MODULE) != 0)
                 {
-                    funcName += " in " + Path.GetFileNameWithoutExtension(m_thread.StackFrames[index].GetSource());
+                    string rawSource = m_thread.StackFrames[index].GetSource();
+                    var secs = rawSource.Split(' ');
+                    string fileName = secs[secs.Length - 1];
+                    fileName = fileName.Replace("\"", "");
+                    funcName += " in " + Path.GetFileNameWithoutExtension(fileName);
                     frameInfo.m_dwValidFields |= enum_FRAMEINFO_FLAGS.FIF_FUNCNAME_MODULE;
                 }
 

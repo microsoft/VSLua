@@ -1,0 +1,6 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <!-- This is an optional step to encourage your debugger to be the default one for new C++ projects in this platform. -->
+    <DebuggerFlavor>LuaDebugger</DebuggerFlavor>
+  </PropertyGroup>
+</Project>

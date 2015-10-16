@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
+  <Identifier Id="Microsoft.VisualStudioToolsforLua">
+    <Name>Microsoft Visual Studio Tools for Lua</Name>
+    <Author>Microsoft</Author>
+    <Version>1.0</Version>
+    <Description xml:space="preserve">Microsoft Visual Studio Tools for Lua</Description>
+    <Locale>1033</Locale>
+    <SupportedProducts>
+      <VisualStudio Version="14.0">
+        <Edition>Community</Edition>
+        <Edition>Enterprise</Edition>
+      </VisualStudio>
+    </SupportedProducts>
+    <SupportedFrameworkRuntimeEdition MinVersion="4.5.1" MaxVersion="4.5.2" />
+  </Identifier>
+  <References />
+  <Content>
+    <MefComponent>|%CurrentProject%|</MefComponent>
+    <MefComponent>|LuaLanguageServicePackage|</MefComponent>
+    <Assembly AssemblyName="LanguageService">|LanguageService|</Assembly>
+    <VsPackage>LuaLanguageServiceThemes.pkgdef</VsPackage>
+  </Content>
+</Vsix>
