@@ -47,6 +47,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
                 }
             }
             List<string> strList = new List<string>();
+            if (currentToken == null)
+                return;
             if (currentToken.Kind == SyntaxKind.Dot)
             {
                 //user inputs dot. Try search members
@@ -105,10 +107,27 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
             else
             {
                 //list all variables and keywords
-                strList.Add("function");
-                strList.Add("local");
-                strList.Add("while");
+                //strList.Add("and");
+                //strList.Add("break");
+                //strList.Add("do");
+                //strList.Add("else");
+                //strList.Add("elseif");
+                //strList.Add("end");
+                //strList.Add("false");
                 strList.Add("for");
+                strList.Add("function");
+                strList.Add("if");
+                //strList.Add("in");
+                strList.Add("local");
+                //strList.Add("nil");
+                //strList.Add("not");
+                //strList.Add("or");
+                //strList.Add("repeat");
+                //strList.Add("return");
+                //strList.Add("then");
+                //strList.Add("true");
+                //strList.Add("until");
+                strList.Add("while");
                 foreach (var statement in syntaxTree.StatementNodeList)
                 {
                     if (statement.StartPosition + statement.Length < triggerPoint.Position) //make sure the variable is declared before the usage
@@ -162,10 +181,22 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
         {
             SnapshotPoint currentPoint = session.TextView.Caret.Position.BufferPosition;
             if (!m_memberlist)
+            {
                 currentPoint = currentPoint - 1;
-            ITextStructureNavigator navigator = m_sourceProvider.NavigatorService.GetTextStructureNavigator(m_textBuffer);
-            TextExtent extent = navigator.GetExtentOfWord(currentPoint);
-            return currentPoint.Snapshot.CreateTrackingSpan(extent.Span, SpanTrackingMode.EdgeInclusive);
+            }
+            var navigator = m_sourceProvider.NavigatorService.GetTextStructureNavigator(m_textBuffer);
+            var extent = navigator.GetExtentOfWord(currentPoint);
+            var text = extent.Span.GetText();
+            System.Diagnostics.Debug.WriteLine("t: " + text);
+            if (!string.IsNullOrEmpty(text.Trim().Replace(Environment.NewLine, string.Empty).Replace("\n", string.Empty)))
+            {
+                return currentPoint.Snapshot.CreateTrackingSpan(extent.Span, SpanTrackingMode.EdgeInclusive);
+            }
+
+            return currentPoint.Snapshot.CreateTrackingSpan(
+                currentPoint.Position,
+                0,
+                SpanTrackingMode.EdgeInclusive);
         }
 
         private bool m_isDisposed;
