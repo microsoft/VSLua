@@ -48,7 +48,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
         BreakpointManager breakpointManager;
 
         IDebugProcess2 debugProcess;
-        
+
         AD7Thread debugThread;
 
         ManualResetEvent _programCreateContinued = new ManualResetEvent(false);
@@ -85,7 +85,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
 
             // This event is optional
             AD7LoadCompleteEvent.Send(this);
-           
+
 
             return VSConstants.S_OK;
         }
@@ -108,7 +108,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
             {
                 _programCreateContinued.Set();
             }
-            
+
             return VSConstants.S_OK;
         }
 
@@ -166,7 +166,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
         {
             return VSConstants.S_OK;
         }
-        
+
         // A metric is a registry value used to change a debug engine's behavior or to advertise supported functionality. 
         // This method can forward the call to the appropriate form of the Debugging SDK Helpers function, SetMetric.
         int IDebugEngine2.SetMetric(string pszMetric, object varValue)
@@ -205,16 +205,16 @@ namespace Microsoft.VisualStudio.Debugger.Lua
         // in which case Visual Studio uses the IDebugEngineLaunch2::LaunchSuspended method
         // The IDebugEngineLaunch2::ResumeProcess method is called to start the process after the process has been successfully launched in a suspended state.
         int IDebugEngineLaunch2.LaunchSuspended(string pszServer, IDebugPort2 port, string exe, string args, string dir, string env, string options, enum_LAUNCH_FLAGS launchFlags, uint hStdInput, uint hStdOutput, uint hStdError, IDebugEventCallback2 ad7Callback, out IDebugProcess2 process)
-        {            
+        {
             Debug.Assert(m_ad7ProgramId == Guid.Empty);
-            
+
             m_ad7ProgramId = Guid.NewGuid();
 
             STARTUPINFO si = new STARTUPINFO();
             pi = new PROCESS_INFORMATION();
 
             // try/finally free
-            bool procOK = NativeMethods.CreateProcess(exe, 
+            bool procOK = NativeMethods.CreateProcess(exe,
                                                       args,
                                                       IntPtr.Zero,
                                                       IntPtr.Zero,
@@ -228,7 +228,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
             pID = pi.dwProcessId;
             Task writepipeOK = WriteNamedPipeAsync();
             Task readpipeOK = ReadNamedPipeAsync();
-            
+
             threadHandle = pi.hThread;
             IntPtr processHandle = pi.hProcess;
 
@@ -237,7 +237,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
 
             string VS140ExtensionPath = Path.Combine(Path.GetDirectoryName(typeof(EngineConstants).Assembly.Location), "LuaDetour");
             string luaDetoursDllName = Path.Combine(VS140ExtensionPath, "LuaDetours.dll");
-            if(!File.Exists(luaDetoursDllName))
+            if (!File.Exists(luaDetoursDllName))
             {
                 process = null;
                 return VSConstants.E_FAIL;
@@ -347,40 +347,56 @@ namespace Microsoft.VisualStudio.Debugger.Lua
                         switch (command)
                         {
                             case "BreakpointHit":
-                            {
-                                debugThread.SourceFile = await pipeReader.ReadLineAsync();
-                                debugThread.Line = uint.Parse(await pipeReader.ReadLineAsync());
-                                debugThread.FuncName = await pipeReader.ReadLineAsync();
-
-                                // Receive Callstack
-                                debugThread.FrameCount = int.Parse(await pipeReader.ReadLineAsync());
-
-                                List<Frame> frames = new List<Frame>(debugThread.FrameCount);
-
-                                for (int stackLineIndex = 0; stackLineIndex < debugThread.FrameCount; stackLineIndex++)
                                 {
-                                    string func = await pipeReader.ReadLineAsync();
-                                    string source = await pipeReader.ReadLineAsync();
-                                    string line = await pipeReader.ReadLineAsync();
-                                    frames.Add(new Frame(func, source, line));
+                                    debugThread.SourceFile = await pipeReader.ReadLineAsync();
+                                    debugThread.Line = uint.Parse(await pipeReader.ReadLineAsync());
+                                    debugThread.FuncName = await pipeReader.ReadLineAsync();
+
+                                    // Receive Callstack
+                                    debugThread.FrameCount = int.Parse(await pipeReader.ReadLineAsync());
+
+                                    List<Frame> frames = new List<Frame>(debugThread.FrameCount);
+
+                                    for (int stackLineIndex = 0; stackLineIndex < debugThread.FrameCount; stackLineIndex++)
+                                    {
+                                        string func = await pipeReader.ReadLineAsync();
+                                        string source = await pipeReader.ReadLineAsync();
+                                        string line = await pipeReader.ReadLineAsync();
+                                        frames.Add(new Frame(func, source, line));
+                                    }
+
+                                    debugThread.StackFrames = frames;
+
+                                    int numberToRead = int.Parse(await pipeReader.ReadLineAsync());
+
+                                    List<Variable> variables = new List<Variable>(numberToRead);
+
+                                    for (int localIndex = 0; localIndex < numberToRead; localIndex++)
+                                    {
+                                        string name = await pipeReader.ReadLineAsync();
+                                        string value = await pipeReader.ReadLineAsync();
+                                        string type = await pipeReader.ReadLineAsync();
+                                        Variable var = new Variable(name, value, type);
+                                        if (type == "table")
+                                        {
+                                            string tablename = await pipeReader.ReadLineAsync();
+                                            while (tablename != "!endoftable!")
+                                            {
+                                                string tablevalue = await pipeReader.ReadLineAsync();
+                                                string tabletype = await pipeReader.ReadLineAsync();
+                                                Variable tablevar = new Variable(tablename, tablevalue, tabletype);
+                                                var.AddChild(tablevar);
+                                                tablename = await pipeReader.ReadLineAsync();
+                                            }
+                                        }
+                                        variables.Add(var);
+                                    }
+
+                                    debugThread.NumberOfLocals = numberToRead;
+                                    debugThread.Locals = variables;
+                                    AD7BreakpointEvent.Send(this, breakpointManager.GetBoundBreakpoint(debugThread.SourceFile + debugThread.Line));
+                                    break;
                                 }
-
-                                debugThread.StackFrames = frames;
-                                    
-                                int numberToRead = int.Parse(await pipeReader.ReadLineAsync());
-
-                                List<Variable> variables = new List<Variable>(numberToRead);
-
-                                for (int localIndex = 0; localIndex < numberToRead; localIndex++)
-                                {
-                                    variables.Add(new Variable(await pipeReader.ReadLineAsync(), await pipeReader.ReadLineAsync(), await pipeReader.ReadLineAsync()));
-                                }
-
-                                debugThread.NumberOfLocals = numberToRead;
-                                debugThread.Locals = variables;
-                                AD7BreakpointEvent.Send(this, breakpointManager.GetBoundBreakpoint(debugThread.SourceFile + debugThread.Line));
-                                break;
-                            }
                             case "BreakpointBound":
                                 string fileandline = await pipeReader.ReadLineAsync();
                                 AD7BoundBreakpoint boundbp = breakpointManager.GetBoundBreakpoint(fileandline);
@@ -389,43 +405,60 @@ namespace Microsoft.VisualStudio.Debugger.Lua
                                 Send(boundBreakpointEvent, AD7BreakpointBoundEvent.IID, this);
                                 break;
                             case "StepComplete":
-                            {
-                                debugThread.FrameCount = 1;
-                                debugThread.SourceFile = await pipeReader.ReadLineAsync();
-                                debugThread.Line = uint.Parse(await pipeReader.ReadLineAsync());
-                                debugThread.FuncName = await pipeReader.ReadLineAsync();
-
-                                // Receive Callstack
-                                debugThread.FrameCount = int.Parse(await pipeReader.ReadLineAsync());
-
-                                List<Frame> frames = new List<Frame>(debugThread.FrameCount);
-
-                                for (int stackLineIndex = 0; stackLineIndex < debugThread.FrameCount; stackLineIndex++)
                                 {
-                                    string func = await pipeReader.ReadLineAsync();
-                                    string source = await pipeReader.ReadLineAsync();
-                                    string line = await pipeReader.ReadLineAsync();
-                                    frames.Add(new Frame(func, source, line));
+                                    debugThread.FrameCount = 1;
+                                    debugThread.SourceFile = await pipeReader.ReadLineAsync();
+                                    debugThread.Line = uint.Parse(await pipeReader.ReadLineAsync());
+                                    debugThread.FuncName = await pipeReader.ReadLineAsync();
+
+                                    // Receive Callstack
+                                    debugThread.FrameCount = int.Parse(await pipeReader.ReadLineAsync());
+
+                                    List<Frame> frames = new List<Frame>(debugThread.FrameCount);
+
+                                    for (int stackLineIndex = 0; stackLineIndex < debugThread.FrameCount; stackLineIndex++)
+                                    {
+                                        string func = await pipeReader.ReadLineAsync();
+                                        string source = await pipeReader.ReadLineAsync();
+                                        string line = await pipeReader.ReadLineAsync();
+                                        frames.Add(new Frame(func, source, line));
+                                    }
+
+                                    debugThread.StackFrames = frames;
+
+                                    int numberToRead = int.Parse(await pipeReader.ReadLineAsync());
+
+                                    List<Variable> variables = new List<Variable>(numberToRead);
+
+                                    for (int localIndex = 0; localIndex < numberToRead; localIndex++)
+                                    {
+                                        string name = await pipeReader.ReadLineAsync();
+                                        string value = await pipeReader.ReadLineAsync();
+                                        string type = await pipeReader.ReadLineAsync();
+                                        Variable var = new Variable(name, value, type);
+                                        if (type == "table")
+                                        {
+                                            string tablename = await pipeReader.ReadLineAsync();
+                                            while (tablename != "!endoftable!")
+                                            {
+                                                string tablevalue = await pipeReader.ReadLineAsync();
+                                                string tabletype = await pipeReader.ReadLineAsync();
+                                                Variable tablevar = new Variable(tablename, tablevalue, tabletype);
+                                                var.AddChild(tablevar);
+                                                tablename = await pipeReader.ReadLineAsync();
+                                            }
+                                        }
+                                        variables.Add(var);
+                                    }
+
+                                    debugThread.NumberOfLocals = numberToRead;
+                                    debugThread.Locals = variables;
+
+
+                                    Send(new AD7StepCompleteEvent(), AD7StepCompleteEvent.IID, this);
+                                    Thread.Sleep(5);
+                                    break;
                                 }
-
-                                debugThread.StackFrames = frames;
-                                    
-                                int numberToRead = int.Parse(await pipeReader.ReadLineAsync());
-
-                                List<Variable> variables = new List<Variable>(numberToRead);
-
-                                for (int localIndex = 0; localIndex < numberToRead; localIndex++)
-                                {
-                                    variables.Add(new Variable(await pipeReader.ReadLineAsync(), await pipeReader.ReadLineAsync(), await pipeReader.ReadLineAsync()));
-                                }
-
-                                debugThread.NumberOfLocals = numberToRead;
-                                debugThread.Locals = variables;
-
-
-                                Send(new AD7StepCompleteEvent(), AD7StepCompleteEvent.IID, this);
-                                break;
-                            }
                         }
                     }
                 }
@@ -467,7 +500,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
             {
                 return VSConstants.S_FALSE;
             }
-            
+
             EnqueueCommand(new Command(CommandKind.Detach));
             this.keepReadPipeOpen = false;
             this.keepWritePipeOpen = false;

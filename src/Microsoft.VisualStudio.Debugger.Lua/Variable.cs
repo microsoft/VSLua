@@ -25,7 +25,15 @@ namespace Microsoft.VisualStudio.Debugger.Lua
 
         public bool HasChildren()
         {
+            if (this.Children == null)
+                return false;
             return Children.Count > 0;
+        }
+        public void AddChild(Variable child)
+        {
+            if (Children == null)
+                Children = new List<Variable>();
+            Children.Add(child);
         }
     }
 }

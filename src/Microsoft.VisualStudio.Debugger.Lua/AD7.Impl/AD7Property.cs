@@ -51,8 +51,21 @@ namespace Microsoft.VisualStudio.Debugger.Lua
 
             if ((dwFields & enum_DEBUGPROP_INFO_FLAGS.DEBUGPROP_INFO_ATTRIB) != 0)
             {
-                // Does not support writing of values displayed in the debugger, so mark them all as read-only.
+                // The sample does not support writing of values displayed in the debugger, so mark them all as read-only.
                 propertyInfo.dwAttrib |= enum_DBG_ATTRIB_FLAGS.DBG_ATTRIB_VALUE_READONLY;
+
+                if (this.m_variableInformation.HasChildren())
+                {
+                    propertyInfo.dwAttrib |= enum_DBG_ATTRIB_FLAGS.DBG_ATTRIB_OBJ_IS_EXPANDABLE;
+                }
+            }
+            // If the debugger has asked for the property, or the property has children (meaning it is a pointer in the sample)
+            // then set the pProperty field so the debugger can call back when the chilren are enumerated.
+            if (((dwFields & enum_DEBUGPROP_INFO_FLAGS.DEBUGPROP_INFO_PROP) != 0) ||
+                (this.m_variableInformation.HasChildren()))
+            {
+                propertyInfo.pProperty = (IDebugProperty2)this;
+                propertyInfo.dwFields |= enum_DEBUGPROP_INFO_FLAGS.DEBUGPROP_INFO_PROP;
             }
 
             return propertyInfo;
@@ -64,16 +77,18 @@ namespace Microsoft.VisualStudio.Debugger.Lua
         // The sample debugger only supports pointer dereferencing as children. This means there is only ever one child.
         public int EnumChildren(enum_DEBUGPROP_INFO_FLAGS dwFields, uint dwRadix, ref System.Guid guidFilter, enum_DBG_ATTRIB_FLAGS dwAttribFilter, string pszNameFilter, uint dwTimeout, out IEnumDebugPropertyInfo2 ppEnum)
         {
-            ppEnum = null;
-
             if (this.m_variableInformation.HasChildren())
             {
-                DEBUG_PROPERTY_INFO[] properties = new DEBUG_PROPERTY_INFO[1];
-                properties[0] = (new AD7Property(this.m_variableInformation.Children[0])).ConstructDebugPropertyInfo(dwFields);
+                var Children = this.m_variableInformation.Children;
+                DEBUG_PROPERTY_INFO[] properties = new DEBUG_PROPERTY_INFO[Children.Count];
+                for (int i = 0; i < Children.Count; i++)
+                {
+                    properties[i] = (new AD7Property(Children[i])).ConstructDebugPropertyInfo(dwFields);
+                }
                 ppEnum = new AD7PropertyEnum(properties);
                 return VSConstants.S_OK;
             }
-
+            ppEnum = null;
             return VSConstants.S_FALSE;
         }
 
