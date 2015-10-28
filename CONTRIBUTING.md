@@ -11,3 +11,9 @@ Your pull request should:
 * Have clear commit messages
     * e.g. "Refactor feature", "Fix issue", "Add tests for issue"
 * To avoid line ending issues, set `autocrlf = input` and `whitespace = cr-at-eol` in your git configuration
+
+# Legal
+
+You will need to complete a Contributor License Agreement (CLA). Briefly, this agreement testifies that you are granting us permission to use the submitted change according to the terms of the project's license, and that the work being submitted is under appropriate copyright.
+
+Please submit a Contributor License Agreement (CLA) before submitting a pull request. 
