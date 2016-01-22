@@ -1,0 +1,16 @@
+﻿{
+  "dependencies": {
+    "Microsoft.VisualStudio.Imaging": "14.0.23205",
+    "Microsoft.VisualStudio.Shell.14.0": "14.0.23205",
+    "Microsoft.VisualStudio.Shell.Interop.12.0": "12.0.30110",
+    "Microsoft.VSSDK.BuildTools": "14.0.23205",
+    "Microsoft.VisualStudio.Text.UI.Wpf": "14.0.23205",
+    "Microsoft.VisualStudio.OLE.Interop": "7.10.6070"
+  },
+  "frameworks": {
+    ".NETFramework,Version=v4.5.2": { }
+  },
+  "runtimes": {
+    "win": { }
+  }
+}
