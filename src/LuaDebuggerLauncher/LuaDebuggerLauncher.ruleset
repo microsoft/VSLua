@@ -1,5 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="Rules for LuaLanguageServicePackage" Description="Code analysis rules for LuaLanguageServicePackage.csproj." ToolsVersion="14.0">
+<RuleSet Name="Microsoft Managed Recommended Rules" Description="These rules focus on the most critical problems in your code, including potential security holes, application crashes, and other important logic and design errors. It is recommended to include this rule set in any custom rule set you create for your projects." ToolsVersion="10.0">
+  <Localization ResourceAssembly="Microsoft.VisualStudio.CodeAnalysis.RuleSets.Strings.dll" ResourceBaseName="Microsoft.VisualStudio.CodeAnalysis.RuleSets.Strings.Localized">
+    <Name Resource="MinimumRecommendedRules_Name" />
+    <Description Resource="MinimumRecommendedRules_Description" />
+  </Localization>
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
     <Rule Id="CA1001" Action="Warning" />
     <Rule Id="CA1009" Action="Warning" />
@@ -65,33 +69,14 @@
     <Rule Id="CA2242" Action="Warning" />
   </Rules>
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
-    <Rule Id="SA1652" Action="None" />
-    <Rule Id="SA1516" Action="Hidden" />
-    <Rule Id="SA1503" Action="Hidden" />
-    <Rule Id="SA1005" Action="Hidden" />
-    <Rule Id="SA1000" Action="Hidden" />
-    <Rule Id="SA1002" Action="Hidden" />
+    <Rule Id="SA1611" Action="Hidden" />
     <Rule Id="SA1028" Action="Hidden" />
-    <Rule Id="SA1025" Action="Hidden" />
-    <Rule Id="SA1101" Action="Hidden" />
-    <Rule Id="SA1108" Action="Hidden" />
-    <Rule Id="SA1116" Action="Hidden" />
-    <Rule Id="SA1110" Action="Hidden" />
-    <Rule Id="SA1117" Action="Hidden" />
-    <Rule Id="SA1119" Action="Hidden" />
-    <Rule Id="SA1129" Action="Hidden" />
-    <Rule Id="SA1130" Action="Hidden" />
-    <Rule Id="SA1133" Action="Hidden" />
-    <Rule Id="SA1202" Action="Hidden" />
-    <Rule Id="SA1203" Action="Hidden" />
-    <Rule Id="SA1204" Action="Hidden" />
+    <Rule Id="SA1002" Action="Hidden" />
+    <Rule Id="SA1121" Action="Hidden" />
     <Rule Id="SA1513" Action="Hidden" />
-    <Rule Id="SA1505" Action="Hidden" />
-    <Rule Id="SA1515" Action="Hidden" />
-    <Rule Id="SA1401" Action="Hidden" />
-    <Rule Id="SA1400" Action="Hidden" />
-    <Rule Id="SA1311" Action="Hidden" />
-    <Rule Id="SA1308" Action="Hidden" />
-    <Rule Id="SA1127" Action="Hidden" />
+    <Rule Id="SA1633" Action="Hidden" />
+    <Rule Id="SA1623" Action="Hidden" />
+    <Rule Id="SA1652" Action="Hidden" />
+    <Rule Id="SA1615" Action="Hidden" />
   </Rules>
 </RuleSet>
