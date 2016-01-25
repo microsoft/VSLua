@@ -1,9 +1,9 @@
-﻿using LanguageService;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using LanguageService;
 using Xunit;
-using System.Collections.Generic;
 
 namespace LanguageModel.Tests
 {
@@ -82,9 +82,9 @@ namespace LanguageModel.Tests
                     using (IndentingWriter.Indent())
                     {
                         GenerateTestStructure(tree.Root);
-                    };
-                };
-            };
+                    }
+                }
+            }
 
             sb.Append(IndentingWriter.ToString());
             sb.AppendLine("        }");

@@ -20,7 +20,8 @@ namespace LanguageModel.Tests.TestGeneration
             if (treeEnumerator.Current is SyntaxNode)
             {
                 Assert.Equal(kind, ((SyntaxNode)treeEnumerator.Current).Kind);
-            } else
+            }
+            else
             {
                 Assert.Equal(kind, ((Token)treeEnumerator.Current).Kind);
             }
