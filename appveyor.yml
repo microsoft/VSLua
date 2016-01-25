@@ -1,6 +1,6 @@
 version: 1.0.{build}
 before_build:
-- ps: nuget restore src
+- ps: nuget restore src -Verbosity quiet
 build:
   verbosity: minimal
 test: off
