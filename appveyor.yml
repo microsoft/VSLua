@@ -3,3 +3,4 @@ before_build:
 - ps: nuget restore src
 build:
   verbosity: minimal
+test: off
