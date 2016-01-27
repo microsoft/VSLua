@@ -65,6 +65,39 @@
     <Rule Id="CA2242" Action="Warning" />
   </Rules>
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
-    <Rule Id="SA1652" Action="None" />
+    <Rule Id="SA1005" Action="Hidden" />
+    <Rule Id="SA1013" Action="Hidden" />
+    <Rule Id="SA1025" Action="Hidden" />
+    <Rule Id="SA1028" Action="Hidden" />
+    <Rule Id="SA1101" Action="Hidden" />
+    <Rule Id="SA1108" Action="Hidden" />
+    <Rule Id="SA1116" Action="Hidden" />
+    <Rule Id="SA1117" Action="Hidden" />
+    <Rule Id="SA1119" Action="Hidden" />
+    <Rule Id="SA1122" Action="Hidden" />
+    <Rule Id="SA1128" Action="Hidden" />
+    <Rule Id="SA1131" Action="Hidden" />
+    <Rule Id="SA1133" Action="Hidden" />
+    <Rule Id="SA1202" Action="Hidden" />
+    <Rule Id="SA1203" Action="Hidden" />
+    <Rule Id="SA1204" Action="Hidden" />
+    <Rule Id="SA1206" Action="Hidden" />
+    <Rule Id="SA1208" Action="Hidden" />
+    <Rule Id="SA1300" Action="Hidden" />
+    <Rule Id="SA1311" Action="Hidden" />
+    <Rule Id="SA1312" Action="Hidden" />
+    <Rule Id="SA1400" Action="Hidden" />
+    <Rule Id="SA1402" Action="Hidden" />
+    <Rule Id="SA1500" Action="Hidden" />
+    <Rule Id="SA1502" Action="Hidden" />
+    <Rule Id="SA1503" Action="Hidden" />
+    <Rule Id="SA1505" Action="Hidden" />
+    <Rule Id="SA1507" Action="Hidden" />
+    <Rule Id="SA1508" Action="Hidden" />
+    <Rule Id="SA1509" Action="Hidden" />
+    <Rule Id="SA1513" Action="Hidden" />
+    <Rule Id="SA1516" Action="Hidden" />
+    <Rule Id="SA1518" Action="Hidden" />
+    <Rule Id="SA1652" Action="Hidden" />
   </Rules>
 </RuleSet>
