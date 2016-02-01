@@ -1,12 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics;
-using Xunit;
-using LanguageModel.Tests.GeneratedTestFiles;
-using LanguageModel.Tests.TestGeneration;
-using LanguageModel.Tests;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Text;
-
+using LanguageModel.Tests;
+using LanguageModel.Tests.GeneratedTestFiles;
+using LanguageModel.Tests.TestGeneration;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Assert = Xunit.Assert;
 
 namespace LanguageService.Tests
@@ -66,7 +65,7 @@ namespace LanguageService.Tests
         [Fact]
         public void TripleNestedFunctionCallGeneratedTest()
         {
-            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\TripleNestedFunctionCall.lua"); ;
+            SyntaxTree tree = SyntaxTree.Create(@"CorrectSampleLuaFiles\TripleNestedFunctionCall.lua");
             new TripleNestedFunctionCall_Generated().Test(new Tester(tree));
             Assert.Equal(0, tree.ErrorList.Count);
         }

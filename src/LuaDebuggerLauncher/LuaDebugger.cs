@@ -22,7 +22,7 @@ namespace Microsoft.VisualStudio.Debugger.Lua
     /// <summary>
     /// A Visual C++ extension that launches a custom debugger.
     /// </summary>
-    [ExportDebugger("LuaDebugger")]  // Keep this string in sync with the one in your debugger's XAML file.
+    [ExportDebugger("LuaDebugger")] // Keep this string in sync with the one in your debugger's XAML file.
     [AppliesTo(ProjectCapabilities.VisualC)]
     public class LuaDebugger : DebugLaunchProviderBase
     {

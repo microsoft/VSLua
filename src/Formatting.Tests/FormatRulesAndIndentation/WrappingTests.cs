@@ -114,7 +114,7 @@ end";
         {
             string original = @"
 foo = function() x = 10 return end";
-            string expected1 =@"
+            string expected1 = @"
 foo = function()
     x = 10
     return

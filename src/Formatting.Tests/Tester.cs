@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Xunit;
 using System.IO;
-using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
-using LanguageService.Formatting;
-using LanguageService.Shared;
 using LanguageService;
+using LanguageService.Formatting;
 using LanguageService.Formatting.Options;
+using LanguageService.Shared;
+using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
+using Microsoft.VisualStudio.Text;
+using Xunit;
 
 namespace Formatting.Tests
 {
