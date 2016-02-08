@@ -28,6 +28,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <DeployExtension Condition=" '$(BuildingInsideVisualStudio)' != 'true' ">false</DeployExtension>
+    <GetVsixSourceItemsDependsOn>$(GetVsixSourceItemsDependsOn);EnsureNuGetDependenciesPackInVSIX</GetVsixSourceItemsDependsOn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -139,4 +140,11 @@
   <PropertyGroup>
     <AssemblySearchPaths>$(AssemblySearchPaths);$(MSBuildProgramFiles32)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\Project</AssemblySearchPaths>
   </PropertyGroup>
+
+  <Target Name="EnsureNuGetDependenciesPackInVSIX" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <VSIXSourceItem Include="@(ReferencePath)" Condition=" '%(ReferencePath.FileName)%(ReferencePath.Extension)' == 'Validation.dll' " />
+      <VSIXSourceItem Include="@(ReferencePath)" Condition=" '%(ReferencePath.FileName)%(ReferencePath.Extension)' == 'ImmutableObjectGraph.dll' " />
+    </ItemGroup>
+  </Target>
 </Project>
