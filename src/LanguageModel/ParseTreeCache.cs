@@ -1,8 +1,4 @@
-﻿/********************************************************
-*                                                        *
-*   © Copyright (C) Microsoft. All rights reserved.      *
-*                                                        *
-*********************************************************/
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 using System.Runtime.CompilerServices;
 using Validation;
@@ -11,7 +7,7 @@ namespace LanguageService
 {
     public class ParseTreeCache
     {
-        private readonly ConditionalWeakTable<SourceText, SyntaxTree> sources = 
+        private readonly ConditionalWeakTable<SourceText, SyntaxTree> sources =
             new ConditionalWeakTable<SourceText, SyntaxTree>();
 
         public SyntaxTree Get(SourceText sourceText)

@@ -51,6 +51,9 @@
     <WarningLevel>4</WarningLevel>
     <DeployExtension>False</DeployExtension>
     <CreateVsixContainer>False</CreateVsixContainer>
+    <DocumentationFile>..\..\bin\Debug\Microsoft.VisualStudio.Tools.Lua.xml</DocumentationFile>
+    <NoWarn>CS1591</NoWarn>
+    <CodeAnalysisRuleSet>ProjectLauncher.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -62,13 +65,21 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <DeployExtension>False</DeployExtension>
     <CreateVsixContainer>False</CreateVsixContainer>
+    <DocumentationFile>..\..\bin\Release\Microsoft.VisualStudio.Tools.Lua.xml</DocumentationFile>
+    <NoWarn>CS1591</NoWarn>
+    <CodeAnalysisRuleSet>ProjectLauncher.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
+    <AdditionalFiles Include="..\stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Shell.14.0" Version="14.3.25407" />
     <PackageReference Include="EnvDTE" Version="8.0.2" />
     <PackageReference Include="EnvDTE80" Version="8.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.SDK.EmbedInteropTypes" Version="15.0.16" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -78,7 +89,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Guids.cs" />
+    <Compile Include="GuidList.cs" />
     <Compile Include="LaunchForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,7 +103,7 @@
     </Compile>
     <Compile Include="ProjectLauncherPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PkgCmdID.cs" />
+    <Compile Include="PkgCmdIDList.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="LaunchForm.resx">
@@ -109,6 +120,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ProjectLauncher.ruleset" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>

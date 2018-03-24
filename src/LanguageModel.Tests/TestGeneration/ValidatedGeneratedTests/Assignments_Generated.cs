@@ -1,11 +1,11 @@
 ﻿//C:\\Users\\t-kevimi\\Documents\\Engineering\\Lua Files for Testing\Assignments.lua
-using LanguageModel.Tests.TestGeneration;
-using LanguageService;
-using Xunit;
-
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
-    class Assignments_Generated
+    using LanguageModel.Tests.TestGeneration;
+    using LanguageService;
+    using Xunit;
+
+    internal class Assignments_Generated
     {
         [Fact]
         public void Test(Tester t)

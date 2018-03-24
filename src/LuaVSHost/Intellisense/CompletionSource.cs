@@ -19,21 +19,20 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
         private ParseTreeCache m_parseTreeCache;
         private SourceTextCache m_sourceTextCache;
         private bool m_memberlist;
-        [Import]
-        private ISingletons singletons;
+
         public CompletionSource(CompletionSourceProvider provider, ITextBuffer textBuffer)
         {
-            m_textBuffer = textBuffer;
-            m_sourceProvider = provider;
-            m_parseTreeCache = new ParseTreeCache();
+            this.m_textBuffer = textBuffer;
+            this.m_sourceProvider = provider;
+            this.m_parseTreeCache = new ParseTreeCache();
             this.m_sourceTextCache = new SourceTextCache();
         }
 
         void ICompletionSource.AugmentCompletionSession(ICompletionSession session, IList<CompletionSet> completionSets)
         {
-            SourceText sourceText = this.m_sourceTextCache.Get(m_textBuffer.CurrentSnapshot);
+            SourceText sourceText = this.m_sourceTextCache.Get(this.m_textBuffer.CurrentSnapshot);
             SyntaxTree syntaxTree = this.m_parseTreeCache.Get(sourceText);
-            var triggerPoint = (SnapshotPoint)session.GetTriggerPoint(m_textBuffer.CurrentSnapshot);
+            var triggerPoint = (SnapshotPoint)session.GetTriggerPoint(this.m_textBuffer.CurrentSnapshot);
             //var ch = triggerPoint.GetChar();
             Token currentToken = null;
             int currentTokenIndex = 0;
@@ -48,7 +47,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
             }
             List<string> strList = new List<string>();
             if (currentToken == null)
+            {
                 return;
+            }
+
             if (currentToken.Kind == SyntaxKind.Dot)
             {
                 //user inputs dot. Try search members
@@ -72,7 +74,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
                                             foreach (var assignment in child.Children[1].Children)
                                             {
                                                 if (assignment.GetType() == typeof(AssignmentField))
+                                                {
                                                     strList.Add(((Token)assignment.Children[0]).Text);
+                                                }
                                             }
                                         }
                                     }
@@ -93,16 +97,18 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
                                             foreach (var assignment in child.Children[1].Children)
                                             {
                                                 if (assignment.GetType() == typeof(AssignmentField))
+                                                {
                                                     strList.Add(((Token)assignment.Children[0]).Text);
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }                         
+                            }
                         }
                     }
                 }
-                m_memberlist = true;
+                this.m_memberlist = true;
             }
             else
             {
@@ -141,9 +147,11 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
                                 {
                                     var str = ((Token)((NameVar)namevar).Children[0]).Text;
                                     if (strList.IndexOf(str) == -1)
+                                    {
                                         strList.Add(str);
+                                    }
                                 }
-                            }                                
+                            }
                         }
                         else if (statement.GetType() == typeof(LocalAssignmentStatementNode))
                         {
@@ -153,13 +161,15 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
                                 {
                                     var str = ((Token)namevar).Text;
                                     if (strList.IndexOf(str) == -1)
+                                    {
                                         strList.Add(str);
+                                    }
                                 }
                             }
                         }
                     }
                 }
-                m_memberlist = false;
+                this.m_memberlist = false;
             }
             strList.Sort();
             this.m_compList = new List<Completion>();
@@ -169,22 +179,22 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
             }
 
             completionSets.Add(new CompletionSet(
-                "Tokens",    // the non-localized title of the tab 
+                "Tokens",    // the non-localized title of the tab
                 "Tokens",    // the display title of the tab
                 this.FindTokenSpanAtPosition(session.GetTriggerPoint(this.m_textBuffer),
                     session),
-                m_compList,
+                this.m_compList,
                 null));
         }
 
         private ITrackingSpan FindTokenSpanAtPosition(ITrackingPoint point, ICompletionSession session)
         {
             SnapshotPoint currentPoint = session.TextView.Caret.Position.BufferPosition;
-            if (!m_memberlist)
+            if (!this.m_memberlist)
             {
                 currentPoint = currentPoint - 1;
             }
-            var navigator = m_sourceProvider.NavigatorService.GetTextStructureNavigator(m_textBuffer);
+            var navigator = this.m_sourceProvider.NavigatorService.GetTextStructureNavigator(this.m_textBuffer);
             var extent = navigator.GetExtentOfWord(currentPoint);
             var text = extent.Span.GetText();
             System.Diagnostics.Debug.WriteLine("t: " + text);
@@ -202,10 +212,10 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
         private bool m_isDisposed;
         public void Dispose()
         {
-            if (!m_isDisposed)
+            if (!this.m_isDisposed)
             {
                 GC.SuppressFinalize(this);
-                m_isDisposed = true;
+                this.m_isDisposed = true;
             }
         }
     }

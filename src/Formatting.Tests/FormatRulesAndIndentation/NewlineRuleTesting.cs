@@ -1,12 +1,14 @@
-﻿using Xunit;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace Formatting.Tests
 {
+    using Xunit;
+
     public class NewlineRuleTesting
     {
 
-        delegate void TestFunction(string original, string expected1, string expected2);
-        TestFunction GeneralTest = Tester.FormattingTest;
+        private delegate void TestFunction(string original, string expected1, string expected2);
+        private TestFunction GeneralTest = Tester.FormattingTest;
 
         [Fact(Skip = "Not passing")]
         public void Basic1()
@@ -22,7 +24,7 @@ t1 = {
 t1 = {
     2,
     }";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact(Skip = "Not Implemented")]
@@ -31,7 +33,7 @@ t1 = {
             string original = @"
 t1 = {
 }";
-            GeneralTest(original, original, original);
+            this.GeneralTest(original, original, original);
         }
 
         [Fact(Skip = "Not passing")]
@@ -44,7 +46,7 @@ t1 =
 t1 =
 {
 }";
-            GeneralTest(original, expected1, expected1);
+            this.GeneralTest(original, expected1, expected1);
         }
 
         [Fact(Skip = "Not passing")]
@@ -57,7 +59,7 @@ t1 =-- comment
 t1 =-- comment
 {
 }";
-            GeneralTest(original, expected, expected);
+            this.GeneralTest(original, expected, expected);
         }
 
         [Fact(Skip = "Not passing")]
@@ -70,7 +72,7 @@ t1 =
 t1 =
 {
 --[[ comment ]]}";
-            GeneralTest(original, expected, expected);
+            this.GeneralTest(original, expected, expected);
         }
 
         [Fact(Skip = "Not passing")]
@@ -89,7 +91,7 @@ t1 = {
     basic,
     --[[ comment ]]basic2
     }";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact(Skip = "Not passing")]
@@ -108,7 +110,7 @@ t1 = {
     1,
     2,
     }";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact(Skip = "Not passing")]
@@ -129,7 +131,7 @@ t1 =
 1,
 2,
 }";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact(Skip = "Not passing")]
@@ -146,7 +148,7 @@ t1 = {
 t1 = {
     t2 = { t3 = { } }
     }";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact(Skip = "Not passing")]
@@ -169,14 +171,14 @@ t1 = {
         t3 = { }
         }
     }";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact]
         public void BrokenTable()
         {
             string original = "t = {";
-            GeneralTest(original, original, original);
+            this.GeneralTest(original, original, original);
         }
 
         [Fact(Skip = "Not passing")]
@@ -195,7 +197,7 @@ t = {
     1,
     2,
     3,";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
     }
 }

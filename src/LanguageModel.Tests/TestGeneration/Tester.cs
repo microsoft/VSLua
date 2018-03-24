@@ -1,10 +1,12 @@
-﻿using LanguageService;
-using System.Collections.Generic;
-using Xunit;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace LanguageModel.Tests.TestGeneration
 {
-    class Tester
+    using System.Collections.Generic;
+    using LanguageService;
+    using Xunit;
+
+    internal class Tester
     {
         private IEnumerator<SyntaxNodeOrToken> treeEnumerator;
 
@@ -15,15 +17,15 @@ namespace LanguageModel.Tests.TestGeneration
 
         public void N(SyntaxKind kind)
         {
-            treeEnumerator.MoveNext();
-            //TODO remove is-check once Immutable graph object bug is fixed. 
-            if (treeEnumerator.Current is SyntaxNode)
+            this.treeEnumerator.MoveNext();
+            //TODO remove is-check once Immutable graph object bug is fixed.
+            if (this.treeEnumerator.Current is SyntaxNode)
             {
-                Assert.Equal(kind, ((SyntaxNode)treeEnumerator.Current).Kind);
+                Assert.Equal(kind, ((SyntaxNode)this.treeEnumerator.Current).Kind);
             }
             else
             {
-                Assert.Equal(kind, ((Token)treeEnumerator.Current).Kind);
+                Assert.Equal(kind, ((Token)this.treeEnumerator.Current).Kind);
             }
         }
     }

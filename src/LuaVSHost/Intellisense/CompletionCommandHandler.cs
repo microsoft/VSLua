@@ -13,7 +13,7 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
 {
-    class CompletionCommandHandler : IOleCommandTarget
+    internal class CompletionCommandHandler : IOleCommandTarget
     {
         private IOleCommandTarget m_nextCommandHandler;
         private ITextView m_textView;
@@ -26,111 +26,122 @@ namespace Microsoft.VisualStudio.LanguageServices.Lua.Intellisense
             this.m_provider = provider;
 
             //add the command to the command chain
-            textViewAdapter.AddCommandFilter(this, out m_nextCommandHandler);
+            textViewAdapter.AddCommandFilter(this, out this.m_nextCommandHandler);
         }
 
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
-            return m_nextCommandHandler.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
+            return this.m_nextCommandHandler.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
         }
 
         public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
-            if (VsShellUtilities.IsInAutomationFunction(m_provider.ServiceProvider))
+            if (VsShellUtilities.IsInAutomationFunction(this.m_provider.ServiceProvider))
             {
-                return m_nextCommandHandler.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
+                return this.m_nextCommandHandler.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
             }
-            //make a copy of this so we can look at it after forwarding some commands 
+            //make a copy of this so we can look at it after forwarding some commands
             uint commandID = nCmdID;
             char typedChar = char.MinValue;
-            //make sure the input is a char before getting it 
+            //make sure the input is a char before getting it
             if (pguidCmdGroup == VSConstants.VSStd2K && nCmdID == (uint)VSConstants.VSStd2KCmdID.TYPECHAR)
             {
                 typedChar = (char)(ushort)Marshal.GetObjectForNativeVariant(pvaIn);
             }
 
-            //check for a commit character 
+            //check for a commit character
             if (nCmdID == (uint)VSConstants.VSStd2KCmdID.RETURN
                 || nCmdID == (uint)VSConstants.VSStd2KCmdID.TAB
                 || (char.IsWhiteSpace(typedChar) || char.IsPunctuation(typedChar)))
             {
-                //check for a a selection 
-                if (m_session != null && !m_session.IsDismissed)
+                //check for a a selection
+                if (this.m_session != null && !this.m_session.IsDismissed)
                 {
-                    //if the selection is fully selected, commit the current session 
-                    if (m_session.SelectedCompletionSet.SelectionStatus.IsSelected)
+                    //if the selection is fully selected, commit the current session
+                    if (this.m_session.SelectedCompletionSet.SelectionStatus.IsSelected)
                     {
-                        m_session.Commit();
-                        //also, don't add the character to the buffer 
-                        if(typedChar != 46)
+                        this.m_session.Commit();
+                        //also, don't add the character to the buffer
+                        if (typedChar != 46)
+                        {
                             return VSConstants.S_OK;
+                        }
                     }
                     else
                     {
                         //if there is no selection, dismiss the session
-                        m_session.Dismiss();
+                        this.m_session.Dismiss();
                     }
                 }
             }
 
-            //pass along the command so the char is added to the buffer 
-            int retVal = m_nextCommandHandler.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
+            //pass along the command so the char is added to the buffer
+            int retVal = this.m_nextCommandHandler.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
             bool handled = false;
             if ((!typedChar.Equals(char.MinValue) && char.IsLetterOrDigit(typedChar)) || typedChar == 46)
             {
-                if (m_session == null || m_session.IsDismissed) // If there is no active session, bring up completion
+                if (this.m_session == null || this.m_session.IsDismissed) // If there is no active session, bring up completion
                 {
                     this.TriggerCompletion();
-                    if (m_session != null && !m_session.IsDismissed)
+                    if (this.m_session != null && !this.m_session.IsDismissed)
                     {
                         if (typedChar != 46) //do not filter is it is '.'
-                            m_session.Filter();
+                        {
+                            this.m_session.Filter();
+                        }
                     }
                 }
                 else     //the completion session is already active, so just filter
                 {
-                    m_session.Filter();
+                    this.m_session.Filter();
                 }
                 handled = true;
             }
             else if (commandID == (uint)VSConstants.VSStd2KCmdID.BACKSPACE   //redo the filter if there is a deletion
                 || commandID == (uint)VSConstants.VSStd2KCmdID.DELETE)
             {
-                if (m_session != null && !m_session.IsDismissed)
-                    m_session.Filter();
+                if (this.m_session != null && !this.m_session.IsDismissed)
+                {
+                    this.m_session.Filter();
+                }
+
                 handled = true;
             }
-            if (handled) return VSConstants.S_OK;
+            if (handled)
+            {
+                return VSConstants.S_OK;
+            }
+
             return retVal;
         }
 
         private bool TriggerCompletion()
         {
-            //the caret must be in a non-projection location 
+            //the caret must be in a non-projection location
             SnapshotPoint? caretPoint =
-            m_textView.Caret.Position.Point.GetPoint(
+            this.m_textView.Caret.Position.Point.GetPoint(
             textBuffer => (!textBuffer.ContentType.IsOfType("projection")), PositionAffinity.Predecessor);
             if (!caretPoint.HasValue)
             {
                 return false;
             }
 
-            m_session = m_provider.CompletionBroker.CreateCompletionSession
-         (m_textView,
+            this.m_session = this.m_provider.CompletionBroker.CreateCompletionSession
+         (this.m_textView,
                 caretPoint.Value.Snapshot.CreateTrackingPoint(caretPoint.Value.Position, PointTrackingMode.Positive),
                 true);
 
-            //subscribe to the Dismissed event on the session 
-            m_session.Dismissed += this.OnSessionDismissed;
-            m_session.Start();
+            //subscribe to the Dismissed event on the session
+            this.m_session.Dismissed += this.OnSessionDismissed;
+            this.m_session.Start();
 
             return true;
         }
 
         private void OnSessionDismissed(object sender, EventArgs e)
         {
-            m_session.Dismissed -= this.OnSessionDismissed;
-            m_session = null;
+            this.m_session.Dismissed -= this.OnSessionDismissed;
+            this.m_session = null;
         }
     }
 }

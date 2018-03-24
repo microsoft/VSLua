@@ -6,6 +6,8 @@ using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 
+#pragma warning disable SA1649 // File name must match first type name
+
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Classifications
 {
     [Export(typeof(EditorFormatDefinition))]

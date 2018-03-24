@@ -11,8 +11,6 @@
     <AssemblyName>Formatting.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,6 +35,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Editor" Version="14.0.23205" />
     <PackageReference Include="EditorUtils2015" Version="1.5.0.1" />
     <PackageReference Include="xunit" Version="2.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\stylecop.json" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -1,7 +1,9 @@
-﻿using Xunit;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace Formatting.Tests.SmartIndent
 {
+    using Xunit;
+
     public class SmartIndentTests
     {
         [Fact]

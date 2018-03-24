@@ -1,14 +1,10 @@
-﻿/********************************************************
-*                                                        *
-*   © Copyright (C) Microsoft. All rights reserved.      *
-*                                                        *
-*********************************************************/
-
-using System;
-using Microsoft.VisualStudio.Text;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace Microsoft.VisualStudio.LanguageServices.Lua.Shared
 {
+    using System;
+    using Microsoft.VisualStudio.Text;
+
     internal static class EditorUtilities
     {
         internal static SnapshotSpan CreateSnapshotSpan(ITextSnapshot snapshot, int position, int length)

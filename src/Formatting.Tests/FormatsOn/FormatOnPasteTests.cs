@@ -1,8 +1,10 @@
-﻿using Xunit;
-using static Formatting.Tests.Tester;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace Formatting.Tests.FormatsOn
 {
+    using Xunit;
+    using static Formatting.Tests.Tester;
+
     public class FormatOnPasteTests
     {
         private static void PasteTest(string original, PasteInfo pasteInfo, string expected)

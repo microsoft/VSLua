@@ -1,12 +1,14 @@
-﻿using Xunit;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace Formatting.Tests
 {
+    using Xunit;
+
     public class IndentationTests
     {
 
-        delegate void TestFunction(string original, string expected1);
-        TestFunction FormattingTest = Tester.FormattingTest;
+        private delegate void TestFunction(string original, string expected1);
+        private TestFunction FormattingTest = Tester.FormattingTest;
 
         [Fact]
         public void BasicFunction()
@@ -19,7 +21,7 @@ end";
 foo = function ()
     return
 end";
-            FormattingTest(original, expected1);
+            this.FormattingTest(original, expected1);
         }
 
         [Fact]
@@ -33,7 +35,7 @@ t1 = {
 t1 = {
     1,
 }";
-            FormattingTest(original, expected1);
+            this.FormattingTest(original, expected1);
         }
 
         [Fact]
@@ -49,7 +51,7 @@ foo = function ()
     bar = function ()
     end
 end";
-            FormattingTest(original, expected1);
+            this.FormattingTest(original, expected1);
         }
 
         [Fact]
@@ -73,7 +75,7 @@ t1 = {
         x
     }
 }";
-            FormattingTest(original, expected1);
+            this.FormattingTest(original, expected1);
         }
 
         [Fact]
@@ -83,7 +85,7 @@ t1 = {
 foo = function ()
     return
 end";
-            FormattingTest(original, original);
+            this.FormattingTest(original, original);
         }
 
         [Fact]
@@ -91,7 +93,7 @@ end";
         {
             string original = "     foo";
             string expected = "foo";
-            FormattingTest(original, expected);
+            this.FormattingTest(original, expected);
         }
 
         [Fact]
@@ -105,7 +107,7 @@ end";
 foo = function ()
     return
 end";
-            FormattingTest(original, expected1);
+            this.FormattingTest(original, expected1);
         }
 
         [Fact]
@@ -115,7 +117,7 @@ end";
         x";
             string expected1 = @"t = {
     x";
-            FormattingTest(original, expected1); 
+            this.FormattingTest(original, expected1);
         }
 
         [Fact]
@@ -129,7 +131,7 @@ end";
 foo = function ()
     return--comment
 end";
-            FormattingTest(original, expected1);
+            this.FormattingTest(original, expected1);
         }
 
         [Fact]
@@ -143,7 +145,7 @@ end";
 foo = function ()
     --[[comment]] return
 end";
-            FormattingTest(original, expected1);
+            this.FormattingTest(original, expected1);
         }
     }
 }

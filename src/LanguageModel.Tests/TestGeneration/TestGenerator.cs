@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using LanguageService;
-using Xunit;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace LanguageModel.Tests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using LanguageService;
+    using Xunit;
+
     public class TestGenerator
     {
         internal IndentingTextWriter IndentingWriter { get; private set; }
@@ -25,7 +27,9 @@ namespace LanguageModel.Tests
         public List<SyntaxTree> GenerateTestsForAllTestFiles()
         {
             if (!Directory.Exists(GenPath))
+            {
                 Directory.CreateDirectory(GenPath);
+            }
 
             var treeList = new List<SyntaxTree>();
 
@@ -34,12 +38,12 @@ namespace LanguageModel.Tests
             foreach (string file in Directory.EnumerateFiles(Path.Combine(BasePath, "Lua Files for Testing"), "*.lua"))
             {
                 SyntaxTree tree = SyntaxTree.Create(file);
-                File.WriteAllText(GetGenFilePath(fileNumber.ToString()), string.Format(@"//{0}{1}", file, GenerateTest(tree, string.Format(GenFileName, fileNumber.ToString()))));
+                File.WriteAllText(this.GetGenFilePath(fileNumber.ToString()), string.Format(@"//{0}{1}", file, this.GenerateTest(tree, string.Format(GenFileName, fileNumber.ToString()))));
 
                 Assert.Equal(0, tree.ErrorList.Count);
 
                 treeList.Add(tree);
-                
+
                 fileNumber++;
             }
 
@@ -49,48 +53,48 @@ namespace LanguageModel.Tests
         public void GenerateTestFromFile(string filePath, string name)
         {
             SyntaxTree tree = SyntaxTree.Create(filePath);
-            File.WriteAllText(GetGenFilePath(name), GenerateTest(tree, name + "_Generated"));
+            File.WriteAllText(this.GetGenFilePath(name), this.GenerateTest(tree, name + "_Generated"));
         }
 
         public void GenerateTestFromString(string program, string name)
         {
             SyntaxTree tree = SyntaxTree.CreateFromString(program);
-            File.WriteAllText(GetGenFilePath(name), GenerateTest(tree, name + "_Generated"));
+            File.WriteAllText(this.GetGenFilePath(name), this.GenerateTest(tree, name + "_Generated"));
         }
 
         public string GenerateTest(SyntaxTree tree, string name)
         {
-            IndentingWriter = IndentingTextWriter.Get(new StringWriter());
-            sb = new StringBuilder();
+            this.IndentingWriter = IndentingTextWriter.Get(new StringWriter());
+            this.sb = new StringBuilder();
 
-            sb.AppendLine();
-            sb.AppendLine("using LanguageModel.Tests.TestGeneration;");
-            sb.AppendLine("using LanguageService;");
-            sb.AppendLine("using Xunit;");
-            sb.AppendLine("namespace LanguageModel.Tests.GeneratedTestFiles");
-            sb.AppendLine("{");
-            sb.AppendLine(string.Format("    class {0}", name));
-            sb.AppendLine("    {");
-            sb.AppendLine("        [Fact]");
-            sb.AppendLine("        public void Test(Tester t)");
-            sb.AppendLine("        {");
+            this.sb.AppendLine();
+            this.sb.AppendLine("using LanguageModel.Tests.TestGeneration;");
+            this.sb.AppendLine("using LanguageService;");
+            this.sb.AppendLine("using Xunit;");
+            this.sb.AppendLine("namespace LanguageModel.Tests.GeneratedTestFiles");
+            this.sb.AppendLine("{");
+            this.sb.AppendLine(string.Format("    class {0}", name));
+            this.sb.AppendLine("    {");
+            this.sb.AppendLine("        [Fact]");
+            this.sb.AppendLine("        public void Test(Tester t)");
+            this.sb.AppendLine("        {");
 
-            using (IndentingWriter.Indent())
+            using (this.IndentingWriter.Indent())
             {
-                using (IndentingWriter.Indent())
+                using (this.IndentingWriter.Indent())
                 {
-                    using (IndentingWriter.Indent())
+                    using (this.IndentingWriter.Indent())
                     {
-                        GenerateTestStructure(tree.Root);
+                        this.GenerateTestStructure(tree.Root);
                     }
                 }
             }
 
-            sb.Append(IndentingWriter.ToString());
-            sb.AppendLine("        }");
-            sb.AppendLine("    }");
-            sb.AppendLine("}");
-            return sb.ToString();
+            this.sb.Append(this.IndentingWriter.ToString());
+            this.sb.AppendLine("        }");
+            this.sb.AppendLine("    }");
+            this.sb.AppendLine("}");
+            return this.sb.ToString();
         }
 
         private void GenerateTestStructure(SyntaxNodeOrToken syntaxNodeOrToken)
@@ -100,27 +104,27 @@ namespace LanguageModel.Tests
                 return;
             }
 
-            //TODO remove is-check once Immutable graph object bug is fixed. 
+            //TODO remove is-check once Immutable graph object bug is fixed.
             if (syntaxNodeOrToken is SyntaxNode)
             {
-                IndentingWriter.WriteLine("t.N(SyntaxKind." + ((SyntaxNode)syntaxNodeOrToken).Kind + ");");
+                this.IndentingWriter.WriteLine("t.N(SyntaxKind." + ((SyntaxNode)syntaxNodeOrToken).Kind + ");");
             }
             else
             {
-                IndentingWriter.WriteLine("t.N(SyntaxKind." + ((Token)syntaxNodeOrToken).Kind + ");");
+                this.IndentingWriter.WriteLine("t.N(SyntaxKind." + ((Token)syntaxNodeOrToken).Kind + ");");
             }
 
             if (!syntaxNodeOrToken.IsLeafNode)
             {
-                IndentingWriter.WriteLine("{");
+                this.IndentingWriter.WriteLine("{");
                 foreach (var node in ((SyntaxNode)syntaxNodeOrToken).Children)
                 {
-                    using (IndentingWriter.Indent())
+                    using (this.IndentingWriter.Indent())
                     {
-                        GenerateTestStructure(node);
+                        this.GenerateTestStructure(node);
                     }
                 }
-                IndentingWriter.WriteLine("}");
+                this.IndentingWriter.WriteLine("}");
             }
         }
     }
