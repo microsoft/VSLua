@@ -1,6 +1,15 @@
-version: 1.0.{build}
+version: '{build}'
+branches:
+  only:
+  - master
+  - /^v\d+(?:\.\d+)?$/
+  - /[\b_]validate\b/
+skip_tags: true
+nuget:
+  disable_publish_on_pr: true
 image: Visual Studio 2017
 environment:
+  VisualStudioVersion: 15.0
   DeployExtension: false
 configuration: Release
 before_build:
