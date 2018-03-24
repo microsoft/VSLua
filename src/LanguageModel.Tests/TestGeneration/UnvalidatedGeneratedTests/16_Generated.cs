@@ -1,10 +1,11 @@
 //C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\IfElse.lua
-using LanguageModel.Tests.TestGeneration;
-using LanguageService;
-using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
-    class Generated_16
+    using LanguageModel.Tests.TestGeneration;
+    using LanguageService;
+    using Xunit;
+
+    internal class Generated_16
     {
         [Fact]
         public void Test(Tester t)

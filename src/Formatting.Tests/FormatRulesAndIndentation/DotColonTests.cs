@@ -1,18 +1,20 @@
-﻿using Xunit;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace Formatting.Tests
 {
+    using Xunit;
+
     public class DotColonTests
     {
-        delegate void TestFunction(string original, string expected);
-        TestFunction GeneralTest = Tester.FormattingTest;
+        private delegate void TestFunction(string original, string expected);
+        private TestFunction GeneralTest = Tester.FormattingTest;
 
         [Fact]
         public void BasicDot()
         {
             string original = "t . foo ()";
             string expected = "t.foo ()";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
@@ -20,7 +22,7 @@ namespace Formatting.Tests
         {
             string original = "t : foo ()";
             string expected = "t:foo ()";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
@@ -28,14 +30,14 @@ namespace Formatting.Tests
         {
             string original = "t     :foo ().anothertable.  bar : foobar ()";
             string expected = "t:foo ().anothertable.bar:foobar ()";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
         public void NothingToChange()
         {
             string original = "t:foo (); t.foo ()";
-            GeneralTest(original, original);
+            this.GeneralTest(original, original);
         }
 
         [Fact]
@@ -51,14 +53,14 @@ t:
 foo ()
 t.
 bar ()";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
         public void CommentInBetweenDotOrColon()
         {
             string original = "t. --[[comment]]bar; t: --[[comment]] bar";
-            GeneralTest(original, original);
+            this.GeneralTest(original, original);
         }
 
 

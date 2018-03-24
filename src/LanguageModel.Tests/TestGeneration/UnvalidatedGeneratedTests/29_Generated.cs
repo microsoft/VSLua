@@ -1,10 +1,11 @@
 //C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\StringConcat.lua
-using LanguageModel.Tests.TestGeneration;
-using LanguageService;
-using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
-    class Generated_29
+    using LanguageModel.Tests.TestGeneration;
+    using LanguageService;
+    using Xunit;
+
+    internal class Generated_29
     {
         [Fact]
         public void Test(Tester t)

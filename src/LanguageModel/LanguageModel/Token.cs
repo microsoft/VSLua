@@ -14,7 +14,7 @@ namespace LanguageService
         public SyntaxKind Kind { get; private set; }
 
         public List<Trivia> LeadingTrivia { get; private set; } //TODO: change to Immutable List
-        
+
         public Token(SyntaxKind kind, string text, List<Trivia> trivia, int fullStart, int start)
         {
             this.Kind = kind;
@@ -24,7 +24,7 @@ namespace LanguageService
             this.LeadingTrivia = trivia == null ? new List<Trivia>() : trivia;
             this.FullStart = fullStart;
             this.Start = start;
-            this.Length = Text.Length;
+            this.Length = this.Text.Length;
         }
 
         public static Token CreateMissingToken(int position)
@@ -37,7 +37,7 @@ namespace LanguageService
             StringBuilder sb = new StringBuilder();
             sb.Append(this.Kind.ToString());
             sb.Append("\t");
-            sb.Append(Text);
+            sb.Append(this.Text);
 
             return sb.ToString();
         }

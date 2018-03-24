@@ -1,10 +1,11 @@
 //C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\MultipleTypeAssignment.lua
-using LanguageModel.Tests.TestGeneration;
-using LanguageService;
-using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
-    class Generated_21
+    using LanguageModel.Tests.TestGeneration;
+    using LanguageService;
+    using Xunit;
+
+    internal class Generated_21
     {
         [Fact]
         public void Test(Tester t)

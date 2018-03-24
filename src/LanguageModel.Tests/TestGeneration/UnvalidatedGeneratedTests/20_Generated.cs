@@ -1,10 +1,11 @@
 //C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\MultipleReturnIf.lua
-using LanguageModel.Tests.TestGeneration;
-using LanguageService;
-using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
-    class Generated_20
+    using LanguageModel.Tests.TestGeneration;
+    using LanguageService;
+    using Xunit;
+
+    internal class Generated_20
     {
         [Fact]
         public void Test(Tester t)

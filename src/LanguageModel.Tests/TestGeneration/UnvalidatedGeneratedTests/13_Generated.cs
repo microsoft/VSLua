@@ -1,10 +1,11 @@
 //C:\Users\t-kevimi\\Documents\\LuaTests\Lua Files for Testing\FunctionCallWithStringLiteral.lua
-using LanguageModel.Tests.TestGeneration;
-using LanguageService;
-using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
-    class Generated_13
+    using LanguageModel.Tests.TestGeneration;
+    using LanguageService;
+    using Xunit;
+
+    internal class Generated_13
     {
         [Fact]
         public void Test(Tester t)

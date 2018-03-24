@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LanguageService;
-using LanguageService.Classification;
-using Xunit;
-
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace Formatting.Tests.Colourization
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using LanguageService;
+    using LanguageService.Classification;
+    using Xunit;
+
     public class ParserColorizationTests
     {
         private static void ClassificationAndOrderTest(string text, Classification[] classifications, string[] tokenTexts)

@@ -1,9 +1,12 @@
-﻿using LanguageModel.Tests.TestGeneration;
-using LanguageService;
-using Xunit;
+﻿// Copyright (c) Microsoft. All rights reserved.
+
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
-    class GrabKeyFromTable_Generated
+    using LanguageModel.Tests.TestGeneration;
+    using LanguageService;
+    using Xunit;
+
+    internal class GrabKeyFromTable_Generated
     {
         [Fact]
         public void Test(Tester t)

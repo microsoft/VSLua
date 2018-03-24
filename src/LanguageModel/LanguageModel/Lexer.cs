@@ -376,9 +376,15 @@ namespace LanguageService
                         if (nextChar == '\r' || nextChar == '\n')
                         {
                             if (nextChar == '\r')
+                            {
                                 stream.ReadChar();
+                            }
+
                             if (stream.Peek() == '\n')
+                            {
                                 stream.ReadChar();
+                            }
+
                             type = SyntaxKind.IgnoreNewLineString;
                         }
 

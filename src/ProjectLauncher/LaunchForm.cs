@@ -1,34 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-
-using EnvDTE;
-using EnvDTE80;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace ProjectLauncher
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Data;
+    using System.Drawing;
+    using System.Text;
+    using System.Windows.Forms;
+    using EnvDTE;
+    using EnvDTE80;
+
     public partial class LaunchForm : Form
     {
-        DTE2 _dte;
-        string _filePath;
+        private DTE2 dte;
+        private string filePath;
+
         public LaunchForm(DTE2 dte)
         {
-            _dte = dte;
-            InitializeComponent();
+            this.dte = dte;
+            this.InitializeComponent();
         }
 
         public string FilePath
         {
-            get { return this._filePath; }
+            get { return this.filePath; }
         }
 
         private void btnLaunch_Click(object sender, EventArgs e)
         {
-            if(_filePath != null)
+            if (this.filePath != null)
             {
                 this.DialogResult = DialogResult.OK;
                 this.Close();
@@ -37,14 +39,16 @@ namespace ProjectLauncher
 
         private void LaunchForm_Load(object sender, EventArgs e)
         {
-            if (_dte.ActiveDocument != null)
+            if (this.dte.ActiveDocument != null)
             {
-                string activeDocName = _dte.ActiveDocument.Name;
-                cmbProjects.Items.Add(activeDocName);
+                string activeDocName = this.dte.ActiveDocument.Name;
+                this.cmbProjects.Items.Add(activeDocName);
             }
 
-            if(this.cmbProjects.Items.Count > 0)
-                this.cmbProjects.SelectedIndex = 0;            
+            if (this.cmbProjects.Items.Count > 0)
+            {
+                this.cmbProjects.SelectedIndex = 0;
+            }
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)
@@ -55,7 +59,7 @@ namespace ProjectLauncher
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 this.lblPath.Text = openFileDialog.FileName;
-                _filePath = openFileDialog.FileName;
+                this.filePath = openFileDialog.FileName;
             }
         }
     }

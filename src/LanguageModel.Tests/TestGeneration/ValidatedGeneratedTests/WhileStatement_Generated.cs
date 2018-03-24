@@ -1,10 +1,12 @@
-﻿using LanguageModel.Tests.TestGeneration;
-using LanguageService;
-using Xunit;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
-    class WhileStatement_Generated
+    using LanguageModel.Tests.TestGeneration;
+    using LanguageService;
+    using Xunit;
+
+    internal class WhileStatement_Generated
     {
         [Fact]
         public void Test(Tester t)

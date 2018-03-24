@@ -1,18 +1,20 @@
-﻿using Xunit;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace Formatting.Tests
 {
+    using Xunit;
+
     public class TrailingWhitespaceTests
     {
-        delegate void TestFunction(string original, string expected);
-        TestFunction GeneralTest = Tester.FormattingTest;
+        private delegate void TestFunction(string original, string expected);
+        private TestFunction GeneralTest = Tester.FormattingTest;
 
         [Fact]
         public void Basic()
         {
             string original = "x = 10      ";
             string expected = "x = 10";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
@@ -26,14 +28,14 @@ namespace Formatting.Tests
 x = 10
 
 x = 10";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
         public void Comments1()
         {
             string original = @"x = 10            -- hello world       ";
-            GeneralTest(original, original);
+            this.GeneralTest(original, original);
         }
 
         [Fact]
@@ -41,7 +43,7 @@ x = 10";
         {
             string original = "x = 10    --[[comment]]     ";
             string expected = "x = 10    --[[comment]]";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
@@ -61,7 +63,7 @@ x = 10
     comment 
     here]]
 x = x + 1";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
@@ -71,7 +73,7 @@ x = x + 1";
     ";
             string expected = @"x = 10
 ";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
@@ -85,7 +87,7 @@ end";
 foo = function ()
 
 end";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
@@ -103,7 +105,7 @@ foo = function ()
 
     }
 end";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
 

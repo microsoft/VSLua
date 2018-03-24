@@ -18,11 +18,6 @@ namespace Microsoft.VisualStudio.Debugger.Lua
         
         private Variable[] m_locals;
 
-        private string m_documentName;
-        private string m_functionName;
-        private uint m_lineNum;
-        private bool m_hasSource;
-        private uint m_numParameters;
         private int m_numLocals;
 
         public AD7StackFrame(AD7Engine engine, AD7Thread thread)

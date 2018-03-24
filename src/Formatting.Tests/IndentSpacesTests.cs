@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace Formatting.Tests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Xunit;
+
     public class IndentSpacesTests
     {
         private static string testStringOneIndent = @"f = function ()

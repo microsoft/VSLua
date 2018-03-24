@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
+#pragma warning disable SA1649 // File name must match first type name
+
 namespace LanguageService
 {
     public abstract class SyntaxNodeOrToken
@@ -17,11 +19,11 @@ namespace LanguageService
     public abstract partial class SyntaxNode : SyntaxNodeOrToken
     {
         [Required]
-        readonly SyntaxKind kind;
+        private readonly SyntaxKind kind;
         [Required]
-        readonly int startPosition;
+        private readonly int startPosition;
         [Required]
-        readonly int length;
+        private readonly int length;
         public override bool IsToken => false;
         public override bool IsLeafNode => this.Children.Count == 0;
 
@@ -53,15 +55,15 @@ namespace LanguageService
     public partial class ChunkNode : SyntaxNode
     {
         [Required]
-        readonly BlockNode programBlock;
+        private readonly BlockNode programBlock;
         [Required]
-        readonly Token endOfFile;
+        private readonly Token endOfFile;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(programBlock, endOfFile);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.programBlock, this.endOfFile);
             }
         }
     }
@@ -70,13 +72,13 @@ namespace LanguageService
     public partial class BlockNode : SyntaxNode
     {
         [Required, NotRecursive]
-        readonly ImmutableList<StatementNode> statements;
+        private readonly ImmutableList<StatementNode> statements;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return statements.Cast<SyntaxNodeOrToken>().ToImmutableList();
+                return this.statements.Cast<SyntaxNodeOrToken>().ToImmutableList();
             }
         }
     }
@@ -89,13 +91,13 @@ namespace LanguageService
     public partial class SemiColonStatementNode : StatementNode
     {
         [Required]
-        readonly Token semiColon;
+        private readonly Token semiColon;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(semiColon);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.semiColon);
             }
         }
     }
@@ -104,24 +106,24 @@ namespace LanguageService
     public partial class FunctionCallStatementNode : StatementNode
     {
         [Required]
-        readonly PrefixExp prefixExp;
-        readonly Token colon;
-        readonly Token name;
+        private readonly PrefixExp prefixExp;
+        private readonly Token colon;
+        private readonly Token name;
         [Required]
-        readonly Args args;
+        private readonly Args args;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
                 var children = new List<SyntaxNodeOrToken>();
-                children.Add(prefixExp);
-                if (colon != null)
+                children.Add(this.prefixExp);
+                if (this.colon != null)
                 {
-                    children.Add(colon);
-                    children.Add(name);
+                    children.Add(this.colon);
+                    children.Add(this.name);
                 }
-                children.Add(args);
+                children.Add(this.args);
                 return children.ToImmutableList();
             }
         }
@@ -131,18 +133,21 @@ namespace LanguageService
     public partial class ReturnStatementNode : StatementNode
     {
         [Required]
-        readonly Token returnKeyword;
+        private readonly Token returnKeyword;
         [Required]
-        readonly SeparatedList expList;
-        readonly Token semiColon;
+        private readonly SeparatedList expList;
+        private readonly Token semiColon;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                var children = new List<SyntaxNodeOrToken> { returnKeyword, expList };
-                if (semiColon != null)
-                    children.Add(semiColon);
+                var children = new List<SyntaxNodeOrToken> { this.returnKeyword, this.expList };
+                if (this.semiColon != null)
+                {
+                    children.Add(this.semiColon);
+                }
+
                 return children.ToImmutableList();
             }
         }
@@ -152,13 +157,13 @@ namespace LanguageService
     public partial class BreakStatementNode : StatementNode
     {
         [Required]
-        readonly Token breakKeyword;
+        private readonly Token breakKeyword;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(breakKeyword);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.breakKeyword);
             }
         }
     }
@@ -167,15 +172,15 @@ namespace LanguageService
     public partial class GoToStatementNode : StatementNode
     {
         [Required]
-        readonly Token goToKeyword;
+        private readonly Token goToKeyword;
         [Required]
-        readonly Token name;
+        private readonly Token name;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(goToKeyword, name);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.goToKeyword, this.name);
             }
         }
     }
@@ -184,17 +189,17 @@ namespace LanguageService
     public partial class DoStatementNode : StatementNode
     {
         [Required]
-        readonly Token doKeyword;
+        private readonly Token doKeyword;
         [Required]
-        readonly BlockNode block;
+        private readonly BlockNode block;
         [Required]
-        readonly Token endKeyword;
+        private readonly Token endKeyword;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(doKeyword, block, endKeyword);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.doKeyword, this.block, this.endKeyword);
             }
         }
     }
@@ -203,20 +208,20 @@ namespace LanguageService
     public partial class WhileStatementNode : StatementNode
     {
         [Required]
-        readonly Token whileKeyword;
+        private readonly Token whileKeyword;
         [Required]
-        readonly ExpressionNode exp;
+        private readonly ExpressionNode exp;
         [Required]
-        readonly Token doKeyword;
+        private readonly Token doKeyword;
         [Required]
-        readonly BlockNode block;
+        private readonly BlockNode block;
         [Required]
-        readonly Token endKeyword;
+        private readonly Token endKeyword;
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(whileKeyword, exp, doKeyword, block, endKeyword);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.whileKeyword, this.exp, this.doKeyword, this.block, this.endKeyword);
             }
         }
     }
@@ -225,19 +230,19 @@ namespace LanguageService
     public partial class RepeatStatementNode : StatementNode
     {
         [Required]
-        readonly Token repeatKeyword;
+        private readonly Token repeatKeyword;
         [Required]
-        readonly BlockNode block;
+        private readonly BlockNode block;
         [Required]
-        readonly Token untilKeyword;
+        private readonly Token untilKeyword;
         [Required]
-        readonly ExpressionNode exp;
+        private readonly ExpressionNode exp;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(repeatKeyword, block, untilKeyword, exp);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.repeatKeyword, this.block, this.untilKeyword, this.exp);
             }
         }
     }
@@ -246,17 +251,17 @@ namespace LanguageService
     public partial class GlobalFunctionStatementNode : StatementNode
     {
         [Required]
-        readonly Token functionKeyword;
+        private readonly Token functionKeyword;
         [Required]
-        readonly FuncNameNode funcName;
+        private readonly FuncNameNode funcName;
         [Required]
-        readonly FuncBodyNode funcBody;
+        private readonly FuncBodyNode funcBody;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(functionKeyword, funcName, funcBody);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.functionKeyword, this.funcName, this.funcBody);
             }
         }
     }
@@ -265,23 +270,23 @@ namespace LanguageService
     public partial class LocalAssignmentStatementNode : StatementNode
     {
         [Required]
-        readonly Token localKeyword;
+        private readonly Token localKeyword;
         [Required]
-        readonly SeparatedList nameList;
-        readonly Token assignmentOperator;
-        readonly SeparatedList expList;
+        private readonly SeparatedList nameList;
+        private readonly Token assignmentOperator;
+        private readonly SeparatedList expList;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
                 var children = new List<SyntaxNodeOrToken>();
-                children.Add(localKeyword);
-                children.Add(nameList);
-                if (assignmentOperator != null)
+                children.Add(this.localKeyword);
+                children.Add(this.nameList);
+                if (this.assignmentOperator != null)
                 {
-                    children.Add(assignmentOperator);
-                    children.Add(expList);
+                    children.Add(this.assignmentOperator);
+                    children.Add(this.expList);
                 }
                 return children.ToImmutableList();
             }
@@ -292,19 +297,19 @@ namespace LanguageService
     public partial class LocalFunctionStatementNode : StatementNode
     {
         [Required]
-        readonly Token localKeyword;
+        private readonly Token localKeyword;
         [Required]
-        readonly Token functionKeyword;
+        private readonly Token functionKeyword;
         [Required]
-        readonly Token name;
+        private readonly Token name;
         [Required]
-        readonly FuncBodyNode funcBody;
+        private readonly FuncBodyNode funcBody;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(localKeyword, functionKeyword, name, funcBody);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.localKeyword, this.functionKeyword, this.name, this.funcBody);
             }
         }
     }
@@ -313,39 +318,39 @@ namespace LanguageService
     public partial class SimpleForStatementNode : StatementNode
     {
         [Required]
-        readonly Token forKeyword;
+        private readonly Token forKeyword;
         [Required]
-        readonly Token name;
+        private readonly Token name;
         [Required]
-        readonly Token assignmentOperator;
+        private readonly Token assignmentOperator;
         [Required]
-        readonly ExpressionNode exp1;
+        private readonly ExpressionNode exp1;
         [Required]
-        readonly Token comma;
+        private readonly Token comma;
         [Required]
-        readonly ExpressionNode exp2;
-        readonly Token optionalComma;
-        readonly ExpressionNode optionalExp3;
+        private readonly ExpressionNode exp2;
+        private readonly Token optionalComma;
+        private readonly ExpressionNode optionalExp3;
         [Required]
-        readonly Token doKeyword;
+        private readonly Token doKeyword;
         [Required]
-        readonly BlockNode block;
+        private readonly BlockNode block;
         [Required]
-        readonly Token endKeyword;
+        private readonly Token endKeyword;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                var children = new List<SyntaxNodeOrToken> { forKeyword, name, assignmentOperator, exp1, comma, exp2 };
-                if (optionalComma != null)
+                var children = new List<SyntaxNodeOrToken> { this.forKeyword, this.name, this.assignmentOperator, this.exp1, this.comma, this.exp2 };
+                if (this.optionalComma != null)
                 {
-                    children.Add(optionalComma);
-                    children.Add(OptionalExp3);
+                    children.Add(this.optionalComma);
+                    children.Add(this.OptionalExp3);
                 }
-                children.Add(doKeyword);
-                children.Add(block);
-                children.Add(endKeyword);
+                children.Add(this.doKeyword);
+                children.Add(this.block);
+                children.Add(this.endKeyword);
                 return children.ToImmutableList();
             }
         }
@@ -355,25 +360,25 @@ namespace LanguageService
     public partial class MultipleArgForStatementNode : StatementNode
     {
         [Required]
-        readonly Token forKeyword;
+        private readonly Token forKeyword;
         [Required]
-        readonly SeparatedList nameList;
+        private readonly SeparatedList nameList;
         [Required]
-        readonly Token inKeyword;
+        private readonly Token inKeyword;
         [Required]
-        readonly SeparatedList expList;
+        private readonly SeparatedList expList;
         [Required]
-        readonly Token doKeyword;
+        private readonly Token doKeyword;
         [Required]
-        readonly BlockNode block;
+        private readonly BlockNode block;
         [Required]
-        readonly Token endKeyword;
+        private readonly Token endKeyword;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(forKeyword, nameList, inKeyword, expList, doKeyword, block, endKeyword);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.forKeyword, this.nameList, this.inKeyword, this.expList, this.doKeyword, this.block, this.endKeyword);
             }
         }
     }
@@ -382,17 +387,17 @@ namespace LanguageService
     public partial class LabelStatementNode : StatementNode
     {
         [Required]
-        readonly Token doubleColon1;
+        private readonly Token doubleColon1;
         [Required]
-        readonly Token name;
+        private readonly Token name;
         [Required]
-        readonly Token doubleColon2;
+        private readonly Token doubleColon2;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(doubleColon1, name, doubleColon2);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.doubleColon1, this.name, this.doubleColon2);
             }
         }
     }
@@ -401,17 +406,17 @@ namespace LanguageService
     public partial class AssignmentStatementNode : StatementNode
     {
         [Required]
-        readonly SeparatedList varList;
+        private readonly SeparatedList varList;
         [Required]
-        readonly Token assignmentOperator;
+        private readonly Token assignmentOperator;
         [Required]
-        readonly SeparatedList expList;
+        private readonly SeparatedList expList;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(varList, assignmentOperator, expList);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.varList, this.assignmentOperator, this.expList);
             }
         }
     }
@@ -422,40 +427,40 @@ namespace LanguageService
     public partial class IfStatementNode : StatementNode
     {
         [Required]
-        readonly Token ifKeyword;
+        private readonly Token ifKeyword;
         [Required]
-        readonly ExpressionNode exp;
+        private readonly ExpressionNode exp;
         [Required]
-        readonly Token thenKeyword;
+        private readonly Token thenKeyword;
         [Required]
-        readonly BlockNode ifBlock;
+        private readonly BlockNode ifBlock;
         [Required, NotRecursive]
-        readonly ImmutableList<ElseIfBlockNode> elseIfList;
-        readonly ElseBlockNode elseBlock;
+        private readonly ImmutableList<ElseIfBlockNode> elseIfList;
+        private readonly ElseBlockNode elseBlock;
         [Required]
-        readonly Token endKeyword;
+        private readonly Token endKeyword;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                var children = new List<SyntaxNodeOrToken> { ifKeyword, exp, thenKeyword, ifBlock };
+                var children = new List<SyntaxNodeOrToken> { this.ifKeyword, this.exp, this.thenKeyword, this.ifBlock };
 
                 //TODO remove temporary code:
-                if (elseIfList != null)
+                if (this.elseIfList != null)
                 {
-                    foreach (var node in elseIfList)
+                    foreach (var node in this.elseIfList)
                     {
                         children.Add(node);
                     }
                 }
 
-                if (elseBlock != null)
+                if (this.elseBlock != null)
                 {
-                    children.Add(elseBlock);
+                    children.Add(this.elseBlock);
                 }
 
-                children.Add(endKeyword); //Why doesnt this do anything??!?!!
+                children.Add(this.endKeyword); //Why doesnt this do anything??!?!!
                 return children.ToImmutableList();
             }
         }
@@ -465,15 +470,15 @@ namespace LanguageService
     public partial class ElseBlockNode : SyntaxNode
     {
         [Required]
-        readonly Token elseKeyword;
+        private readonly Token elseKeyword;
         [Required]
-        readonly BlockNode block;
+        private readonly BlockNode block;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(elseKeyword, block);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.elseKeyword, this.block);
             }
         }
     }
@@ -482,19 +487,19 @@ namespace LanguageService
     public partial class ElseIfBlockNode : SyntaxNode
     {
         [Required]
-        readonly Token elseIfKeyword;
+        private readonly Token elseIfKeyword;
         [Required]
-        readonly ExpressionNode exp;
+        private readonly ExpressionNode exp;
         [Required]
-        readonly Token thenKeyword;
+        private readonly Token thenKeyword;
         [Required]
-        readonly BlockNode block;
+        private readonly BlockNode block;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(elseIfKeyword, exp, thenKeyword, block);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.elseIfKeyword, this.exp, this.thenKeyword, this.block);
             }
         }
     }
@@ -509,13 +514,13 @@ namespace LanguageService
     public partial class SimpleExpression : ExpressionNode
     {
         [Required]
-        readonly Token expressionValue;
+        private readonly Token expressionValue;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(expressionValue);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.expressionValue);
             }
         }
     }
@@ -524,17 +529,17 @@ namespace LanguageService
     public partial class BinaryOperatorExpression : ExpressionNode
     {
         [Required]
-        readonly ExpressionNode exp1;
+        private readonly ExpressionNode exp1;
         [Required]
-        readonly Token binaryOperator;
+        private readonly Token binaryOperator;
         [Required]
-        readonly ExpressionNode exp2;
+        private readonly ExpressionNode exp2;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(exp1, binaryOperator, exp2);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.exp1, this.binaryOperator, this.exp2);
             }
         }
     }
@@ -543,15 +548,15 @@ namespace LanguageService
     public partial class UnaryOperatorExpression : ExpressionNode
     {
         [Required]
-        readonly Token unaryOperator;
+        private readonly Token unaryOperator;
         [Required]
-        readonly ExpressionNode exp;
+        private readonly ExpressionNode exp;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(unaryOperator, exp);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.unaryOperator, this.exp);
             }
         }
     }
@@ -560,17 +565,17 @@ namespace LanguageService
     public partial class TableConstructorExp : ExpressionNode
     {
         [Required]
-        readonly Token openCurly;
+        private readonly Token openCurly;
         [Required]
-        readonly SeparatedList fieldList;
+        private readonly SeparatedList fieldList;
         [Required]
-        readonly Token closeCurly;
+        private readonly Token closeCurly;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(openCurly, fieldList, closeCurly);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.openCurly, this.fieldList, this.closeCurly);
             }
         }
     }
@@ -579,15 +584,15 @@ namespace LanguageService
     public partial class FunctionDef : ExpressionNode
     {
         [Required]
-        readonly Token functionKeyword;
+        private readonly Token functionKeyword;
         [Required]
-        readonly FuncBodyNode functionBody;
+        private readonly FuncBodyNode functionBody;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(functionKeyword, functionBody);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.functionKeyword, this.functionBody);
             }
         }
     }
@@ -600,21 +605,21 @@ namespace LanguageService
     public partial class BracketField : FieldNode
     {
         [Required]
-        readonly Token openBracket;
+        private readonly Token openBracket;
         [Required]
-        readonly ExpressionNode identifierExp;
+        private readonly ExpressionNode identifierExp;
         [Required]
-        readonly Token closeBracket;
+        private readonly Token closeBracket;
         [Required]
-        readonly Token assignmentOperator;
+        private readonly Token assignmentOperator;
         [Required]
-        readonly ExpressionNode assignedExp;
+        private readonly ExpressionNode assignedExp;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(openBracket, identifierExp, closeBracket, assignmentOperator, assignedExp);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.openBracket, this.identifierExp, this.closeBracket, this.assignmentOperator, this.assignedExp);
             }
         }
     }
@@ -623,17 +628,17 @@ namespace LanguageService
     public partial class AssignmentField : FieldNode
     {
         [Required]
-        readonly Token name;
+        private readonly Token name;
         [Required]
-        readonly Token assignmentOperator;
+        private readonly Token assignmentOperator;
         [Required]
-        readonly ExpressionNode exp;
+        private readonly ExpressionNode exp;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(name, assignmentOperator, exp);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.name, this.assignmentOperator, this.exp);
             }
         }
     }
@@ -642,13 +647,13 @@ namespace LanguageService
     public partial class ExpField : FieldNode
     {
         [Required]
-        readonly ExpressionNode exp;
+        private readonly ExpressionNode exp;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(exp);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.exp);
             }
         }
     }
@@ -665,13 +670,13 @@ namespace LanguageService
     public partial class NameVar : Var
     {
         [Required]
-        readonly Token name;
+        private readonly Token name;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(name);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.name);
             }
         }
     }
@@ -680,19 +685,19 @@ namespace LanguageService
     public partial class SquareBracketVar : Var
     {
         [Required]
-        readonly PrefixExp prefixExp;
+        private readonly PrefixExp prefixExp;
         [Required]
-        readonly Token openBracket;
+        private readonly Token openBracket;
         [Required]
-        readonly ExpressionNode exp;
+        private readonly ExpressionNode exp;
         [Required]
-        readonly Token closeBracket;
+        private readonly Token closeBracket;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(prefixExp, openBracket, exp, closeBracket);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.prefixExp, this.openBracket, this.exp, this.closeBracket);
             }
         }
     }
@@ -701,17 +706,17 @@ namespace LanguageService
     public partial class DotVar : Var
     {
         [Required]
-        readonly PrefixExp prefixExp;
+        private readonly PrefixExp prefixExp;
         [Required]
-        readonly Token dotOperator;
+        private readonly Token dotOperator;
         [Required]
-        readonly Token nameIdentifier;
+        private readonly Token nameIdentifier;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(prefixExp, dotOperator, nameIdentifier);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.prefixExp, this.dotOperator, this.nameIdentifier);
             }
         }
     }
@@ -720,23 +725,23 @@ namespace LanguageService
     public partial class FunctionCallPrefixexp : PrefixExp
     {
         [Required]
-        readonly PrefixExp prefixExp;
-        readonly Token colon;
-        readonly Token name;
+        private readonly PrefixExp prefixExp;
+        private readonly Token colon;
+        private readonly Token name;
         [Required]
-        readonly Args args;
+        private readonly Args args;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                var children = new List<SyntaxNodeOrToken> { prefixExp };
-                if (colon != null)
+                var children = new List<SyntaxNodeOrToken> { this.prefixExp };
+                if (this.colon != null)
                 {
-                    children.Add(colon);
-                    children.Add(name);
+                    children.Add(this.colon);
+                    children.Add(this.name);
                 }
-                children.Add(args);
+                children.Add(this.args);
                 return children.ToImmutableList();
             }
         }
@@ -746,17 +751,17 @@ namespace LanguageService
     public partial class ParenPrefixExp : PrefixExp
     {
         [Required]
-        readonly Token openParen;
+        private readonly Token openParen;
         [Required]
-        readonly ExpressionNode exp;
+        private readonly ExpressionNode exp;
         [Required]
-        readonly Token closeParen;
+        private readonly Token closeParen;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(openParen, exp, closeParen);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.openParen, this.exp, this.closeParen);
             }
         }
     }
@@ -772,17 +777,17 @@ namespace LanguageService
     public partial class TableContructorArg : Args
     {
         [Required]
-        readonly Token openCurly;
+        private readonly Token openCurly;
         [Required]
-        readonly SeparatedList fieldList;
+        private readonly SeparatedList fieldList;
         [Required]
-        readonly Token closeCurly;
+        private readonly Token closeCurly;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(openCurly, fieldList, closeCurly);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.openCurly, this.fieldList, this.closeCurly);
             }
         }
     }
@@ -791,17 +796,17 @@ namespace LanguageService
     public partial class ParenArg : Args
     {
         [Required]
-        readonly Token openParen;
+        private readonly Token openParen;
         [Required]
-        readonly SeparatedList expList;
+        private readonly SeparatedList expList;
         [Required]
-        readonly Token closeParen;
+        private readonly Token closeParen;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(openParen, expList, closeParen);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.openParen, this.expList, this.closeParen);
             }
         }
     }
@@ -810,13 +815,13 @@ namespace LanguageService
     public partial class StringArg : Args
     {
         [Required]
-        readonly Token stringLiteral;
+        private readonly Token stringLiteral;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(stringLiteral);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.stringLiteral);
             }
         }
     }
@@ -828,7 +833,7 @@ namespace LanguageService
     public partial class SeparatedList : SyntaxNode
     {
         [Required, NotRecursive]
-        readonly ImmutableList<SeparatedListElement> syntaxList;
+        private readonly ImmutableList<SeparatedListElement> syntaxList;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
@@ -836,7 +841,7 @@ namespace LanguageService
             {
                 var children = new List<SyntaxNodeOrToken>();
 
-                foreach (var listItem in syntaxList)
+                foreach (var listItem in this.syntaxList)
                 {
                     foreach (var child in listItem.Children)
                     {
@@ -853,21 +858,21 @@ namespace LanguageService
     public partial class SeparatedListElement : SyntaxNode
     {
         [Required]
-        readonly SyntaxNodeOrToken element;
+        private readonly SyntaxNodeOrToken element;
         [Required]
-        readonly Token seperator;
+        private readonly Token seperator;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                if (seperator != null)
+                if (this.seperator != null)
                 {
-                    return ImmutableList.Create<SyntaxNodeOrToken>(element, seperator);
+                    return ImmutableList.Create<SyntaxNodeOrToken>(this.element, this.seperator);
                 }
                 else
                 {
-                    return ImmutableList.Create<SyntaxNodeOrToken>(element);
+                    return ImmutableList.Create<SyntaxNodeOrToken>(this.element);
                 }
             }
         }
@@ -880,13 +885,13 @@ namespace LanguageService
     public partial class VarArgParList : ParList
     {
         [Required]
-        readonly Token varargOperator;
+        private readonly Token varargOperator;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(varargOperator);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.varargOperator);
             }
         }
     }
@@ -895,19 +900,19 @@ namespace LanguageService
     public partial class NameListPar : ParList
     {
         [Required]
-        readonly SeparatedList namesList;
-        readonly Token comma;
-        readonly Token vararg;
+        private readonly SeparatedList namesList;
+        private readonly Token comma;
+        private readonly Token vararg;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                var children = new List<SyntaxNodeOrToken> { namesList };
-                if (comma != null)
+                var children = new List<SyntaxNodeOrToken> { this.namesList };
+                if (this.comma != null)
                 {
-                    children.Add(comma);
-                    children.Add(vararg);
+                    children.Add(this.comma);
+                    children.Add(this.vararg);
                 }
                 return children.ToImmutableList();
             }
@@ -920,17 +925,17 @@ namespace LanguageService
     public partial class TableConstructorNode : SyntaxNode
     {
         [Required]
-        readonly Token openCurly;
+        private readonly Token openCurly;
         [Required]
-        readonly SeparatedList fieldList;
+        private readonly SeparatedList fieldList;
         [Required]
-        readonly Token closeCurly;
+        private readonly Token closeCurly;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(openCurly, fieldList, closeCurly);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.openCurly, this.fieldList, this.closeCurly);
             }
         }
     }
@@ -939,21 +944,21 @@ namespace LanguageService
     public partial class FuncBodyNode : SyntaxNode
     {
         [Required]
-        readonly Token openParen;
+        private readonly Token openParen;
         [Required]
-        readonly ParList parameterList;
+        private readonly ParList parameterList;
         [Required]
-        readonly Token closeParen;
+        private readonly Token closeParen;
         [Required]
-        readonly BlockNode block;
+        private readonly BlockNode block;
         [Required]
-        readonly Token endKeyword;
+        private readonly Token endKeyword;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                return ImmutableList.Create<SyntaxNodeOrToken>(openParen, parameterList, closeParen, block, endKeyword);
+                return ImmutableList.Create<SyntaxNodeOrToken>(this.openParen, this.parameterList, this.closeParen, this.block, this.endKeyword);
             }
         }
     }
@@ -962,21 +967,21 @@ namespace LanguageService
     public partial class FuncNameNode : SyntaxNode
     {
         [Required]
-        readonly Token name;
+        private readonly Token name;
         [Required, NotRecursive]
-        readonly SeparatedList funcNameList;
-        readonly Token optionalColon;
-        readonly Token optionalName;
+        private readonly SeparatedList funcNameList;
+        private readonly Token optionalColon;
+        private readonly Token optionalName;
 
         public override ImmutableList<SyntaxNodeOrToken> Children
         {
             get
             {
-                var children = new List<SyntaxNodeOrToken> { name, funcNameList };
-                if (optionalColon != null)
+                var children = new List<SyntaxNodeOrToken> { this.name, this.funcNameList };
+                if (this.optionalColon != null)
                 {
-                    children.Add(optionalColon);
-                    children.Add(optionalName);
+                    children.Add(this.optionalColon);
+                    children.Add(this.optionalName);
                 }
                 return children.ToImmutableList();
             }

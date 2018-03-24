@@ -15,7 +15,7 @@ namespace LanguageService
 
         public override string ToString()
         {
-            return string.Format("{0},\t{1}", Enum.GetName(typeof(SyntaxKind), Type), ConvertStringToSymbols(Text));
+            return string.Format("{0},\t{1}", Enum.GetName(typeof(SyntaxKind), this.Type), this.ConvertStringToSymbols(this.Text));
         }
 
         private string ConvertStringToSymbols(string s) //TODO: temp, just for testing

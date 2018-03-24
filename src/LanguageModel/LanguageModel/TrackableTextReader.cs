@@ -30,11 +30,11 @@ namespace LanguageService
             char currentCharacter;
             if (this.pushedDistance == 0)
             {
-                int readChar = (char)textReader.Read();
+                int readChar = (char)this.textReader.Read();
                 Debug.Assert((readChar & 0xFFFF0000) == 0, "The top 16 bits returned by Read were non-zero, they will be lost when cast to char");
 
                 currentCharacter = (char)readChar;
-                Position++;
+                this.Position++;
                 this.lastCharacters.Add(currentCharacter);
                 if (this.lastCharacters.Count > HistoryLimit)
                 {
@@ -46,7 +46,7 @@ namespace LanguageService
             {
                 currentCharacter = this.lastCharacters[this.lastCharacters.Count - this.pushedDistance];
                 this.pushedDistance--;
-                Position++;
+                this.Position++;
 
                 return currentCharacter;
             }
@@ -62,7 +62,7 @@ namespace LanguageService
         {
             if (this.pushedDistance == 0)
             {
-                return (char)textReader.Peek();
+                return (char)this.textReader.Peek();
             }
             else
             {
@@ -93,7 +93,7 @@ namespace LanguageService
 
         public void Dispose()
         {
-            textReader?.Dispose();
+            this.textReader?.Dispose();
         }
     }
 }

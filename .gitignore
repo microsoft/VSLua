@@ -72,6 +72,7 @@ artifacts/
 *.tmp
 *.tmp_proj
 *.log
+msbuild.binlog
 *.vspscc
 *.vssscc
 .builds
@@ -178,7 +179,6 @@ AppPackages/
 
 # Others
 ClientBin/
-[Ss]tyle[Cc]op.*
 ~$*
 *~
 *.dbmdl

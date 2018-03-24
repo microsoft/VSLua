@@ -1,16 +1,16 @@
-﻿//Author: Andrew Arnott Andrew.Arnott@microsoft.com
-//Source: index/#Microsoft.VisualStudio.Composition/IndentingTextWriter.cs,083b8cac8f07e6cd 
-//File: IndentingTextWriter.cs
-//Project: Microsoft.VisualStudio.Composition\Microsoft.VisualStudio.Composition.csproj(Microsoft.VisualStudio.Composition)
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace LanguageService
 {
+    // Author: Andrew Arnott Andrew.Arnott@microsoft.com
+    // Source: index/#Microsoft.VisualStudio.Composition/IndentingTextWriter.cs,083b8cac8f07e6cd
+    // File: IndentingTextWriter.cs
+    // Project: https://github.com/Microsoft/vs-mef/blob/a670721b9cc932399882c484eb9325518ac580f5/src/Microsoft.VisualStudio.Composition/IndentingTextWriter.cs
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+
     internal class IndentingTextWriter : TextWriter
     {
         private const string Indentation = "    ";
@@ -93,7 +93,7 @@ namespace LanguageService
 
         public override string ToString()
         {
-            return inner.ToString();
+            return this.inner.ToString();
         }
     }
 }

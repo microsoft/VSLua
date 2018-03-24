@@ -1,13 +1,14 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using Xunit;
-
-using Assert = Xunit.Assert;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace LanguageService.Tests
 {
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Xunit;
+    using Assert = Xunit.Assert;
+
     [DeploymentItem("CorrectSampleLuaFiles", "CorrectSampleLuaFiles")]
     public class LexerTests
     {

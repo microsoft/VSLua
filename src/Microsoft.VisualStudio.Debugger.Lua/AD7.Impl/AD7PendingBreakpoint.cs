@@ -18,9 +18,6 @@ namespace Microsoft.VisualStudio.Debugger.Lua
 
         private System.Collections.Generic.List<AD7BoundBreakpoint> m_boundBreakpoints;
 
-        private bool m_enabled;
-        private bool m_deleted;
-
         public AD7PendingBreakpoint(IDebugBreakpointRequest2 pBPRequest, AD7Engine engine, BreakpointManager bpManager)
         {
             m_pBPRequest = pBPRequest;
@@ -31,9 +28,6 @@ namespace Microsoft.VisualStudio.Debugger.Lua
             m_engine = engine;
             m_bpManager = bpManager;
             m_boundBreakpoints = new System.Collections.Generic.List<AD7BoundBreakpoint>();
-
-            m_enabled = true;
-            m_deleted = false;
         }
 
         public int Bind()

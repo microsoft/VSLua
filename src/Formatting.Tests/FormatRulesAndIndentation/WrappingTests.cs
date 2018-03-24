@@ -1,12 +1,14 @@
-﻿using Xunit;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace Formatting.Tests
 {
+    using Xunit;
+
     public class WrappingTests
     {
 
-        delegate void TestFunction(string original, string expected1, string expected2);
-        TestFunction GeneralTest = Tester.FormattingTest;
+        private delegate void TestFunction(string original, string expected1, string expected2);
+        private TestFunction GeneralTest = Tester.FormattingTest;
 
         [Fact(Skip = "Not passing")]
         public void EmptyFunction()
@@ -16,7 +18,7 @@ foo = function() end";
             string expected = @"
 foo = function()
 end";
-            GeneralTest(original, expected, expected);
+            this.GeneralTest(original, expected, expected);
         }
 
         [Fact(Skip = "Not passing")]
@@ -27,7 +29,7 @@ end";
             string expected = @"
     foo = function()
     --[[ comment ]]end";
-            GeneralTest(original, expected, expected);
+            this.GeneralTest(original, expected, expected);
         }
 
         [Fact(Skip = "Not passing")]
@@ -43,7 +45,7 @@ end";
 foo = function()
     --[[ comment ]]return
 end";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact(Skip = "Not passing")]
@@ -57,7 +59,7 @@ t1 = {
             string expected2 = @"
 t1 = {
     --[[ comment ]]}";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact(Skip = "Not passing")]
@@ -73,7 +75,7 @@ t1 = {
 t1 = {
     --[[ comment ]] basic
     }";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact(Skip = "Not Implemented")]
@@ -89,7 +91,7 @@ end";
     foo = function()
         return
     end";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact(Skip = "Not passing")]
@@ -106,7 +108,7 @@ foo = function()
     return x
 end";
 
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact(Skip = "Not Implemented")]
@@ -124,7 +126,7 @@ foo = function()
     x = 10
     return
 end";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact(Skip ="Not Implemented")]
@@ -135,7 +137,7 @@ function foo() end";
             string expected = @"
 function foo()
 end";
-            GeneralTest(original, expected, expected);
+            this.GeneralTest(original, expected, expected);
         }
 
         [Fact(Skip = "Not passing")]
@@ -147,7 +149,7 @@ end";
     function foo()
     return
     end";
-            GeneralTest(original, expected, expected);
+            this.GeneralTest(original, expected, expected);
         }
 
         [Fact(Skip = "Not passing")]
@@ -163,7 +165,7 @@ end";
     foo = function()
         x = x + 1
     end";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact(Skip = "Not passing")]
@@ -172,7 +174,7 @@ end";
             string original = @"
     foo = function() return
     end";
-            GeneralTest(original, original, original);
+            this.GeneralTest(original, original, original);
         }
 
         [Fact(Skip = "Not passing")]
@@ -181,7 +183,7 @@ end";
             string original = @"
     foo =
     function() return end";
-            GeneralTest(original, original, original);
+            this.GeneralTest(original, original, original);
         }
 
         [Fact(Skip = "Not passing")]
@@ -190,7 +192,7 @@ end";
             string original = @"
     function foo()
     end";
-            GeneralTest(original, original, original);
+            this.GeneralTest(original, original, original);
         }
 
         [Fact(Skip = "Not passing")]
@@ -204,7 +206,7 @@ end";
             string expected2 = @"
     t1 = {
         }";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact(Skip = "Not passing")]
@@ -221,7 +223,7 @@ end";
         2
         }";
 
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
 
         }
 
@@ -238,7 +240,7 @@ end";
     t1 = {
         2,
         }";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact(Skip = "Not passing")]
@@ -258,7 +260,7 @@ end";
         2,
         3,
         }";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
 
         }
 
@@ -268,7 +270,7 @@ end";
             string original = @"
 t1 =
 {}";
-            GeneralTest(original, original, original);
+            this.GeneralTest(original, original, original);
         }
 
         [Fact(Skip = "Not passing")]
@@ -277,7 +279,7 @@ t1 =
             string original = @"
 t2 = {2,
 }";
-            GeneralTest(original, original, original);
+            this.GeneralTest(original, original, original);
         }
 
         [Fact(Skip = "Not passing")]
@@ -286,7 +288,7 @@ t2 = {2,
             string original = @"
 t3 = {2
 ,3}";
-            GeneralTest(original, original, original);
+            this.GeneralTest(original, original, original);
         }
 
         [Fact(Skip = "Not passing")]
@@ -309,7 +311,7 @@ t1 = {
             }
         }";
 
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact(Skip = "Not passing")]
@@ -331,7 +333,7 @@ end";
             end
         end
     end";
-            GeneralTest(original, expected1, expected2);
+            this.GeneralTest(original, expected1, expected2);
         }
 
         [Fact(Skip = "Not passing")]
@@ -346,7 +348,7 @@ function foo()
         end
     end
 end";
-            GeneralTest(original, expected, expected);
+            this.GeneralTest(original, expected, expected);
         }
 
         [Fact(Skip = "not implemented")]
@@ -355,7 +357,7 @@ end";
             string original = "for i = 10,3 do end";
             string expected = @"for i = 10,3 do
 end";
-            GeneralTest(original, expected, expected);
+            this.GeneralTest(original, expected, expected);
         }
 
         [Fact(Skip = "not implemented")]
@@ -367,7 +369,7 @@ end";
     y = 4
     z = x + y
 end";
-            GeneralTest(original, expected, expected);
+            this.GeneralTest(original, expected, expected);
         }
 
     }

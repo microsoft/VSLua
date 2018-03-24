@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using LanguageService;
-using LanguageService.Formatting;
-using LanguageService.Formatting.Options;
-using LanguageService.Shared;
-using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
-using Microsoft.VisualStudio.Text;
-using Xunit;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace Formatting.Tests
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using LanguageService;
+    using LanguageService.Formatting;
+    using LanguageService.Formatting.Options;
+    using LanguageService.Shared;
+    using Microsoft.VisualStudio.LanguageServices.Lua.Shared;
+    using Microsoft.VisualStudio.Text;
+    using Xunit;
+
     internal static class Tester
     {
         private static EditorUtils.EditorHostFactory factory = new EditorUtils.EditorHostFactory();

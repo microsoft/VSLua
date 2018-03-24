@@ -1,10 +1,12 @@
+// Copyright (c) Microsoft. All rights reserved.
 
-using LanguageModel.Tests.TestGeneration;
-using LanguageService;
-using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
-    class PrefixExpNested_Generated
+    using LanguageModel.Tests.TestGeneration;
+    using LanguageService;
+    using Xunit;
+
+    internal class PrefixExpNested_Generated
     {
         [Fact]
         public void Test(Tester t)

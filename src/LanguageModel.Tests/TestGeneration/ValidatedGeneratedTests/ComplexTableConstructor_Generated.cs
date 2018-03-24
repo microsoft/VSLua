@@ -1,10 +1,12 @@
-﻿using LanguageModel.Tests.TestGeneration;
-using LanguageService;
-using Xunit;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
-    class ComplexTableConstructor_Generated
+    using LanguageModel.Tests.TestGeneration;
+    using LanguageService;
+    using Xunit;
+
+    internal class ComplexTableConstructor_Generated
     {
         [Fact]
         public void Test(Tester t)

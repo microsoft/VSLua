@@ -1,15 +1,17 @@
-﻿using System.Diagnostics;
-using System.IO;
-using System.Text;
-using LanguageModel.Tests;
-using LanguageModel.Tests.GeneratedTestFiles;
-using LanguageModel.Tests.TestGeneration;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Xunit;
-using Assert = Xunit.Assert;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace LanguageService.Tests
 {
+    using System.Diagnostics;
+    using System.IO;
+    using System.Text;
+    using global::LanguageModel.Tests;
+    using global::LanguageModel.Tests.GeneratedTestFiles;
+    using global::LanguageModel.Tests.TestGeneration;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Xunit;
+    using Assert = Xunit.Assert;
+
     [DeploymentItem("CorrectSampleLuaFiles", "CorrectSampleLuaFiles")]
     [DeploymentItem("SerializedJsonOutput", "SerializedJsonOutput")]
     public class ParserTests
@@ -234,7 +236,9 @@ end", "IfStatement");
                 var sb = new StringBuilder();
 
                 if (nextChar == '"')
+                {
                     nextChar = (char)reader.Read();
+                }
 
                 while (nextChar != '"' && !reader.EndOfStream)
                 {

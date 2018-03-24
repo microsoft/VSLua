@@ -1,19 +1,21 @@
-﻿using Xunit;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace Formatting.Tests
 {
+    using Xunit;
+
     public class BracketTests
     {
 
-        delegate void TestFunction(string original, string expected);
-        TestFunction FormattingTest = Tester.FormattingTest;
+        private delegate void TestFunction(string original, string expected);
+        private TestFunction FormattingTest = Tester.FormattingTest;
 
         [Fact]
         public void BasicSquare()
         {
             string original = "t[1] = 10";
             string expected = "t[ 1 ] = 10";
-            FormattingTest(original, expected);
+            this.FormattingTest(original, expected);
         }
 
         [Fact]
@@ -21,7 +23,7 @@ namespace Formatting.Tests
         {
             string original = "function foo (x) end";
             string expected = "function foo ( x ) end";
-            FormattingTest(original, expected);
+            this.FormattingTest(original, expected);
         }
 
         [Fact]
@@ -29,28 +31,28 @@ namespace Formatting.Tests
         {
             string original = "t = {1}";
             string expected = "t = { 1 }";
-            FormattingTest(original, expected);
+            this.FormattingTest(original, expected);
         }
 
         [Fact]
         public void CommentCurly()
         {
             string original = "t = { 1--[[ comment ]]}";
-            FormattingTest(original, original);
+            this.FormattingTest(original, original);
         }
 
         [Fact]
         public void CommentSquare()
         {
             string original = "t = [ 1--[[ comment ]]]";
-            FormattingTest(original, original);
+            this.FormattingTest(original, original);
         }
 
         [Fact]
         public void CommentParen()
         {
             string original = "foo ( 1--[[ comment ]])";
-            FormattingTest(original, original);
+            this.FormattingTest(original, original);
         }
 
         [Fact]
@@ -58,7 +60,7 @@ namespace Formatting.Tests
         {
             string original = "t = {1, 3, 4, 5, 6, 7,}";
             string expected = "t = { 1, 3, 4, 5, 6, 7, }";
-            FormattingTest(original, expected);
+            this.FormattingTest(original, expected);
         }
 
         [Fact]
@@ -66,7 +68,7 @@ namespace Formatting.Tests
         {
             string original = "foo = function (x, y, z, w) end";
             string expected = "foo = function ( x, y, z, w ) end";
-            FormattingTest(original, expected);
+            this.FormattingTest(original, expected);
         }
 
         [Fact]
@@ -74,7 +76,7 @@ namespace Formatting.Tests
         {
             string original = "t[\"this is a test that grabs this key in Lua\"] = 10";
             string expected = "t[ \"this is a test that grabs this key in Lua\" ] = 10";
-            FormattingTest(original, expected);
+            this.FormattingTest(original, expected);
         }
 
         [Fact]
@@ -82,7 +84,7 @@ namespace Formatting.Tests
         {
             string original = "foo = function     () end";
             string expected = "foo = function () end";
-            FormattingTest(original, expected);
+            this.FormattingTest(original, expected);
         }
 
         [Fact]
@@ -90,7 +92,7 @@ namespace Formatting.Tests
         {
             string original = "function foo      () end";
             string expected = "function foo () end";
-            FormattingTest(original, expected);
+            this.FormattingTest(original, expected);
         }
 
         [Fact]
@@ -98,7 +100,7 @@ namespace Formatting.Tests
         {
             string original = "x = x     [1]";
             string expected = "x = x[ 1 ]";
-            FormattingTest(original, expected);
+            this.FormattingTest(original, expected);
         }
 
         [Fact]
@@ -106,7 +108,7 @@ namespace Formatting.Tests
         {
             string original = "x = { x,}";
             string expected = "x = { x, }";
-            FormattingTest(original, expected);
+            this.FormattingTest(original, expected);
         }
 
         [Fact]
@@ -114,7 +116,7 @@ namespace Formatting.Tests
         {
             string original = "foo   {}";
             string expected = "foo {}";
-            FormattingTest(original, expected);
+            this.FormattingTest(original, expected);
         }
 
         [Fact]
@@ -125,7 +127,7 @@ t = {
     1,
     2,
 }";
-            FormattingTest(original, original);
+            this.FormattingTest(original, original);
         }
 
         [Fact]
@@ -139,7 +141,7 @@ t = [
 
 
 ] = 10";
-            FormattingTest(original, original);
+            this.FormattingTest(original, original);
         }
 
         [Fact]
@@ -151,7 +153,7 @@ a, b, c) end";
             string expected = @"
 foo = function (
 a, b, c ) end";
-            FormattingTest(original, expected);
+            this.FormattingTest(original, expected);
         }
 
         [Fact]
@@ -159,7 +161,7 @@ a, b, c ) end";
         {
             string original = "](";
             string expected = "](";
-            FormattingTest(original, expected);
+            this.FormattingTest(original, expected);
         }
 
         [Fact]
@@ -167,7 +169,7 @@ a, b, c ) end";
         {
             string original = ")(";
             string expected = ")(";
-            FormattingTest(original, expected);
+            this.FormattingTest(original, expected);
         }
 
         [Fact]
@@ -175,7 +177,7 @@ a, b, c ) end";
         {
             string original = "}(";
             string expected = "}(";
-            FormattingTest(original, expected);
+            this.FormattingTest(original, expected);
         }
 
     }

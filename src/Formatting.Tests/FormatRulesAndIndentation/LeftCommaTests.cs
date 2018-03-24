@@ -1,18 +1,20 @@
-﻿using Xunit;
+﻿// Copyright (c) Microsoft. All rights reserved.
 
 namespace Formatting.Tests
 {
+    using Xunit;
+
     public class LeftCommaTests
     {
 
-        delegate void TestFunction(string original, string expected);
-        TestFunction GeneralTest = Tester.FormattingTest;
+        private delegate void TestFunction(string original, string expected);
+        private TestFunction GeneralTest = Tester.FormattingTest;
 
         [Fact]
         public void Comment()
         {
             string original = ",--[[ comment ]]x";
-            GeneralTest(original, original);
+            this.GeneralTest(original, original);
         }
 
         [Fact]
@@ -20,7 +22,7 @@ namespace Formatting.Tests
         {
             string original = "x,y = 1,2";
             string expected = "x, y = 1, 2";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
@@ -28,7 +30,7 @@ namespace Formatting.Tests
         {
             string original = "t = { x,y,z }";
             string expected = "t = { x, y, z }";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
@@ -36,7 +38,7 @@ namespace Formatting.Tests
         {
             string original = "function foo(x,y,z) end";
             string expected = "function foo ( x, y, z ) end";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
@@ -44,7 +46,7 @@ namespace Formatting.Tests
         {
             string original = "t = { x, y,}";
             string expected = "t = { x, y, }";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
@@ -52,7 +54,7 @@ namespace Formatting.Tests
         {
             string original = "t = { x    ,y}";
             string expected = "t = { x, y }";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
@@ -60,7 +62,7 @@ namespace Formatting.Tests
         {
             string original = "t = { x    ,y          ,z}";
             string expected = "t = { x, y, z }";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
@@ -68,7 +70,7 @@ namespace Formatting.Tests
         {
             string original = "x,y = 1,2";
             string expected = "x, y = 1, 2";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
@@ -76,7 +78,7 @@ namespace Formatting.Tests
         {
             string original = "x,= 1";
             string expected = "x, = 1";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
@@ -84,7 +86,7 @@ namespace Formatting.Tests
         {
             string original = "x,             y = 1, 2";
             string expected = "x, y = 1, 2";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
         [Fact]
@@ -96,7 +98,7 @@ y = 1,2";
             string expected = @"
 x,
 y = 1, 2";
-            GeneralTest(original, expected);
+            this.GeneralTest(original, expected);
         }
 
 

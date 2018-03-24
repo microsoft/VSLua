@@ -1,10 +1,12 @@
+// Copyright (c) Microsoft. All rights reserved.
 
-using LanguageModel.Tests.TestGeneration;
-using LanguageService;
-using Xunit;
 namespace LanguageModel.Tests.GeneratedTestFiles
 {
-    class NestedTable_Generated
+    using LanguageModel.Tests.TestGeneration;
+    using LanguageService;
+    using Xunit;
+
+    internal class NestedTable_Generated
     {
         [Fact]
         public void Test(Tester t)
