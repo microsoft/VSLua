@@ -17,3 +17,8 @@ before_build:
 build:
   verbosity: minimal
 test: off
+artifacts:
+- path: bin\Release\Microsoft.VisualStudio.LanguageServices.Lua.vsix
+  name: Lua Language service
+- path: bin\%configuration%\LuaDebuggerLauncher.vsix
+  name: Lua Debugger launcher
