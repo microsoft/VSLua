@@ -1,5 +1,7 @@
 version: 1.0.{build}
 image: Visual Studio 2017
+environment:
+  DeployExtension: false
 configuration: Release
 before_build:
 - ps: nuget restore src -Verbosity quiet
